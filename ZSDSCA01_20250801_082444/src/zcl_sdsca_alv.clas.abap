@@ -1,0 +1,167 @@
+CLASS ZCL_SDSCA_ALV DEFINITION
+  PUBLIC
+  ABSTRACT
+  CREATE PUBLIC .
+
+  PUBLIC SECTION.
+
+    DATA GT_FCAT TYPE SLIS_T_FIELDCAT_ALV .
+    DATA GS_LAYOUT TYPE SLIS_LAYOUT_ALV .
+    DATA GT_SORT TYPE SLIS_T_SORTINFO_ALV .
+    DATA GS_SORT TYPE SLIS_SORTINFO_ALV .
+
+    METHODS START_PROCESS
+        ABSTRACT .
+    METHODS GET_DATA
+        ABSTRACT .
+    METHODS GET_ADDTIONAL_DATA
+        ABSTRACT .
+    METHODS SHOW_REPORT
+        ABSTRACT .
+    METHODS SET_LAYOUT_OUTPUT .
+    METHODS BUILD_FCAT .
+    METHODS SET_SORT
+        ABSTRACT .
+    METHODS SET_ALV_GRID
+      CHANGING
+        !IT_DATA TYPE ANY TABLE .
+    METHODS HTML_TOP_OF_PAGE
+        ABSTRACT .
+    METHODS SAVE
+        ABSTRACT .
+  PROTECTED SECTION.
+  PRIVATE SECTION.
+ENDCLASS.
+
+
+
+CLASS ZCL_SDSCA_ALV IMPLEMENTATION.
+
+
+  METHOD BUILD_FCAT.
+    DATA:
+       LS_FCAT TYPE SLIS_FIELDCAT_ALV.
+
+    DATA : LV_RUNNING  TYPE I,
+           LV_DATA     TYPE C LENGTH 6 VALUE 'TEXT-',
+           LV_RUN_TEXT TYPE C LENGTH 2.
+
+    CONSTANTS : LC_F TYPE C VALUE 'F',
+                LC_T TYPE C VALUE 'T',
+                LC_d TYPE C VALUE 'D'.
+
+    FIELD-SYMBOLS <LFS> TYPE ANY.
+
+    DATA : LV_TEXT TYPE C LENGTH 8.
+*Field
+    CLEAR : LS_FCAT.
+    DO 99 TIMES.
+      ADD 1 TO LV_RUNNING.
+      LV_RUN_TEXT = LV_RUNNING.
+
+      LV_RUN_TEXT = |{ LV_RUN_TEXT ALPHA = IN }|.
+
+      IF <LFS> IS ASSIGNED.
+        UNASSIGN <LFS>.
+      ENDIF.
+      CONCATENATE LV_DATA LC_F LV_RUN_TEXT INTO LV_TEXT.
+      ASSIGN (LV_TEXT) TO <LFS>.
+      IF <LFS> IS NOT ASSIGNED.
+        EXIT.
+      ENDIF.
+      LS_FCAT-FIELDNAME = <LFS>.
+*Teble Ref
+      IF <LFS> IS ASSIGNED.
+        UNASSIGN <LFS>.
+      ENDIF.
+      CONCATENATE LV_DATA LC_T LV_RUN_TEXT INTO LV_TEXT.
+      ASSIGN (LV_TEXT) TO <LFS>.
+      IF <LFS> IS ASSIGNED.
+        LS_FCAT-REF_TABNAME = <LFS>.
+      ENDIF.
+*Description
+      IF <LFS> IS ASSIGNED.
+        UNASSIGN <LFS>.
+      ENDIF.
+      CONCATENATE LV_DATA LC_D LV_RUN_TEXT INTO LV_TEXT.
+      ASSIGN (LV_TEXT) TO <LFS>.
+      IF <LFS> IS ASSIGNED.
+        LS_FCAT-SELTEXT_S = <LFS>.
+        LS_FCAT-SELTEXT_M = <LFS>.
+        LS_FCAT-SELTEXT_L = <LFS>.
+      ENDIF.
+      APPEND LS_FCAT TO GT_FCAT.
+      CLEAR LS_FCAT.
+    ENDDO.
+  ENDMETHOD.
+
+
+  METHOD SET_ALV_GRID.
+
+    DATA: DREF TYPE REF TO DATA.
+    FIELD-SYMBOLS : <FS>       TYPE ANY,
+                    <LFT_DATA> TYPE STANDARD TABLE.
+
+    CREATE DATA DREF LIKE IT_DATA.
+    ASSIGN DREF->* TO <LFT_DATA>.
+
+    <LFT_DATA> = IT_DATA.
+
+    CALL FUNCTION 'REUSE_ALV_GRID_DISPLAY'
+      EXPORTING
+        I_CALLBACK_PROGRAM = SY-REPID
+        "I_CALLBACK_PF_STATUS_SET = 'PF_STATUS_1'
+        "I_callback_user_command  = 'USER_COMMAND'
+*       I_CALLBACK_TOP_OF_PAGE            = ' '
+*       i_html_height_top  = 12
+*       I_CALLBACK_HTML_TOP_OF_PAGE       = 'HTML_TOP_OF_PAGE'
+*       I_CALLBACK_HTML_END_OF_LIST       = ' '
+*       I_STRUCTURE_NAME   =
+*       I_BACKGROUND_ID    = ' '
+*       I_GRID_TITLE       =
+*       I_GRID_SETTINGS    =
+        IS_LAYOUT          = GS_LAYOUT
+        IT_FIELDCAT        = GT_FCAT
+*       IT_EXCLUDING       =
+*       IT_SPECIAL_GROUPS  =
+        IT_SORT            = GT_SORT
+*       IT_FILTER          =
+*       IS_SEL_HIDE        =
+        I_DEFAULT          = ABAP_TRUE
+        I_SAVE             = 'A'
+*       IS_VARIANT         =
+*       IT_EVENTS          =
+*       IT_EVENT_EXIT      =
+*       IS_PRINT           =
+*       IS_REPREP_ID       =
+*       I_SCREEN_START_COLUMN             = 0
+*       I_SCREEN_START_LINE               = 0
+*       I_SCREEN_END_COLUMN               = 0
+*       I_SCREEN_END_LINE  = 0
+*       I_HTML_HEIGHT_TOP  = 0
+*       I_HTML_HEIGHT_END  = 0
+*       IT_ALV_GRAPHICS    =
+*       IT_HYPERLINK       =
+*       IT_ADD_FIELDCAT    =
+*       IT_EXCEPT_QINFO    =
+*       IR_SALV_FULLSCREEN_ADAPTER        =
+* IMPORTING
+*       E_EXIT_CAUSED_BY_CALLER           =
+*       ES_EXIT_CAUSED_BY_USER            =
+      TABLES
+        T_OUTTAB           = <LFT_DATA>
+      EXCEPTIONS
+        PROGRAM_ERROR      = 1
+        OTHERS             = 2.
+    IF SY-SUBRC <> 0.
+* MESSAGE ID SY-MSGID TYPE SY-MSGTY NUMBER SY-MSGNO
+*         WITH SY-MSGV1 SY-MSGV2 SY-MSGV3 SY-MSGV4.
+    ENDIF.
+  ENDMETHOD.
+
+
+  METHOD SET_LAYOUT_OUTPUT.
+    GS_LAYOUT-ZEBRA             = ABAP_TRUE.
+    GS_LAYOUT-COLWIDTH_OPTIMIZE = ABAP_TRUE.
+  ENDMETHOD.
+ENDCLASS.

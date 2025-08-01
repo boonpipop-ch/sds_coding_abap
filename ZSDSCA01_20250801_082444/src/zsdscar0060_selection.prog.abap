@@ -1,0 +1,31 @@
+*&---------------------------------------------------------------------*
+*& Include          ZSDSCAR0060_SELECTION
+*&---------------------------------------------------------------------*
+*-----------------------------------------------------------------------
+* P A R A M E T E R S   &   S E L E C T - O P T I O N S
+*-----------------------------------------------------------------------
+SELECTION-SCREEN BEGIN OF BLOCK BLOCK1 WITH FRAME TITLE TEXT-001 .
+  SELECT-OPTIONS : S_MATNR FOR MARA-MATNR MODIF ID MAT,
+                   S_ERSDA FOR MARA-ERSDA MODIF ID DAT,
+                   S_LGORT FOR MARD-LGORT MODIF ID LOC,
+                   S_MATKL FOR MARA-MATKL MODIF ID MDC,
+                   S_UNAME FOR MARA-ERNAM MODIF ID NAM.
+
+  PARAMETERS : P_BUKRS TYPE KNB1-BUKRS MODIF ID CUS DEFAULT 1000.
+  SELECT-OPTIONS : S_KUNNR FOR KNB1-KUNNR MODIF ID CUS,
+                   S_ERDAT FOR KNB1-ERDAT MODIF ID CUS.
+
+  PARAMETERS : P_ETAX  AS CHECKBOX MODIF ID CUS.
+  PARAMETERS : P_EMAIL AS CHECKBOX MODIF ID CUS.
+
+  PARAMETERS : P_AL11 TYPE CHAR255 MODIF ID AL1 LOWER CASE.
+SELECTION-SCREEN END OF BLOCK BLOCK1.
+
+SELECTION-SCREEN BEGIN OF BLOCK BLOCK2 WITH FRAME TITLE TEXT-002 .
+  PARAMETERS : R1 RADIOBUTTON GROUP INF DEFAULT 'X' USER-COMMAND UCOMM,
+               R2 RADIOBUTTON GROUP INF,
+               R3 RADIOBUTTON GROUP INF,
+               R4 RADIOBUTTON GROUP INF,
+               R5 RADIOBUTTON GROUP INF,
+               R6 RADIOBUTTON GROUP INF.
+SELECTION-SCREEN END OF BLOCK BLOCK2.

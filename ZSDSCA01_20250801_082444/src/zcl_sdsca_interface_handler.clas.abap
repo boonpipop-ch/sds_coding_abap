@@ -1,0 +1,50 @@
+class ZCL_SDSCA_INTERFACE_HANDLER definition
+  public
+  inheriting from CL_REST_HTTP_HANDLER
+  final
+  create public .
+
+public section.
+
+  methods IF_REST_APPLICATION~GET_ROOT_HANDLER
+    redefinition .
+protected section.
+
+  methods HANDLE_CSRF_TOKEN
+    redefinition .
+private section.
+ENDCLASS.
+
+
+
+CLASS ZCL_SDSCA_INTERFACE_HANDLER IMPLEMENTATION.
+
+
+METHOD HANDLE_CSRF_TOKEN.
+* Reimplement to disable CSRF Token
+ENDMETHOD.
+
+
+METHOD IF_REST_APPLICATION~GET_ROOT_HANDLER.
+
+  DATA:
+    LF_CLASS TYPE SEOCLSNAME VALUE 'ZCL_SDSCA_INTERFACE_PROVIDER'.
+
+
+* Create Router Object
+  DATA(LREF_ROUTER) = NEW CL_REST_ROUTER( ).
+
+* Get End Point
+  DATA(LF_PATH) = MO_SERVER->REQUEST->GET_HEADER_FIELD( IF_HTTP_HEADER_FIELDS_SAP=>PATH_INFO ).
+
+* Attach processing class
+  LREF_ROUTER->ATTACH(
+    EXPORTING
+      IV_TEMPLATE      = LF_PATH
+      IV_HANDLER_CLASS = LF_CLASS ).
+
+* Assign Result
+  RO_ROOT_HANDLER = LREF_ROUTER.
+
+ENDMETHOD.
+ENDCLASS.

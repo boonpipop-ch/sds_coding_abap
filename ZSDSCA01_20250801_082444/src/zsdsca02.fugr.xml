@@ -1,0 +1,241 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<abapGit version="v1.0.0" serializer="LCL_OBJECT_FUGR" serializer_version="v1.0.0">
+ <asx:abap xmlns:asx="http://www.sap.com/abapxml" version="1.0">
+  <asx:values>
+   <AREAT>Spell Amount</AREAT>
+   <INCLUDES>
+    <SOBJ_NAME>LZSDSCA02F01</SOBJ_NAME>
+    <SOBJ_NAME>LZSDSCA02TOP</SOBJ_NAME>
+    <SOBJ_NAME>SAPLZSDSCA02</SOBJ_NAME>
+   </INCLUDES>
+   <FUNCTIONS>
+    <item>
+     <FUNCNAME>Z_SDSCA_DATE_TO_DDMMMYYYY</FUNCNAME>
+     <SHORT_TEXT>Convert Date to format DD MMM YYYYY</SHORT_TEXT>
+     <IMPORT>
+      <RSIMP>
+       <PARAMETER>I_DATE</PARAMETER>
+       <DEFAULT>SY-DATUM</DEFAULT>
+       <OPTIONAL>X</OPTIONAL>
+       <REFERENCE>X</REFERENCE>
+       <TYP>SY-DATUM</TYP>
+      </RSIMP>
+      <RSIMP>
+       <PARAMETER>LANGUAGE</PARAMETER>
+       <DEFAULT>SY-LANGU</DEFAULT>
+       <OPTIONAL>X</OPTIONAL>
+       <REFERENCE>X</REFERENCE>
+       <TYP>SY-LANGU</TYP>
+      </RSIMP>
+     </IMPORT>
+     <EXPORT>
+      <RSEXP>
+       <PARAMETER>O_DATE</PARAMETER>
+       <REFERENCE>X</REFERENCE>
+       <TYP>CHAR30</TYP>
+      </RSEXP>
+     </EXPORT>
+     <DOCUMENTATION>
+      <RSFDO>
+       <PARAMETER>I_DATE</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>Current Date of Application Server</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>LANGUAGE</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>Language Key of Current Text Environment</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>O_DATE</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>30 Characters</STEXT>
+      </RSFDO>
+     </DOCUMENTATION>
+    </item>
+    <item>
+     <FUNCNAME>Z_SDSCA_GET_ADDRESS3</FUNCNAME>
+     <SHORT_TEXT>Get address using customer or vendor &amp; Check One Time</SHORT_TEXT>
+     <IMPORT>
+      <RSIMP>
+       <PARAMETER>P_DOCNO</PARAMETER>
+       <REFERENCE>X</REFERENCE>
+       <TYP>BELNR_D</TYP>
+      </RSIMP>
+      <RSIMP>
+       <PARAMETER>P_GJAHR</PARAMETER>
+       <OPTIONAL>X</OPTIONAL>
+       <REFERENCE>X</REFERENCE>
+       <TYP>GJAHR</TYP>
+      </RSIMP>
+      <RSIMP>
+       <PARAMETER>P_BUKRS</PARAMETER>
+       <OPTIONAL>X</OPTIONAL>
+       <REFERENCE>X</REFERENCE>
+       <TYP>BUKRS</TYP>
+      </RSIMP>
+      <RSIMP>
+       <PARAMETER>P_CUSTOMER</PARAMETER>
+       <REFERENCE>X</REFERENCE>
+       <TYP>KUNNR</TYP>
+      </RSIMP>
+      <RSIMP>
+       <PARAMETER>P_NATION</PARAMETER>
+       <REFERENCE>X</REFERENCE>
+       <TYP>ADRC-NATION</TYP>
+      </RSIMP>
+      <RSIMP>
+       <PARAMETER>P_FLAG</PARAMETER>
+       <REFERENCE>X</REFERENCE>
+       <TYP>C</TYP>
+      </RSIMP>
+     </IMPORT>
+     <EXPORT>
+      <RSEXP>
+       <PARAMETER>WA_ADRC</PARAMETER>
+       <REFERENCE>X</REFERENCE>
+       <TYP>ADRC</TYP>
+      </RSEXP>
+      <RSEXP>
+       <PARAMETER>WA_BSEC</PARAMETER>
+       <REFERENCE>X</REFERENCE>
+       <TYP>BSEC</TYP>
+      </RSEXP>
+      <RSEXP>
+       <PARAMETER>V_ATEXT</PARAMETER>
+       <REFERENCE>X</REFERENCE>
+       <TYP>ANREX</TYP>
+      </RSEXP>
+     </EXPORT>
+     <EXCEPTION>
+      <RSEXC>
+       <EXCEPTION>NO_DATA_FOUND</EXCEPTION>
+      </RSEXC>
+     </EXCEPTION>
+     <DOCUMENTATION>
+      <RSFDO>
+       <PARAMETER>P_DOCNO</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>Accounting Document Number</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>P_GJAHR</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>Fiscal Year</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>P_BUKRS</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>Company Code</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>P_CUSTOMER</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>Customer Number 1</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>P_NATION</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>International address version ID</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>P_FLAG</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>V for Vendor / C for Customer</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>WA_ADRC</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>Addresses (Business Address Services)</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>WA_BSEC</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>One-Time Account Data Document Segment</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>V_ATEXT</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>Form of address text</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>NO_DATA_FOUND</PARAMETER>
+       <KIND>X</KIND>
+       <STEXT>No data found</STEXT>
+      </RSFDO>
+     </DOCUMENTATION>
+    </item>
+    <item>
+     <FUNCNAME>Z_SDSCA_SPELL_AMOUNT</FUNCNAME>
+     <SHORT_TEXT>Spell Amount</SHORT_TEXT>
+     <IMPORT>
+      <RSIMP>
+       <PARAMETER>AMOUNT</PARAMETER>
+       <DEFAULT>0</DEFAULT>
+       <OPTIONAL>X</OPTIONAL>
+      </RSIMP>
+      <RSIMP>
+       <PARAMETER>CURRENCY</PARAMETER>
+       <DEFAULT>SPACE</DEFAULT>
+       <OPTIONAL>X</OPTIONAL>
+       <TYP>SY-WAERS</TYP>
+      </RSIMP>
+      <RSIMP>
+       <PARAMETER>LANGUAGE</PARAMETER>
+       <DEFAULT>SY-LANGU</DEFAULT>
+       <OPTIONAL>X</OPTIONAL>
+       <TYP>SY-LANGU</TYP>
+      </RSIMP>
+     </IMPORT>
+     <EXPORT>
+      <RSEXP>
+       <PARAMETER>SPELL_WORD</PARAMETER>
+       <REFERENCE>X</REFERENCE>
+       <TYP>CHAR255</TYP>
+      </RSEXP>
+     </EXPORT>
+     <EXCEPTION>
+      <RSEXC>
+       <EXCEPTION>NOT_FOUND</EXCEPTION>
+      </RSEXC>
+      <RSEXC>
+       <EXCEPTION>TOO_LARGE</EXCEPTION>
+      </RSEXC>
+     </EXCEPTION>
+     <DOCUMENTATION>
+      <RSFDO>
+       <PARAMETER>AMOUNT</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>Amount/Number to Be Spelled Out</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>CURRENCY</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>Currency for Amounts, Blank for Numbers</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>LANGUAGE</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>Language Key of Current Text Environment</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>SPELL_WORD</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>Char255</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>NOT_FOUND</PARAMETER>
+       <KIND>X</KIND>
+       <STEXT>Argument Not Found in T015Z</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>TOO_LARGE</PARAMETER>
+       <KIND>X</KIND>
+       <STEXT>Amount Too Large to Be Spelled Out</STEXT>
+      </RSFDO>
+     </DOCUMENTATION>
+    </item>
+   </FUNCTIONS>
+  </asx:values>
+ </asx:abap>
+</abapGit>

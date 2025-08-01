@@ -1,0 +1,212 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<abapGit version="v1.0.0" serializer="LCL_OBJECT_MSAG" serializer_version="v1.0.0">
+ <asx:abap xmlns:asx="http://www.sap.com/abapxml" version="1.0">
+  <asx:values>
+   <T100A>
+    <ARBGB>ZSDSCA01</ARBGB>
+    <MASTERLANG>E</MASTERLANG>
+    <STEXT>SDS Message Class for Cross applications</STEXT>
+   </T100A>
+   <T100>
+    <T100>
+     <SPRSL>E</SPRSL>
+     <ARBGB>ZSDSCA01</ARBGB>
+     <MSGNR>000</MSGNR>
+     <TEXT>&amp; &amp; &amp; &amp;</TEXT>
+    </T100>
+    <T100>
+     <SPRSL>E</SPRSL>
+     <ARBGB>ZSDSCA01</ARBGB>
+     <MSGNR>001</MSGNR>
+     <TEXT>No data found.</TEXT>
+    </T100>
+    <T100>
+     <SPRSL>E</SPRSL>
+     <ARBGB>ZSDSCA01</ARBGB>
+     <MSGNR>002</MSGNR>
+     <TEXT>Please enter a valid filename.</TEXT>
+    </T100>
+    <T100>
+     <SPRSL>E</SPRSL>
+     <ARBGB>ZSDSCA01</ARBGB>
+     <MSGNR>003</MSGNR>
+     <TEXT>Cannot modify the specified filename.</TEXT>
+    </T100>
+    <T100>
+     <SPRSL>E</SPRSL>
+     <ARBGB>ZSDSCA01</ARBGB>
+     <MSGNR>004</MSGNR>
+     <TEXT>Error occurred during generate Excel file.</TEXT>
+    </T100>
+    <T100>
+     <SPRSL>E</SPRSL>
+     <ARBGB>ZSDSCA01</ARBGB>
+     <MSGNR>005</MSGNR>
+     <TEXT>Export file generated successfully.</TEXT>
+    </T100>
+    <T100>
+     <SPRSL>E</SPRSL>
+     <ARBGB>ZSDSCA01</ARBGB>
+     <MSGNR>006</MSGNR>
+     <TEXT>Invalid Interface ID &amp;1. Please check setting in table ZSDSCAC004.</TEXT>
+    </T100>
+    <T100>
+     <SPRSL>E</SPRSL>
+     <ARBGB>ZSDSCA01</ARBGB>
+     <MSGNR>007</MSGNR>
+     <TEXT>Error during get interface file path from Logical path &amp;1.</TEXT>
+    </T100>
+    <T100>
+     <SPRSL>E</SPRSL>
+     <ARBGB>ZSDSCA01</ARBGB>
+     <MSGNR>008</MSGNR>
+     <TEXT>Cannot find input data for file creation.</TEXT>
+    </T100>
+    <T100>
+     <SPRSL>E</SPRSL>
+     <ARBGB>ZSDSCA01</ARBGB>
+     <MSGNR>009</MSGNR>
+     <TEXT>Error during creating file on application server.</TEXT>
+    </T100>
+    <T100>
+     <SPRSL>E</SPRSL>
+     <ARBGB>ZSDSCA01</ARBGB>
+     <MSGNR>010</MSGNR>
+     <TEXT>Interface File is created successfully.</TEXT>
+    </T100>
+    <T100>
+     <SPRSL>E</SPRSL>
+     <ARBGB>ZSDSCA01</ARBGB>
+     <MSGNR>011</MSGNR>
+     <TEXT>Invalid setting for auto subfolder in Interface ID &amp;1.</TEXT>
+    </T100>
+    <T100>
+     <SPRSL>E</SPRSL>
+     <ARBGB>ZSDSCA01</ARBGB>
+     <MSGNR>012</MSGNR>
+     <TEXT>Cannot process local file in background mode.</TEXT>
+    </T100>
+    <T100>
+     <SPRSL>E</SPRSL>
+     <ARBGB>ZSDSCA01</ARBGB>
+     <MSGNR>013</MSGNR>
+     <TEXT>Invalid Interface number.</TEXT>
+    </T100>
+    <T100>
+     <SPRSL>E</SPRSL>
+     <ARBGB>ZSDSCA01</ARBGB>
+     <MSGNR>014</MSGNR>
+     <TEXT>Error on DATA to JSON transform.</TEXT>
+    </T100>
+    <T100>
+     <SPRSL>E</SPRSL>
+     <ARBGB>ZSDSCA01</ARBGB>
+     <MSGNR>015</MSGNR>
+     <TEXT>Cannot determine Transformation.</TEXT>
+    </T100>
+    <T100>
+     <SPRSL>E</SPRSL>
+     <ARBGB>ZSDSCA01</ARBGB>
+     <MSGNR>016</MSGNR>
+     <TEXT>Transformation to JSON error.</TEXT>
+    </T100>
+    <T100>
+     <SPRSL>E</SPRSL>
+     <ARBGB>ZSDSCA01</ARBGB>
+     <MSGNR>017</MSGNR>
+     <TEXT>URL Error</TEXT>
+    </T100>
+    <T100>
+     <SPRSL>E</SPRSL>
+     <ARBGB>ZSDSCA01</ARBGB>
+     <MSGNR>018</MSGNR>
+     <TEXT>Error on Sending request.</TEXT>
+    </T100>
+    <T100>
+     <SPRSL>E</SPRSL>
+     <ARBGB>ZSDSCA01</ARBGB>
+     <MSGNR>019</MSGNR>
+     <TEXT>Transformation from JSON error.</TEXT>
+    </T100>
+    <T100>
+     <SPRSL>E</SPRSL>
+     <ARBGB>ZSDSCA01</ARBGB>
+     <MSGNR>020</MSGNR>
+     <TEXT>Cannot Generate Request number</TEXT>
+    </T100>
+    <T100>
+     <SPRSL>E</SPRSL>
+     <ARBGB>ZSDSCA01</ARBGB>
+     <MSGNR>021</MSGNR>
+     <TEXT>Error during insert new log entry.</TEXT>
+    </T100>
+    <T100>
+     <SPRSL>E</SPRSL>
+     <ARBGB>ZSDSCA01</ARBGB>
+     <MSGNR>022</MSGNR>
+     <TEXT>Error on JSON to DATA transform.</TEXT>
+    </T100>
+    <T100>
+     <SPRSL>E</SPRSL>
+     <ARBGB>ZSDSCA01</ARBGB>
+     <MSGNR>023</MSGNR>
+     <TEXT>Invalid Endpoint &amp;1</TEXT>
+    </T100>
+    <T100>
+     <SPRSL>E</SPRSL>
+     <ARBGB>ZSDSCA01</ARBGB>
+     <MSGNR>024</MSGNR>
+     <TEXT>No log deleted.</TEXT>
+    </T100>
+    <T100>
+     <SPRSL>E</SPRSL>
+     <ARBGB>ZSDSCA01</ARBGB>
+     <MSGNR>025</MSGNR>
+     <TEXT>Operation cancelled by user.</TEXT>
+    </T100>
+    <T100>
+     <SPRSL>E</SPRSL>
+     <ARBGB>ZSDSCA01</ARBGB>
+     <MSGNR>026</MSGNR>
+     <TEXT>&amp;1 log entries deleted.</TEXT>
+    </T100>
+    <T100>
+     <SPRSL>E</SPRSL>
+     <ARBGB>ZSDSCA01</ARBGB>
+     <MSGNR>027</MSGNR>
+     <TEXT>Error occured during delete entries from log table.</TEXT>
+    </T100>
+    <T100>
+     <SPRSL>E</SPRSL>
+     <ARBGB>ZSDSCA01</ARBGB>
+     <MSGNR>028</MSGNR>
+     <TEXT>The interface is currently processing other data. Please try again later.</TEXT>
+    </T100>
+    <T100>
+     <SPRSL>E</SPRSL>
+     <ARBGB>ZSDSCA01</ARBGB>
+     <MSGNR>029</MSGNR>
+     <TEXT>Invalid date value &amp;1.</TEXT>
+    </T100>
+    <T100>
+     <SPRSL>E</SPRSL>
+     <ARBGB>ZSDSCA01</ARBGB>
+     <MSGNR>030</MSGNR>
+     <TEXT>No layout found.</TEXT>
+    </T100>
+    <T100>
+     <SPRSL>E</SPRSL>
+     <ARBGB>ZSDSCA01</ARBGB>
+     <MSGNR>031</MSGNR>
+     <TEXT>Invalid status. Only S or E can be used.</TEXT>
+    </T100>
+    <T100>
+     <SPRSL>E</SPRSL>
+     <ARBGB>ZSDSCA01</ARBGB>
+     <MSGNR>032</MSGNR>
+     <TEXT>Operation is cancelled by user.</TEXT>
+    </T100>
+   </T100>
+  </asx:values>
+ </asx:abap>
+</abapGit>

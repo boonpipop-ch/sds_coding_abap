@@ -1,0 +1,98 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<abapGit version="v1.0.0" serializer="LCL_OBJECT_CLAS" serializer_version="v1.0.0">
+ <asx:abap xmlns:asx="http://www.sap.com/abapxml" version="1.0">
+  <asx:values>
+   <VSEOCLASS>
+    <CLSNAME>ZCL_SDSCA_CAL_API</CLSNAME>
+    <LANGU>E</LANGU>
+    <DESCRIPT>Call API</DESCRIPT>
+    <STATE>1</STATE>
+    <CLSCCINCL>X</CLSCCINCL>
+    <FIXPT>X</FIXPT>
+    <UNICODE>X</UNICODE>
+   </VSEOCLASS>
+   <TPOOL>
+    <item>
+     <ID>I</ID>
+     <KEY>996</KEY>
+     <ENTRY>server errors</ENTRY>
+     <LENGTH>23</LENGTH>
+    </item>
+    <item>
+     <ID>I</ID>
+     <KEY>997</KEY>
+     <ENTRY>client-request incomplete</ENTRY>
+     <LENGTH>50</LENGTH>
+    </item>
+    <item>
+     <ID>I</ID>
+     <KEY>998</KEY>
+     <ENTRY>redirected; further actions required</ENTRY>
+     <LENGTH>72</LENGTH>
+    </item>
+    <item>
+     <ID>I</ID>
+     <KEY>999</KEY>
+     <ENTRY>client-request successful</ENTRY>
+     <LENGTH>50</LENGTH>
+    </item>
+   </TPOOL>
+   <DESCRIPTIONS>
+    <SEOCOMPOTX>
+     <CMPNAME>GC_E</CMPNAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Single-Character Flag</DESCRIPT>
+    </SEOCOMPOTX>
+    <SEOCOMPOTX>
+     <CMPNAME>GC_S</CMPNAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Single-Character Flag</DESCRIPT>
+    </SEOCOMPOTX>
+   </DESCRIPTIONS>
+   <DESCRIPTIONS_SUB>
+    <SEOSUBCOTX>
+     <CMPNAME>CALL_API</CMPNAME>
+     <SCONAME>E_STATUS</SCONAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Single-Character Flag</DESCRIPT>
+    </SEOSUBCOTX>
+    <SEOSUBCOTX>
+     <CMPNAME>CALL_API</CMPNAME>
+     <SCONAME>I_FROM</SCONAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Header API</DESCRIPT>
+    </SEOSUBCOTX>
+    <SEOSUBCOTX>
+     <CMPNAME>CALL_API</CMPNAME>
+     <SCONAME>I_HEADER</SCONAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Header API</DESCRIPT>
+    </SEOSUBCOTX>
+    <SEOSUBCOTX>
+     <CMPNAME>GET_API_END_POINT</CMPNAME>
+     <SCONAME>I_PROCESS_NAME</SCONAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Process Name</DESCRIPT>
+    </SEOSUBCOTX>
+    <SEOSUBCOTX>
+     <CMPNAME>GET_API_END_POINT</CMPNAME>
+     <SCONAME>R_RETURN</SCONAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>End Point</DESCRIPT>
+    </SEOSUBCOTX>
+    <SEOSUBCOTX>
+     <CMPNAME>GET_API_HEADER</CMPNAME>
+     <SCONAME>I_DATA</SCONAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Header API</DESCRIPT>
+    </SEOSUBCOTX>
+    <SEOSUBCOTX>
+     <CMPNAME>GET_API_HEADER</CMPNAME>
+     <SCONAME>R_RETURN</SCONAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Header API</DESCRIPT>
+    </SEOSUBCOTX>
+   </DESCRIPTIONS_SUB>
+  </asx:values>
+ </asx:abap>
+</abapGit>

@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<abapGit version="v1.0.0" serializer="LCL_OBJECT_SPLO" serializer_version="v1.0.0">
+ <asx:abap xmlns:asx="http://www.sap.com/abapxml" version="1.0">
+  <asx:values>
+   <TSPLD>
+    <PAPART>ZCHEQU2</PAPART>
+    <PFORMAT>ZCHEQU2</PFORMAT>
+    <ORIENT>.</ORIENT>
+    <TYPE>S</TYPE>
+   </TSPLD>
+  </asx:values>
+ </asx:abap>
+</abapGit>

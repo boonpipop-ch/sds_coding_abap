@@ -1,0 +1,377 @@
+*"* use this source file for the definition and implementation of
+*"* local helper classes, interface definitions and type
+*"* declarations
+CLASS LCL_DATA DEFINITION.
+  PUBLIC SECTION.
+    METHODS :
+      CONSTRUCTOR.
+    CLASS-METHODS :
+      SEND_TO_DATA_SPIDER_PATH IMPORTING IT_OTF    TYPE TSFOTF
+                                         I_PATH    TYPE STRING
+                               EXPORTING E_MESSAGE TYPE CHAR50
+                                         E_STATUS  TYPE CHAR1,
+
+      SEND_TO_LOCAL_PATH IMPORTING IT_OTF    TYPE TSFOTF
+                                   I_PATH    TYPE STRING
+                         EXPORTING E_MESSAGE TYPE CHAR50
+                                   E_STATUS  TYPE CHAR1,
+      SET_LOA IMPORTING I_DATA   LIKE ZCL_SDSCA_UTIL_SDS=>GS_DATA_LOA
+                        I_LOA    TYPE ZSDSCAS009
+              RETURNING VALUE(R) TYPE ZSDSCAS009,
+      SET_LOA_RUN IMPORTING I_DATA   LIKE ZCL_SDSCA_UTIL_SDS=>GS_DATA_LOA
+                            I_LOA    TYPE ZSDSCAS009
+                  RETURNING VALUE(R) TYPE ZSDSCAS009,
+      COMMIT,
+      ENDPOINT RETURNING VALUE(R) TYPE STRING,
+      HEADER_API RETURNING VALUE(R) TYPE ZSDSCAS001_TT,
+      BODY_API IMPORTING I_NAME   TYPE STRING
+                         I_PATH   TYPE STRING
+                         I_FILE   TYPE XSTRING
+               RETURNING VALUE(R) TYPE STRING,
+      BODY_API_LEN IMPORTING I_DATA   TYPE STRING
+                   RETURNING VALUE(R) TYPE I.
+
+    CONSTANTS : BEGIN OF LC_CON,
+                  FORMAT TYPE C LENGTH 3 VALUE 'PDF',
+                  BIN    TYPE CHAR10     VALUE 'BIN',
+                  E      TYPE C LENGTH 1 VALUE 'E',
+                  S      TYPE C LENGTH 1 VALUE 'S',
+                  DEV    TYPE C LENGTH 3 VALUE 'F36',
+                  QAS    TYPE C LENGTH 3 VALUE 'F46',
+                  PRD    TYPE C LENGTH 3 VALUE 'F56',
+                  POST   TYPE C LENGTH 4 VALUE 'POST',
+                END OF LC_CON.
+
+ENDCLASS.
+CLASS lcl_Data IMPLEMENTATION.
+  METHOD CONSTRUCTOR.
+
+  ENDMETHOD.
+  METHOD SEND_TO_DATA_SPIDER_PATH.
+
+    DATA : LT_LINES TYPE STANDARD TABLE OF TLINE.
+
+    DATA : LS_LINE LIKE LINE OF LT_LINES.
+
+    DATA : LV_BIN_FILESIZE TYPE I.
+
+    CALL FUNCTION 'CONVERT_OTF'
+      EXPORTING
+        FORMAT                = LC_CON-FORMAT
+*       max_linewidth         = 132
+      IMPORTING
+        BIN_FILESIZE          = LV_BIN_FILESIZE
+*       bin_file              = bin_file
+      TABLES
+        OTF                   = IT_OTF
+        LINES                 = LT_LINES
+      EXCEPTIONS
+        ERR_MAX_LINEWIDTH     = 1
+        ERR_FORMAT            = 2
+        ERR_CONV_NOT_POSSIBLE = 3
+        ERR_BAD_OTF           = 4
+        OTHERS                = 5.
+
+    DATA : LS_FILE_NAME TYPE C LENGTH 255.
+
+    OPEN DATASET LS_FILE_NAME FOR OUTPUT IN BINARY MODE.
+    IF SY-SUBRC = 0.
+      LOOP AT LT_LINES INTO LS_LINE.
+        TRANSFER LS_LINE-TDLINE TO LS_FILE_NAME.
+      ENDLOOP.
+      CLOSE DATASET LS_FILE_NAME.
+      E_STATUS  = LC_CON-S.
+      E_MESSAGE = TEXT-S01.
+    ELSE.
+      E_STATUS  = LC_CON-E.
+      E_MESSAGE = TEXT-E01.
+    ENDIF.
+  ENDMETHOD.
+  METHOD SEND_TO_LOCAL_PATH.
+
+    DATA : IT_LINES TYPE STANDARD TABLE OF TLINE.
+
+    DATA : LV_BIN_FILESIZE TYPE I.
+
+    DATA : LV_LENGTH TYPE I.
+
+    DATA : LV_FILENAME TYPE STRING.
+
+    CALL FUNCTION 'CONVERT_OTF'
+      EXPORTING
+        FORMAT                = LC_CON-FORMAT
+*       max_linewidth         = 132
+      IMPORTING
+        BIN_FILESIZE          = LV_BIN_FILESIZE
+*       bin_file              = bin_file
+      TABLES
+        OTF                   = IT_OTF
+        LINES                 = IT_LINES
+      EXCEPTIONS
+        ERR_MAX_LINEWIDTH     = 1
+        ERR_FORMAT            = 2
+        ERR_CONV_NOT_POSSIBLE = 3
+        ERR_BAD_OTF           = 4
+        OTHERS                = 5.
+
+    LV_FILENAME = I_PATH.
+
+    CALL FUNCTION 'GUI_DOWNLOAD'
+      EXPORTING
+        FILENAME                = LV_FILENAME
+        FILETYPE                = LC_CON-BIN
+      IMPORTING
+        FILELENGTH              = LV_LENGTH
+      TABLES
+        DATA_TAB                = IT_LINES
+      EXCEPTIONS
+        FILE_OPEN_ERROR         = 1
+        FILE_READ_ERROR         = 2
+        NO_BATCH                = 3
+        GUI_REFUSE_FILETRANSFER = 4
+        INVALID_TYPE            = 5
+        NO_AUTHORITY            = 6
+        UNKNOWN_ERROR           = 7
+        BAD_DATA_FORMAT         = 8
+        HEADER_NOT_ALLOWED      = 9
+        SEPARATOR_NOT_ALLOWED   = 10
+        HEADER_TOO_LONG         = 11
+        UNKNOWN_DP_ERROR        = 12
+        ACCESS_DENIED           = 13
+        DP_OUT_OF_MEMORY        = 14
+        DISK_FULL               = 15
+        DP_TIMEOUT              = 16
+        OTHERS                  = 17.
+    IF SY-SUBRC <> 0.
+      E_STATUS = LC_CON-E.
+      CONCATENATE SY-MSGV1 SY-MSGV2 SY-MSGV3 SY-MSGV4
+             INTO E_MESSAGE SEPARATED BY SPACE.
+    ELSE.
+      E_STATUS  = LC_CON-S.
+      E_MESSAGE = TEXT-S01.
+    ENDIF.
+
+  ENDMETHOD.
+  METHOD SET_LOA.
+
+    DATA : LS_R LIKE R.
+
+    CONSTANTS : BEGIN OF LC_CON,
+                  SUB TYPE C LENGTH 3 VALUE 'SUB',
+                END OF LC_CON.
+
+
+    LS_R = I_LOA.
+
+    IF I_DATA-STATU EQ LC_CON-SUB.
+      LS_R-SUBMIT_NAME = I_DATA-ACTBY.
+      LS_R-SUBMIT_DATE = I_DATA-ERDAT.
+    ELSE.
+      IF     I_DATA-POSIT EQ 1.
+        LS_R-APPROVE_NAME_LV1  = I_DATA-ACTBY.
+        LS_R-APPROVE_DATE_LV1  = I_DATA-ERDAT.
+        LS_R-APPROVE_POST_LV1  = I_DATA-LVDES.
+      ELSEIF I_DATA-POSIT EQ 2.
+        LS_R-APPROVE_NAME_LV2  = I_DATA-ACTBY.
+        LS_R-APPROVE_DATE_LV2  = I_DATA-ERDAT.
+        LS_R-APPROVE_POST_LV2  = I_DATA-LVDES.
+      ELSEIF I_DATA-POSIT EQ 3.
+        LS_R-APPROVE_NAME_LV3  = I_DATA-ACTBY.
+        LS_R-APPROVE_DATE_LV3  = I_DATA-ERDAT.
+        LS_R-APPROVE_POST_LV3  = I_DATA-LVDES.
+      ELSEIF I_DATA-POSIT EQ 4.
+        LS_R-APPROVE_NAME_LV4  = I_DATA-ACTBY.
+        LS_R-APPROVE_DATE_LV4  = I_DATA-ERDAT.
+        LS_R-APPROVE_POST_LV4  = I_DATA-LVDES.
+      ELSEIF I_DATA-POSIT EQ 5.
+        LS_R-APPROVE_NAME_LV5  = I_DATA-ACTBY.
+        LS_R-APPROVE_DATE_LV5  = I_DATA-ERDAT.
+        LS_R-APPROVE_POST_LV5  = I_DATA-LVDES.
+      ELSEIF I_DATA-POSIT EQ 6.
+        LS_R-APPROVE_NAME_LV6  = I_DATA-ACTBY.
+        LS_R-APPROVE_DATE_LV6  = I_DATA-ERDAT.
+        LS_R-APPROVE_POST_LV6  = I_DATA-LVDES.
+      ELSEIF I_DATA-POSIT EQ 7.
+        LS_R-APPROVE_NAME_LV7  = I_DATA-ACTBY.
+        LS_R-APPROVE_DATE_LV7  = I_DATA-ERDAT.
+        LS_R-APPROVE_POST_LV7  = I_DATA-LVDES.
+      ELSEIF I_DATA-POSIT EQ 8.
+        LS_R-APPROVE_NAME_LV8  = I_DATA-ACTBY.
+        LS_R-APPROVE_DATE_LV8  = I_DATA-ERDAT.
+        LS_R-APPROVE_POST_LV8  = I_DATA-LVDES.
+      ELSEIF I_DATA-POSIT EQ 9.
+        LS_R-APPROVE_NAME_LV9  = I_DATA-ACTBY.
+        LS_R-APPROVE_DATE_LV9  = I_DATA-ERDAT.
+        LS_R-APPROVE_POST_LV9  = I_DATA-LVDES.
+      ELSEIF I_DATA-POSIT EQ 10.
+        LS_R-APPROVE_NAME_LV10 = I_DATA-ACTBY.
+        LS_R-APPROVE_DATE_LV10 = I_DATA-ERDAT.
+        LS_R-APPROVE_POST_LV10 = I_DATA-LVDES.
+      ELSEIF I_DATA-POSIT EQ 11.
+        LS_R-APPROVE_NAME_LV11 = I_DATA-ACTBY.
+        LS_R-APPROVE_DATE_LV11 = I_DATA-ERDAT.
+        LS_R-APPROVE_POST_LV11 = I_DATA-LVDES.
+      ELSEIF I_DATA-POSIT EQ 12.
+        LS_R-APPROVE_NAME_LV12 = I_DATA-ACTBY.
+        LS_R-APPROVE_DATE_LV12 = I_DATA-ERDAT.
+        LS_R-APPROVE_POST_LV12 = I_DATA-LVDES.
+      ELSEIF I_DATA-POSIT EQ 13.
+        LS_R-APPROVE_NAME_LV13 = I_DATA-ACTBY.
+        LS_R-APPROVE_DATE_LV13 = I_DATA-ERDAT.
+        LS_R-APPROVE_POST_LV13 = I_DATA-LVDES.
+      ELSEIF I_DATA-POSIT EQ 14.
+        LS_R-APPROVE_NAME_LV14 = I_DATA-ACTBY.
+        LS_R-APPROVE_DATE_LV14 = I_DATA-ERDAT.
+        LS_R-APPROVE_POST_LV14 = I_DATA-LVDES.
+      ENDIF.
+    ENDIF.
+    R = LS_R.
+  ENDMETHOD.
+  METHOD SET_LOA_RUN.
+    DATA : LS_R LIKE R.
+
+    CONSTANTS : BEGIN OF LC_CON,
+                  SUB TYPE C LENGTH 3 VALUE 'SUB',
+                END OF LC_CON.
+
+    LS_R = I_LOA.
+
+    IF I_DATA-STATU EQ LC_CON-SUB.
+      LS_R-SUBMIT_NAME = I_DATA-ACTBY.
+      LS_R-SUBMIT_DATE = I_DATA-ERDAT.
+    ELSE.
+      IF     LS_R-APPROVE_NAME_LV1 IS INITIAL.
+        LS_R-APPROVE_NAME_LV1  = I_DATA-ACTBY.
+        LS_R-APPROVE_DATE_LV1  = I_DATA-ERDAT.
+        LS_R-APPROVE_POST_LV1  = I_DATA-LVDES.
+      ELSEIF LS_R-APPROVE_NAME_LV2 IS INITIAL.
+        LS_R-APPROVE_NAME_LV2  = I_DATA-ACTBY.
+        LS_R-APPROVE_DATE_LV2  = I_DATA-ERDAT.
+        LS_R-APPROVE_POST_LV2  = I_DATA-LVDES.
+      ELSEIF LS_R-APPROVE_NAME_LV3 IS INITIAL.
+        LS_R-APPROVE_NAME_LV3  = I_DATA-ACTBY.
+        LS_R-APPROVE_DATE_LV3  = I_DATA-ERDAT.
+        LS_R-APPROVE_POST_LV3  = I_DATA-LVDES.
+      ELSEIF LS_R-APPROVE_NAME_LV4 IS INITIAL.
+        LS_R-APPROVE_NAME_LV4  = I_DATA-ACTBY.
+        LS_R-APPROVE_DATE_LV4  = I_DATA-ERDAT.
+        LS_R-APPROVE_POST_LV4  = I_DATA-LVDES.
+      ELSEIF LS_R-APPROVE_NAME_LV5 IS INITIAL.
+        LS_R-APPROVE_NAME_LV5  = I_DATA-ACTBY.
+        LS_R-APPROVE_DATE_LV5  = I_DATA-ERDAT.
+        LS_R-APPROVE_POST_LV5  = I_DATA-LVDES.
+      ELSEIF LS_R-APPROVE_NAME_LV6 IS INITIAL.
+        LS_R-APPROVE_NAME_LV6  = I_DATA-ACTBY.
+        LS_R-APPROVE_DATE_LV6  = I_DATA-ERDAT.
+        LS_R-APPROVE_POST_LV6  = I_DATA-LVDES.
+      ELSEIF LS_R-APPROVE_NAME_LV7 IS INITIAL.
+        LS_R-APPROVE_NAME_LV7  = I_DATA-ACTBY.
+        LS_R-APPROVE_DATE_LV7  = I_DATA-ERDAT.
+        LS_R-APPROVE_POST_LV7  = I_DATA-LVDES.
+      ELSEIF LS_R-APPROVE_NAME_LV8 IS INITIAL.
+        LS_R-APPROVE_NAME_LV8  = I_DATA-ACTBY.
+        LS_R-APPROVE_DATE_LV8  = I_DATA-ERDAT.
+        LS_R-APPROVE_POST_LV8  = I_DATA-LVDES.
+      ELSEIF LS_R-APPROVE_NAME_LV9 IS INITIAL.
+        LS_R-APPROVE_NAME_LV9  = I_DATA-ACTBY.
+        LS_R-APPROVE_DATE_LV9  = I_DATA-ERDAT.
+        LS_R-APPROVE_POST_LV9  = I_DATA-LVDES.
+      ELSEIF LS_R-APPROVE_NAME_LV10 IS INITIAL.
+        LS_R-APPROVE_NAME_LV10 = I_DATA-ACTBY.
+        LS_R-APPROVE_DATE_LV10 = I_DATA-ERDAT.
+        LS_R-APPROVE_POST_LV10 = I_DATA-LVDES.
+      ELSEIF LS_R-APPROVE_NAME_LV11 IS INITIAL.
+        LS_R-APPROVE_NAME_LV11 = I_DATA-ACTBY.
+        LS_R-APPROVE_DATE_LV11 = I_DATA-ERDAT.
+        LS_R-APPROVE_POST_LV11 = I_DATA-LVDES.
+      ELSEIF LS_R-APPROVE_NAME_LV12 IS INITIAL.
+        LS_R-APPROVE_NAME_LV12 = I_DATA-ACTBY.
+        LS_R-APPROVE_DATE_LV12 = I_DATA-ERDAT.
+        LS_R-APPROVE_POST_LV12 = I_DATA-LVDES.
+      ELSEIF LS_R-APPROVE_NAME_LV13 IS INITIAL.
+        LS_R-APPROVE_NAME_LV13 = I_DATA-ACTBY.
+        LS_R-APPROVE_DATE_LV13 = I_DATA-ERDAT.
+        LS_R-APPROVE_POST_LV13 = I_DATA-LVDES.
+      ELSEIF LS_R-APPROVE_NAME_LV14 IS INITIAL.
+        LS_R-APPROVE_NAME_LV14 = I_DATA-ACTBY.
+        LS_R-APPROVE_DATE_LV14 = I_DATA-ERDAT.
+        LS_R-APPROVE_POST_LV14 = I_DATA-LVDES.
+      ENDIF.
+    ENDIF.
+    R = LS_R.
+
+  ENDMETHOD.
+  METHOD COMMIT.
+    COMMIT WORK AND WAIT.
+  ENDMETHOD.
+  METHOD ENDPOINT.
+    CONSTANTS : BEGIN OF LC_API,
+*                  REPID TYPE C LENGTH 22 VALUE 'SONY_STATUS_DO',
+                  REPID TYPE C LENGTH 11 VALUE 'ZSDSMMR0710',
+                  DEV   TYPE C LENGTH 3  VALUE 'DEV',
+                  QAS   TYPE C LENGTH 3  VALUE 'QAS',
+                  PRD   TYPE C LENGTH 3  VALUE 'PRD',
+                  API   TYPE C LENGTH 3  VALUE 'API',
+                END OF LC_API.
+
+    CASE SY-SYSID.
+      WHEN LC_CON-DEV.
+        ZCL_SDSCA_UTIL_SDS=>GET_CONFIG_001( EXPORTING I_REPID             = LC_API-REPID
+                                                      I_SINGLE_VALUE_FLAG = ABAP_TRUE
+                                                      I_PARAM             = LC_API-DEV
+                                                      I_PARAM_EXT         = LC_API-API
+                                            CHANGING  C_RETURN            = R ).
+      WHEN LC_CON-QAS.
+        ZCL_SDSCA_UTIL_SDS=>GET_CONFIG_001( EXPORTING I_REPID             = LC_API-REPID
+                                                      I_SINGLE_VALUE_FLAG = ABAP_TRUE
+                                                      I_PARAM             = LC_API-QAS
+                                                      I_PARAM_EXT         = LC_API-API
+                                            CHANGING  C_RETURN            = R ).
+      WHEN LC_CON-PRD.
+        ZCL_SDSCA_UTIL_SDS=>GET_CONFIG_001( EXPORTING I_REPID             = LC_API-REPID
+                                                      I_SINGLE_VALUE_FLAG = ABAP_TRUE
+                                                      I_PARAM             = LC_API-PRD
+                                                      I_PARAM_EXT         = LC_API-API
+                                            CHANGING  C_RETURN            = R ).
+    ENDCASE.
+
+  ENDMETHOD.
+  METHOD HEADER_API.
+    DATA : LS_HEADER TYPE ZSDSCAS001.
+
+    DATA : LV_TOKEN TYPE STRING.
+
+    LS_HEADER-NAME  = 'Content-Type'.
+    LS_HEADER-VALUE = 'application/json'.
+    APPEND LS_HEADER TO R.
+    CLEAR LS_HEADER.
+
+    LS_HEADER-NAME  = 'Accept'.
+    LS_HEADER-VALUE = 'application/json'.
+    APPEND LS_HEADER TO R.
+    CLEAR LS_HEADER.
+  ENDMETHOD.
+  METHOD BODY_API.
+    DATA: BEGIN OF LS_DATA_API,
+            _File_Name TYPE STRING,
+            _File_Path TYPE STRING,
+            _File      TYPE STRING,
+          END OF LS_DATA_API.
+
+    LS_DATA_API-_File_Name = I_NAME.
+    LS_DATA_API-_File_Path = I_PATH.
+    LS_DATA_API-_File      = I_FILE.
+
+    CALL METHOD /UI2/CL_JSON=>SERIALIZE
+      EXPORTING
+        DATA        = LS_DATA_API
+        PRETTY_NAME = /UI2/CL_JSON=>PRETTY_MODE-CAMEL_CASE
+      RECEIVING
+        R_JSON      = R
+      EXCEPTIONS
+        OTHERS      = 1.
+  ENDMETHOD.
+  METHOD BODY_API_LEN.
+    R = STRLEN( I_DATA ).
+  ENDMETHOD.
+ENDCLASS.

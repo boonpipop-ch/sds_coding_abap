@@ -1,0 +1,87 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<abapGit version="v1.0.0" serializer="LCL_OBJECT_FUGR" serializer_version="v1.0.0">
+ <asx:abap xmlns:asx="http://www.sap.com/abapxml" version="1.0">
+  <asx:values>
+   <AREAT>Overlay Form</AREAT>
+   <INCLUDES>
+    <SOBJ_NAME>LZSDSCA04TOP</SOBJ_NAME>
+    <SOBJ_NAME>SAPLZSDSCA04</SOBJ_NAME>
+   </INCLUDES>
+   <FUNCTIONS>
+    <item>
+     <FUNCNAME>Z_SDSCA_OPT_GET_OVERLAY_FORM</FUNCNAME>
+     <SHORT_TEXT>Overlay form</SHORT_TEXT>
+     <IMPORT>
+      <RSIMP>
+       <PARAMETER>REPID</PARAMETER>
+       <REFERENCE>X</REFERENCE>
+       <TYP>REPID</TYP>
+      </RSIMP>
+      <RSIMP>
+       <PARAMETER>COMP_CODE</PARAMETER>
+       <REFERENCE>X</REFERENCE>
+       <TYP>BUKRS</TYP>
+      </RSIMP>
+      <RSIMP>
+       <PARAMETER>DOC_TYPE</PARAMETER>
+       <OPTIONAL>X</OPTIONAL>
+       <REFERENCE>X</REFERENCE>
+       <TYP>CHAR4</TYP>
+      </RSIMP>
+      <RSIMP>
+       <PARAMETER>CUSTOMER_COPY</PARAMETER>
+       <OPTIONAL>X</OPTIONAL>
+       <REFERENCE>X</REFERENCE>
+       <TYP>CHAR1</TYP>
+      </RSIMP>
+     </IMPORT>
+     <CHANGING>
+      <RSCHA>
+       <PARAMETER>TOA_DARA</PARAMETER>
+       <REFERENCE>X</REFERENCE>
+       <TYP>TOA_DARA</TYP>
+      </RSCHA>
+      <RSCHA>
+       <PARAMETER>LAYOUT_SET</PARAMETER>
+       <OPTIONAL>X</OPTIONAL>
+       <REFERENCE>X</REFERENCE>
+       <TYP>ZSDSCAC007</TYP>
+      </RSCHA>
+     </CHANGING>
+     <DOCUMENTATION>
+      <RSFDO>
+       <PARAMETER>REPID</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>ABAP Program Name</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>COMP_CODE</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>Company Code</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>DOC_TYPE</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>Undefined range (can be used for patch levels)</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>CUSTOMER_COPY</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>Single-Character Flag</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>TOA_DARA</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>SAP ArchiveLink structure of a DARA line</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>LAYOUT_SET</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>Config form overlay</STEXT>
+      </RSFDO>
+     </DOCUMENTATION>
+    </item>
+   </FUNCTIONS>
+  </asx:values>
+ </asx:abap>
+</abapGit>

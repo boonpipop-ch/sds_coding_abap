@@ -1,0 +1,18 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<abapGit version="v1.0.0" serializer="LCL_OBJECT_SPLO" serializer_version="v1.0.0">
+ <asx:abap xmlns:asx="http://www.sap.com/abapxml" version="1.0">
+  <asx:values>
+   <TSPLT>
+    <SPRAS>E</SPRAS>
+    <PAPART>ZSDSCHQ2</PAPART>
+    <TXT>ZCHEQU2  Print CHEQUE_SCB</TXT>
+   </TSPLT>
+   <TSPLD>
+    <PAPART>ZSDSCHQ2</PAPART>
+    <PFORMAT>ZSDSCHQ2</PFORMAT>
+    <ORIENT>.</ORIENT>
+    <TYPE>S</TYPE>
+   </TSPLD>
+  </asx:values>
+ </asx:abap>
+</abapGit>
