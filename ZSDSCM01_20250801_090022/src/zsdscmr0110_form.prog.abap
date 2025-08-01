@@ -101,7 +101,7 @@ FORM f_call_transection.
   IF sy-subrc = 0.
 
   ENDIF.
-
+**
 ENDFORM.                    " F_CALL_TRANSECTION
 *&---------------------------------------------------------------------*
 *&      Form  bdc_dynpro
