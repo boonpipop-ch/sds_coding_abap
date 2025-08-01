@@ -1,0 +1,71 @@
+<?sap.transform simple?>
+<tt:transform xmlns:tt="http://www.sap.com/transformation-templates" xmlns:ddic="http://www.sap.com/abapxml/types/dictionary">
+
+  <tt:root name="DATA" type="ddic:ZSDSPSS008"/>
+  <tt:template>
+
+    <!-- Project Defination-->
+    <object>
+      <array name="Budget">
+        <tt:cond check="exist(DATA.BUDGET)">
+          <tt:loop ref="DATA.BUDGET">
+            <!-- Project Budget -->
+            <object>
+
+              <tt:group>
+                <tt:cond frq="1">
+                  <str name="WBS">
+                    <tt:value ref="$ref.POSID"/>
+                  </str>
+                </tt:cond>
+                <tt:cond frq="?">
+                  <str name="CostElement">
+                    <tt:value ref="$ref.KSTAR"/>
+                  </str>
+                </tt:cond>
+                <tt:cond frq="1">
+                  <str name="FiscalYear">
+                    <tt:value ref="$ref.GJAHR"/>
+                  </str>
+                </tt:cond>
+                <tt:cond frq="?">
+                  <str name="Period">
+                    <tt:value ref="$ref.MONAT"/>
+                  </str>
+                </tt:cond>
+                <tt:cond frq="?">
+                  <num name="PlanRevenue">
+                    <tt:value ref="$ref.REVAM"/>
+                  </num>
+                </tt:cond>
+                <tt:cond frq="1">
+                  <num name="PlanCost">
+                    <tt:value ref="$ref.CSTAM"/>
+                  </num>
+                </tt:cond>
+                <tt:cond frq="1">
+                  <str name="Version">
+                    <tt:value ref="$ref.VERSN"/>
+                  </str>
+                </tt:cond>
+                <tt:cond frq="?">
+                  <str name="ResponseStatus">
+                    <tt:value ref="$ref.RESP_STATUS"/>
+                  </str>
+                </tt:cond>
+                <tt:cond frq="?">
+                  <str name="ResponseMessage">
+                    <tt:value ref="$ref.RESP_MESSAGE"/>
+                  </str>
+                </tt:cond>
+
+              </tt:group>
+
+            </object>
+          </tt:loop>
+        </tt:cond>
+      </array>
+
+    </object>
+  </tt:template>
+</tt:transform>

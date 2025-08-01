@@ -1,0 +1,641 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<abapGit version="v1.0.0" serializer="LCL_OBJECT_CLAS" serializer_version="v1.0.0">
+ <asx:abap xmlns:asx="http://www.sap.com/abapxml" version="1.0">
+  <asx:values>
+   <VSEOCLASS>
+    <CLSNAME>ZCL_SDSMM_RESERV_VAN_SLOC</CLSNAME>
+    <LANGU>E</LANGU>
+    <DESCRIPT>Reservation to van storage location</DESCRIPT>
+    <STATE>1</STATE>
+    <CLSCCINCL>X</CLSCCINCL>
+    <FIXPT>X</FIXPT>
+    <UNICODE>X</UNICODE>
+   </VSEOCLASS>
+   <TPOOL>
+    <item>
+     <ID>I</ID>
+     <KEY>E01</KEY>
+     <ENTRY>Required fields in reservation header could not be blank</ENTRY>
+     <LENGTH>72</LENGTH>
+    </item>
+    <item>
+     <ID>I</ID>
+     <KEY>E02</KEY>
+     <ENTRY>Create reservation cannot choose Final Issue</ENTRY>
+     <LENGTH>88</LENGTH>
+    </item>
+    <item>
+     <ID>I</ID>
+     <KEY>E03</KEY>
+     <ENTRY>Create reservation cannot choose Deleted</ENTRY>
+     <LENGTH>80</LENGTH>
+    </item>
+    <item>
+     <ID>I</ID>
+     <KEY>E04</KEY>
+     <ENTRY>Reservation number or reservation item not found in SAP</ENTRY>
+     <LENGTH>66</LENGTH>
+    </item>
+    <item>
+     <ID>I</ID>
+     <KEY>E05</KEY>
+     <ENTRY>Reservation detail not align with SAP</ENTRY>
+     <LENGTH>74</LENGTH>
+    </item>
+    <item>
+     <ID>I</ID>
+     <KEY>E06</KEY>
+     <ENTRY>Item is marked for deletion, change is not allowed</ENTRY>
+     <LENGTH>106</LENGTH>
+    </item>
+    <item>
+     <ID>I</ID>
+     <KEY>E07</KEY>
+     <ENTRY>Required fields in reservation item could not be blank</ENTRY>
+     <LENGTH>108</LENGTH>
+    </item>
+    <item>
+     <ID>I</ID>
+     <KEY>E08</KEY>
+     <ENTRY>Item</ENTRY>
+     <LENGTH>14</LENGTH>
+    </item>
+    <item>
+     <ID>I</ID>
+     <KEY>E09</KEY>
+     <ENTRY>Reservation number should be the same for all items</ENTRY>
+     <LENGTH>102</LENGTH>
+    </item>
+    <item>
+     <ID>I</ID>
+     <KEY>E10</KEY>
+     <ENTRY>Material does not exist or no available stock for this material</ENTRY>
+     <LENGTH>100</LENGTH>
+    </item>
+    <item>
+     <ID>I</ID>
+     <KEY>E11</KEY>
+     <ENTRY>Quantity redetermined according to available stock quantity</ENTRY>
+     <LENGTH>118</LENGTH>
+    </item>
+    <item>
+     <ID>I</ID>
+     <KEY>E12</KEY>
+     <ENTRY>Cannot change quantity. Material document is created</ENTRY>
+     <LENGTH>104</LENGTH>
+    </item>
+    <item>
+     <ID>I</ID>
+     <KEY>E13</KEY>
+     <ENTRY>Request quantity is the same as existing reservation quantity</ENTRY>
+     <LENGTH>122</LENGTH>
+    </item>
+    <item>
+     <ID>I</ID>
+     <KEY>E14</KEY>
+     <ENTRY>No any reservation item specified. Reservation could not be created</ENTRY>
+     <LENGTH>76</LENGTH>
+    </item>
+    <item>
+     <ID>I</ID>
+     <KEY>E15</KEY>
+     <ENTRY>Function performed in Test run mode: Reservation can be created</ENTRY>
+     <LENGTH>126</LENGTH>
+    </item>
+    <item>
+     <ID>I</ID>
+     <KEY>E16</KEY>
+     <ENTRY>All items contained errors. Reservation could not be created</ENTRY>
+     <LENGTH>112</LENGTH>
+    </item>
+    <item>
+     <ID>I</ID>
+     <KEY>E17</KEY>
+     <ENTRY>The specified movement type is not supported</ENTRY>
+     <LENGTH>88</LENGTH>
+    </item>
+    <item>
+     <ID>I</ID>
+     <KEY>E18</KEY>
+     <ENTRY>All items contained errors. Reservation could not be updated</ENTRY>
+     <LENGTH>120</LENGTH>
+    </item>
+    <item>
+     <ID>I</ID>
+     <KEY>E19</KEY>
+     <ENTRY>The specified plant is not in scope</ENTRY>
+     <LENGTH>70</LENGTH>
+    </item>
+   </TPOOL>
+   <DESCRIPTIONS>
+    <SEOCOMPOTX>
+     <CMPNAME>APPEND_RESPONSE</CMPNAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Append response table</DESCRIPT>
+    </SEOCOMPOTX>
+    <SEOCOMPOTX>
+     <CMPNAME>CHECK_MATERIAL_AVAILABILITY</CMPNAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Material availability check</DESCRIPT>
+    </SEOCOMPOTX>
+    <SEOCOMPOTX>
+     <CMPNAME>CONVERT_CUNIT_INPUT</CMPNAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Convert MEINS to interal format</DESCRIPT>
+    </SEOCOMPOTX>
+    <SEOCOMPOTX>
+     <CMPNAME>CONVERT_MATN1_INPUT</CMPNAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Convert MATNR to internal format</DESCRIPT>
+    </SEOCOMPOTX>
+    <SEOCOMPOTX>
+     <CMPNAME>CREATE_RESERVATION</CMPNAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Create reservation</DESCRIPT>
+    </SEOCOMPOTX>
+    <SEOCOMPOTX>
+     <CMPNAME>EXTEND_MATERIAL_SLOC</CMPNAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Extend material o storage location</DESCRIPT>
+    </SEOCOMPOTX>
+    <SEOCOMPOTX>
+     <CMPNAME>GC_COMMA</CMPNAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Comma separator</DESCRIPT>
+    </SEOCOMPOTX>
+    <SEOCOMPOTX>
+     <CMPNAME>GC_CREATE</CMPNAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Mode Create</DESCRIPT>
+    </SEOCOMPOTX>
+    <SEOCOMPOTX>
+     <CMPNAME>GC_ERROR</CMPNAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Status Error</DESCRIPT>
+    </SEOCOMPOTX>
+    <SEOCOMPOTX>
+     <CMPNAME>GC_MVT_TRF</CMPNAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Movement Type (Inventory Management)</DESCRIPT>
+    </SEOCOMPOTX>
+    <SEOCOMPOTX>
+     <CMPNAME>GC_RECTYPE_HDR</CMPNAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Record Type</DESCRIPT>
+    </SEOCOMPOTX>
+    <SEOCOMPOTX>
+     <CMPNAME>GC_RECTYPE_ITM</CMPNAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Record Type</DESCRIPT>
+    </SEOCOMPOTX>
+    <SEOCOMPOTX>
+     <CMPNAME>GC_SUCCESS</CMPNAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Status Success</DESCRIPT>
+    </SEOCOMPOTX>
+    <SEOCOMPOTX>
+     <CMPNAME>GC_UPDATE</CMPNAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Mode Update</DESCRIPT>
+    </SEOCOMPOTX>
+    <SEOCOMPOTX>
+     <CMPNAME>GC_WARNING</CMPNAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Status Warning</DESCRIPT>
+    </SEOCOMPOTX>
+    <SEOCOMPOTX>
+     <CMPNAME>GET_CONSTANTS</CMPNAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Get Constants</DESCRIPT>
+    </SEOCOMPOTX>
+    <SEOCOMPOTX>
+     <CMPNAME>GET_MATERIAL_DESCRIPTION</CMPNAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Get material description</DESCRIPT>
+    </SEOCOMPOTX>
+    <SEOCOMPOTX>
+     <CMPNAME>GET_RESERVATION_DB</CMPNAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Get reservation data</DESCRIPT>
+    </SEOCOMPOTX>
+    <SEOCOMPOTX>
+     <CMPNAME>GRT_PLANT</CMPNAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Range table type WERKS</DESCRIPT>
+    </SEOCOMPOTX>
+    <SEOCOMPOTX>
+     <CMPNAME>REDETERMINE_QUANTITY</CMPNAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Redetermine quantity according to available stock quantity</DESCRIPT>
+    </SEOCOMPOTX>
+    <SEOCOMPOTX>
+     <CMPNAME>RESERVATION_PROCESS</CMPNAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Process reservation data</DESCRIPT>
+    </SEOCOMPOTX>
+    <SEOCOMPOTX>
+     <CMPNAME>TS_INTERFACE_LOG</CMPNAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Interface log for reservation to van storage location</DESCRIPT>
+    </SEOCOMPOTX>
+    <SEOCOMPOTX>
+     <CMPNAME>TS_MATERIAL_PLANT</CMPNAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>List of Material / Plant</DESCRIPT>
+    </SEOCOMPOTX>
+    <SEOCOMPOTX>
+     <CMPNAME>TT_MATERIAL_PLANT</CMPNAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>List of Material / Plant</DESCRIPT>
+    </SEOCOMPOTX>
+    <SEOCOMPOTX>
+     <CMPNAME>UPDATE_INTERFACE_LOG</CMPNAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Update result of interface to interface log table</DESCRIPT>
+    </SEOCOMPOTX>
+    <SEOCOMPOTX>
+     <CMPNAME>UPDATE_RESERVATION</CMPNAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Update reservation</DESCRIPT>
+    </SEOCOMPOTX>
+    <SEOCOMPOTX>
+     <CMPNAME>VALIDATE_INPUT</CMPNAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Input validation</DESCRIPT>
+    </SEOCOMPOTX>
+    <SEOCOMPOTX>
+     <CMPNAME>VALIDATE_INPUT_SINGLE</CMPNAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Validate input data single line</DESCRIPT>
+    </SEOCOMPOTX>
+    <SEOCOMPOTX>
+     <CMPNAME>VALIDATE_WITH_RESB</CMPNAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Validate reservation data</DESCRIPT>
+    </SEOCOMPOTX>
+   </DESCRIPTIONS>
+   <DESCRIPTIONS_SUB>
+    <SEOSUBCOTX>
+     <CMPNAME>APPEND_RESPONSE</CMPNAME>
+     <SCONAME>CS_RESERVATION_HDR</SCONAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Reservation header</DESCRIPT>
+    </SEOSUBCOTX>
+    <SEOSUBCOTX>
+     <CMPNAME>APPEND_RESPONSE</CMPNAME>
+     <SCONAME>CT_RESPONSE</SCONAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Response table</DESCRIPT>
+    </SEOSUBCOTX>
+    <SEOSUBCOTX>
+     <CMPNAME>APPEND_RESPONSE</CMPNAME>
+     <SCONAME>IF_ITEM_NO</SCONAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Salesforce Item No</DESCRIPT>
+    </SEOSUBCOTX>
+    <SEOSUBCOTX>
+     <CMPNAME>APPEND_RESPONSE</CMPNAME>
+     <SCONAME>IF_MESSAGE</SCONAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Response message</DESCRIPT>
+    </SEOSUBCOTX>
+    <SEOSUBCOTX>
+     <CMPNAME>APPEND_RESPONSE</CMPNAME>
+     <SCONAME>IF_STATUS</SCONAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Response status</DESCRIPT>
+    </SEOSUBCOTX>
+    <SEOSUBCOTX>
+     <CMPNAME>CHECK_MATERIAL_AVAILABILITY</CMPNAME>
+     <SCONAME>EF_COM_QTY</SCONAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Committed Quantity</DESCRIPT>
+    </SEOSUBCOTX>
+    <SEOSUBCOTX>
+     <CMPNAME>CHECK_MATERIAL_AVAILABILITY</CMPNAME>
+     <SCONAME>IF_CHECK_RULE</SCONAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Checking rule</DESCRIPT>
+    </SEOSUBCOTX>
+    <SEOSUBCOTX>
+     <CMPNAME>CHECK_MATERIAL_AVAILABILITY</CMPNAME>
+     <SCONAME>IF_MATNR</SCONAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Material number</DESCRIPT>
+    </SEOSUBCOTX>
+    <SEOSUBCOTX>
+     <CMPNAME>CHECK_MATERIAL_AVAILABILITY</CMPNAME>
+     <SCONAME>IF_PLANT</SCONAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Plant</DESCRIPT>
+    </SEOSUBCOTX>
+    <SEOSUBCOTX>
+     <CMPNAME>CHECK_MATERIAL_AVAILABILITY</CMPNAME>
+     <SCONAME>IF_STGE_LOC</SCONAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Storage location</DESCRIPT>
+    </SEOSUBCOTX>
+    <SEOSUBCOTX>
+     <CMPNAME>CHECK_MATERIAL_AVAILABILITY</CMPNAME>
+     <SCONAME>IF_UNIT</SCONAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Unit of measure</DESCRIPT>
+    </SEOSUBCOTX>
+    <SEOSUBCOTX>
+     <CMPNAME>CONVERT_CUNIT_INPUT</CMPNAME>
+     <SCONAME>EF_UNIT</SCONAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Base Unit of Measure internal format</DESCRIPT>
+    </SEOSUBCOTX>
+    <SEOSUBCOTX>
+     <CMPNAME>CONVERT_CUNIT_INPUT</CMPNAME>
+     <SCONAME>IF_UNIT</SCONAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Base Unit of Measure</DESCRIPT>
+    </SEOSUBCOTX>
+    <SEOSUBCOTX>
+     <CMPNAME>CONVERT_MATN1_INPUT</CMPNAME>
+     <SCONAME>EF_MATNR</SCONAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Material Number intenal format</DESCRIPT>
+    </SEOSUBCOTX>
+    <SEOSUBCOTX>
+     <CMPNAME>CONVERT_MATN1_INPUT</CMPNAME>
+     <SCONAME>IF_MATNR</SCONAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Material Number</DESCRIPT>
+    </SEOSUBCOTX>
+    <SEOSUBCOTX>
+     <CMPNAME>CREATE_RESERVATION</CMPNAME>
+     <SCONAME>CS_RESERVATION_HDR</SCONAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Reservation header</DESCRIPT>
+    </SEOSUBCOTX>
+    <SEOSUBCOTX>
+     <CMPNAME>CREATE_RESERVATION</CMPNAME>
+     <SCONAME>CT_INTERFACE_LOG</SCONAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Interface log</DESCRIPT>
+    </SEOSUBCOTX>
+    <SEOSUBCOTX>
+     <CMPNAME>CREATE_RESERVATION</CMPNAME>
+     <SCONAME>CT_RESPONSE</SCONAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Response</DESCRIPT>
+    </SEOSUBCOTX>
+    <SEOSUBCOTX>
+     <CMPNAME>CREATE_RESERVATION</CMPNAME>
+     <SCONAME>IF_TEST</SCONAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Test Run Flag</DESCRIPT>
+    </SEOSUBCOTX>
+    <SEOSUBCOTX>
+     <CMPNAME>CREATE_RESERVATION</CMPNAME>
+     <SCONAME>IT_RESERVATION_ITM</SCONAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Reservation item</DESCRIPT>
+    </SEOSUBCOTX>
+    <SEOSUBCOTX>
+     <CMPNAME>EXTEND_MATERIAL_SLOC</CMPNAME>
+     <SCONAME>IF_SLOC</SCONAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Receiving/issuing storage location</DESCRIPT>
+    </SEOSUBCOTX>
+    <SEOSUBCOTX>
+     <CMPNAME>EXTEND_MATERIAL_SLOC</CMPNAME>
+     <SCONAME>IT_MATERIAL_PLANT</SCONAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>List of Material / Plant</DESCRIPT>
+    </SEOSUBCOTX>
+    <SEOSUBCOTX>
+     <CMPNAME>GET_CONSTANTS</CMPNAME>
+     <SCONAME>ET_PLANT</SCONAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Range table for WERKS</DESCRIPT>
+    </SEOSUBCOTX>
+    <SEOSUBCOTX>
+     <CMPNAME>GET_MATERIAL_DESCRIPTION</CMPNAME>
+     <SCONAME>EF_MAKTX</SCONAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Material Description</DESCRIPT>
+    </SEOSUBCOTX>
+    <SEOSUBCOTX>
+     <CMPNAME>GET_MATERIAL_DESCRIPTION</CMPNAME>
+     <SCONAME>IF_MATNR</SCONAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Material Number</DESCRIPT>
+    </SEOSUBCOTX>
+    <SEOSUBCOTX>
+     <CMPNAME>GET_RESERVATION_DB</CMPNAME>
+     <SCONAME>ES_RESERVATION_DB</SCONAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Reservation data</DESCRIPT>
+    </SEOSUBCOTX>
+    <SEOSUBCOTX>
+     <CMPNAME>GET_RESERVATION_DB</CMPNAME>
+     <SCONAME>IF_RSNUM</SCONAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Number of reservation/dependent requirements</DESCRIPT>
+    </SEOSUBCOTX>
+    <SEOSUBCOTX>
+     <CMPNAME>GET_RESERVATION_DB</CMPNAME>
+     <SCONAME>IF_RSPOS</SCONAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Item Number of Reservation / Dependent Requirements</DESCRIPT>
+    </SEOSUBCOTX>
+    <SEOSUBCOTX>
+     <CMPNAME>REDETERMINE_QUANTITY</CMPNAME>
+     <SCONAME>CF_QUANTITY_UPD</SCONAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Revised Quantiity</DESCRIPT>
+    </SEOSUBCOTX>
+    <SEOSUBCOTX>
+     <CMPNAME>REDETERMINE_QUANTITY</CMPNAME>
+     <SCONAME>IF_AVAILABLE_QTY</SCONAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Available Quantity</DESCRIPT>
+    </SEOSUBCOTX>
+    <SEOSUBCOTX>
+     <CMPNAME>REDETERMINE_QUANTITY</CMPNAME>
+     <SCONAME>IF_QUANTITY_IN</SCONAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Request quantity</DESCRIPT>
+    </SEOSUBCOTX>
+    <SEOSUBCOTX>
+     <CMPNAME>REDETERMINE_QUANTITY</CMPNAME>
+     <SCONAME>IF_UPDATEMODE</SCONAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Mode (C-Create, U-Update)</DESCRIPT>
+    </SEOSUBCOTX>
+    <SEOSUBCOTX>
+     <CMPNAME>REDETERMINE_QUANTITY</CMPNAME>
+     <SCONAME>IS_RESERVATION_DB</SCONAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Existing reservation data in DB</DESCRIPT>
+    </SEOSUBCOTX>
+    <SEOSUBCOTX>
+     <CMPNAME>RESERVATION_PROCESS</CMPNAME>
+     <SCONAME>CS_RESERVATION_HDR</SCONAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Reservation header</DESCRIPT>
+    </SEOSUBCOTX>
+    <SEOSUBCOTX>
+     <CMPNAME>RESERVATION_PROCESS</CMPNAME>
+     <SCONAME>CT_RESERVATION_ITM</SCONAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Reservation item</DESCRIPT>
+    </SEOSUBCOTX>
+    <SEOSUBCOTX>
+     <CMPNAME>RESERVATION_PROCESS</CMPNAME>
+     <SCONAME>CT_RESPONSE</SCONAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Response</DESCRIPT>
+    </SEOSUBCOTX>
+    <SEOSUBCOTX>
+     <CMPNAME>RESERVATION_PROCESS</CMPNAME>
+     <SCONAME>IF_TEST</SCONAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Test Run Flag</DESCRIPT>
+    </SEOSUBCOTX>
+    <SEOSUBCOTX>
+     <CMPNAME>UPDATE_INTERFACE_LOG</CMPNAME>
+     <SCONAME>IT_INTERFACE_LOG</SCONAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Interface log</DESCRIPT>
+    </SEOSUBCOTX>
+    <SEOSUBCOTX>
+     <CMPNAME>UPDATE_RESERVATION</CMPNAME>
+     <SCONAME>CS_RESERVATION_HDR</SCONAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Reservation header</DESCRIPT>
+    </SEOSUBCOTX>
+    <SEOSUBCOTX>
+     <CMPNAME>UPDATE_RESERVATION</CMPNAME>
+     <SCONAME>CT_INTERFACE_LOG</SCONAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Interface log</DESCRIPT>
+    </SEOSUBCOTX>
+    <SEOSUBCOTX>
+     <CMPNAME>UPDATE_RESERVATION</CMPNAME>
+     <SCONAME>CT_RESPONSE</SCONAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Response</DESCRIPT>
+    </SEOSUBCOTX>
+    <SEOSUBCOTX>
+     <CMPNAME>UPDATE_RESERVATION</CMPNAME>
+     <SCONAME>IF_TEST</SCONAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Test Run Flag</DESCRIPT>
+    </SEOSUBCOTX>
+    <SEOSUBCOTX>
+     <CMPNAME>UPDATE_RESERVATION</CMPNAME>
+     <SCONAME>IT_RESERVATION_ITM</SCONAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Reservation item</DESCRIPT>
+    </SEOSUBCOTX>
+    <SEOSUBCOTX>
+     <CMPNAME>VALIDATE_INPUT</CMPNAME>
+     <SCONAME>CS_RESERVATION_HDR</SCONAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Reservation header</DESCRIPT>
+    </SEOSUBCOTX>
+    <SEOSUBCOTX>
+     <CMPNAME>VALIDATE_INPUT</CMPNAME>
+     <SCONAME>CT_RESERVATION_ITM</SCONAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Reservation item</DESCRIPT>
+    </SEOSUBCOTX>
+    <SEOSUBCOTX>
+     <CMPNAME>VALIDATE_INPUT</CMPNAME>
+     <SCONAME>CT_RESPONSE</SCONAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Response</DESCRIPT>
+    </SEOSUBCOTX>
+    <SEOSUBCOTX>
+     <CMPNAME>VALIDATE_INPUT</CMPNAME>
+     <SCONAME>ET_INTERFACE_LOG</SCONAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Interface log</DESCRIPT>
+    </SEOSUBCOTX>
+    <SEOSUBCOTX>
+     <CMPNAME>VALIDATE_INPUT_SINGLE</CMPNAME>
+     <SCONAME>CS_RESERVATION_HDR</SCONAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Reservation header</DESCRIPT>
+    </SEOSUBCOTX>
+    <SEOSUBCOTX>
+     <CMPNAME>VALIDATE_INPUT_SINGLE</CMPNAME>
+     <SCONAME>CT_RESPONSE</SCONAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Response</DESCRIPT>
+    </SEOSUBCOTX>
+    <SEOSUBCOTX>
+     <CMPNAME>VALIDATE_INPUT_SINGLE</CMPNAME>
+     <SCONAME>EF_INVALID</SCONAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Validation Fail Flag</DESCRIPT>
+    </SEOSUBCOTX>
+    <SEOSUBCOTX>
+     <CMPNAME>VALIDATE_INPUT_SINGLE</CMPNAME>
+     <SCONAME>EF_MESSAGE</SCONAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Message Text</DESCRIPT>
+    </SEOSUBCOTX>
+    <SEOSUBCOTX>
+     <CMPNAME>VALIDATE_INPUT_SINGLE</CMPNAME>
+     <SCONAME>ES_RESERVATION_DB</SCONAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Existing reservation data in DB</DESCRIPT>
+    </SEOSUBCOTX>
+    <SEOSUBCOTX>
+     <CMPNAME>VALIDATE_INPUT_SINGLE</CMPNAME>
+     <SCONAME>IF_UPDATEMODE</SCONAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Mode (C-Create, U-Update)</DESCRIPT>
+    </SEOSUBCOTX>
+    <SEOSUBCOTX>
+     <CMPNAME>VALIDATE_INPUT_SINGLE</CMPNAME>
+     <SCONAME>IS_RESERVATION_ITM</SCONAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Reservation item</DESCRIPT>
+    </SEOSUBCOTX>
+    <SEOSUBCOTX>
+     <CMPNAME>VALIDATE_WITH_RESB</CMPNAME>
+     <SCONAME>CS_RESERVATION_HDR</SCONAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Reservation header</DESCRIPT>
+    </SEOSUBCOTX>
+    <SEOSUBCOTX>
+     <CMPNAME>VALIDATE_WITH_RESB</CMPNAME>
+     <SCONAME>CT_RESPONSE</SCONAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Response</DESCRIPT>
+    </SEOSUBCOTX>
+    <SEOSUBCOTX>
+     <CMPNAME>VALIDATE_WITH_RESB</CMPNAME>
+     <SCONAME>EF_INVALID</SCONAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Validation Fail Flag</DESCRIPT>
+    </SEOSUBCOTX>
+    <SEOSUBCOTX>
+     <CMPNAME>VALIDATE_WITH_RESB</CMPNAME>
+     <SCONAME>EF_MESSAGE</SCONAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Message Text</DESCRIPT>
+    </SEOSUBCOTX>
+    <SEOSUBCOTX>
+     <CMPNAME>VALIDATE_WITH_RESB</CMPNAME>
+     <SCONAME>ES_RESERVATION_DB</SCONAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Existing reservation data in DB</DESCRIPT>
+    </SEOSUBCOTX>
+    <SEOSUBCOTX>
+     <CMPNAME>VALIDATE_WITH_RESB</CMPNAME>
+     <SCONAME>IS_RESERVATION_ITM</SCONAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Reservation item</DESCRIPT>
+    </SEOSUBCOTX>
+   </DESCRIPTIONS_SUB>
+  </asx:values>
+ </asx:abap>
+</abapGit>

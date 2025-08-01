@@ -1,0 +1,8 @@
+@AbapCatalog.internal.setChange: 'FLDADD_NO_ASS_INFLUENCE'
+@AbapCatalog.sqlViewAppendName: 'ZZ1_357A87531D3B'
+
+extend view C_MARGANLYSPRODANDSRVCQ with ZZ1_ORPTNGNWPMKYFYH4VNAFJJ2RGY
+  
+{ 
+  I_MargAnlysProdAndSrvcCube.ZZ1_SERVTYPE_MSE as ZZ1_SERVTYPE_MSE
+}

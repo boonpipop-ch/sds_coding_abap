@@ -1,0 +1,72 @@
+class ZCL_IM_SDS_MATERIAL_OD definition
+  public
+  final
+  create public .
+
+public section.
+
+  interfaces IF_BADI_INTERFACE .
+  interfaces IF_EX_BADI_MATERIAL_OD .
+protected section.
+private section.
+ENDCLASS.
+
+
+
+CLASS ZCL_IM_SDS_MATERIAL_OD IMPLEMENTATION.
+
+
+  method IF_EX_BADI_MATERIAL_OD~CHANGE_CHECK_OTHER_MAT_DATA.
+  endmethod.
+
+
+  method IF_EX_BADI_MATERIAL_OD~GET_OTHER_MATERIAL_DATA_BILD.
+  endmethod.
+
+
+  method IF_EX_BADI_MATERIAL_OD~MATERIAL_DIFFMAINT_ORGLEVS_OD.
+  endmethod.
+
+
+  method IF_EX_BADI_MATERIAL_OD~MATERIAL_GET_DIFFERENCES_OD_RT.
+  endmethod.
+
+
+  METHOD IF_EX_BADI_MATERIAL_OD~MATERIAL_POST_OTHER_DATA.
+    IF SY-SUBRC EQ 0.
+
+    ENDIF.
+  ENDMETHOD.
+
+
+  method IF_EX_BADI_MATERIAL_OD~MATERIAL_PREPARE_POSTING_OD.
+  endmethod.
+
+
+  method IF_EX_BADI_MATERIAL_OD~MATERIAL_REFCHANGE_OD_RT.
+  endmethod.
+
+
+  method IF_EX_BADI_MATERIAL_OD~MATERIAL_REFERENCE_OD_RT.
+  endmethod.
+
+
+  method IF_EX_BADI_MATERIAL_OD~MG_IDOC_CREATE_FULL.
+  endmethod.
+
+
+  method IF_EX_BADI_MATERIAL_OD~PF_STATUS_SETZEN.
+  endmethod.
+
+
+  method IF_EX_BADI_MATERIAL_OD~READ_OTHER_MATERIAL_DATA.
+  endmethod.
+
+
+  method IF_EX_BADI_MATERIAL_OD~SET_OTHER_MATERIAL_DATA_BILD.
+  endmethod.
+
+
+  method IF_EX_BADI_MATERIAL_OD~SET_PROGRAM_FOR_OKCODE_ROUTN.
+  endmethod.
+ENDCLASS.

@@ -1,0 +1,77 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<abapGit version="v1.0.0" serializer="LCL_OBJECT_CLAS" serializer_version="v1.0.0">
+ <asx:abap xmlns:asx="http://www.sap.com/abapxml" version="1.0">
+  <asx:values>
+   <VSEOCLASS>
+    <CLSNAME>ZCL_SDSFI_ENHANCEMENT2</CLSNAME>
+    <LANGU>E</LANGU>
+    <DESCRIPT>SDS: FI Enhancement implement</DESCRIPT>
+    <STATE>1</STATE>
+    <CLSCCINCL>X</CLSCCINCL>
+    <FIXPT>X</FIXPT>
+    <UNICODE>X</UNICODE>
+   </VSEOCLASS>
+   <DESCRIPTIONS>
+    <SEOCOMPOTX>
+     <CMPNAME>EXIT_SAPLV60B_010</CMPNAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>User exit item table for the customer lines</DESCRIPT>
+    </SEOCOMPOTX>
+    <SEOCOMPOTX>
+     <CMPNAME>GET_GENC</CMPNAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Get GenC Setting</DESCRIPT>
+    </SEOCOMPOTX>
+    <SEOCOMPOTX>
+     <CMPNAME>IS_SDS</CMPNAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Is SDS related?</DESCRIPT>
+    </SEOCOMPOTX>
+   </DESCRIPTIONS>
+   <DESCRIPTIONS_SUB>
+    <SEOSUBCOTX>
+     <CMPNAME>EXIT_SAPLV60B_010</CMPNAME>
+     <SCONAME>CS_XACCIT_DEB</SCONAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Item fields for creating customer lines</DESCRIPT>
+    </SEOSUBCOTX>
+    <SEOSUBCOTX>
+     <CMPNAME>EXIT_SAPLV60B_010</CMPNAME>
+     <SCONAME>IS_XACCIT_DEB</SCONAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Item fields for creating customer lines</DESCRIPT>
+    </SEOSUBCOTX>
+    <SEOSUBCOTX>
+     <CMPNAME>EXIT_SAPLV60B_010</CMPNAME>
+     <SCONAME>IS_XKOMV</SCONAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Pricing Communications-Condition Record</DESCRIPT>
+    </SEOSUBCOTX>
+    <SEOSUBCOTX>
+     <CMPNAME>EXIT_SAPLV60B_010</CMPNAME>
+     <SCONAME>IS_XVBRP</SCONAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Reference Structure for XVBRP/YVBRP</DESCRIPT>
+    </SEOSUBCOTX>
+    <SEOSUBCOTX>
+     <CMPNAME>IS_SDS</CMPNAME>
+     <SCONAME>IF_BUKRS</SCONAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Company Code</DESCRIPT>
+    </SEOSUBCOTX>
+    <SEOSUBCOTX>
+     <CMPNAME>IS_SDS</CMPNAME>
+     <SCONAME>IF_VKORG</SCONAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Sales Organization</DESCRIPT>
+    </SEOSUBCOTX>
+    <SEOSUBCOTX>
+     <CMPNAME>IS_SDS</CMPNAME>
+     <SCONAME>RF_RESULT</SCONAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Truth Value: True/False</DESCRIPT>
+    </SEOSUBCOTX>
+   </DESCRIPTIONS_SUB>
+  </asx:values>
+ </asx:abap>
+</abapGit>

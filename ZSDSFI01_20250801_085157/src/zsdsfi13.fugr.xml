@@ -1,0 +1,124 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<abapGit version="v1.0.0" serializer="LCL_OBJECT_FUGR" serializer_version="v1.0.0">
+ <asx:abap xmlns:asx="http://www.sap.com/abapxml" version="1.0">
+  <asx:values>
+   <AREAT>Electronic Bank Statement</AREAT>
+   <INCLUDES>
+    <SOBJ_NAME>LZSDSFI13TOP</SOBJ_NAME>
+    <SOBJ_NAME>SAPLZSDSFI13</SOBJ_NAME>
+   </INCLUDES>
+   <FUNCTIONS>
+    <item>
+     <FUNCNAME>Z_SDSFI_EBS_UPDATE</FUNCNAME>
+     <SHORT_TEXT>Update Bank Transaction to FEBEP-ZUONR</SHORT_TEXT>
+     <IMPORT>
+      <RSIMP>
+       <PARAMETER>I_FEBEP</PARAMETER>
+       <REFERENCE>X</REFERENCE>
+       <TYP>FEBEP</TYP>
+      </RSIMP>
+      <RSIMP>
+       <PARAMETER>I_FEBKO</PARAMETER>
+       <REFERENCE>X</REFERENCE>
+       <TYP>FEBKO</TYP>
+      </RSIMP>
+      <RSIMP>
+       <PARAMETER>I_TESTRUN</PARAMETER>
+       <REFERENCE>X</REFERENCE>
+       <TYP>XFLAG</TYP>
+      </RSIMP>
+     </IMPORT>
+     <EXPORT>
+      <RSEXP>
+       <PARAMETER>E_FEBEP</PARAMETER>
+       <REFERENCE>X</REFERENCE>
+       <TYP>FEBEP</TYP>
+      </RSEXP>
+      <RSEXP>
+       <PARAMETER>E_FEBKO</PARAMETER>
+       <REFERENCE>X</REFERENCE>
+       <TYP>FEBKO</TYP>
+      </RSEXP>
+      <RSEXP>
+       <PARAMETER>E_MSGTEXT</PARAMETER>
+       <REFERENCE>X</REFERENCE>
+       <TYP>FEBMKA-MESSG</TYP>
+      </RSEXP>
+      <RSEXP>
+       <PARAMETER>E_MSGTYP</PARAMETER>
+       <REFERENCE>X</REFERENCE>
+       <TYP>FEBMKA-MSTYP</TYP>
+      </RSEXP>
+      <RSEXP>
+       <PARAMETER>E_UPDATE</PARAMETER>
+       <REFERENCE>X</REFERENCE>
+       <TYP>FEBMKA-MSTYP</TYP>
+      </RSEXP>
+     </EXPORT>
+     <TABLES>
+      <RSTBL>
+       <PARAMETER>T_FEBCL</PARAMETER>
+       <DBSTRUCT>FEBCL</DBSTRUCT>
+      </RSTBL>
+      <RSTBL>
+       <PARAMETER>T_FEBRE</PARAMETER>
+       <DBSTRUCT>FEBRE</DBSTRUCT>
+      </RSTBL>
+     </TABLES>
+     <DOCUMENTATION>
+      <RSFDO>
+       <PARAMETER>I_FEBEP</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>Electronic Bank Statement Line Items</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>I_FEBKO</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>Header Record of Electronic Account Statement</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>I_TESTRUN</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>Test Run</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>E_FEBEP</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>Electronic Bank Statement Line Items</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>E_FEBKO</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>Header Record of Electronic Account Statement</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>E_MSGTEXT</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>Message to be Displayed</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>E_MSGTYP</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>Message Type (E,S,W,I)</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>E_UPDATE</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>Indicator: Change Data in the Program</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>T_FEBCL</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>Clearing Data for Line Item</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>T_FEBRE</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>Note to Payee Reference Records for Line Item</STEXT>
+      </RSFDO>
+     </DOCUMENTATION>
+    </item>
+   </FUNCTIONS>
+  </asx:values>
+ </asx:abap>
+</abapGit>

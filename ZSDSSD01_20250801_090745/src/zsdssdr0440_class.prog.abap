@@ -1,0 +1,1829 @@
+*&---------------------------------------------------------------------*
+*& Include          ZSDSSDR0440_CLASS
+*&---------------------------------------------------------------------*
+CLASS LCL_UTIL DEFINITION.
+  PUBLIC SECTION.
+    METHODS :
+      CONSTRUCTOR.
+    CLASS-METHODS :
+      CONVERT_ALPHA_IN  IMPORTING I_DATA TYPE ANY
+                        EXPORTING E_DATA TYPE ANY,
+      CONVERT_ALPHA_OUT IMPORTING I_DATA TYPE ANY
+                        EXPORTING E_DATA TYPE ANY.
+
+ENDCLASS.
+CLASS LCL_UTIL IMPLEMENTATION.
+  METHOD CONSTRUCTOR.
+
+  ENDMETHOD.
+  METHOD CONVERT_ALPHA_IN.
+
+    CALL FUNCTION 'CONVERSION_EXIT_ALPHA_INPUT'
+      EXPORTING
+        INPUT  = I_DATA
+      IMPORTING
+        OUTPUT = E_DATA.
+
+  ENDMETHOD.
+  METHOD CONVERT_ALPHA_OUT.
+    CALL FUNCTION 'CONVERSION_EXIT_ALPHA_outPUT'
+      EXPORTING
+        INPUT  = I_DATA
+      IMPORTING
+        OUTPUT = E_DATA.
+
+  ENDMETHOD.
+ENDCLASS.
+CLASS LCL_DATA DEFINITION.
+  PUBLIC SECTION.
+    METHODS :
+      CONSTRUCTOR,
+      START_PROCESS.
+    CLASS-METHODS :
+      GET_DATA,
+      GET_ADDTIONAL_DATA,
+      SHOW_REPORT,
+      SET_LAYOUT_OUTPUT,
+      BUILD_FCAT,
+      SET_SORT,
+      SET_ALV_GRID,
+      HTML_TOP_OF_PAGE,
+      PREPARE_FILEDCAT IMPORTING I_DATA   TYPE TABNAME
+                       RETURNING VALUE(R) TYPE LVC_T_FCAT,
+      SET_TEXT_FILEDCAT IMPORTING I_FIELD TYPE ANY
+                                  I_DATA  TYPE ANY,
+      MAPPING_DATA IMPORTING IT_DATA TYPE GTY_DATA,
+      GET_CAL_PRICE IMPORTING IT_DATA  TYPE TT_PRCD_EL_KEY
+                    RETURNING VALUE(R) TYPE TT_CAL_PRICE,
+      GET_ADDRESS IMPORTING IT_DATA  TYPE GTY_KUNAG
+                  RETURNING VALUE(R) TYPE GTY_ADDRESS,
+      GET_SHIPMENT IMPORTING IT_DATA  TYPE GTY_DONUM
+                   RETURNING VALUE(R) TYPE TT_SHIPMENT,
+      GET_ADVANCE IMPORTING IT_DATA  TYPE GTY_INV
+                  RETURNING VALUE(R) TYPE GTY_ADVANCE,
+      GET_GENC IMPORTING IF_REPID TYPE SY-REPID
+               EXPORTING ES_GENC  TYPE TS_GENC,
+      GET_HEAD_DISCOUNT IMPORTING IS_GENC    TYPE TS_GENC
+                                  IT_KNUMV   TYPE TT_KNUMV
+                        EXPORTING ET_DISC_HD TYPE TT_DISCOUNT,
+      GET_CASH_DISCOUNT IMPORTING IS_GENC      TYPE TS_GENC
+                                  IT_KNUMV     TYPE TT_KNUMV
+                        EXPORTING ET_DISC_CASH TYPE TT_DISCOUNT.
+    CLASS-DATA :
+      LO TYPE REF TO LCL_DATA.
+ENDCLASS.
+CLASS LCL_DATA IMPLEMENTATION.
+  METHOD CONSTRUCTOR.
+    SELECT COUNT( * )
+      FROM ZSDSSDC027
+      WHERE BNAME EQ SY-UNAME.
+    IF SY-SUBRC EQ 0.
+      GV_COST = ABAP_TRUE.
+    ELSE.
+      CLEAR : GV_COST.
+    ENDIF.
+  ENDMETHOD.
+  METHOD GET_DATA.
+    IF LO IS INITIAL.
+      CREATE OBJECT LO.
+    ENDIF.
+
+    LO->START_PROCESS( ).
+  ENDMETHOD.
+  METHOD START_PROCESS.
+
+    DATA : LT_DATA TYPE GTY_DATA.
+
+    SELECT *
+      FROM ZSDSVC_SALES_RESULT( P_VKORG = @P_VKORG )
+      WHERE VTWEG IN @S_VTWEG[]
+        AND SPART IN @S_SPART[]
+        AND VKBUR IN @S_VKBUR[]
+        AND VKGRP IN @S_VKGRP[]
+        AND KUNAG IN @S_KUNAG[]
+        AND FKART IN @S_FKART[]
+        AND FKDAT IN @S_FKDAT[]
+        AND VBELN IN @S_VBELN[]
+        AND MATNR IN @S_MATNR[]
+        AND PRODH IN @S_PRODH[]
+        AND PERNR IN @S_PERNR[]
+        AND BSTKD IN @S_BSTKD[]
+        AND KVGR2 IN @S_KVGR2[]
+        AND BNAME IN @S_BNAME[]
+      INTO TABLE @LT_DATA.
+
+
+
+    "Adjust ZTERM and BSTKD
+    IF LT_DATA[] IS NOT INITIAL.
+      SELECT VBAK~VBELN,
+             VBKD~POSNR,
+             VBKD~ZTERM,
+             T052U~TEXT1,
+             VBKD~BSTKD
+        FROM VBAK
+        INNER JOIN VBKD ON VBKD~VBELN = VBAK~VBELN
+        INNER JOIN T052U ON T052U~ZTERM = VBKD~ZTERM
+        INTO TABLE @DATA(LT_SO)
+        FOR ALL ENTRIES IN @LT_DATA[]
+        WHERE VBAK~VBELN = @LT_DATA-AUBEL
+*         AND VBKD~POSNR = @LT_DATA-AUPOS
+         AND T052U~SPRAS = @SY-LANGU.
+      IF SY-SUBRC = 0.
+        SORT LT_SO BY VBELN POSNR.
+      ENDIF.
+
+
+      LOOP AT LT_DATA ASSIGNING FIELD-SYMBOL(<LFS_DATA>).
+        READ TABLE LT_SO INTO DATA(LS_SO)
+                         WITH KEY VBELN = <LFS_DATA>-AUBEL
+                                  POSNR = <LFS_DATA>-AUPOS
+                                  BINARY SEARCH.
+        IF SY-SUBRC <> 0.
+          READ TABLE LT_SO INTO LS_SO
+                           WITH KEY VBELN = <LFS_DATA>-AUBEL
+                                    BINARY SEARCH.
+        ENDIF.
+
+        IF LS_SO IS NOT INITIAL.
+          IF <LFS_DATA>-ZTERM IS INITIAL.
+            MOVE LS_SO-ZTERM TO <LFS_DATA>-ZTERM.
+          ENDIF.
+
+          IF <LFS_DATA>-BSTKD IS INITIAL.
+            MOVE LS_SO-BSTKD TO <LFS_DATA>-BSTKD.
+          ENDIF.
+
+          IF <LFS_DATA>-PAYTM IS INITIAL.
+             MOVE LS_SO-TEXT1 TO <LFS_DATA>-PAYTM.
+          ENDIF.
+        ENDIF.
+
+        CLEAR: LS_SO.
+      ENDLOOP.
+
+
+    ENDIF.
+
+*    SORT LT_DATA BY VBELN POSNR.
+    MAPPING_DATA( LT_DATA ).
+
+  ENDMETHOD.
+  METHOD GET_ADDTIONAL_DATA.
+*    FIELD-SYMBOLS <LFS_RESULT> LIKE LINE OF GT_RESULT.
+*    LOOP AT GT_RESULT ASSIGNING <LFS_RESULT>.
+*
+*    ENDLOOP.
+  ENDMETHOD.
+  METHOD SHOW_REPORT.
+    SET_LAYOUT_OUTPUT( ).
+    BUILD_FCAT( ).
+    SET_SORT( ).
+    SET_ALV_GRID( ).
+  ENDMETHOD.
+  METHOD SET_LAYOUT_OUTPUT.
+*    CONSTANTS : BEGIN OF LC_CON,
+*                  CHK_FILED TYPE C LENGTH 5 VALUE 'CHECK',
+*                END OF LC_CON.
+    GS_LAYOUT-ZEBRA             = GC_X.
+    GS_LAYOUT-COLWIDTH_OPTIMIZE = GC_X.
+*    GS_LAYOUT-BOX_FIELDNAME     = LC_CON-CHK_FILED.
+  ENDMETHOD.
+  METHOD BUILD_FCAT.
+    DATA:
+       LS_FCAT TYPE SLIS_FIELDCAT_ALV.
+
+    DATA : LT_FIELDCAT  TYPE LVC_T_FCAT.
+
+    CONSTANTS:
+      LC_DECIMALS_O_2 TYPE I VALUE 2,
+      LC_DECIMALS_O_0 TYPE I VALUE 0.
+
+    FIELD-SYMBOLS: <L_FIELDCAT> TYPE LVC_S_FCAT.
+
+
+    LT_FIELDCAT = PREPARE_FILEDCAT( GC_STRUCTURE_1 ).
+
+    LOOP AT LT_FIELDCAT ASSIGNING <L_FIELDCAT>.
+      CASE <L_FIELDCAT>-FIELDNAME.
+        WHEN 'HALF_PERIOD'.
+          "Text-001 : 1st half / 2nd half
+          SET_TEXT_FILEDCAT( EXPORTING I_FIELD = <L_FIELDCAT>-FIELDNAME
+                                       I_DATA  = TEXT-001 ).
+        WHEN 'ZZMONTH'.
+          "Text-002 : Month
+          SET_TEXT_FILEDCAT( EXPORTING I_FIELD = <L_FIELDCAT>-FIELDNAME
+                                       I_DATA  = TEXT-002 ).
+        WHEN 'PERIOD'.
+          "Text-003 : Period
+          SET_TEXT_FILEDCAT( EXPORTING I_FIELD = <L_FIELDCAT>-FIELDNAME I_DATA = TEXT-003 ).
+        WHEN 'CALENDAR_YEAR'.
+          "Text-004 : Calendar Year
+          SET_TEXT_FILEDCAT( EXPORTING I_FIELD = <L_FIELDCAT>-FIELDNAME I_DATA = TEXT-004 ).
+        WHEN 'QUARTER'.
+          "Text-005 : Quarter
+          SET_TEXT_FILEDCAT( EXPORTING I_FIELD = <L_FIELDCAT>-FIELDNAME I_DATA = TEXT-005 ).
+        WHEN 'WEEK'.
+          "Text-006 : Week
+          SET_TEXT_FILEDCAT( EXPORTING I_FIELD = <L_FIELDCAT>-FIELDNAME I_DATA = TEXT-006 ).
+        WHEN 'FISCAL_YEAR'.
+          "Text-007 : Fiscal Year
+          SET_TEXT_FILEDCAT( EXPORTING I_FIELD = <L_FIELDCAT>-FIELDNAME I_DATA = TEXT-007 ).
+        WHEN 'SALE_ORG'.
+          "Text-008 : Sales Organization
+          SET_TEXT_FILEDCAT( EXPORTING I_FIELD = <L_FIELDCAT>-FIELDNAME I_DATA = TEXT-008 ).
+        WHEN 'DIST_CHANNEL'.
+          "Text-009 : Distribution Channel
+          SET_TEXT_FILEDCAT( EXPORTING I_FIELD = <L_FIELDCAT>-FIELDNAME I_DATA = TEXT-009 ).
+        WHEN 'DIVISION'.
+          "Text-010 : Division
+          SET_TEXT_FILEDCAT( EXPORTING I_FIELD = <L_FIELDCAT>-FIELDNAME I_DATA = TEXT-010 ).
+        WHEN 'SALE_AREA'.
+          "Text-011 : Sales Area
+          SET_TEXT_FILEDCAT( EXPORTING I_FIELD = <L_FIELDCAT>-FIELDNAME I_DATA = TEXT-011 ).
+        WHEN 'SALE_OFFICE'.
+          "Text-012 : Sales Office
+          SET_TEXT_FILEDCAT( EXPORTING I_FIELD = <L_FIELDCAT>-FIELDNAME I_DATA = TEXT-012 ).
+        WHEN 'SALE_GROUP'.
+          "Text-013 : Sales Group
+          SET_TEXT_FILEDCAT( EXPORTING I_FIELD = <L_FIELDCAT>-FIELDNAME I_DATA = TEXT-013 ).
+        WHEN 'CUST_CREATE_DATE'.
+          "Text-014 : Cust. Create Date
+          SET_TEXT_FILEDCAT( EXPORTING I_FIELD = <L_FIELDCAT>-FIELDNAME I_DATA = TEXT-014 ).
+        WHEN 'CUST_CODE'.
+          "Text-015 : Customer Code
+          SET_TEXT_FILEDCAT( EXPORTING I_FIELD = <L_FIELDCAT>-FIELDNAME I_DATA = TEXT-015 ).
+        WHEN 'CUST_NAME_EN'.
+          "Text-016 : Customer Name (English)
+          SET_TEXT_FILEDCAT( EXPORTING I_FIELD = <L_FIELDCAT>-FIELDNAME I_DATA = TEXT-016 ).
+        WHEN 'CUST_NAME_TH'.
+          "Text-017 : Customer Name (Thai)
+          SET_TEXT_FILEDCAT( EXPORTING I_FIELD = <L_FIELDCAT>-FIELDNAME I_DATA = TEXT-017 ).
+        WHEN 'APPLICATION'.
+          "Text-018 : Application
+          SET_TEXT_FILEDCAT( EXPORTING I_FIELD = <L_FIELDCAT>-FIELDNAME I_DATA = TEXT-018 ).
+        WHEN 'CUST_CLASS'.
+          "Text-019 : Customer Classification
+          SET_TEXT_FILEDCAT( EXPORTING I_FIELD = <L_FIELDCAT>-FIELDNAME I_DATA = TEXT-019 ).
+        WHEN 'ACC_CLERK'.
+          "Text-020 : Account Clerk
+          SET_TEXT_FILEDCAT( EXPORTING I_FIELD = <L_FIELDCAT>-FIELDNAME I_DATA = TEXT-020 ).
+        WHEN 'CUST_ADDR_1'.
+          "Text-021 : Customer Address1
+          SET_TEXT_FILEDCAT( EXPORTING I_FIELD = <L_FIELDCAT>-FIELDNAME I_DATA = TEXT-021 ).
+        WHEN 'CUST_ADDR_2'.
+          "Text-022 : Customer Address2
+          SET_TEXT_FILEDCAT( EXPORTING I_FIELD = <L_FIELDCAT>-FIELDNAME I_DATA = TEXT-022 ).
+        WHEN 'CUST_REGION'.
+          "Text-023 : Customer Region
+          SET_TEXT_FILEDCAT( EXPORTING I_FIELD = <L_FIELDCAT>-FIELDNAME I_DATA = TEXT-023 ).
+        WHEN 'CUST_POSTCODE'.
+          "Text-024 : Customer Post Code
+          SET_TEXT_FILEDCAT( EXPORTING I_FIELD = <L_FIELDCAT>-FIELDNAME I_DATA = TEXT-024 ).
+        WHEN 'MOBILE'.
+          "Text-025 : Mobile phone
+          SET_TEXT_FILEDCAT( EXPORTING I_FIELD = <L_FIELDCAT>-FIELDNAME I_DATA = TEXT-025 ).
+        WHEN 'TELEPHONE'.
+          "Text-026 : Telephone
+          SET_TEXT_FILEDCAT( EXPORTING I_FIELD = <L_FIELDCAT>-FIELDNAME I_DATA = TEXT-026 ).
+        WHEN 'ETAX_EMAIL'.
+          "Text-027 : E-Tax Email
+          SET_TEXT_FILEDCAT( EXPORTING I_FIELD = <L_FIELDCAT>-FIELDNAME I_DATA = TEXT-027 ).
+        WHEN 'CUST_CREDIT_GROUP'.
+          "Text-028 : Customer credit group
+          SET_TEXT_FILEDCAT( EXPORTING I_FIELD = <L_FIELDCAT>-FIELDNAME I_DATA = TEXT-028 ).
+        WHEN 'SHIPTO_CODE'.
+          "Text-029 : ShipTo Code
+          SET_TEXT_FILEDCAT( EXPORTING I_FIELD = <L_FIELDCAT>-FIELDNAME I_DATA = TEXT-029 ).
+        WHEN 'SHIPTO_NAME_EN'.
+          "Text-030 : ShipTo Name (English)
+          SET_TEXT_FILEDCAT( EXPORTING I_FIELD = <L_FIELDCAT>-FIELDNAME I_DATA = TEXT-030 ).
+        WHEN 'SHIPTO_NAME_TH'.
+          "Text-031 : ShipTo Name (Thai)
+          SET_TEXT_FILEDCAT( EXPORTING I_FIELD = <L_FIELDCAT>-FIELDNAME I_DATA = TEXT-031 ).
+        WHEN 'SHIPTO_ADDR'.
+          "Text-032 : ShipTo Address
+          SET_TEXT_FILEDCAT( EXPORTING I_FIELD = <L_FIELDCAT>-FIELDNAME I_DATA = TEXT-032 ).
+        WHEN 'SHIPTO_REGION'.
+          "Text-033 : ShipTo Region
+          SET_TEXT_FILEDCAT( EXPORTING I_FIELD = <L_FIELDCAT>-FIELDNAME I_DATA = TEXT-033 ).
+        WHEN 'SHIPTO_POSTCODE'.
+          "Text-034 : ShipTo Post Code
+          SET_TEXT_FILEDCAT( EXPORTING I_FIELD = <L_FIELDCAT>-FIELDNAME I_DATA = TEXT-034 ).
+        WHEN 'PERSON_NO'.
+          "Text-035 : Personal Number
+          SET_TEXT_FILEDCAT( EXPORTING I_FIELD = <L_FIELDCAT>-FIELDNAME I_DATA = TEXT-035 ).
+        WHEN 'PERSON_NAME'.
+          "Text-036 : Personal Name
+          SET_TEXT_FILEDCAT( EXPORTING I_FIELD = <L_FIELDCAT>-FIELDNAME I_DATA = TEXT-036 ).
+        WHEN 'CUST_GROUP_1'.
+          "Text-037 : Cust. Grp1
+          SET_TEXT_FILEDCAT( EXPORTING I_FIELD = <L_FIELDCAT>-FIELDNAME I_DATA = TEXT-037 ).
+        WHEN 'CUST_GROUP_1_TX'.
+          "Text-038 : Cust. Grp1 Description
+          SET_TEXT_FILEDCAT( EXPORTING I_FIELD = <L_FIELDCAT>-FIELDNAME I_DATA = TEXT-038 ).
+        WHEN 'CUST_GROUP_2'.
+          "Text-039 : Cust. Grp2
+          SET_TEXT_FILEDCAT( EXPORTING I_FIELD = <L_FIELDCAT>-FIELDNAME I_DATA = TEXT-039 ).
+        WHEN 'CUST_GROUP_2_TX'.
+          "Text-040 : Cust. Grp2 Description
+          SET_TEXT_FILEDCAT( EXPORTING I_FIELD = <L_FIELDCAT>-FIELDNAME I_DATA = TEXT-040 ).
+        WHEN 'QUOTE_TYPE'.
+          "Text-041 : Q/T Type
+          SET_TEXT_FILEDCAT( EXPORTING I_FIELD = <L_FIELDCAT>-FIELDNAME I_DATA = TEXT-041 ).
+        WHEN 'QUOTE_NO'.
+          "Text-042 : Q/T No.
+          SET_TEXT_FILEDCAT( EXPORTING I_FIELD = <L_FIELDCAT>-FIELDNAME I_DATA = TEXT-042 ).
+        WHEN 'SO_TYPE'.
+          "Text-043 : S/O Type
+          SET_TEXT_FILEDCAT( EXPORTING I_FIELD = <L_FIELDCAT>-FIELDNAME I_DATA = TEXT-043 ).
+        WHEN 'SO_NO'.
+          "Text-044 : S/O No.
+          SET_TEXT_FILEDCAT( EXPORTING I_FIELD = <L_FIELDCAT>-FIELDNAME I_DATA = TEXT-044 ).
+        WHEN 'SO_CREATE_DATE'.
+          "Text-045 : S/O Create Date
+          SET_TEXT_FILEDCAT( EXPORTING I_FIELD = <L_FIELDCAT>-FIELDNAME I_DATA = TEXT-045 ).
+        WHEN 'SO_CREATE_BY'.
+          "Text-046 : S/O Create name
+          SET_TEXT_FILEDCAT( EXPORTING I_FIELD = <L_FIELDCAT>-FIELDNAME I_DATA = TEXT-046 ).
+        WHEN 'DO_NO'.
+          "Text-047 : D/O No.
+          SET_TEXT_FILEDCAT( EXPORTING I_FIELD = <L_FIELDCAT>-FIELDNAME I_DATA = TEXT-047 ).
+        WHEN 'DO_CREATE_DATE'.
+          "Text-048 : D/O Create Date
+          SET_TEXT_FILEDCAT( EXPORTING I_FIELD = <L_FIELDCAT>-FIELDNAME I_DATA = TEXT-048 ).
+        WHEN 'DO_CREATE_TIME'.
+          "Text-049 : D/O Create Time
+          SET_TEXT_FILEDCAT( EXPORTING I_FIELD = <L_FIELDCAT>-FIELDNAME I_DATA = TEXT-049 ).
+        WHEN 'DO_DATE'.
+          "Text-050 : D/O Date
+          SET_TEXT_FILEDCAT( EXPORTING I_FIELD = <L_FIELDCAT>-FIELDNAME I_DATA = TEXT-050 ).
+        WHEN 'BILL_TYPE'.
+          "Text-051 : Billing Type
+          SET_TEXT_FILEDCAT( EXPORTING I_FIELD = <L_FIELDCAT>-FIELDNAME I_DATA = TEXT-051 ).
+        WHEN 'BILL_TYPE_TX'.
+          "Text-052 : Billing Type Name
+          SET_TEXT_FILEDCAT( EXPORTING I_FIELD = <L_FIELDCAT>-FIELDNAME I_DATA = TEXT-052 ).
+        WHEN 'BILL_NO'.
+          "Text-053 : Invoice No.
+          SET_TEXT_FILEDCAT( EXPORTING I_FIELD = <L_FIELDCAT>-FIELDNAME I_DATA = TEXT-053 ).
+        WHEN 'BILL_DATE'.
+          "Text-054 : Invoice Date
+          SET_TEXT_FILEDCAT( EXPORTING I_FIELD = <L_FIELDCAT>-FIELDNAME I_DATA = TEXT-054 ).
+        WHEN 'TAX_NO'.
+          "Text-055 : Tax number
+          SET_TEXT_FILEDCAT( EXPORTING I_FIELD = <L_FIELDCAT>-FIELDNAME I_DATA = TEXT-055 ).
+        WHEN 'REF_FIDOC'.
+          "Text-056 : Ref. FI document no.
+          SET_TEXT_FILEDCAT( EXPORTING I_FIELD = <L_FIELDCAT>-FIELDNAME I_DATA = TEXT-056 ).
+        WHEN 'EXT_SYSTEM_1'.
+          "Text-057 : External systems1
+          SET_TEXT_FILEDCAT( EXPORTING I_FIELD = <L_FIELDCAT>-FIELDNAME I_DATA = TEXT-057 ).
+        WHEN 'EXT_SYSTEM_2'.
+          "Text-058 : External systems2
+          SET_TEXT_FILEDCAT( EXPORTING I_FIELD = <L_FIELDCAT>-FIELDNAME I_DATA = TEXT-058 ).
+        WHEN 'PO_NO'.
+          "Text-059 : Main P/O No.
+          SET_TEXT_FILEDCAT( EXPORTING I_FIELD = <L_FIELDCAT>-FIELDNAME I_DATA = TEXT-059 ).
+        WHEN 'ORDER_REASON'.
+          "Text-060 : Order Reason
+          SET_TEXT_FILEDCAT( EXPORTING I_FIELD = <L_FIELDCAT>-FIELDNAME I_DATA = TEXT-060 ).
+        WHEN 'ZTERM'.
+          "Text-061 : Payment term
+          SET_TEXT_FILEDCAT( EXPORTING I_FIELD = <L_FIELDCAT>-FIELDNAME I_DATA = TEXT-061 ).
+        WHEN 'ZTERM_TX'.
+          "Text-062 : Payment term desc.
+          SET_TEXT_FILEDCAT( EXPORTING I_FIELD = <L_FIELDCAT>-FIELDNAME I_DATA = TEXT-062 ).
+        WHEN 'WAERK'.
+          "Text-063 : Currency
+          SET_TEXT_FILEDCAT( EXPORTING I_FIELD = <L_FIELDCAT>-FIELDNAME I_DATA = TEXT-063 ).
+        WHEN 'VSART'.
+          "Text-064 : Shipping Type
+          SET_TEXT_FILEDCAT( EXPORTING I_FIELD = <L_FIELDCAT>-FIELDNAME I_DATA = TEXT-064 ).
+        WHEN 'TKNUM'.
+          "Text-065 : Shipment No.
+          SET_TEXT_FILEDCAT( EXPORTING I_FIELD = <L_FIELDCAT>-FIELDNAME I_DATA = TEXT-065 ).
+        WHEN 'LSTEL'.
+          "Text-066 : Loading Point
+          SET_TEXT_FILEDCAT( EXPORTING I_FIELD = <L_FIELDCAT>-FIELDNAME I_DATA = TEXT-066 ).
+        WHEN 'LSTEL_TX'.
+          "Text-067 : Loading Point Desc.
+          SET_TEXT_FILEDCAT( EXPORTING I_FIELD = <L_FIELDCAT>-FIELDNAME I_DATA = TEXT-067 ).
+        WHEN 'DTDIS'.
+          "Text-068 : Planning (Date for delivery)
+          SET_TEXT_FILEDCAT( EXPORTING I_FIELD = <L_FIELDCAT>-FIELDNAME I_DATA = TEXT-068 ).
+        WHEN 'ROUTE'.
+          "Text-069 : Route
+          SET_TEXT_FILEDCAT( EXPORTING I_FIELD = <L_FIELDCAT>-FIELDNAME I_DATA = TEXT-069 ).
+        WHEN 'EXTI2'.
+          "Text-070 : Truck driver
+          SET_TEXT_FILEDCAT( EXPORTING I_FIELD = <L_FIELDCAT>-FIELDNAME I_DATA = TEXT-070 ).
+        WHEN 'EXTI1'.
+          "Text-071 : External ID1
+          SET_TEXT_FILEDCAT( EXPORTING I_FIELD = <L_FIELDCAT>-FIELDNAME I_DATA = TEXT-071 ).
+        WHEN 'UZDIS'.
+          "Text-072 : Schedule(Time)
+          SET_TEXT_FILEDCAT( EXPORTING I_FIELD = <L_FIELDCAT>-FIELDNAME I_DATA = TEXT-072 ).
+        WHEN 'DATEN'.
+          "Text-073 : ActShipEnd(Date of Receive)
+          SET_TEXT_FILEDCAT( EXPORTING I_FIELD = <L_FIELDCAT>-FIELDNAME I_DATA = TEXT-073 ).
+        WHEN 'UATEN'.
+          "Text-074 : AcShET (Time Receive)
+          SET_TEXT_FILEDCAT( EXPORTING I_FIELD = <L_FIELDCAT>-FIELDNAME I_DATA = TEXT-074 ).
+        WHEN 'REF_MEMO_HTX'.
+          "Text-075 : Refer Memo
+          SET_TEXT_FILEDCAT( EXPORTING I_FIELD = <L_FIELDCAT>-FIELDNAME I_DATA = TEXT-075 ).
+        WHEN 'REQ_REMARK_HTX'.
+          "Text-076 : Req. Remark
+          SET_TEXT_FILEDCAT( EXPORTING I_FIELD = <L_FIELDCAT>-FIELDNAME I_DATA = TEXT-076 ).
+        WHEN 'PROJ_HTX'.
+          "Text-077 : Project Text
+          SET_TEXT_FILEDCAT( EXPORTING I_FIELD = <L_FIELDCAT>-FIELDNAME I_DATA = TEXT-077 ).
+        WHEN 'REMARK_QT_HTX'.
+          "Text-078 : Remarks QT
+          SET_TEXT_FILEDCAT( EXPORTING I_FIELD = <L_FIELDCAT>-FIELDNAME I_DATA = TEXT-078 ).
+        WHEN 'REASON_HTX'.
+          "Text-079 : Reason
+          SET_TEXT_FILEDCAT( EXPORTING I_FIELD = <L_FIELDCAT>-FIELDNAME I_DATA = TEXT-079 ).
+        WHEN 'INV_REMARK_HTX'.
+          "Text-080 : Inv. Remark
+          SET_TEXT_FILEDCAT( EXPORTING I_FIELD = <L_FIELDCAT>-FIELDNAME I_DATA = TEXT-080 ).
+        WHEN 'LAND_NO_HTX'.
+          "Text-081 : Land No.
+          SET_TEXT_FILEDCAT( EXPORTING I_FIELD = <L_FIELDCAT>-FIELDNAME I_DATA = TEXT-081 ).
+        WHEN 'POSNR'.
+          "Text-082 : Item
+          SET_TEXT_FILEDCAT( EXPORTING I_FIELD = <L_FIELDCAT>-FIELDNAME I_DATA = TEXT-082 ).
+        WHEN 'UEPOS'.
+          "Text-083 : H-Item
+          SET_TEXT_FILEDCAT( EXPORTING I_FIELD = <L_FIELDCAT>-FIELDNAME I_DATA = TEXT-083 ).
+        WHEN 'MATNR_BOM'.
+          "Text-084 : Header Bom Material refer.
+          SET_TEXT_FILEDCAT( EXPORTING I_FIELD = <L_FIELDCAT>-FIELDNAME I_DATA = TEXT-084 ).
+        WHEN 'MATNR'.
+          "Text-085 : Material No.
+          SET_TEXT_FILEDCAT( EXPORTING I_FIELD = <L_FIELDCAT>-FIELDNAME I_DATA = TEXT-085 ).
+        WHEN 'ARKTX'.
+          "Text-086 : Material Description
+          SET_TEXT_FILEDCAT( EXPORTING I_FIELD = <L_FIELDCAT>-FIELDNAME I_DATA = TEXT-086 ).
+        WHEN 'WERKS_TX'.
+          "Text-087 : Plant
+          SET_TEXT_FILEDCAT( EXPORTING I_FIELD = <L_FIELDCAT>-FIELDNAME I_DATA = TEXT-087 ).
+        WHEN 'LGOBE'.
+          "Text-088 : Storage Location
+          SET_TEXT_FILEDCAT( EXPORTING I_FIELD = <L_FIELDCAT>-FIELDNAME I_DATA = TEXT-088 ).
+        WHEN 'H_BOM_QTY'.
+          "Text-089 : Set Qty. Header BOM
+          SET_TEXT_FILEDCAT( EXPORTING I_FIELD = <L_FIELDCAT>-FIELDNAME I_DATA = TEXT-089 ).
+          LS_FCAT-NO_ZERO      = GC_TRUE.
+          LS_FCAT-DECIMALS_OUT = LC_DECIMALS_O_0.
+        WHEN 'SALE_QTY'.
+          "Text-090 : Sale Qty.
+          SET_TEXT_FILEDCAT( EXPORTING I_FIELD = <L_FIELDCAT>-FIELDNAME I_DATA = TEXT-090 ).
+          LS_FCAT-NO_ZERO      = GC_TRUE.
+          LS_FCAT-DECIMALS_OUT = LC_DECIMALS_O_0.
+        WHEN 'BILL_QTY'.
+          "Text-091 : Billing Qty.
+          SET_TEXT_FILEDCAT( EXPORTING I_FIELD = <L_FIELDCAT>-FIELDNAME I_DATA = TEXT-091 ).
+          LS_FCAT-NO_ZERO      = GC_TRUE.
+          LS_FCAT-DECIMALS_OUT = LC_DECIMALS_O_0.
+        WHEN 'ACT_QTY'.
+          "Text-092 : Actual Qty.
+          SET_TEXT_FILEDCAT( EXPORTING I_FIELD = <L_FIELDCAT>-FIELDNAME I_DATA = TEXT-092 ).
+          LS_FCAT-NO_ZERO      = GC_TRUE.
+          LS_FCAT-DECIMALS_OUT = LC_DECIMALS_O_0.
+        WHEN 'VRKME'.
+          "Text-093 : UOM
+          SET_TEXT_FILEDCAT( EXPORTING I_FIELD = <L_FIELDCAT>-FIELDNAME I_DATA = TEXT-093 ).
+        WHEN 'NTGEW'.
+          "Text-094 : Net Weight
+          SET_TEXT_FILEDCAT( EXPORTING I_FIELD = <L_FIELDCAT>-FIELDNAME I_DATA = TEXT-094 ).
+          LS_FCAT-NO_ZERO    = GC_TRUE.
+        WHEN 'BRGEW'.
+          "Text-095 : Gross Weight
+          SET_TEXT_FILEDCAT( EXPORTING I_FIELD = <L_FIELDCAT>-FIELDNAME I_DATA = TEXT-095 ).
+          LS_FCAT-NO_ZERO    = GC_TRUE.
+        WHEN 'VOLUM'.
+          "Text-096 : Volume
+          SET_TEXT_FILEDCAT( EXPORTING I_FIELD = <L_FIELDCAT>-FIELDNAME I_DATA = TEXT-096 ).
+          LS_FCAT-NO_ZERO    = GC_TRUE.
+        WHEN 'PRCTR'.
+          "Text-097 : Profit Center
+          SET_TEXT_FILEDCAT( EXPORTING I_FIELD = <L_FIELDCAT>-FIELDNAME I_DATA = TEXT-097 ).
+        WHEN 'ZZREFT'.
+          "Text-098 : Refrigerant Type
+          SET_TEXT_FILEDCAT( EXPORTING I_FIELD = <L_FIELDCAT>-FIELDNAME I_DATA = TEXT-098 ).
+        WHEN 'MFRNR'.
+          "Text-099 : Manufact
+          SET_TEXT_FILEDCAT( EXPORTING I_FIELD = <L_FIELDCAT>-FIELDNAME I_DATA = TEXT-099 ).
+        WHEN 'PS_PSP_PNR'.
+          "Text-100 : WBS
+          SET_TEXT_FILEDCAT( EXPORTING I_FIELD = <L_FIELDCAT>-FIELDNAME I_DATA = TEXT-100 ).
+        WHEN 'PRODH'.
+          "Text-101 : Prod.Hierarchy
+          SET_TEXT_FILEDCAT( EXPORTING I_FIELD = <L_FIELDCAT>-FIELDNAME I_DATA = TEXT-101 ).
+        WHEN 'PRODH_1'.
+          "Text-102 : Prodh. Lv.1
+          SET_TEXT_FILEDCAT( EXPORTING I_FIELD = <L_FIELDCAT>-FIELDNAME I_DATA = TEXT-102 ).
+        WHEN 'PRODH_2'.
+          "Text-103 : Prodh. Lv.2
+          SET_TEXT_FILEDCAT( EXPORTING I_FIELD = <L_FIELDCAT>-FIELDNAME I_DATA = TEXT-103 ).
+        WHEN 'PRODH_3'.
+          "Text-104 : Prodh. Lv.3
+          SET_TEXT_FILEDCAT( EXPORTING I_FIELD = <L_FIELDCAT>-FIELDNAME I_DATA = TEXT-104 ).
+        WHEN 'SUB_PO_NO'.
+          "Text-105 : Sub P/O No.
+          SET_TEXT_FILEDCAT( EXPORTING I_FIELD = <L_FIELDCAT>-FIELDNAME I_DATA = TEXT-105 ).
+        WHEN 'HEAD_DIS_KWERT'.
+          "Text-106 : Header Discount %
+          SET_TEXT_FILEDCAT( EXPORTING I_FIELD = <L_FIELDCAT>-FIELDNAME I_DATA = TEXT-106 ).
+          LS_FCAT-NO_ZERO      = GC_TRUE.
+          LS_FCAT-DECIMALS_OUT = LC_DECIMALS_O_2.
+        WHEN 'CASH_DIS_KWERT'.
+          "Text-107 : Cash Discount %
+          SET_TEXT_FILEDCAT( EXPORTING I_FIELD = <L_FIELDCAT>-FIELDNAME I_DATA = TEXT-107 ).
+          LS_FCAT-NO_ZERO      = GC_TRUE.
+          LS_FCAT-DECIMALS_OUT = LC_DECIMALS_O_2.
+        WHEN 'UNIT_PRICE'.
+          "Text-108 : Price/Unit
+          SET_TEXT_FILEDCAT( EXPORTING I_FIELD = <L_FIELDCAT>-FIELDNAME I_DATA = TEXT-108 ).
+          LS_FCAT-NO_ZERO      = GC_TRUE.
+          LS_FCAT-DECIMALS_OUT = LC_DECIMALS_O_2.
+        WHEN 'UNIT_NET_PRICE'.
+          "Text-109 : Net Price/Unit
+          SET_TEXT_FILEDCAT( EXPORTING I_FIELD = <L_FIELDCAT>-FIELDNAME I_DATA = TEXT-109 ).
+          LS_FCAT-NO_ZERO      = GC_TRUE.
+          LS_FCAT-DECIMALS_OUT = LC_DECIMALS_O_2.
+        WHEN 'BOM_AMOUNT'.
+          "Text-110 : Amount Of BOM
+          SET_TEXT_FILEDCAT( EXPORTING I_FIELD = <L_FIELDCAT>-FIELDNAME I_DATA = TEXT-110 ).
+          LS_FCAT-NO_ZERO      = GC_TRUE.
+          LS_FCAT-DECIMALS_OUT = LC_DECIMALS_O_2.
+        WHEN 'BOM_TOTAL_AMOUNT'.
+          "Text-111 : Total Amount Of BOM
+          SET_TEXT_FILEDCAT( EXPORTING I_FIELD = <L_FIELDCAT>-FIELDNAME I_DATA = TEXT-111 ).
+          LS_FCAT-NO_ZERO      = GC_TRUE.
+          LS_FCAT-DECIMALS_OUT = LC_DECIMALS_O_2.
+        WHEN 'NET_AMOUNT'.
+          "Text-112 : Net Amount
+          SET_TEXT_FILEDCAT( EXPORTING I_FIELD = <L_FIELDCAT>-FIELDNAME I_DATA = TEXT-112 ).
+          LS_FCAT-NO_ZERO      = GC_TRUE.
+          LS_FCAT-DECIMALS_OUT = LC_DECIMALS_O_2.
+        WHEN 'TAX_AMOUNT'.
+          "Text-113 : Tax Amount
+          SET_TEXT_FILEDCAT( EXPORTING I_FIELD = <L_FIELDCAT>-FIELDNAME I_DATA = TEXT-113 ).
+          LS_FCAT-NO_ZERO      = GC_TRUE.
+          LS_FCAT-DECIMALS_OUT = LC_DECIMALS_O_2.
+        WHEN 'TOTAL_AMOUNT'.
+          "Text-114 : Total Amount
+          SET_TEXT_FILEDCAT( EXPORTING I_FIELD = <L_FIELDCAT>-FIELDNAME I_DATA = TEXT-114 ).
+          LS_FCAT-NO_ZERO      = GC_TRUE.
+          LS_FCAT-DECIMALS_OUT = LC_DECIMALS_O_2.
+        WHEN 'UNIT_COST'.
+          "Text-115 : Cost/Unit
+          IF GV_COST EQ ABAP_TRUE.
+            SET_TEXT_FILEDCAT( EXPORTING I_FIELD = <L_FIELDCAT>-FIELDNAME I_DATA = TEXT-115 ).
+            LS_FCAT-NO_ZERO      = GC_TRUE.
+            LS_FCAT-DECIMALS_OUT = LC_DECIMALS_O_2.
+          ENDIF.
+        WHEN 'TOTAL_COST'.
+          "Text-116 : Total Cost
+          IF GV_COST EQ ABAP_TRUE.
+            SET_TEXT_FILEDCAT( EXPORTING I_FIELD = <L_FIELDCAT>-FIELDNAME I_DATA = TEXT-116 ).
+            LS_FCAT-NO_ZERO      = GC_TRUE.
+            LS_FCAT-DECIMALS_OUT = LC_DECIMALS_O_2.
+          ENDIF.
+        WHEN 'BOM_TOTAL_COST'.
+          "Text-117 : Total Cost Of BOM
+          IF GV_COST EQ ABAP_TRUE.
+            SET_TEXT_FILEDCAT( EXPORTING I_FIELD = <L_FIELDCAT>-FIELDNAME I_DATA = TEXT-117 ).
+            LS_FCAT-NO_ZERO      = GC_TRUE.
+            LS_FCAT-DECIMALS_OUT = LC_DECIMALS_O_2.
+          ENDIF.
+        WHEN 'SALE_AMOUNT_X1000'.
+          "Text-118 : Sales Amount x 1000
+          SET_TEXT_FILEDCAT( EXPORTING I_FIELD = <L_FIELDCAT>-FIELDNAME I_DATA = TEXT-118 ).
+          LS_FCAT-NO_ZERO      = GC_TRUE.
+          LS_FCAT-DECIMALS_OUT = LC_DECIMALS_O_2.
+        WHEN 'QUOTE_WORK_COND'.
+          "Text-119 : Work Condition QT
+          SET_TEXT_FILEDCAT( EXPORTING I_FIELD = <L_FIELDCAT>-FIELDNAME I_DATA = TEXT-119 ).
+        WHEN 'JOB_COMP_DATE'.
+          "Text-120 : Job Completion Date
+          SET_TEXT_FILEDCAT( EXPORTING I_FIELD = <L_FIELDCAT>-FIELDNAME I_DATA = TEXT-120 ).
+        WHEN 'SERV_ORDER'.
+          "Text-121 : Service Order
+          SET_TEXT_FILEDCAT( EXPORTING I_FIELD = <L_FIELDCAT>-FIELDNAME I_DATA = TEXT-121 ).
+        WHEN 'SERV_ORDER_WBS'.
+          "Text-122 : Service Order WBS
+          SET_TEXT_FILEDCAT( EXPORTING I_FIELD = <L_FIELDCAT>-FIELDNAME I_DATA = TEXT-122 ).
+        WHEN 'SERV_ORDER_STATUS'.
+          "Text-123 : Service Order Status
+          SET_TEXT_FILEDCAT( EXPORTING I_FIELD = <L_FIELDCAT>-FIELDNAME I_DATA = TEXT-123 ).
+        WHEN 'CAUSE_FAIL'.
+          "Text-124 : Cause of Failure
+          SET_TEXT_FILEDCAT( EXPORTING I_FIELD = <L_FIELDCAT>-FIELDNAME I_DATA = TEXT-124 ).
+        WHEN 'CLOSE_DATE'.
+          "Text-125 : Closed Date of all Process
+          SET_TEXT_FILEDCAT( EXPORTING I_FIELD = <L_FIELDCAT>-FIELDNAME I_DATA = TEXT-125 ).
+        WHEN 'PLACE_FAIL'.
+          "Text-126 : Place of Failure"
+          SET_TEXT_FILEDCAT( EXPORTING I_FIELD = <L_FIELDCAT>-FIELDNAME I_DATA = TEXT-126 ).
+        WHEN 'RECEPTION_DATE'.
+          "Text-127 : Reception Date
+          SET_TEXT_FILEDCAT( EXPORTING I_FIELD = <L_FIELDCAT>-FIELDNAME I_DATA = TEXT-127 ).
+          LS_FCAT-NO_ZERO = GC_TRUE.
+        WHEN 'SERV_SUB_CONT'.
+          "Text-128 : Service subcontract team
+          SET_TEXT_FILEDCAT( EXPORTING I_FIELD = <L_FIELDCAT>-FIELDNAME I_DATA = TEXT-128 ).
+        WHEN 'SERV_CONT_STARTDATE'.
+          "Text-129 : Service Contract Start Date
+          SET_TEXT_FILEDCAT( EXPORTING I_FIELD = <L_FIELDCAT>-FIELDNAME I_DATA = TEXT-129 ).
+          LS_FCAT-NO_ZERO = GC_TRUE.
+        WHEN 'SERV_CONT_ENDDATE'.
+          "Text-130 : Service Contract End Date
+          SET_TEXT_FILEDCAT( EXPORTING I_FIELD = <L_FIELDCAT>-FIELDNAME I_DATA = TEXT-130 ).
+          LS_FCAT-NO_ZERO = GC_TRUE.
+        WHEN 'MGMT_NO'.
+          "Text-131 : Management Number(After Service)
+          SET_TEXT_FILEDCAT( EXPORTING I_FIELD = <L_FIELDCAT>-FIELDNAME I_DATA = TEXT-131 ).
+        WHEN 'PROJ_NAME'.
+          "Text-132 : Project Name
+          SET_TEXT_FILEDCAT( EXPORTING I_FIELD = <L_FIELDCAT>-FIELDNAME I_DATA = TEXT-132 ).
+        WHEN 'ADV_RECEIVE'.
+          "Text-133 : Advance Receive
+          SET_TEXT_FILEDCAT( EXPORTING I_FIELD = <L_FIELDCAT>-FIELDNAME I_DATA = TEXT-133 ).
+
+
+
+      ENDCASE.
+
+      MODIFY GT_FCAT FROM LS_FCAT TRANSPORTING NO_ZERO DECIMALS_OUT
+                                  WHERE FIELDNAME EQ <L_FIELDCAT>-FIELDNAME.
+      CLEAR : LS_FCAT.
+    ENDLOOP.
+
+    LS_FCAT-NO_ZERO      = GC_TRUE.
+    LS_FCAT-DECIMALS_OUT = LC_DECIMALS_O_2.
+    SET_TEXT_FILEDCAT( EXPORTING I_FIELD = 'INS_P' I_DATA = TEXT-134 ).
+    MODIFY GT_FCAT FROM LS_FCAT TRANSPORTING NO_ZERO DECIMALS_OUT
+                                  WHERE FIELDNAME EQ <L_FIELDCAT>-FIELDNAME.
+
+
+    LS_FCAT-NO_ZERO      = GC_TRUE.
+    LS_FCAT-DECIMALS_OUT = LC_DECIMALS_O_2.
+    SET_TEXT_FILEDCAT( EXPORTING I_FIELD = 'MIT_P' I_DATA = TEXT-135 ).
+    MODIFY GT_FCAT FROM LS_FCAT TRANSPORTING NO_ZERO DECIMALS_OUT
+                                  WHERE FIELDNAME EQ <L_FIELDCAT>-FIELDNAME.
+
+    LS_FCAT-NO_ZERO      = GC_TRUE.
+    LS_FCAT-DECIMALS_OUT = LC_DECIMALS_O_2.
+    SET_TEXT_FILEDCAT( EXPORTING I_FIELD = 'SLA_P' I_DATA = TEXT-136 ).
+    MODIFY GT_FCAT FROM LS_FCAT TRANSPORTING NO_ZERO DECIMALS_OUT
+                                  WHERE FIELDNAME EQ <L_FIELDCAT>-FIELDNAME.
+
+    LS_FCAT-NO_ZERO      = GC_TRUE.
+    LS_FCAT-DECIMALS_OUT = LC_DECIMALS_O_2.
+    SET_TEXT_FILEDCAT( EXPORTING I_FIELD = 'MOD_P' I_DATA = TEXT-137 ).
+    MODIFY GT_FCAT FROM LS_FCAT TRANSPORTING NO_ZERO DECIMALS_OUT
+                                  WHERE FIELDNAME EQ <L_FIELDCAT>-FIELDNAME.
+
+    LS_FCAT-NO_ZERO      = GC_TRUE.
+    LS_FCAT-DECIMALS_OUT = LC_DECIMALS_O_2.
+    SET_TEXT_FILEDCAT( EXPORTING I_FIELD = 'EXW_P' I_DATA = TEXT-138 ).
+    MODIFY GT_FCAT FROM LS_FCAT TRANSPORTING NO_ZERO DECIMALS_OUT
+                                  WHERE FIELDNAME EQ <L_FIELDCAT>-FIELDNAME.
+
+    LS_FCAT-NO_ZERO      = GC_TRUE.
+    LS_FCAT-DECIMALS_OUT = LC_DECIMALS_O_2.
+    SET_TEXT_FILEDCAT( EXPORTING I_FIELD = 'STW_P' I_DATA = TEXT-143 ).
+    MODIFY GT_FCAT FROM LS_FCAT TRANSPORTING NO_ZERO DECIMALS_OUT
+                                  WHERE FIELDNAME EQ <L_FIELDCAT>-FIELDNAME.
+
+    LS_FCAT-NO_ZERO      = GC_TRUE.
+    LS_FCAT-DECIMALS_OUT = LC_DECIMALS_O_2.
+    SET_TEXT_FILEDCAT( EXPORTING I_FIELD = 'TOTFG' I_DATA = TEXT-139 ).
+    MODIFY GT_FCAT FROM LS_FCAT TRANSPORTING NO_ZERO DECIMALS_OUT
+                                  WHERE FIELDNAME EQ <L_FIELDCAT>-FIELDNAME.
+
+    SET_TEXT_FILEDCAT( EXPORTING I_FIELD = 'ZZPOB' I_DATA = TEXT-140 ).
+    SET_TEXT_FILEDCAT( EXPORTING I_FIELD = 'BU_GROUP' I_DATA = TEXT-141 ).
+    SET_TEXT_FILEDCAT( EXPORTING I_FIELD = 'BU_DESC' I_DATA = TEXT-142 ).
+    SET_TEXT_FILEDCAT( EXPORTING I_FIELD = 'CN_INV_REF' I_DATA = TEXT-144 ).
+    SET_TEXT_FILEDCAT( EXPORTING I_FIELD = 'INV_TYPE' I_DATA = TEXT-145 ).
+    SET_TEXT_FILEDCAT( EXPORTING I_FIELD = 'INV_VTEXT' I_DATA = TEXT-146 ).
+
+*    CONSTANTS : BEGIN OF LC_CON,
+*                  CHK_FILED TYPE C LENGTH 5 VALUE 'CHECK',
+*                  CHK_NAME  TYPE C LENGTH 3 VALUE 'CHK',
+*                END OF LC_CON.
+*
+*    CLEAR LS_FCAT.
+*    LS_FCAT-FIELDNAME   = LC_CON-CHK_FILED.
+*    LS_FCAT-SELTEXT_S   = LC_CON-CHK_NAME.
+*    LS_FCAT-SELTEXT_M   = LC_CON-CHK_NAME.
+*    LS_FCAT-SELTEXT_L   = LC_CON-CHK_FILED.
+*    LS_FCAT-CHECKBOX    = ABAP_TRUE.
+*    LS_FCAT-INPUT       = ABAP_TRUE.
+*    LS_FCAT-EDIT        = ABAP_TRUE.
+*    APPEND LS_FCAT TO GT_FCAT.
+*
+*    DATA : LV_RUNNING  TYPE I,
+*           LV_DATA     TYPE C LENGTH 6 VALUE 'TEXT-',
+*           LV_RUN_TEXT TYPE C LENGTH 2.
+*
+*    CONSTANTS : LC_F TYPE C VALUE 'F',
+*                LC_T TYPE C VALUE 'T',
+*                LC_d TYPE C VALUE 'D'.
+*
+*    FIELD-SYMBOLS <LFS> TYPE ANY.
+*
+*    DATA : LV_TEXT TYPE C LENGTH 8.
+**Field
+*    CLEAR : LS_FCAT.
+*    DO 99 TIMES.
+*      ADD 1 TO LV_RUNNING.
+*      LV_RUN_TEXT = LV_RUNNING.
+*
+*      LCL_UTIL=>CONVERT_ALPHA_IN( EXPORTING I_DATA = LV_RUN_TEXT
+*                                  IMPORTING E_Data = LV_RUN_TEXT ).
+*
+*      IF <LFS> IS ASSIGNED.
+*        UNASSIGN <LFS>.
+*      ENDIF.
+*      CONCATENATE LV_DATA LC_F LV_RUN_TEXT INTO LV_TEXT.
+*      ASSIGN (LV_TEXT) TO <LFS>.
+*      IF <LFS> IS NOT ASSIGNED.
+*        EXIT.
+*      ENDIF.
+*      LS_FCAT-FIELDNAME = <LFS>.
+**Teble Ref
+*      IF <LFS> IS ASSIGNED.
+*        UNASSIGN <LFS>.
+*      ENDIF.
+*      CONCATENATE LV_DATA LC_T LV_RUN_TEXT INTO LV_TEXT.
+*      ASSIGN (LV_TEXT) TO <LFS>.
+*      IF <LFS> IS ASSIGNED.
+*        LS_FCAT-REF_TABNAME = <LFS>.
+*      ENDIF.
+**Description
+*      IF <LFS> IS ASSIGNED.
+*        UNASSIGN <LFS>.
+*      ENDIF.
+*      CONCATENATE LV_DATA LC_D LV_RUN_TEXT INTO LV_TEXT.
+*      ASSIGN (LV_TEXT) TO <LFS>.
+*      IF <LFS> IS ASSIGNED.
+*        LS_FCAT-SELTEXT_S = <LFS>.
+*        LS_FCAT-SELTEXT_M = <LFS>.
+*        LS_FCAT-SELTEXT_L = <LFS>.
+*      ENDIF.
+*      APPEND LS_FCAT TO GT_FCAT.
+*      CLEAR LS_FCAT.
+*    ENDDO.
+
+  ENDMETHOD.
+  METHOD SET_SORT.
+**  CLEAR gs_sort.
+**  gs_sort-fieldname = 'LIFNR'.
+**  gs_sort-spos = '1'.
+**  gs_sort-up = 'X'.
+***  gs_sort-subtot = 'X'.
+**  APPEND gs_sort TO gt_sort.
+  ENDMETHOD.
+  METHOD SET_ALV_GRID.
+*SAPLKKBL
+    CALL FUNCTION 'REUSE_ALV_GRID_DISPLAY'
+      EXPORTING
+        I_CALLBACK_PROGRAM = SY-REPID
+        "I_CALLBACK_PF_STATUS_SET = 'PF_STATUS_1'
+        "I_callback_user_command  = 'USER_COMMAND'
+*       I_CALLBACK_TOP_OF_PAGE            = ' '
+*       i_html_height_top  = 12
+*       I_CALLBACK_HTML_TOP_OF_PAGE       = 'HTML_TOP_OF_PAGE'
+*       I_CALLBACK_HTML_END_OF_LIST       = ' '
+*       I_STRUCTURE_NAME   =
+*       I_BACKGROUND_ID    = ' '
+*       I_GRID_TITLE       =
+*       I_GRID_SETTINGS    =
+        IS_LAYOUT          = GS_LAYOUT
+        IT_FIELDCAT        = GT_FCAT
+*       IT_EXCLUDING       =
+*       IT_SPECIAL_GROUPS  =
+        IT_SORT            = GT_SORT
+*       IT_FILTER          =
+*       IS_SEL_HIDE        =
+        I_DEFAULT          = GC_X
+        I_SAVE             = GC_A
+*       IS_VARIANT         =
+*       IT_EVENTS          =
+*       IT_EVENT_EXIT      =
+*       IS_PRINT           =
+*       IS_REPREP_ID       =
+*       I_SCREEN_START_COLUMN             = 0
+*       I_SCREEN_START_LINE               = 0
+*       I_SCREEN_END_COLUMN               = 0
+*       I_SCREEN_END_LINE  = 0
+*       I_HTML_HEIGHT_TOP  = 0
+*       I_HTML_HEIGHT_END  = 0
+*       IT_ALV_GRAPHICS    =
+*       IT_HYPERLINK       =
+*       IT_ADD_FIELDCAT    =
+*       IT_EXCEPT_QINFO    =
+*       IR_SALV_FULLSCREEN_ADAPTER        =
+* IMPORTING
+*       E_EXIT_CAUSED_BY_CALLER           =
+*       ES_EXIT_CAUSED_BY_USER            =
+      TABLES
+        T_OUTTAB           = GT_RESULT
+      EXCEPTIONS
+        PROGRAM_ERROR      = 1
+        OTHERS             = 2.
+    IF SY-SUBRC <> 0.
+* MESSAGE ID SY-MSGID TYPE SY-MSGTY NUMBER SY-MSGNO
+*         WITH SY-MSGV1 SY-MSGV2 SY-MSGV3 SY-MSGV4.
+    ENDIF.
+
+  ENDMETHOD.
+  METHOD HTML_TOP_OF_PAGE.
+*  DATA: text TYPE sdydo_text_element.
+*
+*  CALL METHOD document->add_gap
+*    EXPORTING
+*      width = 100.
+*  text =  'Company Code Data'.
+*  CALL METHOD document->add_text
+*    EXPORTING
+*      text      = text
+*      sap_style = 'HEADING'.
+*
+*  CALL METHOD document->new_line.
+*  CALL METHOD document->new_line.
+*  CALL METHOD document->new_line.
+*
+*  text = 'User Name : '.
+*  CALL METHOD document->add_text
+*    EXPORTING
+*      text         = text
+*      sap_emphasis = 'Strong'.
+*
+*  CALL METHOD document->add_gap
+*    EXPORTING
+*      width = 6.
+*
+*  text = sy-uname.
+*  CALL METHOD document->add_text
+*    EXPORTING
+*      text      = text
+*      sap_style = 'Key'.
+*
+*  CALL METHOD document->add_gap
+*    EXPORTING
+*      width = 50.
+*
+*
+*  text = 'Date : '.
+*  CALL METHOD document->add_text
+*    EXPORTING
+*      text         = text
+*      sap_emphasis = 'Strong'.
+*
+*  CALL METHOD document->add_gap
+*    EXPORTING
+*      width = 6.
+*
+*  text = sy-datum.
+*  CALL METHOD document->add_text
+*    EXPORTING
+*      text      = text
+*      sap_style = 'Key'.
+*
+*  CALL METHOD document->add_gap
+*    EXPORTING
+*      width = 50.
+*
+*  text = 'Time : '.
+*  CALL METHOD document->add_text
+*    EXPORTING
+*      text         = text
+*      sap_emphasis = 'Strong'.
+*
+*  CALL METHOD document->add_gap
+*    EXPORTING
+*      width = 6.
+*
+*  text = sy-uzeit.
+*  CALL METHOD document->add_text
+*    EXPORTING
+*      text      = text
+*      sap_style = 'Key'.
+*
+*  CALL METHOD document->new_line.
+*  CALL METHOD document->new_line.
+  ENDMETHOD.
+  METHOD PREPARE_FILEDCAT.
+    CALL FUNCTION 'LVC_FIELDCATALOG_MERGE'
+      EXPORTING
+        I_STRUCTURE_NAME       = I_DATA
+      CHANGING
+        CT_FIELDCAT            = R
+      EXCEPTIONS
+        INCONSISTENT_INTERFACE = 1
+        PROGRAM_ERROR          = 2
+        OTHERS                 = 3.
+
+    IF SY-SUBRC <> 0.
+      MESSAGE ID SY-MSGID TYPE SY-MSGTY NUMBER SY-MSGNO
+              WITH SY-MSGV1 SY-MSGV2 SY-MSGV3 SY-MSGV4.
+    ENDIF.
+  ENDMETHOD.
+  METHOD SET_TEXT_FILEDCAT.
+    DATA:
+       LS_FCAT TYPE SLIS_FIELDCAT_ALV.
+
+    LS_FCAT-FIELDNAME   = I_FIELD.
+    LS_FCAT-SELTEXT_S   = I_DATA.
+    LS_FCAT-SELTEXT_M   = I_DATA.
+    LS_FCAT-SELTEXT_L   = I_DATA.
+
+    APPEND LS_FCAT TO GT_FCAT.
+  ENDMETHOD.
+  METHOD MAPPING_DATA.
+    CONSTANTS:
+      LC_MINUS_SIGN  TYPE I VALUE -1,
+      LC_AMOUNTX1000 TYPE I VALUE 1000.
+
+    DATA : LCL_SD TYPE REF TO ZCL_SDSSD_SALES_ANALYSIS.
+
+    DATA: LT_VBELN TYPE TT_VBELN.
+
+
+    DATA : LV_TABIX         TYPE SY-TABIX,
+           LV_STRING        TYPE STRING,
+           LT_PRCD_EL_KEY   TYPE TT_PRCD_EL_KEY,
+           LT_KNUMV         TYPE TT_KNUMV,
+           LT_OBJECT_ID     TYPE TT_OBJECT_ID,
+           LF_OBJECT_ID     TYPE CRMT_OBJECT_ID_DB,
+           LT_BILL_BOM_ITEM TYPE TT_BILL_BOM_ITEM,
+           LT_PERNR         TYPE TT_PERNR.
+
+    DATA : LCL_UTIL TYPE REF TO ZCL_SDSCA_UTIL_SDS.
+
+    DATA : LS_DATA LIKE LINE OF IT_DATA.
+
+    DATA : LT_STRING TYPE SORTED TABLE OF STRING
+                            WITH UNIQUE KEY TABLE_LINE.
+
+    DATA : LV_TEXT1 TYPE STRING,
+           LV_TEXT2 TYPE STRING,
+           LV_TEXT3 TYPE STRING,
+           LV_TEXT4 TYPE STRING,
+           LV_TEXT5 TYPE STRING,
+           LV_TEXT6 TYPE STRING,
+           LV_TEXT7 TYPE STRING.
+
+    DATA : LT_KUNAG TYPE GTY_KUNAG,
+           LT_DONUM TYPE GTY_DONUM,
+           LT_INV   TYPE GTY_INV.
+
+    DATA : LT_KOWRR TYPE TT_KOWRR.
+
+    DATA : LT_BOM TYPE GTY_DATA,
+           LT_COM TYPE GTY_DATA.
+
+    DATA : LT_CAL_PRICE TYPE TT_CAL_PRICE,
+           LS_CAL_PRICE TYPE TS_CAL_PRICE.
+
+    DATA : LV_LINE TYPE I VALUE 1.
+
+    DATA : LV_VBRK_VBTYP TYPE VBRK-VBTYP,
+           LV_VBRK_FKART TYPE VBRK-FKART.
+
+     SELECT FROM TVFKT
+       FIELDS FKART, VTEXT
+        WHERE SPRAS EQ 'E'
+        INTO TABLE @DATA(GT_TVFKT).
+
+    IF LCL_SD IS NOT BOUND.
+      CREATE OBJECT LCL_SD.
+    ENDIF.
+
+
+    IF LCL_UTIL IS NOT BOUND.
+      CREATE OBJECT LCL_UTIL.
+    ENDIF.
+
+    GET_GENC( EXPORTING IF_REPID = GC_REPID
+              IMPORTING ES_GENC  = DATA(LS_GENC) ).
+
+    LT_VBELN = CORRESPONDING #( IT_DATA DISCARDING DUPLICATES ).
+
+
+    IF LT_VBELN IS NOT INITIAL.
+      SELECT FROM VBPA
+          FIELDS VBELN,
+                 PARVW,
+                 PERNR
+          FOR ALL ENTRIES IN @LT_VBELN
+           WHERE VBELN = @LT_VBELN-VBELN
+             AND PARVW IN ( @GC_PARVW-SALE_EMPLOYEE, @GC_PARVW-EMPLOYEE_RESP )
+            INTO TABLE @DATA(LT_PERS_C).
+
+      IF SY-SUBRC IS INITIAL.
+        SORT LT_PERS_C BY VBELN PARVW.
+      ENDIF.
+*     BREAK-POINT.
+         SELECT FROM VBFA
+         FIELDS VBELV, POSNV, VBELN, POSNN,
+                VBTYP_N, VBTYP_V
+         FOR ALL ENTRIES IN  @LT_VBELN
+         WHERE VBELN  = @LT_VBELN-VBELN
+         AND VBTYP_N IN ('O','N')
+         AND VBTYP_V EQ 'B'
+         INTO TABLE @DATA(GT_VBFA_QT).
+
+        SORT GT_VBFA_QT BY VBELN.
+        DELETE ADJACENT DUPLICATES FROM GT_VBFA_QT.
+
+         SELECT FROM VBFA
+         FIELDS VBELV, POSNV, VBELN, POSNN,
+                VBTYP_N, VBTYP_V
+         FOR ALL ENTRIES IN  @LT_VBELN
+         WHERE VBELN  = @LT_VBELN-VBELN
+         AND VBTYP_N IN ('O','N')
+         AND VBTYP_V EQ 'M'
+         INTO TABLE @DATA(GT_VBFA_INV).
+
+        SORT GT_VBFA_INV BY VBELN.
+        DELETE ADJACENT DUPLICATES FROM GT_VBFA_INV.
+
+        IF GT_VBFA_INV IS NOT INITIAL.
+           SELECT FROM VBRK
+           FIELDS VBELN, FKART, VBTYP
+           FOR ALL ENTRIES IN @GT_VBFA_INV
+           WHERE VBELN = @GT_VBFA_INV-VBELV
+           INTO TABLE @DATA(GT_INVREF).
+
+        ENDIF.
+    ENDIF.
+
+
+
+    IF IT_DATA[] IS NOT INITIAL.
+      SELECT *
+        FROM TB002
+        INTO TABLE @DATA(LT_TB002)
+        FOR ALL ENTRIES IN @IT_DATA[]
+        WHERE BU_GROUP = @IT_DATA-BU_GROUP
+          AND SPRAS    = 'E'.
+      IF SY-SUBRC = 0.
+        SORT LT_TB002 BY BU_GROUP.
+      ENDIF.
+    ENDIF.
+
+    LT_KOWRR =  VALUE #( ( KOWRR  = ABAP_TRUE ) ).
+    LT_BOM   = FILTER #( IT_DATA IN LT_KOWRR WHERE KOWRR = KOWRR ).
+    LT_COM   = IT_DATA.
+    SORT LT_COM BY UEPOS ASCENDING.
+    DELETE LT_COM WHERE UEPOS IS INITIAL.
+    SORT LT_BOM BY VBELN POSNR.
+    SORT LT_COM BY VBELN UEPOS.
+
+    LT_KUNAG = CORRESPONDING #( IT_DATA  DISCARDING DUPLICATES ).
+    LT_DONUM = CORRESPONDING #( IT_DATA  DISCARDING DUPLICATES ).
+    LT_INV   = CORRESPONDING #( IT_DATA  DISCARDING DUPLICATES ).
+
+    LT_PERNR = CORRESPONDING #( IT_DATA DISCARDING DUPLICATES ).
+    LCL_SD->GET_PERSON_NAME(
+      EXPORTING
+        IT_PERNR  = LT_PERNR
+      IMPORTING
+        ET_PA0002 = DATA(LT_PERS) ).
+
+    LT_PRCD_EL_KEY = CORRESPONDING #( BASE (  LT_PRCD_EL_KEY )
+                                      IT_DATA  DISCARDING DUPLICATES
+                                               MAPPING KPOSN = POSNR ).
+
+    LT_CAL_PRICE = GET_CAL_PRICE( LT_PRCD_EL_KEY ).
+
+    LCL_SD->GET_UNIT_PRICE(
+      EXPORTING
+        IT_PRCD_EL_KEY = LT_PRCD_EL_KEY
+      IMPORTING
+        ET_UNIT_PRICE  = DATA(LT_UNIT_PRICE) ).
+
+    LCL_SD->GET_UNIT_COST(
+      EXPORTING
+        IT_PRCD_EL_KEY = LT_PRCD_EL_KEY
+      IMPORTING
+        ET_UNIT_COST   = DATA(LT_UNIT_COST) ).
+
+    LT_OBJECT_ID = CORRESPONDING #( IT_DATA DISCARDING DUPLICATES
+                                            MAPPING OBJECT_ID = XBLNR ).
+
+    LCL_SD->GET_SERVICE(
+      EXPORTING
+        IT_OBJECT_ID = LT_OBJECT_ID
+      IMPORTING
+        ET_SERVICE   = DATA(LT_SERVICE) ).
+
+    LT_KNUMV = CORRESPONDING #( IT_DATA DISCARDING DUPLICATES ).
+
+    GET_HEAD_DISCOUNT(
+      EXPORTING
+        IS_GENC    = LS_GENC
+        IT_KNUMV   = LT_KNUMV
+      IMPORTING
+        ET_DISC_HD = DATA(LT_DISC_HD) ).
+
+    GET_CASH_DISCOUNT(
+      EXPORTING
+        IS_GENC      = LS_GENC
+        IT_KNUMV     = LT_KNUMV
+      IMPORTING
+        ET_DISC_CASH = DATA(LT_DISC_CASH) ).
+
+    DATA(LT_ADDRESS)  = GET_ADDRESS( LT_KUNAG ).
+    DATA(LT_SHIPMENT) = GET_SHIPMENT( LT_DONUM ).
+    DATA(LT_ADVANCE)  = GET_ADVANCE( LT_INV ).
+
+
+
+    DATA : LS_ADDRESS    LIKE LINE OF LT_ADDRESS,
+           LS_SHIPMENT   LIKE LINE OF LT_SHIPMENT,
+           LS_ADVANCE    LIKE LINE OF LT_ADVANCE,
+           LS_UNIT_PRICE LIKE LINE OF LT_UNIT_PRICE,
+           LS_DISC_HD    LIKE LINE OF LT_DISC_HD,
+           LS_DISC_CASH  LIKE LINE OF LT_DISC_CASH,
+           LS_UNIT_COST  LIKE LINE OF LT_UNIT_COST.
+
+    LOOP AT IT_DATA INTO DATA(LS_TMP).
+      MOVE-CORRESPONDING LS_TMP TO LS_DATA.
+      GS_RESULT-CUST_CODE         = LS_DATA-KUNAG.
+      IF LS_DATA-PERNR IS NOT INITIAL.
+        GS_RESULT-PERSON_NO         = LS_DATA-PERNR.
+      ELSE.
+        GS_RESULT-PERSON_NO         = LS_DATA-PERZM.
+      ENDIF.
+      IF GS_RESULT-PERSON_NO IS INITIAL.
+        READ TABLE LT_PERS_C ASSIGNING FIELD-SYMBOL(<L_PERS_C>)
+          WITH KEY VBELN = LS_DATA-VBELN
+             PARVW = GC_PARVW-SALE_EMPLOYEE
+             BINARY SEARCH.
+        IF SY-SUBRC IS INITIAL.
+          GS_RESULT-PERSON_NO  = <L_PERS_C>-PERNR.
+        ENDIF.
+      ENDIF.
+
+      GS_RESULT-SO_NO             = LS_DATA-AUBEL.
+      GS_RESULT-SO_TYPE           = LS_DATA-AUART.
+      GS_RESULT-SO_CREATE_DATE    = LS_DATA-AUDAT.
+      GS_RESULT-SO_CREATE_BY      = LS_DATA-ERNAM.
+      GS_RESULT-BILL_TYPE         = LS_DATA-FKART.
+      GS_RESULT-BILL_NO           = LS_DATA-VBELN.
+      GS_RESULT-BILL_DATE         = LS_DATA-FKDAT.
+      GS_RESULT-TAX_NO            = LS_DATA-XBLNR.
+      GS_RESULT-EXT_SYSTEM_1      = LS_DATA-IHREZ.
+      GS_RESULT-EXT_SYSTEM_2      = LS_DATA-BNAME.
+      GS_RESULT-PO_NO             = LS_DATA-BSTKD.
+      GS_RESULT-ZTERM             = LS_DATA-ZTERM.
+      GS_RESULT-WAERK             = LS_DATA-WAERK.
+      GS_RESULT-SUB_PO_NO         = LS_DATA-BSTKD_E.
+      GS_RESULT-SALE_ORG          = LS_DATA-ORGDS.
+      GS_RESULT-DIST_CHANNEL      = LS_DATA-CHADS.
+      GS_RESULT-SALE_OFFICE       = LS_DATA-OFFDS.
+      GS_RESULT-SALE_GROUP        = LS_DATA-GRPDS.
+      GS_RESULT-BILL_TYPE_TX      = LS_DATA-BITDS.
+      GS_RESULT-CUST_CREATE_DATE  = LS_DATA-ERDAT.
+      GS_RESULT-MOBILE            = LS_DATA-TELF2.
+      GS_RESULT-CUST_CLASS        = LS_DATA-CSFDS.
+      GS_RESULT-ACC_CLERK         = LS_DATA-ACCDS.
+      GS_RESULT-PRODH             = LS_DATA-PRODH.
+      GS_RESULT-PRODH_1           = LS_DATA-PRODH+0(5).
+      GS_RESULT-PRODH_2           = LS_DATA-PRODH+5(5).
+      GS_RESULT-PRODH_3           = LS_DATA-PRODH+10(8).
+      GS_RESULT-POSNR             = LS_DATA-POSNR.
+      GS_RESULT-UEPOS             = LS_DATA-UEPOS.
+      GS_RESULT-MATNR             = LS_DATA-MATNR.
+      GS_RESULT-ARKTX             = LS_DATA-ARKTX.
+      GS_RESULT-VRKME             = LS_DATA-VRKME.
+      GS_RESULT-NTGEW             = LS_DATA-NTGEW.
+      GS_RESULT-BRGEW             = LS_DATA-BRGEW.
+      GS_RESULT-VOLUM             = LS_DATA-VOLUM.
+      GS_RESULT-PRCTR             = LS_DATA-PRCTR.
+      GS_RESULT-PS_PSP_PNR        = LS_DATA-PS_PSP_PNR.
+      GS_RESULT-NET_AMOUNT        = LS_DATA-NETWR.
+      GS_RESULT-TAX_AMOUNT        = LS_DATA-MWSBP.
+      GS_RESULT-TOTAL_AMOUNT      = LS_DATA-NETWR + LS_DATA-MWSBP.
+      GS_RESULT-SALE_AMOUNT_X1000 = LS_DATA-NETWR / LC_AMOUNTX1000.
+      GS_RESULT-CUST_GROUP_1_TX   = LS_DATA-CUSG1.
+      GS_RESULT-CUST_GROUP_2      = LS_DATA-KVGR2.
+      GS_RESULT-CUST_GROUP_2_TX   = LS_DATA-CUSG2.
+      GS_RESULT-ORDER_REASON      = LS_DATA-ORDRS.
+      GS_RESULT-QUOTE_NO          = LS_DATA-VGBEL.
+      GS_RESULT-QUOTE_TYPE        = LS_DATA-QUOTY.
+      GS_RESULT-DO_NO             = LS_DATA-DONUM.
+      GS_RESULT-DO_CREATE_DATE    = LS_DATA-DOCRE.
+      GS_RESULT-DO_CREATE_TIME    = LS_DATA-DOTIM.
+      GS_RESULT-DO_DATE           = LS_DATA-DODAT.
+      GS_RESULT-LSTEL             = LS_DATA-LSTEL.
+      GS_RESULT-LSTEL_TX          = LS_DATA-LODPT.
+      GS_RESULT-REF_FIDOC         = LS_DATA-BELNR.
+      GS_RESULT-ZTERM_TX          = LS_DATA-PAYTM.
+      GS_RESULT-PROJ_NAME         = LS_DATA-POST1.
+      GS_RESULT-APPLICATION       = LS_DATA-APPLI.
+      GS_RESULT-DIVISION          = LS_DATA-DIVIS.
+      GS_RESULT-ZZREFT            = LS_DATA-ZZREFT.
+      GS_RESULT-MFRNR             = LS_DATA-MFRNR.
+      GS_RESULT-ZZPOB             = LS_DATA-ZZPOB.
+      GS_RESULT-BU_GROUP          = LS_DATA-BU_GROUP.
+
+      READ TABLE LT_TB002 INTO DATA(LS_TB002)
+                          WITH KEY BU_GROUP = LS_DATA-BU_GROUP
+                          BINARY SEARCH.
+      IF SY-SUBRC = 0.
+        GS_RESULT-BU_DESC = LS_TB002-TXT15.
+      ENDIF.
+
+      IF LS_DATA-ZZSCF     EQ GC_SALE_COUNT_FLAG_0 AND
+         GS_RESULT-PRODH_2 EQ GC_PRODH2_CDU AND
+         GS_RESULT-DO_NO   IS NOT INITIAL.
+        GS_RESULT-SALE_QTY = LS_DATA-FKIMG.
+      ENDIF.
+
+      IF GS_RESULT-DO_NO IS NOT INITIAL.
+        GS_RESULT-ACT_QTY  = LS_DATA-FKIMG.
+      ENDIF.
+
+      IF GS_RESULT-SALE_ORG IS NOT INITIAL.
+        GS_RESULT-SALE_AREA = GS_RESULT-SALE_ORG.
+      ENDIF.
+
+      IF GS_RESULT-DIST_CHANNEL IS NOT INITIAL.
+        GS_RESULT-SALE_AREA = |{ GS_RESULT-SALE_AREA }/{ GS_RESULT-DIST_CHANNEL }|.
+      ENDIF.
+
+      IF GS_RESULT-DIVISION IS NOT INITIAL.
+        GS_RESULT-SALE_AREA = |{ GS_RESULT-SALE_AREA }/{ GS_RESULT-DIVISION }|.
+      ENDIF.
+
+      IF LS_DATA-FKIMG IS NOT INITIAL.
+        GS_RESULT-UNIT_NET_PRICE = LS_DATA-NETWR / LS_DATA-FKIMG.
+      ENDIF.
+
+      IF LS_DATA-PSTYV IN LS_GENC-ITEMCAT_BOM_RANGE.
+        GS_RESULT-H_BOM_QTY = LS_DATA-FKIMG.
+        GS_RESULT-BILL_QTY  = LS_DATA-FKIMG.
+      ENDIF.
+
+      LCL_SD->GET_DATE_IN_FISCAL_YEAR(
+        EXPORTING
+          IF_DATE          = LS_DATA-FKDAT
+        IMPORTING
+          EF_HALF_PERIOD   = GS_RESULT-HALF_PERIOD
+          EF_QUARTER       = GS_RESULT-QUARTER
+          EF_PERIOD        = GS_RESULT-PERIOD
+          EF_WEEK          = GS_RESULT-WEEK
+          EF_MONTH         = GS_RESULT-ZZMONTH
+          EF_CALENDAR_YEAR = GS_RESULT-CALENDAR_YEAR
+          EF_FISCAL_YEAR   = GS_RESULT-FISCAL_YEAR ).
+
+      READ TABLE LT_UNIT_PRICE INTO LS_UNIT_PRICE
+        WITH KEY KNUMV = LS_DATA-KNUMV
+                 KPOSN = LS_DATA-POSNR.
+      IF SY-SUBRC IS INITIAL.
+        GS_RESULT-UNIT_PRICE = LS_UNIT_PRICE-KBETR.
+      ENDIF.
+
+      READ TABLE LT_UNIT_COST INTO LS_UNIT_COST
+       WITH KEY KNUMV = LS_DATA-KNUMV
+                KPOSN = LS_DATA-POSNR.
+      IF SY-SUBRC IS INITIAL.
+        GS_RESULT-UNIT_COST  = LS_UNIT_COST-KBETR.
+        GS_RESULT-TOTAL_COST = LS_UNIT_COST-KWERT.
+      ENDIF.
+
+      READ TABLE LT_PERS ASSIGNING FIELD-SYMBOL(<L_PERS>)
+      WITH KEY PERNR = GS_RESULT-PERSON_NO.
+      IF SY-SUBRC IS INITIAL.
+        GS_RESULT-PERSON_NAME = <L_PERS>-NAME.
+      ENDIF.
+
+      READ TABLE LT_ADDRESS INTO LS_ADDRESS
+      WITH KEY KUNNR = LS_DATA-KUNAG.
+      IF SY-SUBRC EQ 0.
+        GS_RESULT-CUST_NAME_TH      = LS_ADDRESS-NAMTH.
+        GS_RESULT-CUST_ADDR_1       = LS_ADDRESS-ADR1TH.
+        GS_RESULT-CUST_ADDR_2       = LS_ADDRESS-ADR2TH.
+        GS_RESULT-CUST_REGION       = LS_ADDRESS-CITY1TH.
+        GS_RESULT-CUST_POSTCODE     = LS_ADDRESS-POST_CODE1TH.
+        GS_RESULT-TELEPHONE         = LS_ADDRESS-TEL_NUMBERTH.
+        GS_RESULT-CUST_NAME_EN      = LS_ADDRESS-NAMEN.
+        GS_RESULT-ETAX_EMAIL        = LS_ADDRESS-SMTP_ADDR.
+        GS_RESULT-CUST_CREDIT_GROUP = LS_ADDRESS-PARTNER2.
+      ENDIF.
+
+      READ TABLE LT_SHIPMENT INTO LS_SHIPMENT
+      WITH KEY VBELN = LS_DATA-VBELN.
+      IF SY-SUBRC EQ 0.
+        GS_RESULT-VSART = LS_SHIPMENT-VSART.
+        GS_RESULT-TKNUM = LS_SHIPMENT-TKNUM.
+        GS_RESULT-DTDIS = LS_SHIPMENT-DTDIS.
+        GS_RESULT-ROUTE = LS_SHIPMENT-ROUTE.
+        GS_RESULT-UZDIS = LS_SHIPMENT-UZDIS.
+        GS_RESULT-EXTI1 = LS_SHIPMENT-EXTI1.
+        GS_RESULT-EXTI2 = LS_SHIPMENT-EXTI2.
+        GS_RESULT-DATEN = LS_SHIPMENT-DATEN.
+        GS_RESULT-UATEN = LS_SHIPMENT-UATEN.
+      ENDIF.
+
+      READ TABLE LT_DISC_HD INTO LS_DISC_HD
+      WITH KEY KNUMV = LS_DATA-KNUMV.
+      IF SY-SUBRC IS INITIAL.
+        GS_RESULT-HEAD_DIS_KWERT = LS_DISC_HD-SUM_KWERT.
+      ENDIF.
+
+      READ TABLE LT_DISC_CASH INTO LS_DISC_CASH
+      WITH KEY KNUMV = LS_DATA-KNUMV.
+      IF SY-SUBRC IS INITIAL.
+        GS_RESULT-CASH_DIS_KWERT = LS_DISC_CASH-SUM_KWERT.
+      ENDIF.
+
+      LF_OBJECT_ID = LS_DATA-XBLNR.
+
+      CLEAR : LT_STRING.
+      READ TABLE LT_SERVICE ASSIGNING FIELD-SYMBOL(<L_SERVICE>)
+      WITH KEY OBJECT_ID = LF_OBJECT_ID .
+      IF SY-SUBRC IS INITIAL.
+        LV_TABIX = SY-TABIX.
+
+        GS_RESULT-QUOTE_WORK_COND      = <L_SERVICE>-ZZ1_EXT_REFNO.
+        GS_RESULT-SERV_ORDER           = <L_SERVICE>-OBJECT_ID.
+        GS_RESULT-SERV_ORDER_STATUS    = <L_SERVICE>-INBOX_STATUS.
+        GS_RESULT-RECEPTION_DATE       = <L_SERVICE>-SRV_CUST_BEG.
+        GS_RESULT-SERV_SUB_CONT        = <L_SERVICE>-ZZ1_VENDOR_TEAM.
+        GS_RESULT-SERV_CONT_STARTDATE  = <L_SERVICE>-CONTSTART.
+        GS_RESULT-SERV_CONT_ENDDATE    = <L_SERVICE>-CONTEND.
+        GS_RESULT-MGMT_NO              = <L_SERVICE>-PO_NUMBER_SOLD.
+
+        CASE <L_SERVICE>-AC_OBJECT_TYPE.
+          WHEN GC_AC_OBJECT_TYPE-INT_ORDER.
+            "Text-007: I/O
+            GS_RESULT-SERV_ORDER_WBS = TEXT-007.
+          WHEN GC_AC_OBJECT_TYPE-WBS.
+            GS_RESULT-SERV_ORDER_WBS = <L_SERVICE>-AC_ASSIGNMENT.
+        ENDCASE.
+
+        " Closed Date of all Process
+        IF <L_SERVICE>-HEAD_CHANGED_AT IS NOT INITIAL.
+          CALL FUNCTION 'CONVERSION_EXIT_TSTPS_OUTPUT'
+            EXPORTING
+              INPUT  = <L_SERVICE>-HEAD_CHANGED_AT
+            IMPORTING
+              OUTPUT = GS_RESULT-CLOSE_DATE.
+        ENDIF.
+
+        IF <L_SERVICE>-INBOX_STATUS = GC_INBOX_STATUS_COMPLETE.
+          "Text-008: Complete
+          GS_RESULT-JOB_COMP_DATE = TEXT-008.
+          GS_RESULT-CLOSE_DATE    = TEXT-008.
+
+        ENDIF.
+
+        CLEAR LT_STRING.
+
+        LOOP AT LT_SERVICE ASSIGNING <L_SERVICE> FROM LV_TABIX.
+
+          IF <L_SERVICE>-OBJECT_ID = LS_DATA-XBLNR.
+            LV_STRING = <L_SERVICE>-ZZ1_VENDOR_TEAM.
+            INSERT LV_STRING INTO TABLE LT_STRING.
+          ELSE.
+            EXIT.
+          ENDIF.
+
+        ENDLOOP.
+
+        CONCATENATE LINES OF LT_STRING INTO GS_RESULT-SERV_SUB_CONT
+                SEPARATED BY GC_SEPARATE-COMMA.
+
+      ENDIF.
+
+      AT NEW VBELN.
+        LV_TEXT1 = LCL_UTIL->GET_TEXT( EXPORTING I_ID       = GC_TDID-REF_MEMO
+                                                               I_NAME     = GS_RESULT-SO_NO
+                                                               I_OBJECT   = GC_TDOBJECT-VBBK
+                                                               I_LANGUAGE = SY-LANGU ).
+
+        LV_TEXT2 = LCL_UTIL->GET_TEXT( EXPORTING I_ID     = GC_TDID-REQ_REMARK
+                                                               I_NAME     = GS_RESULT-SO_NO
+                                                               I_OBJECT   = GC_TDOBJECT-VBBK
+                                                               I_LANGUAGE = SY-LANGU ).
+
+        LV_TEXT3 =  LCL_UTIL->GET_TEXT( EXPORTING I_ID           = GC_TDID-PROJECT_TX
+                                                                I_NAME     = GS_RESULT-SO_NO
+                                                                I_OBJECT   = GC_TDOBJECT-VBBK
+                                                                I_LANGUAGE = SY-LANGU ).
+
+        LV_TEXT4 = LCL_UTIL->GET_TEXT( EXPORTING I_ID     = GC_TDID-REMARK_QT
+                                                                I_NAME     = GS_RESULT-SO_NO
+                                                                I_OBJECT   = GC_TDOBJECT-VBBK
+                                                                I_LANGUAGE = SY-LANGU ).
+
+        LV_TEXT5 = LCL_UTIL->GET_TEXT( EXPORTING I_ID         = GC_TDID-REASON
+                                                                I_NAME     = GS_RESULT-SO_NO
+                                                                I_OBJECT   = GC_TDOBJECT-VBBK
+                                                                I_LANGUAGE = SY-LANGU ).
+
+        LV_TEXT6 =  LCL_UTIL->GET_TEXT( EXPORTING I_ID     = GC_TDID-INV_REMARK
+                                                                I_NAME     = GS_RESULT-SO_NO
+                                                                I_OBJECT   = GC_TDOBJECT-VBBK
+                                                                I_LANGUAGE = SY-LANGU ).
+
+
+        LV_TEXT7 =   LCL_UTIL->GET_TEXT( EXPORTING I_ID       = GC_TDID-LAND_NO
+                                                                I_NAME     = GS_RESULT-SO_NO
+                                                                I_OBJECT   = GC_TDOBJECT-VBBK
+                                                                I_LANGUAGE = SY-LANGU ).
+      ENDAT.
+
+      GS_RESULT-REF_MEMO_HTX   = LV_TEXT1.
+      GS_RESULT-REQ_REMARK_HTX = LV_TEXT2.
+      GS_RESULT-PROJ_HTX       = LV_TEXT3.
+      GS_RESULT-REMARK_QT_HTX  = LV_TEXT4.
+      GS_RESULT-REASON_HTX     = LV_TEXT5.
+      GS_RESULT-INV_REMARK_HTX = LV_TEXT6.
+      GS_RESULT-LAND_NO_HTX    = LV_TEXT7.
+
+      CLEAR : LT_STRING.
+      READ TABLE LT_ADVANCE
+        TRANSPORTING NO FIELDS
+        WITH KEY VBELN = GS_RESULT-SO_NO
+                 BINARY SEARCH.
+      IF SY-SUBRC IS INITIAL.
+        LV_TABIX = SY-TABIX.
+        CLEAR LT_STRING.
+        LOOP AT LT_ADVANCE INTO LS_ADVANCE FROM LV_TABIX.
+
+          IF LS_ADVANCE-VBELN NE GS_RESULT-SO_NO.
+            EXIT.
+          ENDIF.
+
+          IF LS_ADVANCE-BELNR IS NOT INITIAL.
+            LV_STRING = LS_ADVANCE-BELNR.
+            INSERT LV_STRING INTO TABLE LT_STRING.
+          ENDIF.
+
+        ENDLOOP.
+
+        CONCATENATE LINES OF LT_STRING INTO GS_RESULT-ADV_RECEIVE
+                SEPARATED BY GC_SEPARATE-COMMA.
+      ENDIF.
+
+      IF GS_RESULT-UEPOS IS INITIAL.
+        GS_RESULT-UEPOS     = LS_DATA-POSNR.
+        GS_RESULT-MATNR_BOM = LS_DATA-MATNR.
+
+        READ TABLE LT_BOM TRANSPORTING NO FIELDS
+        WITH KEY VBELN = LS_DATA-VBELN
+                 POSNR = LS_DATA-POSNR.
+        IF SY-SUBRC EQ 0.
+          LOOP AT LT_COM ASSIGNING FIELD-SYMBOL(<L_BILL_BOM_ITEM>) FROM LV_LINE.
+            IF <L_BILL_BOM_ITEM>-VBELN NE LS_DATA-VBELN  AND
+               <L_BILL_BOM_ITEM>-UEPOS NE LS_DATA-POSNR.
+              LV_LINE = SY-TABIX + 1.
+              EXIT.
+            ENDIF.
+
+            GS_RESULT-BOM_AMOUNT       = GS_RESULT-BOM_AMOUNT + <L_BILL_BOM_ITEM>-NETWR.
+            GS_RESULT-BOM_TOTAL_AMOUNT = GS_RESULT-BOM_TOTAL_AMOUNT + <L_BILL_BOM_ITEM>-NETWR + <L_BILL_BOM_ITEM>-MWSBP .
+
+            " Summary Total Cost of BOM
+            READ TABLE LT_UNIT_COST ASSIGNING FIELD-SYMBOL(<L_UNIT_COST>)
+            WITH KEY KNUMV = <L_BILL_BOM_ITEM>-KNUMV
+                     KPOSN = <L_BILL_BOM_ITEM>-POSNR.
+            IF SY-SUBRC IS INITIAL.
+              GS_RESULT-BOM_TOTAL_COST = GS_RESULT-BOM_TOTAL_COST + <L_UNIT_COST>-KWERT.
+            ENDIF.
+          ENDLOOP.
+        ENDIF.
+      ELSE.
+        GS_RESULT-ACT_QTY = LS_DATA-FKIMG.
+
+        IF LS_DATA-UPMAT IS NOT INITIAL.
+          GS_RESULT-MATNR_BOM = LS_DATA-UPMAT.
+        ELSE.
+          READ TABLE LT_BOM ASSIGNING FIELD-SYMBOL(<L_BILL_BOM>)
+          WITH KEY VBELN = LS_DATA-VBELN
+                   POSNR = LS_DATA-UEPOS
+          BINARY SEARCH.
+          IF SY-SUBRC IS INITIAL.
+            GS_RESULT-MATNR_BOM = <L_BILL_BOM>-MATNR.
+          ENDIF.
+        ENDIF.
+      ENDIF.
+
+      READ TABLE LT_CAL_PRICE INTO LS_CAL_PRICE
+      WITH KEY KNUMV = LS_DATA-KNUMV
+               KPOSN = LS_DATA-POSNR
+               KSCHL = GC_CAL_PRICE-ZPS1.
+      IF SY-SUBRC EQ 0.
+        GS_RESULT-INS_P = LS_CAL_PRICE-KWERT.
+      ENDIF.
+
+      READ TABLE LT_CAL_PRICE INTO LS_CAL_PRICE
+      WITH KEY KNUMV = LS_DATA-KNUMV
+               KPOSN = LS_DATA-POSNR
+               KSCHL = GC_CAL_PRICE-ZPS2.
+      IF SY-SUBRC EQ 0.
+        GS_RESULT-MIT_P = LS_CAL_PRICE-KWERT.
+      ENDIF.
+
+      READ TABLE LT_CAL_PRICE INTO LS_CAL_PRICE
+      WITH KEY KNUMV = LS_DATA-KNUMV
+               KPOSN = LS_DATA-POSNR
+               KSCHL = GC_CAL_PRICE-ZPS3.
+      IF SY-SUBRC EQ 0.
+        GS_RESULT-SLA_P = LS_CAL_PRICE-KWERT.
+      ENDIF.
+
+      READ TABLE LT_CAL_PRICE INTO LS_CAL_PRICE
+      WITH KEY KNUMV = LS_DATA-KNUMV
+               KPOSN = LS_DATA-POSNR
+               KSCHL = GC_CAL_PRICE-ZPS4.
+      IF SY-SUBRC EQ 0.
+        GS_RESULT-MOD_P = LS_CAL_PRICE-KWERT.
+      ENDIF.
+
+      READ TABLE LT_CAL_PRICE INTO LS_CAL_PRICE
+      WITH KEY KNUMV = LS_DATA-KNUMV
+               KPOSN = LS_DATA-POSNR
+               KSCHL = GC_CAL_PRICE-ZWR3.
+      IF SY-SUBRC EQ 0.
+        GS_RESULT-EXW_P = LS_CAL_PRICE-KWERT.
+      ENDIF.
+
+      READ TABLE LT_CAL_PRICE INTO LS_CAL_PRICE
+      WITH KEY KNUMV = LS_DATA-KNUMV
+               KPOSN = LS_DATA-POSNR
+               KSCHL = GC_CAL_PRICE-ZWR1.
+      IF SY-SUBRC EQ 0.
+        GS_RESULT-STW_P = LS_CAL_PRICE-KWERT.
+      ENDIF.
+
+      GS_RESULT-TOTFG =  GS_RESULT-NET_AMOUNT -
+      ( GS_RESULT-INS_P + GS_RESULT-MIT_P + GS_RESULT-SLA_P + GS_RESULT-MOD_P + GS_RESULT-EXW_P ).
+
+      IF LS_DATA-FKART IN LS_GENC-BILLTYPE_MINUS_RANGE AND
+         LS_GENC-BILLTYPE_MINUS_RANGE IS NOT INITIAL.
+
+        GS_RESULT-H_BOM_QTY         = ABS( GS_RESULT-H_BOM_QTY ) * LC_MINUS_SIGN.
+        GS_RESULT-SALE_QTY          = ABS( GS_RESULT-SALE_QTY ) * LC_MINUS_SIGN.
+        GS_RESULT-BILL_QTY          = ABS( GS_RESULT-BILL_QTY ) * LC_MINUS_SIGN.
+        GS_RESULT-NET_AMOUNT        = ABS( GS_RESULT-NET_AMOUNT ) * LC_MINUS_SIGN.
+        GS_RESULT-TAX_AMOUNT        = ABS( GS_RESULT-TAX_AMOUNT ) * LC_MINUS_SIGN.
+        GS_RESULT-TOTAL_AMOUNT      = ABS( GS_RESULT-TOTAL_AMOUNT ) * LC_MINUS_SIGN.
+        GS_RESULT-UNIT_COST         = ABS( GS_RESULT-UNIT_COST ) * LC_MINUS_SIGN.
+        GS_RESULT-TOTAL_COST        = ABS( GS_RESULT-TOTAL_COST ) * LC_MINUS_SIGN.
+        GS_RESULT-BOM_AMOUNT        = ABS( GS_RESULT-BOM_AMOUNT ) * LC_MINUS_SIGN.
+        GS_RESULT-BOM_TOTAL_AMOUNT  = ABS( GS_RESULT-BOM_TOTAL_AMOUNT ) * LC_MINUS_SIGN.
+        GS_RESULT-BOM_TOTAL_COST    = ABS( GS_RESULT-BOM_TOTAL_COST ) * LC_MINUS_SIGN.
+        GS_RESULT-SALE_AMOUNT_X1000 = ABS( GS_RESULT-SALE_AMOUNT_X1000 ) * LC_MINUS_SIGN.
+      ENDIF.
+
+      CLEAR: GS_VBFA_INV,GS_INVREF,GS_TVFKT,GS_VBFA_QT.
+      READ TABLE GT_VBFA_INV INTO GS_VBFA_INV WITH KEY VBELN = GS_RESULT-BILL_NO.
+           IF SY-SUBRC EQ 0.
+                 GS_RESULT-CN_INV_REF = GS_VBFA_INV-VBELV.
+                READ TABLE GT_INVREF INTO GS_INVREF WITH KEY VBELN = GS_VBFA_INV-VBELV.
+                   IF SY-SUBRC EQ 0.
+                      GS_RESULT-INV_TYPE = GS_INVREF-FKART.
+                      READ TABLE GT_TVFKT INTO GS_TVFKT WITH KEY FKART = GS_INVREF-FKART.
+                          IF SY-SUBRC EQ 0.
+                             GS_RESULT-INV_VTEXT = GS_TVFKT-VTEXT.
+                          ENDIF.
+                      READ TABLE GT_VBFA_QT INTO GS_VBFA_QT WITH KEY VBELN = GS_VBFA_INV-VBELN.
+                          IF SY-SUBRC EQ 0.
+                             GS_RESULT-QUOTE_NO = GS_VBFA_QT-VBELV.
+                          ELSE.
+                             GS_RESULT-QUOTE_NO = ''.
+                          ENDIF.
+                   ENDIF.
+           ENDIF.
+
+
+      APPEND GS_RESULT TO GT_RESULT.
+      CLEAR : GS_RESULT.
+    ENDLOOP.
+  ENDMETHOD.
+  METHOD GET_ADDRESS.
+    SELECT B~*
+      FROM ZSDSVC_CUSTOMER_INFO AS B
+      INNER JOIN @IT_DATA AS A ON B~KUNNR EQ A~KUNAG
+    INTO TABLE @R.
+  ENDMETHOD.
+  METHOD GET_SHIPMENT.
+    SELECT FROM VBFA
+    INNER JOIN @IT_DATA AS DO
+            ON VBFA~VBELV = DO~DONUM
+    FIELDS DO~VBELN,
+           VBFA~VBELN AS TKNUM,
+           DO~DONUM
+    WHERE VBFA~VBTYP_N    = @GC_VBTYP-SHIP_TO
+    INTO TABLE @DATA(LT_VBFA_SHIP).
+
+    SELECT FROM VTTK AS H
+    INNER JOIN @LT_VBFA_SHIP AS KEY
+            ON KEY~TKNUM = H~TKNUM
+    INNER JOIN VTTP AS IT
+            ON IT~TKNUM = H~TKNUM
+    FIELDS KEY~VBELN,
+           KEY~DONUM,
+           H~TKNUM,
+           H~VSART,
+           H~DTDIS,
+           H~ROUTE,
+           H~UZDIS,
+           H~EXTI1,
+           H~EXTI2,
+           H~DATEN,
+           H~UATEN
+   INTO TABLE @R.
+  ENDMETHOD.
+  METHOD GET_ADVANCE .
+    SELECT B~*
+      FROM @IT_DATA AS A
+      INNER JOIN ZSDSVC_GET_ADVANCE AS B ON A~VBELN EQ B~INVNO
+      INTO TABLE @R.
+  ENDMETHOD.
+  METHOD GET_GENC.
+
+    CONSTANTS:
+      LC_ITEMCAT_BOM    TYPE ZSDSDE_PARAM_NAME VALUE 'ITEMCAT_BOM',
+      LC_DISCOUNT_HD    TYPE ZSDSDE_PARAM_NAME VALUE 'DISCOUNT_HD',
+      LC_DISCOUNT_CASH  TYPE ZSDSDE_PARAM_NAME VALUE 'DISCOUNT_CASH',
+      LC_BILLTYPE_MINUS TYPE ZSDSDE_PARAM_NAME VALUE 'BILLTYPE_MINUS',
+      LC_SD_DOCCAT      TYPE ZSDSDE_PARAM_NAME VALUE 'SD_DOCCAT',
+
+      LC_PARAM_EXT_BILL TYPE ZSDSCAC001-PARAM_EXT VALUE 'BILL'
+      .
+
+    DATA:
+      LT_GENC  TYPE  ZCL_SDSCA_UTILITIES=>TT_GEN_C.
+
+* Initialize Output
+    CLEAR: ES_GENC.
+
+* Read All GenC constants for program
+    CALL METHOD ZCL_SDSCA_UTILITIES=>GET_GEN_C
+      EXPORTING
+        IF_REPID = IF_REPID
+      IMPORTING
+        ET_GEN_C = LT_GENC.
+
+
+    LOOP AT LT_GENC ASSIGNING FIELD-SYMBOL(<L_GENC>).
+
+      CASE <L_GENC>-PARAM.
+        WHEN LC_ITEMCAT_BOM.
+
+          APPEND VALUE #( SIGN   = <L_GENC>-PARAM_SIGN
+                          OPTION = <L_GENC>-PARAM_OPTION
+                          LOW    = <L_GENC>-VALUE_LOW
+                          HIGH   = <L_GENC>-VALUE_HIGH )
+                    TO  ES_GENC-ITEMCAT_BOM_RANGE.
+
+          INSERT VALUE TS_PSTYV( PSTYV = <L_GENC>-VALUE_LOW )
+            INTO TABLE ES_GENC-T_ITEMCAT_BOM.
+
+        WHEN LC_BILLTYPE_MINUS.
+
+          APPEND VALUE #( SIGN   = <L_GENC>-PARAM_SIGN
+                          OPTION = <L_GENC>-PARAM_OPTION
+                          LOW    = <L_GENC>-VALUE_LOW
+                          HIGH   = <L_GENC>-VALUE_HIGH )
+                    TO  ES_GENC-BILLTYPE_MINUS_RANGE.
+
+        WHEN LC_DISCOUNT_HD.
+
+          APPEND VALUE #( SIGN   = <L_GENC>-PARAM_SIGN
+                          OPTION = <L_GENC>-PARAM_OPTION
+                          LOW    = <L_GENC>-VALUE_LOW
+                          HIGH   = <L_GENC>-VALUE_HIGH )
+                    TO  ES_GENC-DISCOUNT_HD_RANGE.
+
+        WHEN LC_DISCOUNT_CASH.
+
+          APPEND VALUE #( SIGN   = <L_GENC>-PARAM_SIGN
+                          OPTION = <L_GENC>-PARAM_OPTION
+                          LOW    = <L_GENC>-VALUE_LOW
+                          HIGH   = <L_GENC>-VALUE_HIGH )
+                    TO  ES_GENC-DISCOUNT_CASH_RANGE.
+
+        WHEN LC_SD_DOCCAT.
+
+          IF <L_GENC>-PARAM_EXT = LC_PARAM_EXT_BILL.
+
+            APPEND VALUE #( SIGN   = <L_GENC>-PARAM_SIGN
+                            OPTION = <L_GENC>-PARAM_OPTION
+                            LOW    = <L_GENC>-VALUE_LOW
+                            HIGH   = <L_GENC>-VALUE_HIGH )
+                      TO  ES_GENC-SD_DOCCAT_BILL_RANGE.
+
+          ENDIF.
+
+          APPEND VALUE #( SIGN   = <L_GENC>-PARAM_SIGN
+                          OPTION = <L_GENC>-PARAM_OPTION
+                          LOW    = <L_GENC>-VALUE_LOW
+                          HIGH   = <L_GENC>-VALUE_HIGH )
+                    TO  ES_GENC-SD_DOCCAT_RANGE.
+
+        WHEN OTHERS.
+      ENDCASE.
+    ENDLOOP.
+
+  ENDMETHOD.
+  METHOD GET_HEAD_DISCOUNT.
+
+    CLEAR ET_DISC_HD.
+
+    IF IT_KNUMV IS INITIAL.
+      RETURN.
+    ENDIF.
+
+    SELECT FROM PRCD_ELEMENTS AS PRC
+ INNER JOIN @IT_KNUMV AS KEY
+         ON PRC~KNUMV = KEY~KNUMV
+     FIELDS PRC~KNUMV,
+            SUM( ABS( PRC~KWERT ) ) AS SUM_KWERT
+      WHERE PRC~KINAK =  @SPACE
+        AND PRC~KSCHL IN @IS_GENC-DISCOUNT_HD_RANGE
+      GROUP BY PRC~KNUMV
+ INTO TABLE @ET_DISC_HD.
+
+  ENDMETHOD.
+  METHOD GET_CASH_DISCOUNT.
+
+    CLEAR ET_DISC_CASH.
+
+    IF IT_KNUMV IS INITIAL.
+      RETURN.
+    ENDIF.
+
+    SELECT FROM PRCD_ELEMENTS AS PRC
+     INNER JOIN @IT_KNUMV AS KEY
+             ON PRC~KNUMV = KEY~KNUMV
+         FIELDS PRC~KNUMV,
+                SUM( ABS( PRC~KWERT ) ) AS SUM_KWERT
+          WHERE PRC~KINAK =  @SPACE
+            AND PRC~KSCHL IN @IS_GENC-DISCOUNT_CASH_RANGE
+          GROUP BY PRC~KNUMV
+     INTO TABLE @ET_DISC_CASH.
+
+  ENDMETHOD.
+  METHOD GET_CAL_PRICE.
+    DATA: LT_KSCHL_RANGE TYPE COND_TYPE_RANGE_ERP_T.
+
+    LT_KSCHL_RANGE = VALUE #( SIGN = 'I' OPTION = 'EQ'
+                            ( LOW  = GC_CAL_PRICE-ZPS1 )
+                            ( LOW  = GC_CAL_PRICE-ZPS2 )
+                            ( LOW  = GC_CAL_PRICE-ZPS3 )
+                            ( LOW  = GC_CAL_PRICE-ZPS4 )
+                            ( LOW  = GC_CAL_PRICE-ZWR1 )
+                            ( LOW  = GC_CAL_PRICE-ZWR3 ) ).
+
+    IF IT_DATA IS INITIAL.
+      RETURN.
+    ENDIF.
+
+    SELECT FROM PRCD_ELEMENTS AS PRC
+     INNER JOIN @IT_DATA AS KEY
+             ON PRC~KNUMV = KEY~KNUMV AND
+                PRC~KPOSN = KEY~KPOSN
+         FIELDS PRC~KNUMV,
+                PRC~KPOSN,
+                PRC~KSCHL,
+                PRC~KWERT
+          WHERE PRC~KINAK = @SPACE
+            AND PRC~KSCHL IN @LT_KSCHL_RANGE
+            AND PRC~KBETR IS NOT INITIAL
+     INTO TABLE @R.
+  ENDMETHOD.
+ENDCLASS.
+*----------------------------------------------------------------------*
+* CLASS lcl_event_receiver DEFINITION
+*----------------------------------------------------------------------*
+CLASS EVENT_CLASS DEFINITION.
+*Handling double click
+  PUBLIC SECTION.
+    METHODS:
+    HANDLE_DOUBLE_CLICK
+    FOR EVENT DOUBLE_CLICK OF CL_GUI_ALV_GRID IMPORTING E_ROW E_COLUMN ES_ROW_NO.
+ENDCLASS. "lcl_event_receiver DEFINITION
+*----------------------------------------------------------------------*
+*----------------------------------------------------------------------*
+* CLASS lcl_event_receiver IMPLEMENTATION
+*----------------------------------------------------------------------*
+CLASS EVENT_CLASS IMPLEMENTATION.
+  METHOD HANDLE_DOUBLE_CLICK.
+
+  ENDMETHOD. "handle_double_click
+ENDCLASS. "lcl_event_receiver IMPLEMENTATION

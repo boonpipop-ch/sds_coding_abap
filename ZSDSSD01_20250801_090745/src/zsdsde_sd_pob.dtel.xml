@@ -1,0 +1,23 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<abapGit version="v1.0.0" serializer="LCL_OBJECT_DTEL" serializer_version="v1.0.0">
+ <asx:abap xmlns:asx="http://www.sap.com/abapxml" version="1.0">
+  <asx:values>
+   <DD04V>
+    <ROLLNAME>ZSDSDE_SD_POB</ROLLNAME>
+    <DDLANGUAGE>E</DDLANGUAGE>
+    <DOMNAME>ZSDSDM_SD_POB</DOMNAME>
+    <HEADLEN>03</HEADLEN>
+    <SCRLEN1>03</SCRLEN1>
+    <SCRLEN2>03</SCRLEN2>
+    <SCRLEN3>03</SCRLEN3>
+    <DDTEXT>Performance obligation (POB)</DDTEXT>
+    <REPTEXT>POB</REPTEXT>
+    <SCRTEXT_S>POB</SCRTEXT_S>
+    <SCRTEXT_M>POB</SCRTEXT_M>
+    <SCRTEXT_L>POB</SCRTEXT_L>
+    <DTELMASTER>E</DTELMASTER>
+    <REFKIND>D</REFKIND>
+   </DD04V>
+  </asx:values>
+ </asx:abap>
+</abapGit>

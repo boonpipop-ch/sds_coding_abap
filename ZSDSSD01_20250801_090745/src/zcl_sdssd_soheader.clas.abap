@@ -1,0 +1,46 @@
+class ZCL_SDSSD_SOHEADER definition
+  public
+  final
+  create public .
+
+public section.
+
+  interfaces IF_BADI_INTERFACE .
+  interfaces IF_EX_SLS_HEAD_SCR_CUS .
+protected section.
+private section.
+ENDCLASS.
+
+
+
+CLASS ZCL_SDSSD_SOHEADER IMPLEMENTATION.
+
+
+  METHOD IF_EX_SLS_HEAD_SCR_CUS~ACTIVATE_TAB_PAGE.
+
+    IF IS_VBAK-VKORG = '1000'.
+      DATA LS_HEAD_TAB TYPE SALES_CUST_TAB_PAGE.
+      LS_HEAD_TAB-HEAD_CAPTION = TEXT-001.
+      LS_HEAD_TAB-HEAD_PROGRAM = 'ZSDSSDD0010'.
+      LS_HEAD_TAB-HEAD_DYNPRO  = '9001'.
+
+      APPEND LS_HEAD_TAB TO CT_CUS_HEAD_TAB.
+    ENDIF.
+
+  ENDMETHOD.
+
+
+  method IF_EX_SLS_HEAD_SCR_CUS~PASS_FCODE_TO_SUBSCREEN.
+
+  endmethod.
+
+
+  method IF_EX_SLS_HEAD_SCR_CUS~TRANSFER_DATA_FROM_SUBSCREEN.
+
+  endmethod.
+
+
+  method IF_EX_SLS_HEAD_SCR_CUS~TRANSFER_DATA_TO_SUBSCREEN.
+
+  endmethod.
+ENDCLASS.

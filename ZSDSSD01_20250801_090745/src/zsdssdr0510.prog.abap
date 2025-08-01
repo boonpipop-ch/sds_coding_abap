@@ -1,0 +1,1998 @@
+*&---------------------------------------------------------------------*
+*& Report ZSDSSDR0510
+*&---------------------------------------------------------------------*
+*&---------------------------------------------------------------------*
+*  Creation Date      : 11.03.2025
+*  Author             : Wantanee Prateep na thalang
+*  Add-on ID          :
+*  Description        : Sales order create from excel file
+*  Purpose            :
+*  Copied from        : ZR_SD_UPLOAD_EXCEL_TO_SO
+*  Restriction        :
+*&---------------------------------------------------------------------*
+*  CHANGE HISTORY
+*-----------------------------------------------------------------------
+*  Date        Task #      Programmer  Description
+*-----------------------------------------------------------------------
+*  DD.MM.YYYY  TR no.      ABAP Name   Detail
+*&---------------------------------------------------------------------*
+REPORT ZSDSSDR0510.
+*&---------------------------------------------------------------------*
+*  TYPE-POOL
+*&---------------------------------------------------------------------*
+
+TYPE-POOLS:TRUXS,SLIS,ICON.
+*&---------------------------------------------------------------------*
+*  TYPE
+*&---------------------------------------------------------------------*
+TYPES : BEGIN OF GY_INPUT_FILE,
+  DOC_RUN           TYPE C LENGTH 255,  "DOC_RUNNING
+  INDICATOR         TYPE C LENGTH 255,
+  DOC_DATE          TYPE C LENGTH 255,  "DOC_DATE . PO NO NUMBER
+  SALES_OFFICE      TYPE C LENGTH 255,  "DOC_DATE / SO ITEM
+  SALES_GROUP       TYPE C LENGTH 255,  "SALES_OFFICE /MATERIAL
+  PO_NUMBER         TYPE C LENGTH 255,  "SALES_GROUP / QTY
+  SALES_CODE        TYPE C LENGTH 255,  "PO_NUMBER / AMOUNT
+  SOLD_TO_CODE      TYPE C LENGTH 255,  "SALES_CODE /DISCOUNT
+  SOLD_TO_NAME1     TYPE C LENGTH 255,
+  SOLD_TO_NAME2     TYPE C LENGTH 255,
+  SOLD_TO_STREET    TYPE C LENGTH 255,
+  SOLD_TO_DISTRICT  TYPE C LENGTH 255,
+  SOLD_TO_CITY      TYPE C LENGTH 255,
+  SOLD_TO_POSTCODE  TYPE C LENGTH 255,
+  SOLD_TO_TRANS_ZONE  TYPE C LENGTH 255,
+  SOLD_TO_TEL1      TYPE C LENGTH 255,
+  SOLD_TO_TEL2      TYPE C LENGTH 255,
+  SHIP_TO_NAME1     TYPE C LENGTH 255,
+  SHIP_TO_STREET    TYPE C LENGTH 255,
+  SHIP_TO_LOCATION   TYPE C LENGTH 255,
+  SHIP_TO_DISTRICT  TYPE C LENGTH 255,
+  SHIP_TO_CITY      TYPE C LENGTH 255,
+  SHIP_TO_POSTCODE  TYPE C LENGTH 255,
+*  SHIP_TO_TRANS_ZONE  TYPE C LENGTH 255,
+*  SHIP_TO_TEL1      TYPE C LENGTH 255,
+*  SHIP_TO_TEL2      TYPE C LENGTH 255,
+  TEXT_REQEST_REMARK  TYPE C LENGTH 255,
+  PAY_TERM          TYPE C LENGTH 255,
+  TRANSPORTZONE    TYPE C LENGTH 255,
+  WHT_CODE         TYPE C LENGTH 255,
+  TAX_ID           TYPE C LENGTH 255,
+  VAT_CODE         TYPE C LENGTH 255,
+
+
+END OF GY_INPUT_FILE.
+
+TYPES : BEGIN OF GY_INPUT_HEADER,
+  DOC_RUN           TYPE C LENGTH 255,  "DOC_RUNNING
+  INDICATOR         TYPE C LENGTH 255,
+  DOC_DATE          TYPE C LENGTH 255,
+  SALES_OFFICE      TYPE C LENGTH 255,
+  SALES_GROUP       TYPE C LENGTH 255,
+  PO_NUMBER         TYPE C LENGTH 255,
+  SALES_CODE        TYPE C LENGTH 255,
+  SOLD_TO_CODE      TYPE C LENGTH 255,
+  SOLD_TO_NAME1     TYPE C LENGTH 255,
+  SOLD_TO_NAME2     TYPE C LENGTH 255,
+  SOLD_TO_STREET    TYPE C LENGTH 255,
+  SOLD_TO_DISTRICT  TYPE C LENGTH 255,
+  SOLD_TO_CITY      TYPE C LENGTH 255,
+  SOLD_TO_POSTCODE  TYPE C LENGTH 255,
+  SOLD_TO_TRANS_ZONE  TYPE C LENGTH 255,
+  SOLD_TO_TEL1      TYPE C LENGTH 255,
+  SOLD_TO_TEL2      TYPE C LENGTH 255,
+  SHIP_TO_NAME1     TYPE C LENGTH 255,
+  SHIP_TO_STREET    TYPE C LENGTH 255,
+  SHIP_TO_LOCATION   TYPE C LENGTH 255,
+  SHIP_TO_DISTRICT  TYPE C LENGTH 255,
+  SHIP_TO_CITY      TYPE C LENGTH 255,
+  SHIP_TO_POSTCODE  TYPE C LENGTH 255,
+  SHIP_TO_TRANS_ZONE  TYPE C LENGTH 255,
+  SHIP_TO_TEL1      TYPE C LENGTH 255,
+  SHIP_TO_TEL2      TYPE C LENGTH 255,
+  TEXT_REQEST_REMARK  TYPE C LENGTH 255,
+  PAY_TERM          TYPE C LENGTH 255,
+  TRANSPORTZONE    TYPE C LENGTH 255,
+  WHT_CODE         TYPE C LENGTH 255,
+  TAX_ID           TYPE C LENGTH 255,
+  VAT_CODE         TYPE C LENGTH 255,
+
+END OF GY_INPUT_HEADER.
+
+
+TYPES : BEGIN OF GY_INPUT_ITEM,
+  DOC_RUN           TYPE C LENGTH 255,  "DOC_RUNNING
+  INDICATOR         TYPE C LENGTH 255,
+  SO_ITEM           TYPE C LENGTH 255,
+  MATERIAL          TYPE C LENGTH 255,
+  QTY               TYPE C LENGTH 255,
+  AMT               TYPE C LENGTH 255,
+  DISCOUNT          TYPE C LENGTH 255,
+  WHT               TYPE C LENGTH 255,
+  STORAGE_LOCATION  TYPE C LENGTH 255,
+END OF GY_INPUT_ITEM.
+
+
+TYPES : BEGIN OF GY_KNA1,
+  KUNNR TYPE KNA1-KUNNR,
+END OF GY_KNA1.
+
+TYPES : BEGIN OF GY_TVBUR,
+  VKBUR TYPE TVBUR-VKBUR,
+END OF GY_TVBUR.
+
+TYPES : BEGIN OF GY_TVKGR,
+  VKGRP TYPE TVKGR-VKGRP,
+END OF GY_TVKGR.
+
+TYPES : BEGIN OF GY_CEPC,
+  PRCTR TYPE CEPC-PRCTR,
+  DATBI TYPE CEPC-DATBI,
+  KOKRS TYPE CEPC-KOKRS,
+END OF GY_CEPC.
+
+TYPES : BEGIN OF GY_T179,
+  PRODH TYPE T179-PRODH,
+END OF GY_T179.
+
+
+
+TYPES: BEGIN OF TYP_VBAP,
+  VBELN TYPE VBAP-VBELN,
+  OBJNR TYPE VBAP-OBJNR,
+END OF TYP_VBAP.
+TYPES: BEGIN OF TYP_VBAK,
+  VBELN TYPE VBAK-VBELN,
+  OBJNR TYPE VBAK-OBJNR,
+  KNUMV TYPE VBAK-KNUMV,
+END OF TYP_VBAK.
+TYPES: BEGIN OF TYP_PRCD_ELEMENTS,
+  KNUMV TYPE PRCD_ELEMENTS-KNUMV,
+  KPOSN TYPE PRCD_ELEMENTS-KPOSN,
+END OF TYP_PRCD_ELEMENTS.
+TYPES : BEGIN OF GY_STATUS,
+  LINE      TYPE C LENGTH 13,
+  STATUS    TYPE ICON-ID,
+  DOC_RUN   TYPE C LENGTH 255,  "DOC_RUNNING
+  CUST_CODE TYPE KNA1-KUNNR,
+  PO_NO     TYPE VBKD-BSTKD,
+  SO_DOC    TYPE VBAK-VBELN,
+  MESSAGE TYPE BAPI_MSG,
+END OF GY_STATUS.
+  TYPES : BEGIN OF TY_ACK,
+          VBELN TYPE VBAK-VBELN,
+          LOG_STAT(1),
+          MSG(100),
+          END OF TY_ACK.
+          DATA : GT_ACK TYPE TABLE OF TY_ACK WITH HEADER LINE.
+*&---------------------------------------------------------------------*
+*  VARIABLE
+*&---------------------------------------------------------------------*
+DATA : GS_INPUT_FILE TYPE GY_INPUT_FILE,
+       GT_INPUT_FILE TYPE TABLE OF GY_INPUT_FILE.
+
+DATA : GT_VBAP TYPE TABLE OF VBAP,
+       GS_VBAP TYPE VBAP.
+
+
+DATA : GT_DD07V TYPE TABLE OF DD07V,
+       GS_DD07V TYPE DD07V.
+
+DATA : GV_SUCCESS TYPE I,
+       GV_ERROR   TYPE I,
+       GV_TOTAL   TYPE I,
+       GV_VRV     TYPE C,
+       GV_OTHER   TYPE C.
+
+DATA: GT_INPUT_HEADER TYPE STANDARD TABLE OF GY_INPUT_HEADER,
+      GW_INPUT_HEADER TYPE  GY_INPUT_HEADER,
+      GT_INPUT_ITEM   TYPE STANDARD TABLE OF GY_INPUT_ITEM,
+      GW_INPUT_ITEM   TYPE  GY_INPUT_ITEM.
+DATA: GT_PRCD_ELEMENTS TYPE STANDARD TABLE OF TYP_PRCD_ELEMENTS,
+      GW_PRCD_ELEMENTS TYPE TYP_PRCD_ELEMENTS.
+
+DATA: GT_VBAK TYPE STANDARD TABLE OF TYP_VBAK,
+      GW_VBAK TYPE TYP_VBAK,
+      GT_VBAP1 TYPE STANDARD TABLE OF TYP_VBAP,
+      GW_VBAP1 TYPE TYP_VBAP.
+
+
+DATA : GV_TMP_FILE_PATH LIKE IBIPPARMS-PATH.
+
+DATA : GT_FCAT   TYPE SLIS_T_FIELDCAT_ALV,
+       GS_LAYOUT TYPE SLIS_LAYOUT_ALV,
+       GT_LISTHEADER TYPE SLIS_T_LISTHEADER,
+       GS_LISTHEADER TYPE SLIS_LISTHEADER.
+
+DATA : GS_STATUS TYPE GY_STATUS,
+       GT_STATUS TYPE TABLE OF GY_STATUS.
+
+DATA: GV_VBELN             TYPE VBAK-VBELN,
+      GV_ITEM_POSNR        TYPE VBAP-POSNR,
+      GV_ADDR_LINK         TYPE BAPIPARNR-ADDR_LINK,
+
+      GWA_HEADER_IN        TYPE BAPISDHD1,
+      GWA_HEADER_INX       TYPE BAPISDHD1X,
+      GWA_HEADER_CH_IN     TYPE BAPISDH1,
+      GWA_HEADER_CH_INX    TYPE BAPISDH1X,
+
+      GT_RETURN            TYPE STANDARD TABLE OF BAPIRET2,
+      GWA_RETURN           LIKE LINE OF GT_RETURN,
+
+      GT_ITEMS_IN          TYPE STANDARD TABLE OF BAPISDITM,
+      GWA_ITEMS_IN         LIKE LINE OF GT_ITEMS_IN,
+      GT_ITEMS_INX         TYPE STANDARD TABLE OF BAPISDITMX,
+      GWA_ITEMS_INX        LIKE LINE OF GT_ITEMS_INX,
+
+      GT_PARTNERS          TYPE STANDARD TABLE OF BAPIPARNR,
+      GWA_PARTNERS         LIKE LINE OF GT_PARTNERS,
+      GT_PARTNERS_CHANGE   TYPE STANDARD TABLE OF BAPIPARNRC,
+      GWA_PARTNERS_CHANGE  LIKE LINE OF GT_PARTNERS_CHANGE,
+
+
+
+      GT_SCHED_IN          TYPE STANDARD TABLE OF BAPISCHDL,
+      GWA_SCHED_IN         LIKE LINE OF GT_SCHED_IN,
+      GT_SCHED_INX         TYPE STANDARD TABLE OF BAPISCHDLX,
+      GWA_SCHED_INX        LIKE LINE OF GT_SCHED_INX,
+
+      GT_COND_IN           TYPE STANDARD TABLE OF BAPICOND,
+      GWA_COND_IN          LIKE LINE OF GT_COND_IN,
+      GT_COND_INX          TYPE STANDARD TABLE OF BAPICONDX,
+      GWA_COND_INX         LIKE LINE OF GT_COND_INX,
+
+      GT_COND_IN_WHT           TYPE STANDARD TABLE OF BAPICOND,
+      GWA_COND_IN_WHT           LIKE LINE OF GT_COND_IN_WHT,
+      GT_COND_INX_WHT           TYPE STANDARD TABLE OF BAPICONDX,
+      GWA_COND_INX_WHT          LIKE LINE OF GT_COND_INX_WHT,
+
+      GT_SO_TEXT        TYPE STANDARD TABLE OF BAPISDTEXT,
+      GWA_SO_TEXT       LIKE LINE OF GT_SO_TEXT,
+
+      GT_PARTNER_ADDR      TYPE STANDARD TABLE OF BAPIADDR1,
+      GWA_PARTNER_ADDR     LIKE LINE OF GT_PARTNER_ADDR,
+      BAPI_RETN_INFO  LIKE BAPIRET2 OCCURS 0 WITH HEADER LINE,
+      ERROR_FLAG,
+      BAPI_IDOC_STATUS LIKE BDIDOCSTAT-STATUS,
+      GT_VBAP_DEL          TYPE STANDARD TABLE OF VBAP,
+      GWA_VBAP_DEL         LIKE LINE OF GT_VBAP_DEL,
+      GT_VBEP_DEL          TYPE STANDARD TABLE OF VBEP,
+      GWA_VBEP_DEL         LIKE LINE OF GT_VBEP_DEL.
+
+DATA : PARTNERADDRESSES    TYPE TABLE OF BAPIADDR1,
+       LS_PARTNERADDRESSES LIKE LINE OF PARTNERADDRESSES.
+
+DATA: LS_VBPA3KOM              TYPE VBPA3KOM,
+      LT_VBPA3KOM              TYPE STANDARD TABLE OF VBPA3KOM.
+
+DATA: GT_BDCDATA TYPE STANDARD TABLE OF BDCDATA,
+      GWA_BDCDATA LIKE LINE OF GT_BDCDATA,
+      GT_MESSTAB TYPE STANDARD TABLE OF BDCMSGCOLL,
+      GWA_MESSTAB LIKE LINE OF GT_MESSTAB.
+
+  DATA : GWA_HEADER LIKE BAPI_ALM_ORDER_HEADER_E,
+         GT_OPERATION_D LIKE TABLE OF BAPI_ALM_ORDER_OPERATION_E WITH HEADER LINE,
+         GT_COMPONENT_D LIKE TABLE OF BAPI_ALM_ORDER_COMPONENT_E WITH HEADER LINE,
+         GT_PARTNER_D   LIKE TABLE OF BAPI_ALM_ORDER_PARTNER WITH HEADER LINE,
+         GT_OBJECTLIST_D LIKE TABLE OF BAPI_ALM_ORDER_OBJECTLIST WITH HEADER LINE,
+         GT_TEXT_D       LIKE TABLE OF BAPI_ALM_TEXT WITH HEADER LINE,
+         GT_TEXT_LINES_D LIKE TABLE OF BAPI_ALM_TEXT_LINES WITH HEADER LINE,
+
+         GT_OPERATION LIKE TABLE OF BAPI_ALM_ORDER_OPERATION WITH HEADER LINE,
+         GT_OPERATION_UP LIKE TABLE OF BAPI_ALM_ORDER_OPERATION_UP WITH HEADER LINE,
+         GT_COMPONENT LIKE TABLE OF BAPI_ALM_ORDER_COMPONENT WITH HEADER LINE,
+         GT_COMPONENT_UP LIKE TABLE OF BAPI_ALM_ORDER_COMPONENT_UP WITH HEADER LINE,
+         GT_OBJECTLIST LIKE TABLE OF BAPI_ALM_ORDER_OBJECTLIST WITH HEADER LINE,
+         GT_OBJECTLIST_UP LIKE TABLE OF BAPI_ALM_ORDER_OLIST_UP WITH HEADER LINE,
+         GT_USERSTATUS LIKE TABLE OF BAPI_ALM_ORDER_USRSTAT WITH HEADER LINE,
+         GT_TEXT2 LIKE TABLE OF BAPI_ALM_TEXT WITH HEADER LINE,
+         GT_TEXT_LINES LIKE TABLE OF BAPI_ALM_TEXT_LINES WITH HEADER LINE,
+         GT_RETURN2 LIKE TABLE OF BAPIRET2 WITH HEADER LINE,
+         GW_RETURN2 LIKE BAPIRET2,
+         GT_HEADER LIKE TABLE OF BAPI_ALM_ORDER_HEADERS_I WITH HEADER LINE,
+         GT_HEADER_UP LIKE TABLE OF BAPI_ALM_ORDER_HEADERS_UP WITH HEADER LINE,
+         GT_PARTNER LIKE TABLE OF BAPI_ALM_ORDER_PARTN_MUL WITH HEADER LINE,
+         GT_PARTNER_UP LIKE TABLE OF BAPI_ALM_ORDER_PARTN_MUL_UP WITH HEADER LINE,
+         GT_METHODS LIKE TABLE OF BAPI_ALM_ORDER_METHOD WITH HEADER LINE,
+         GV_RSPOS TYPE RSPOS,
+         GV_REFNUM TYPE IFREFNUM,
+         GV_APOSN TYPE NUMC4,
+         GV_MESSAGE(200),
+         GT_RESB TYPE TABLE OF RESB WITH HEADER LINE.
+
+
+  DATA: GV_ROUTE TYPE VBAP-ROUTE.
+
+  DATA: BDCDATA LIKE BDCDATA    OCCURS 0 WITH HEADER LINE,
+        MESSTAB LIKE BDCMSGCOLL OCCURS 0 WITH HEADER LINE,
+        GV_MODE(1),
+        GV_MEMID(7) VALUE 'ZDCM004'.
+
+*"    IMPORTING
+DATA: I_BAPI_VIEW   LIKE ORDER_VIEW,
+      I_MEMORY_READ LIKE ORDER_READ-MEM_ACCESS.
+
+*"    TABLES
+DATA: SALES_DOCUMENTS     TYPE STANDARD TABLE OF  SALES_KEY WITH HEADER LINE,
+      G_HEADERS_OUT       TYPE STANDARD TABLE OF  BAPISDHD WITH HEADER LINE,
+      G_ITEMS_OUT         TYPE STANDARD TABLE OF  BAPISDIT WITH HEADER LINE,
+      G_SCHEDULES_OUT     TYPE STANDARD TABLE OF  BAPISDHEDU WITH HEADER LINE,
+      G_BUSINESS_OUT      TYPE STANDARD TABLE OF  BAPISDBUSI WITH HEADER LINE,
+      G_PARTNERS_OUT      TYPE STANDARD TABLE OF  BAPISDPART WITH HEADER LINE,
+      G_ADDRESS_OUT       TYPE STANDARD TABLE OF  BAPISDCOAD WITH HEADER LINE,
+      G_STATUSHEADERS_OUT TYPE STANDARD TABLE OF  BAPISDHDST WITH HEADER LINE,
+      G_STATUSITEMS_OUT   TYPE STANDARD TABLE OF  BAPISDITST WITH HEADER LINE,
+      G_CONDITIONS_OUT    TYPE STANDARD TABLE OF  BAPISDCOND WITH HEADER LINE,
+      G_COND_HEAD         TYPE STANDARD TABLE OF  BAPICONDHD WITH HEADER LINE,
+      G_COND_ITEM         TYPE STANDARD TABLE OF  BAPICONDIT WITH HEADER LINE,
+      G_COND_QTY_SCALE    TYPE STANDARD TABLE OF  BAPICONDQS WITH HEADER LINE,
+      G_COND_VAL_SCALE    TYPE STANDARD TABLE OF  BAPICONDVS WITH HEADER LINE,
+      G_CONTRACTS_OUT     TYPE STANDARD TABLE OF  BAPISDCNTR WITH HEADER LINE,
+      G_TEXTHEADERS_OUT   TYPE STANDARD TABLE OF  BAPISDTEHD WITH HEADER LINE,
+      G_TEXTLINES_OUT     TYPE STANDARD TABLE OF  BAPITEXTLI WITH HEADER LINE,
+      G_FLOWS_OUT         TYPE STANDARD TABLE OF  BAPISDFLOW WITH HEADER LINE,
+      G_CFGS_CUREFS_OUT   TYPE STANDARD TABLE OF  BAPICUREFM WITH HEADER LINE,
+      G_CFGS_CUCFGS_OUT   TYPE STANDARD TABLE OF  BAPICUCFGM WITH HEADER LINE,
+      G_CFGS_CUINS_OUT    TYPE STANDARD TABLE OF  BAPICUINSM WITH HEADER LINE,
+      G_CFGS_CUPRTS_OUT   TYPE STANDARD TABLE OF  BAPICUPRTM WITH HEADER LINE,
+      G_CFGS_CUVALS_OUT   TYPE STANDARD TABLE OF  BAPICUVALM WITH HEADER LINE,
+      G_CFGS_CUBLBS_OUT   TYPE STANDARD TABLE OF  BAPICUBLBM WITH HEADER LINE,
+      G_CFGS_CUVKS_OUT    TYPE STANDARD TABLE OF  BAPICUVKM WITH HEADER LINE,
+      G_BILLINGPLANS_OUT  TYPE STANDARD TABLE OF  BAPISDBPL WITH HEADER LINE,
+      G_BILLINGDATES_OUT  TYPE STANDARD TABLE OF  BAPISDBPLD WITH HEADER LINE,
+      G_CREDITCARDS_OUT   TYPE STANDARD TABLE OF  BAPICCARDM WITH HEADER LINE,
+      EXTENSIONOUT        TYPE STANDARD TABLE OF  BAPIPAREX WITH HEADER LINE.
+*&---------------------------------------------------------------------*
+*  CONSTANTS
+*&---------------------------------------------------------------------*
+RANGES : GR_MATNR    FOR MARA-MATNR,
+         GR_MATNR_VR FOR MARA-MATNR,
+         GR_DATE     FOR SY-DATUM.
+*&---------------------------------------------------------------------*
+*  CONSTANTS
+*&---------------------------------------------------------------------*
+CONSTANTS : GC_TRUE TYPE C VALUE 'X'.
+*&---------------------------------------------------------------------*
+*   S E L E C T I O N  S C R E E N                                     *
+*&---------------------------------------------------------------------*
+SELECTION-SCREEN BEGIN OF BLOCK B1 WITH FRAME TITLE TEXT-001.
+PARAMETERS: P_FILE LIKE RLGRAP-FILENAME OBLIGATORY,
+            P_VTWEG TYPE VBAK-VTWEG DEFAULT 'D0',
+            P_SPART TYPE VBAK-SPART DEFAULT '00',
+            P_AUART TYPE VBAK-AUART DEFAULT 'ZO04',
+            P_PSTYV TYPE VBAP-PSTYV DEFAULT 'ZSE1',
+            P_ETTYP TYPE VBEP-ETTYP,
+            P_AUFNR TYPE VBAP-AUFNR.
+*            P_CHECK AS CHECKBOX.
+SELECTION-SCREEN END OF BLOCK B1.
+SELECTION-SCREEN BEGIN OF BLOCK B2 WITH FRAME TITLE TEXT-B01.
+PARAMETERS:  R_PRE RADIOBUTTON GROUP GR1 DEFAULT 'X' USER-COMMAND EXEC,
+             R_FG  RADIOBUTTON GROUP GR1.
+
+SELECTION-SCREEN END OF BLOCK B2.
+
+*&---------------------------------------------------------------------*
+*   INITIALIZATION.                              *
+*&---------------------------------------------------------------------*
+INITIALIZATION.
+
+*&---------------------------------------------------------------------*
+*   A T  S E L E C T I O N   S C R E E N                               *
+*&---------------------------------------------------------------------*
+AT SELECTION-SCREEN ON VALUE-REQUEST FOR P_FILE.
+  CLEAR GV_TMP_FILE_PATH.
+  PERFORM F_SELECT_INPUT_FILE_NAME.
+  MOVE GV_TMP_FILE_PATH TO P_FILE.
+*&---------------------------------------------------------------------*
+*   START-OF-SELECTION                                                 *
+*&---------------------------------------------------------------------*
+START-OF-SELECTION.
+  PERFORM F_GET_DATA.
+*&---------------------------------------------------------------------*
+*   END-OF-SELECTION                                                   *
+*&---------------------------------------------------------------------*
+END-OF-SELECTION.
+  IF GT_INPUT_FILE[] IS NOT INITIAL.
+    PERFORM F_CHECK_DATA.
+  ENDIF.
+
+  PERFORM F_INSERT_TABLE.
+  PERFORM F_SHOW_REPORT.
+
+*&---------------------------------------------------------------------*
+*&      FORM  SELECT_INPUT_FILE_NAME
+*&---------------------------------------------------------------------*
+*       PARAMETER NONE
+*----------------------------------------------------------------------*
+FORM F_SELECT_INPUT_FILE_NAME.
+  CALL FUNCTION 'F4_FILENAME'
+    EXPORTING
+      PROGRAM_NAME  = SY-REPID
+      DYNPRO_NUMBER = SY-DYNNR
+      FIELD_NAME    = 'PATH'
+    IMPORTING
+      FILE_NAME     = GV_TMP_FILE_PATH.
+ENDFORM.                    "SELECT_INPUT_FILE_NAME
+*&---------------------------------------------------------------------*
+*&      FORM  GET_DATA
+*&---------------------------------------------------------------------*
+*       TEXT
+*----------------------------------------------------------------------*
+*  -->  P1        TEXT
+*  <--  P2        TEXT
+*----------------------------------------------------------------------*
+FORM F_GET_DATA .
+
+  DATA: IT_RAW   TYPE TRUXS_T_TEXT_DATA,
+        LV_TABIX TYPE SY-TABIX.
+
+  CALL FUNCTION 'TEXT_CONVERT_XLS_TO_SAP'
+    EXPORTING
+      I_FIELD_SEPERATOR    = 'X'
+      I_LINE_HEADER        = 'X'
+      I_TAB_RAW_DATA       = IT_RAW
+      I_FILENAME           = P_FILE
+    TABLES
+      I_TAB_CONVERTED_DATA = GT_INPUT_FILE
+    EXCEPTIONS
+      CONVERSION_FAILED    = 1
+      OTHERS               = 2.
+
+  IF SY-SUBRC <> 0.
+    MESSAGE ID SY-MSGID TYPE SY-MSGTY NUMBER SY-MSGNO
+            WITH SY-MSGV1 SY-MSGV2 SY-MSGV3 SY-MSGV4.
+  ENDIF.
+
+  CLEAR GR_DATE[].
+  LOOP AT GT_INPUT_FILE INTO GS_INPUT_FILE.
+
+       IF GS_INPUT_FILE-INDICATOR = 'H'.
+
+          MOVE-CORRESPONDING GS_INPUT_FILE TO GW_INPUT_HEADER.
+
+          APPEND GW_INPUT_HEADER TO GT_INPUT_HEADER.
+
+
+       ELSEIF GS_INPUT_FILE-INDICATOR = 'I'.
+
+
+
+         GW_INPUT_ITEM-DOC_RUN = GS_INPUT_FILE-DOC_RUN.
+         GW_INPUT_ITEM-INDICATOR = GS_INPUT_FILE-INDICATOR.
+         GW_INPUT_ITEM-SO_ITEM = GS_INPUT_FILE-DOC_DATE.
+         GW_INPUT_ITEM-MATERIAL = GS_INPUT_FILE-SALES_OFFICE.
+         GW_INPUT_ITEM-QTY = GS_INPUT_FILE-SALES_GROUP.
+         GW_INPUT_ITEM-AMT = GS_INPUT_FILE-PO_NUMBER.
+         GW_INPUT_ITEM-DISCOUNT = GS_INPUT_FILE-SALES_CODE.
+         GW_INPUT_ITEM-WHT = GS_INPUT_FILE-SOLD_TO_CODE.
+         GW_INPUT_ITEM-STORAGE_LOCATION = GS_INPUT_FILE-SOLD_TO_NAME1.
+
+
+         APPEND GW_INPUT_ITEM TO GT_INPUT_ITEM.
+
+
+       ENDIF.
+
+
+
+  ENDLOOP.
+
+ENDFORM.                    " GET_DATA
+*&---------------------------------------------------------------------*
+*&      FORM  INSERT_TABLE
+*&---------------------------------------------------------------------*
+*       TEXT
+*----------------------------------------------------------------------*
+*  -->  P1        TEXT
+*  <--  P2        TEXT
+*----------------------------------------------------------------------*
+FORM F_INSERT_TABLE.
+
+
+ENDFORM.                    " INSERT_TABLE
+
+*&---------------------------------------------------------------------*
+*&      FORM  F_PF_ALV_GRID
+*&---------------------------------------------------------------------*
+*       TEXT
+*----------------------------------------------------------------------*
+*      -->P_LS_CLAIM_ITEM_MATERIAL  TEXT
+*----------------------------------------------------------------------*
+FORM F_PF_ALV_GRID.
+  CALL FUNCTION 'REUSE_ALV_GRID_DISPLAY'
+    EXPORTING
+      I_CALLBACK_PROGRAM     = SY-REPID
+      I_CALLBACK_TOP_OF_PAGE = 'F_TOP_OF_PAGE'
+      IS_LAYOUT              = GS_LAYOUT
+      IT_FIELDCAT            = GT_FCAT
+      I_DEFAULT              = 'X'
+      I_SAVE                 = 'X'
+    TABLES
+      T_OUTTAB               = GT_STATUS
+    EXCEPTIONS
+      PROGRAM_ERROR          = 1
+      OTHERS                 = 2.
+  IF SY-SUBRC <> 0.
+* MESSAGE ID SY-MSGID TYPE SY-MSGTY NUMBER SY-MSGNO
+*         WITH SY-MSGV1 SY-MSGV2 SY-MSGV3 SY-MSGV4.
+  ENDIF.
+ENDFORM.                    "PF_ALV_GRID
+*&---------------------------------------------------------------------*
+*&      FORM  SET_LAYOUT_OUTPUT
+*&---------------------------------------------------------------------*
+*       TEXT
+*----------------------------------------------------------------------*
+*      -->PS_LAYOUT  TEXT
+*----------------------------------------------------------------------*
+FORM F_SET_LAYOUT_OUTPUT." CHANGING PS_LAYOUT TYPE SLIS_LAYOUT_ALV.
+  "GS_LAYOUT-BOX_FIELDNAME     = 'SEL'.
+  GS_LAYOUT-ZEBRA             = 'X'.
+  GS_LAYOUT-COLWIDTH_OPTIMIZE = 'X'.
+ENDFORM.                    " SET_LAYOUT_OUTPUT
+*&---------------------------------------------------------------------*
+*&      FORM  BUILD_ALV_HEADER
+*&---------------------------------------------------------------------*
+FORM F_BUILD_ALV_HEADER .
+
+
+
+*  TYPE H IS USED TO DISPLAY HEADERS I.E. BIG FONT
+  GS_LISTHEADER-TYP  = 'H'.
+*  IF P_CHECK EQ 'X'.
+*    GS_LISTHEADER-INFO = 'TEST RUN'.
+*  ELSE.
+    GS_LISTHEADER-INFO = 'REPORT'.
+*  ENDIF.
+  APPEND GS_LISTHEADER TO GT_LISTHEADER.
+  CLEAR GS_LISTHEADER.
+
+  GS_LISTHEADER-TYP = 'S'.
+  GS_LISTHEADER-KEY = 'TOTAL INPUT RECORDS' .
+  GS_LISTHEADER-INFO = GV_TOTAL.
+  APPEND GS_LISTHEADER TO GT_LISTHEADER.
+  CLEAR GS_LISTHEADER.
+
+  GS_LISTHEADER-TYP = 'S'.
+  GS_LISTHEADER-KEY = 'SUCCESSFUL RECORDS' .
+  GS_LISTHEADER-INFO = GV_SUCCESS.
+  APPEND GS_LISTHEADER TO GT_LISTHEADER.
+  CLEAR GS_LISTHEADER.
+
+  GS_LISTHEADER-TYP = 'S'.
+  GS_LISTHEADER-KEY = 'ERROR RECORDS' .
+  GS_LISTHEADER-INFO = GV_ERROR.
+  APPEND GS_LISTHEADER TO GT_LISTHEADER.
+  CLEAR GS_LISTHEADER.
+
+*  TYPE A IS USED TO DISPLAY ITALIC FONT
+*  GS_LISTHEADER-TYP = 'A'.
+*  GS_LISTHEADER-INFO ='SAP ALV REPORT'.
+*  APPEND GS_LISTHEADER TO GT_LISTHEADER.
+*  CLEAR GS_LISTHEADER.
+ENDFORM.                    " BUILD_ALV_HEADER
+*&---------------------------------------------------------------------*
+*&      FORM  TOP_OF_PAGE
+*&---------------------------------------------------------------------*
+FORM F_TOP_OF_PAGE.
+
+  CALL FUNCTION 'REUSE_ALV_COMMENTARY_WRITE'
+    EXPORTING
+      IT_LIST_COMMENTARY = GT_LISTHEADER.
+
+ENDFORM.                    "TOP_OF_PAGE
+*&---------------------------------------------------------------------*
+*&      FORM  BUILD_FCAT
+*&---------------------------------------------------------------------*
+*       TEXT
+*----------------------------------------------------------------------*
+FORM F_BUILD_FCAT.
+
+  DATA:
+  LS_FCAT TYPE SLIS_FIELDCAT_ALV.
+
+*
+*  LINE      TYPE C LENGTH 13,
+*  STATUS    TYPE ICON-ID,
+*  PO_NO     TYPE VBAD-BSTKD,
+*  SO_DOC    TYPE VBAK-VBELN,
+*  MESSAGE TYPE BAPI_MSG,
+  CLEAR LS_FCAT.
+*  LS_FCAT-REF_TABNAME = 'GT_STATUS'.
+  LS_FCAT-FIELDNAME = 'LINE'.
+  LS_FCAT-SELTEXT_S = 'NO.'.
+  LS_FCAT-SELTEXT_M = 'NO.'.
+  LS_FCAT-SELTEXT_L = 'NO.'.
+  APPEND LS_FCAT TO GT_FCAT.
+
+  CLEAR LS_FCAT.
+*  LS_FCAT-REF_TABNAME = 'GT_STATUS'.
+  LS_FCAT-FIELDNAME = 'STATUS'.
+  LS_FCAT-SELTEXT_S = 'STATUS'.
+  LS_FCAT-SELTEXT_M = 'STATUS'.
+  LS_FCAT-SELTEXT_L = 'STATUS'.
+  APPEND LS_FCAT TO GT_FCAT.
+
+  CLEAR LS_FCAT.
+*  LS_FCAT-REF_TABNAME = 'GT_STATUS'.
+  LS_FCAT-FIELDNAME = 'DOC_RUN'.
+  LS_FCAT-SELTEXT_S = 'DOC. RUNNING NO'.
+  LS_FCAT-SELTEXT_M = 'DOC. RUNNING NO'.
+  LS_FCAT-SELTEXT_L = 'DOC. RUNNING NO'.
+  APPEND LS_FCAT TO GT_FCAT.
+
+  CLEAR LS_FCAT.
+*  LS_FCAT-REF_TABNAME = 'GT_STATUS'.CUST_CODE
+  LS_FCAT-FIELDNAME = 'CUST_CODE'.
+  LS_FCAT-SELTEXT_S = 'CUSTOMER CODE'.
+  LS_FCAT-SELTEXT_M = 'CUSTOMER CODE'.
+  LS_FCAT-SELTEXT_L = 'CUSTOMER CODE'.
+  APPEND LS_FCAT TO GT_FCAT.
+
+  CLEAR LS_FCAT.
+*  LS_FCAT-REF_TABNAME = 'GT_STATUS'.
+  LS_FCAT-FIELDNAME = 'PO_NO'.
+  LS_FCAT-SELTEXT_S = 'PO NO.'.
+  LS_FCAT-SELTEXT_M = 'PO NO.'.
+  LS_FCAT-SELTEXT_L = 'PO NO.'.
+  APPEND LS_FCAT TO GT_FCAT.
+
+  CLEAR LS_FCAT.
+  LS_FCAT-REF_TABNAME = 'GT_STATUS'.
+  LS_FCAT-FIELDNAME = 'SO_DOC'.
+  LS_FCAT-SELTEXT_S = 'SO DOC'.
+  LS_FCAT-SELTEXT_M = 'SO DOC'.
+  LS_FCAT-SELTEXT_L = 'SO DOC'.
+  APPEND LS_FCAT TO GT_FCAT.
+
+  CLEAR LS_FCAT.
+  LS_FCAT-REF_TABNAME = 'GT_STATUS'.
+  LS_FCAT-FIELDNAME = 'MESSAGE'.
+  LS_FCAT-SELTEXT_S = 'MESSAGE'.
+  LS_FCAT-SELTEXT_M = 'MESSAGE'.
+  LS_FCAT-SELTEXT_L = 'MESSAGE'.
+  APPEND LS_FCAT TO GT_FCAT.
+
+ENDFORM.                    "F_BUILD_FCAT
+
+*&---------------------------------------------------------------------*
+*&      FORM  F_SHOW_REPORT
+*&---------------------------------------------------------------------*
+*       TEXT
+*----------------------------------------------------------------------*
+*  -->  P1        TEXT
+*  <--  P2        TEXT
+*----------------------------------------------------------------------*
+FORM F_SHOW_REPORT .
+  PERFORM F_SET_LAYOUT_OUTPUT.
+  PERFORM F_BUILD_ALV_HEADER.
+  PERFORM F_BUILD_FCAT.
+  PERFORM F_PF_ALV_GRID.
+ENDFORM.                    " F_SHOW_REPORT
+*&---------------------------------------------------------------------*
+*&      FORM  F_ALPHA_OUTPUT
+*&---------------------------------------------------------------------*
+*       TEXT
+*----------------------------------------------------------------------*
+*      -->P_GS_INPUT_FILE_SERNR  TEXT
+*----------------------------------------------------------------------*
+FORM F_ALPHA_OUTPUT  USING LV_RESULT.
+
+  CALL FUNCTION 'CONVERSION_EXIT_ALPHA_INPUT'
+    EXPORTING
+      INPUT  = LV_RESULT
+    IMPORTING
+      OUTPUT = LV_RESULT.
+
+ENDFORM.                    " F_ALPHA_OUTPUT
+*&---------------------------------------------------------------------*
+*&      FORM  F_CHECK_DATA
+*&---------------------------------------------------------------------*
+*       TEXT
+*----------------------------------------------------------------------*
+*  -->  P1        TEXT
+*  <--  P2        TEXT
+*----------------------------------------------------------------------*
+FORM F_CHECK_DATA .
+    DATA: LV_TABIX TYPE SY-TABIX,
+        LV_VBELN TYPE VBAK-VBELN,
+        LV_DO    TYPE LIKP-VBELN,
+        LV_RSNUM TYPE AFKO-RSNUM.
+
+  LOOP AT GT_INPUT_HEADER INTO GW_INPUT_HEADER.
+          CLEAR: LV_VBELN,GT_SO_TEXT,PARTNERADDRESSES.
+*           BREAK-POINT.
+*            GWA_HEADER_IN-DOC_TYPE   = 'ZO01'."CH1 REMOVE BY WANTANEE 20230808
+            GWA_HEADER_IN-DOC_TYPE   = P_AUART. "CH1 ADD BY WANTANEE 20230808
+            GWA_HEADER_IN-DOC_DATE   = GW_INPUT_HEADER-DOC_DATE.
+            GWA_HEADER_IN-SALES_ORG  = '1000'.
+            GWA_HEADER_IN-DISTR_CHAN = P_VTWEG.
+            GWA_HEADER_IN-DIVISION   = P_SPART.
+            GWA_HEADER_IN-SALES_GRP  = GW_INPUT_HEADER-SALES_GROUP.
+            GWA_HEADER_IN-SALES_OFF  = GW_INPUT_HEADER-SALES_OFFICE.
+            GWA_HEADER_IN-PURCH_NO_C = GW_INPUT_HEADER-PO_NUMBER.
+
+*            GWA_HEADER_IN-PMNTTRMS = 'A015'.
+            GWA_HEADER_IN-PMNTTRMS = GW_INPUT_HEADER-PAY_TERM..
+            GWA_HEADER_IN-ORD_REASON = GW_INPUT_HEADER-WHT_CODE..
+            GWA_HEADER_IN-ALTTAX_CLS = GW_INPUT_HEADER-VAT_CODE.
+            PERFORM PARTNER USING SPACE.    "PARTNER
+
+              GWA_SO_TEXT-TEXT_ID   = 'ZH10'.
+              GWA_SO_TEXT-LANGU     = SY-LANGU.
+              GWA_SO_TEXT-TEXT_LINE = GW_INPUT_HEADER-TEXT_REQEST_REMARK.
+              APPEND GWA_SO_TEXT TO GT_SO_TEXT. CLEAR GWA_SO_TEXT.
+
+
+
+            CLEAR : GT_ITEMS_IN[],GT_ITEMS_INX[].
+            CLEAR : GT_COND_IN[],GT_COND_INX[],
+                    GT_SCHED_IN[],GT_SCHED_INX[].
+           CLEAR:  GT_COND_INX_WHT,GT_COND_IN_WHT.
+       LOOP AT GT_INPUT_ITEM INTO GW_INPUT_ITEM WHERE DOC_RUN = GW_INPUT_HEADER-DOC_RUN.
+
+            PERFORM CONDITION.              "CONDITION
+            PERFORM ITEM.                   "SO ITEM
+            PERFORM SCHEDULE.               "SCHEDULE LINE
+
+       ENDLOOP.
+            PERFORM BAPI_SO_CREATE USING LV_VBELN.
+
+
+    CLEAR: GWA_RETURN.
+    READ TABLE GT_RETURN INTO GWA_RETURN
+               WITH KEY TYPE = 'E'.
+    IF SY-SUBRC <> 0.
+      CALL FUNCTION 'BAPI_TRANSACTION_COMMIT'
+        EXPORTING
+          WAIT = 'X'.
+
+      LOOP AT GT_RETURN INTO GWA_RETURN
+           WHERE TYPE = 'S'
+           AND  ( NUMBER = '311' ).
+        CLEAR BAPI_RETN_INFO.
+        MOVE-CORRESPONDING GWA_RETURN TO BAPI_RETN_INFO.    "#EC ENHOK
+        BAPI_IDOC_STATUS = '53'.
+*        PERFORM IDOC_STATUS_SVO_CREATEFR
+*                TABLES IDOC_DATA
+*                       IDOC_STATUS
+*                       RETURN_VARIABLES
+*                 USING IDOC_CONTRL
+*                       BAPI_RETN_INFO
+*                       BAPI_IDOC_STATUS.
+
+
+
+*                LINE      TYPE C LENGTH 13,
+          GS_STATUS-STATUS  = BAPI_IDOC_STATUS.
+          GS_STATUS-PO_NO   = GW_INPUT_HEADER-PO_NUMBER.
+          GS_STATUS-DOC_RUN   = GW_INPUT_HEADER-DOC_RUN.
+          GS_STATUS-SO_DOC   = LV_VBELN.
+          GS_STATUS-CUST_CODE   = GW_INPUT_HEADER-SOLD_TO_CODE.
+          GS_STATUS-MESSAGE = GWA_RETURN-MESSAGE.
+
+        APPEND GS_STATUS TO GT_STATUS.
+
+
+         IF GS_STATUS-SO_DOC IS NOT INITIAL.
+            CLEAR: GW_VBAK,GW_VBAP1.
+
+            SELECT SINGLE VBELN OBJNR KNUMV
+              INTO (GW_VBAK-VBELN,GW_VBAK-OBJNR,GW_VBAK-KNUMV)
+              FROM VBAK
+              WHERE VBELN = LV_VBELN.
+
+             SELECT  VBELN OBJNR
+              INTO TABLE  GT_VBAP1
+              FROM VBAP
+              WHERE VBELN = LV_VBELN.
+
+             SELECT KNUMV KPOSN
+               INTO TABLE GT_PRCD_ELEMENTS
+               FROM PRCD_ELEMENTS
+               WHERE KNUMV EQ GW_VBAK-KNUMV
+               AND KSCHL  = 'ZWHT'
+               AND STUNR = 085.
+
+*             PERFORM F_APPROVE_HEADER.
+*             PERFORM F_APPROVE_DETAIL.
+            IF GT_COND_IN_WHT IS NOT INITIAL.
+*              BREAK-POINT.
+              LOOP AT GT_PRCD_ELEMENTS INTO GW_PRCD_ELEMENTS .
+                  READ TABLE GT_COND_IN_WHT INTO GWA_COND_IN_WHT WITH KEY ITM_NUMBER = GW_PRCD_ELEMENTS-KPOSN.
+                  UPDATE  PRCD_ELEMENTS
+                  SET KHERK = 'C'
+                      KWERT = GWA_COND_IN_WHT-CONDVALUE
+                      KSTEU = 'E'
+                      KMPRS = 'X'
+                      KBFLAG = '1000'
+
+                  WHERE KNUMV = GW_VBAK-KNUMV
+                  AND  KPOSN = GW_PRCD_ELEMENTS-KPOSN
+                  AND KSCHL  = 'ZWHT'
+                  AND STUNR = 085
+                  AND ZAEHK = 001.
+                  COMMIT WORK.
+              ENDLOOP.
+*              PERFORM F_CHANGE_WHT.
+            ENDIF.
+         ENDIF.
+          CLEAR GS_STATUS.
+       ENDLOOP.
+      ELSE.
+        GS_STATUS-MESSAGE = GWA_RETURN-MESSAGE.
+
+        APPEND GS_STATUS TO GT_STATUS.
+         CLEAR GS_STATUS.
+
+      ENDIF.
+
+  ENDLOOP.
+
+ENDFORM.                    " F_CHECK_DATA
+
+
+*&---------------------------------------------------------------------*
+*&      FORM  PARTNER
+*&---------------------------------------------------------------------*
+*       TEXT
+*----------------------------------------------------------------------*
+*  -->  P1        TEXT
+*  <--  P2        TEXT
+*----------------------------------------------------------------------*
+FORM PARTNER USING P_AUFNR.
+
+  CLEAR : GT_PARTNERS[],
+          GWA_PARTNERS.
+
+  DATA: P_SALES TYPE PA0002-PERNR.
+  DATA: LV_NAME1 TYPE KNA1-NAME1,
+        LV_NAME2 TYPE KNA1-NAME2.
+
+    DATA: LV_ALAND TYPE ALAND,
+        LV_AZONE TYPE AZONE,
+        LV_LLAND TYPE LLAND,
+        LV_LZONE TYPE LZONE,
+        LV_VSBED TYPE KNVV-VSBED,
+        LV_ROUTE TYPE TROLZ-ROUTE.
+
+
+  DATA: LV_TRANSPZONE TYPE KNA1-LZONE. ""ADD BY WANTANEE 20210113 T41K938118
+
+  CLEAR: LV_NAME1,LV_NAME2.
+
+  IF GW_INPUT_HEADER-SOLD_TO_CODE EQ 'OT01'.
+
+*          PERFORM CONVERSION_INPUT USING GWA_HEAD-SOLDTO.
+          GWA_PARTNERS-PARTN_ROLE = 'AG'. "SOLD TO
+          GWA_PARTNERS-PARTN_NUMB = GW_INPUT_HEADER-SOLD_TO_CODE.
+          GWA_PARTNERS-NAME = GW_INPUT_HEADER-SOLD_TO_NAME1.
+          GWA_PARTNERS-NAME_2 = GW_INPUT_HEADER-SOLD_TO_NAME2.
+          GWA_PARTNERS-STREET = GW_INPUT_HEADER-SOLD_TO_STREET.
+*          CONCATENATE
+          GWA_PARTNERS-DISTRICT = GW_INPUT_HEADER-SOLD_TO_DISTRICT.
+          GWA_PARTNERS-CITY = GW_INPUT_HEADER-SOLD_TO_CITY.
+          GWA_PARTNERS-POSTL_CODE = GW_INPUT_HEADER-SOLD_TO_POSTCODE.
+
+          GWA_PARTNERS-TELEPHONE = GW_INPUT_HEADER-SOLD_TO_TEL1.
+          GWA_PARTNERS-TELEPHONE2 = GW_INPUT_HEADER-SOLD_TO_TEL2.
+          GWA_PARTNERS-COUNTRY = 'TH'.
+          GWA_PARTNERS-LANGU = 'EN'.
+          GWA_PARTNERS-TAXJURCODE = '1234567890123'.
+          GWA_PARTNERS-VAT_REG_NO = '1231234567890'.
+
+          APPEND GWA_PARTNERS TO GT_PARTNERS.
+
+
+
+          CLEAR GWA_PARTNERS.
+*          PERFORM CONVERSION_INPUT USING GWA_HEAD-SHIPTO.
+          GWA_PARTNERS-PARTN_ROLE = 'WE'. "SHIP TO
+          GWA_PARTNERS-PARTN_NUMB = GW_INPUT_HEADER-SOLD_TO_CODE.
+          "ADD BY WANTANEE 20201228
+          GWA_PARTNERS-NAME = GW_INPUT_HEADER-SHIP_TO_NAME1.
+*          GWA_PARTNERS-NAME_2 = GW_INPUT_HEADER-SHIP_TO_NAME2.
+          GWA_PARTNERS-STREET = GW_INPUT_HEADER-SHIP_TO_STREET.
+*          GWA_PARTNERS-POBX_CTY = GWA_HEAD-SHIPTO_SUBDISTRICT.
+*          CONCATENATE
+          GWA_PARTNERS-DISTRICT = GW_INPUT_HEADER-SHIP_TO_DISTRICT.
+          GWA_PARTNERS-CITY = GW_INPUT_HEADER-SHIP_TO_CITY.
+          GWA_PARTNERS-POSTL_CODE = GW_INPUT_HEADER-SHIP_TO_POSTCODE.
+          GWA_PARTNERS-COUNTRY = 'TH'.
+          GWA_PARTNERS-LANGU = 'EN'.
+          APPEND GWA_PARTNERS TO GT_PARTNERS. "CH2 ADD BY WANTANEE 20230809
+          ""ADD BY WANTANEE 20210113 T41K938118
+*          SELECT SINGLE LZONE
+*            INTO LV_TRANSPZONE
+*            FROM KNA1
+*            WHERE KUNNR = GWA_HEAD-SOLDTO.
+
+*          GWA_PARTNERS-TRANSPZONE = LV_TRANSPZONE.
+          "END ADD BY WANTANEE 20210113 T41K938118
+          "END ADD BY WANTANEE 20201228
+
+*Tax3 one-time customer
+*         (PARTN_ROLE) = ‘SP’ Sold-to  AG
+*         (PARTN_ROLE) = ‘BP’ Bill-to  RE
+*         (PARTN_ROLE) = ‘PY’ Payer    RG
+             IF GW_INPUT_HEADER-TAX_ID IS NOT INITIAL.
+               DO 3 TIMES.
+                 CLEAR LS_VBPA3KOM.
+
+                 LS_VBPA3KOM-POSNR = '000000'.
+
+                 CASE SY-INDEX.
+                   WHEN 1.
+                     LS_VBPA3KOM-PARVW = 'AG'.
+                   WHEN 2.
+                     LS_VBPA3KOM-PARVW = 'RE'.
+                   WHEN 3.
+                     LS_VBPA3KOM-PARVW = 'RG'.
+                 ENDCASE.
+
+                 LS_VBPA3KOM-STCD3 = GW_INPUT_HEADER-TAX_ID.
+
+                 APPEND LS_VBPA3KOM TO LT_VBPA3KOM.
+
+               ENDDO.
+             ENDIF.
+
+             IF LT_VBPA3KOM IS NOT INITIAL.
+               "Export to MV45AFZZ  FORM USEREXIT_SAVE_DOCUMENT_PREPARE.
+               EXPORT LT_VBPA3KOM FROM LT_VBPA3KOM TO MEMORY ID 'ONETIMECUST_TAX3'.
+             ENDIF.
+   ELSE.
+          CLEAR: GWA_PARTNERS,GV_ROUTE.
+          GWA_PARTNERS-PARTN_ROLE = 'AG'. "SOLD TO
+          GWA_PARTNERS-PARTN_NUMB = GW_INPUT_HEADER-SOLD_TO_CODE.
+          PERFORM CONVERSION_INPUT USING GWA_PARTNERS-PARTN_NUMB.
+          APPEND GWA_PARTNERS TO GT_PARTNERS.
+
+          CLEAR GWA_PARTNERS.
+          GWA_PARTNERS-PARTN_ROLE = 'RE'. "SOLD TO
+          GWA_PARTNERS-PARTN_NUMB = GW_INPUT_HEADER-SOLD_TO_CODE.
+          PERFORM CONVERSION_INPUT USING GWA_PARTNERS-PARTN_NUMB.
+          APPEND GWA_PARTNERS TO GT_PARTNERS.
+
+             SELECT SINGLE LZONE
+             INTO LV_TRANSPZONE
+             FROM KNA1
+             WHERE KUNNR = GWA_PARTNERS-PARTN_NUMB.
+
+             SELECT SINGLE VSBED
+               INTO LV_VSBED
+               FROM KNVV
+               WHERE KUNNR = GWA_PARTNERS-PARTN_NUMB
+               AND VTWEG = '10'.
+
+
+            LV_AZONE = LV_TRANSPZONE.
+            LV_LZONE = LV_TRANSPZONE.
+
+
+
+          BREAK WANTANEE.
+
+          CALL FUNCTION 'SD_ROUTE_DETERMINATION'
+           EXPORTING
+             I_ALAND                   = 'TH'
+             I_AZONE                   = 'BANGKOK'
+             I_LLAND                   = 'TH'
+             I_LZONE                   = LV_LZONE
+             I_VSBED                   = LV_VSBED
+             I_TRAGR                   = '0001'
+*            I_GRULG                   = ' '
+*            I_FLAG_GEN_GRULG          = ' '
+*            I_FLAG_GEN_VT             = ' '
+*            I_FLAG_INCR_GRULG         = ' '
+*            I_FLAG_KEY_CHECK          = ' '
+*            I_VBAK                    = I_VBAK
+*            I_VBKD                    = I_VBKD
+*            I_VBAP                    = I_VBAP
+*            I_LIKP                    = I_LIKP
+          IMPORTING
+            E_ROUTE                   = GV_ROUTE
+*          TABLES
+*            C_PROT                    = C_PROT
+*            I_VBPA                    = I_VBPA
+*            I_LIPS                    = I_LIPS
+          EXCEPTIONS
+            NO_ROUTE_FOUND            = 1
+            DEPARTURE_ERROR           = 2
+            DESTINATION_ERROR         = 3
+            INVALID_GENERIC_KEY       = 4
+            CUSTOMER_EXIT_ERROR       = 5   .
+
+
+
+
+          CLEAR: GWA_PARTNERS,LS_PARTNERADDRESSES.
+          GWA_PARTNERS-PARTN_ROLE = 'WE'. "SOLD TO
+          GWA_PARTNERS-PARTN_NUMB = GW_INPUT_HEADER-SOLD_TO_CODE.
+          GWA_PARTNERS-ADDR_LINK   = '0000000001'.
+          LS_PARTNERADDRESSES-ADDR_NO    = '0000000001'.
+          PERFORM CONVERSION_INPUT USING GWA_PARTNERS-PARTN_NUMB.
+           IF ( GW_INPUT_HEADER-SHIP_TO_STREET IS NOT INITIAL ).
+                IF ( GW_INPUT_HEADER-SHIP_TO_NAME1 IS NOT INITIAL ) .
+                 GWA_PARTNERS-NAME = GW_INPUT_HEADER-SHIP_TO_NAME1.
+*                 GWA_PARTNERS-NAME_2 = GW_INPUT_HEADER-SHIP_TO_NAME2.
+                 LS_PARTNERADDRESSES-NAME = GW_INPUT_HEADER-SHIP_TO_NAME1.
+                ELSE.
+                   SELECT SINGLE NAME1 NAME2
+                     INTO (LV_NAME1, LV_NAME2)
+                     FROM KNA1
+                     WHERE KUNNR =  GWA_PARTNERS-PARTN_NUMB.
+
+                    GWA_PARTNERS-NAME  = LV_NAME1.
+                    GWA_PARTNERS-NAME_2  = LV_NAME2.
+
+                    LS_PARTNERADDRESSES-NAME = LV_NAME1.
+                    LS_PARTNERADDRESSES-NAME_2  = LV_NAME2.
+*                    LS_PARTNERADDRESSES-NAME_3
+*                    LS_PARTNERADDRESSES-NAME_4.
+
+
+                ENDIF.
+              GWA_PARTNERS-STREET = GW_INPUT_HEADER-SHIP_TO_STREET.
+*              GWA_PARTNERS-POBX_CTY = GWA_HEAD-SHIPTO_SUBDISTRICT.
+*              CONCATENATE
+              GWA_PARTNERS-DISTRICT = GW_INPUT_HEADER-SHIP_TO_DISTRICT.
+              GWA_PARTNERS-CITY = GW_INPUT_HEADER-SHIP_TO_CITY.
+              GWA_PARTNERS-POSTL_CODE = GW_INPUT_HEADER-SHIP_TO_POSTCODE.
+              GWA_PARTNERS-COUNTRY = 'TH'.
+              GWA_PARTNERS-LANGU = 'EN'.
+
+              LS_PARTNERADDRESSES-STREET = GW_INPUT_HEADER-SHIP_TO_STREET.
+*              LS_PARTNERADDRESSES-STR_SUPPL3 = GW_INPUT_HEADER-STR_SUPPL3.
+              LS_PARTNERADDRESSES-LOCATION = GW_INPUT_HEADER-SHIP_TO_LOCATION.
+
+
+               LS_PARTNERADDRESSES-DISTRICT   = GW_INPUT_HEADER-SHIP_TO_DISTRICT.
+               LS_PARTNERADDRESSES-CITY       = GW_INPUT_HEADER-SHIP_TO_CITY.
+               LS_PARTNERADDRESSES-POSTL_COD1 = GW_INPUT_HEADER-SHIP_TO_POSTCODE.
+               LS_PARTNERADDRESSES-LANGU      = 'E'.
+               LS_PARTNERADDRESSES-COUNTRY    = 'TH'.
+
+*               APPEND LS_PARTNERADDRESSES TO PARTNERADDRESSES.
+             ENDIF.
+
+             SELECT SINGLE LZONE
+             INTO LV_TRANSPZONE
+             FROM KNA1
+             WHERE KUNNR = GW_INPUT_HEADER-SOLD_TO_CODE.
+
+
+           IF GW_INPUT_HEADER-TRANSPORTZONE IS NOT INITIAL.
+               GWA_PARTNERS-TRANSPZONE = GW_INPUT_HEADER-TRANSPORTZONE.
+               LS_PARTNERADDRESSES-TRANSPZONE    = GW_INPUT_HEADER-TRANSPORTZONE.
+           ELSE.
+               GWA_PARTNERS-TRANSPZONE = LV_TRANSPZONE.
+               LS_PARTNERADDRESSES-TRANSPZONE    = LV_TRANSPZONE.
+           ENDIF.
+
+            IF ( GW_INPUT_HEADER-SHIP_TO_STREET IS NOT INITIAL ).
+
+               APPEND LS_PARTNERADDRESSES TO PARTNERADDRESSES.
+            ENDIF.
+
+               APPEND GWA_PARTNERS TO GT_PARTNERS.
+
+
+
+
+
+
+
+
+
+          CLEAR GWA_PARTNERS.
+
+
+
+   ENDIF.
+
+
+
+
+  CLEAR: GWA_PARTNERS,P_SALES.
+  P_SALES = GW_INPUT_HEADER-SALES_CODE.
+  PERFORM CONVERSION_INPUT USING P_SALES.
+  GWA_PARTNERS-PARTN_ROLE = 'VE'. "SALES EMP
+  GWA_PARTNERS-PARTN_NUMB = P_SALES.
+  APPEND GWA_PARTNERS TO GT_PARTNERS.
+
+ENDFORM.                    " PARTNER
+
+*&---------------------------------------------------------------------*
+*&      FORM  CONVERSION_INPUT
+*&---------------------------------------------------------------------*
+*       TEXT
+*----------------------------------------------------------------------*
+*      -->P_GWA_COMP_LIFNR  TEXT
+*----------------------------------------------------------------------*
+FORM CONVERSION_INPUT  USING    P_LIFNR.
+
+  CALL FUNCTION 'CONVERSION_EXIT_ALPHA_INPUT'
+    EXPORTING
+      INPUT  = P_LIFNR
+    IMPORTING
+      OUTPUT = P_LIFNR.
+
+
+ENDFORM.                    " CONVERSION_INPUT
+
+
+*&---------------------------------------------------------------------*
+*&      FORM  CONDITION
+*&---------------------------------------------------------------------*
+*       TEXT
+*----------------------------------------------------------------------*
+*  -->  P1        TEXT
+*  <--  P2        TEXT
+*----------------------------------------------------------------------*
+FORM CONDITION .
+
+  CLEAR : GWA_COND_IN,
+          GWA_COND_INX.
+  CLEAR : GWA_COND_IN_WHT,
+          GWA_COND_INX_WHT.
+*     IF R_FG EQ 'X'.
+*        CLEAR GWA_COND_IN.
+*        GWA_COND_IN-ITM_NUMBER = GW_INPUT_ITEM-SO_ITEM.
+*        GWA_COND_IN-COND_TYPE  = 'ZPR0'.
+*        GWA_COND_IN-COND_VALUE = GW_INPUT_ITEM-AMT / 10.
+*        GWA_COND_IN-COND_ST_NO = '011'.
+*        GWA_COND_IN-COND_COUNT = 1.
+*        APPEND GWA_COND_IN TO GT_COND_IN.
+*
+*        CLEAR GWA_COND_INX.
+*        GWA_COND_INX-ITM_NUMBER = GW_INPUT_ITEM-SO_ITEM.
+*        GWA_COND_INX-COND_TYPE  = 'ZPR0'.
+*        GWA_COND_INX-COND_VALUE = 'X'.
+*        GWA_COND_INX-UPDATEFLAG = 'U'.
+*        GWA_COND_INX-COND_ST_NO = '011'.
+*        GWA_COND_INX-COND_COUNT = 1.
+*        APPEND GWA_COND_INX TO GT_COND_INX.
+*      ENDIF.
+*      IF R_PRE EQ 'X'.
+*        IF GW_INPUT_ITEM-WHT NE 0.
+*          BREAK-POINT.
+*
+*          CLEAR GWA_COND_IN.
+*          GWA_COND_IN-ITM_NUMBER = GW_INPUT_ITEM-SO_ITEM.
+*          GWA_COND_IN-COND_TYPE  = 'ZWHT'.
+*          IF GWA_HEADER_IN-ORD_REASON EQ 'Y01'.
+*             GWA_COND_IN-COND_VALUE = 2.
+*          ELSEIF GWA_HEADER_IN-ORD_REASON EQ 'Y02'.
+*             GWA_COND_IN-COND_VALUE = 3.
+*          ELSEIF GWA_HEADER_IN-ORD_REASON EQ 'Y03'.
+*             GWA_COND_IN-COND_VALUE = 5.
+*          ENDIF.
+**          GWA_COND_IN_WHT-COND_VALUE = GW_INPUT_ITEM-WHT.
+*           GWA_COND_IN-COND_ST_NO = '010'.
+*          GWA_COND_IN-COND_COUNT = 0.
+*          GWA_COND_IN-COND_ST_NO = 85.
+*          GWA_COND_IN-CONDVALUE = GW_INPUT_ITEM-WHT.
+*          GWA_COND_IN-CONDORIGIN = 'C'.
+*          GWA_COND_IN-COND_UPDAT = 'X'.
+*          APPEND GWA_COND_IN TO GT_COND_IN.
+*
+*          CLEAR GWA_COND_INX.
+*          GWA_COND_INX-ITM_NUMBER = GW_INPUT_ITEM-SO_ITEM.
+*          GWA_COND_INX-COND_TYPE  = 'ZWHT'.
+*          GWA_COND_INX-COND_ST_NO = '010'.
+*          GWA_COND_INX-COND_COUNT = 0.
+*          GWA_COND_INX-COND_ST_NO = 85.
+*          GWA_COND_INX-COND_VALUE = 'X'.
+*          GWA_COND_INX-UPDATEFLAG = 'X'.
+*
+*
+**          GWA_COND_INX-COND_COUNT = 1.
+*
+*          APPEND GWA_COND_INX TO GT_COND_INX.
+*        ENDIF.
+*      ENDIF.
+
+"Update WHT
+    IF R_PRE EQ 'X'.
+        IF GW_INPUT_ITEM-WHT NE 0.
+
+
+          CLEAR: GWA_COND_IN_WHT.
+          GWA_COND_IN_WHT-ITM_NUMBER = GW_INPUT_ITEM-SO_ITEM.
+          GWA_COND_IN_WHT-COND_TYPE  = 'ZWHT'.
+          IF GWA_HEADER_IN-ORD_REASON EQ 'Y01'.
+             GWA_COND_IN_WHT-COND_VALUE = 2.
+          ELSEIF GWA_HEADER_IN-ORD_REASON EQ 'Y02'.
+             GWA_COND_IN_WHT-COND_VALUE = 3.
+          ELSEIF GWA_HEADER_IN-ORD_REASON EQ 'Y03'.
+             GWA_COND_IN_WHT-COND_VALUE = 5.
+          ENDIF.
+*          GWA_COND_IN_WHT-COND_VALUE = GW_INPUT_ITEM-WHT.
+          GWA_COND_IN_WHT-COND_COUNT = 1.
+          GWA_COND_IN_WHT-COND_ST_NO = 85.
+          GWA_COND_IN_WHT-CONDVALUE = GW_INPUT_ITEM-WHT.
+          GWA_COND_IN_WHT-CONDORIGIN = 'C'.
+*          GWA_COND_IN_WHT-COND_UPDAT = 'X'.
+          GWA_COND_IN_WHT-CURRENCY_2 = 'THB'.
+          GWA_COND_IN_WHT-CURR_ISO_2 = 'THB'.
+          APPEND GWA_COND_IN_WHT TO GT_COND_IN_WHT.
+
+          CLEAR GWA_COND_INX.
+          GWA_COND_INX_WHT-ITM_NUMBER = GW_INPUT_ITEM-SO_ITEM.
+          GWA_COND_INX_WHT-COND_COUNT = 1.
+          GWA_COND_INX_WHT-COND_ST_NO = 85.
+          GWA_COND_INX_WHT-COND_TYPE  = 'ZWHT'.
+          GWA_COND_INX_WHT-UPDATEFLAG = 'U'.
+          GWA_COND_INX_WHT-COND_VALUE = 'X'.
+
+
+*          GWA_COND_INX-COND_COUNT = 1.
+
+          APPEND GWA_COND_INX_WHT TO GT_COND_INX_WHT.
+        ENDIF.
+      ENDIF.
+
+
+*    IF GW_INPUT_ITEM-DISCOUNT NE 0.
+*      CLEAR GWA_COND_IN.
+*      GWA_COND_IN-ITM_NUMBER = GW_INPUT_ITEM-SO_ITEM.
+*      GWA_COND_IN-COND_TYPE  = 'ZD02'.
+*      GWA_COND_IN-COND_VALUE = GW_INPUT_ITEM-DISCOUNT / 10.
+**    GWA_COND_IN-COND_ST_NO = '011'.
+*      GWA_COND_IN-COND_COUNT = 1.
+*      APPEND GWA_COND_IN TO GT_COND_IN.
+*
+*      CLEAR GWA_COND_INX.
+*      GWA_COND_INX-ITM_NUMBER = GW_INPUT_ITEM-SO_ITEM.
+*      GWA_COND_INX-COND_TYPE  = 'ZD02'.
+*      GWA_COND_INX-COND_VALUE = 'X'.
+*      GWA_COND_INX-UPDATEFLAG = 'U'.
+**    GWA_COND_INX-COND_ST_NO = '011'.
+*      GWA_COND_INX-COND_COUNT = 1.
+*      APPEND GWA_COND_INX TO GT_COND_INX.
+*    ENDIF.
+
+
+ENDFORM.                    " CONDITION
+
+
+
+*&---------------------------------------------------------------------*
+*&      FORM  ITEM
+*&---------------------------------------------------------------------*
+*       TEXT
+*----------------------------------------------------------------------*
+*  -->  P1        TEXT
+*  <--  P2        TEXT
+*----------------------------------------------------------------------*
+FORM ITEM .
+
+  DATA: LV_LGORT TYPE T001L-LGORT.
+
+
+
+
+
+  CLEAR : GWA_ITEMS_IN.
+
+*  DATA : LW_MARA TYPE MARA.
+  DATA : LW_T001L TYPE T001L.
+
+    CLEAR GWA_ITEMS_IN.
+    GWA_ITEMS_IN-ITM_NUMBER = GW_INPUT_ITEM-SO_ITEM. "ITEM NO
+    GWA_ITEMS_IN-MATERIAL   = GW_INPUT_ITEM-MATERIAL. "MATERIAL
+    IF R_PRE EQ 'X'.
+          GWA_ITEMS_IN-ITEM_CATEG   = P_PSTYV.
+    ENDIF.
+*    GWA_ITEMS_IN-PROD_HIERA = 'SP   SP   SP'.           "PRODH
+***>> INS ISS CH 12.05.2017 14:19:35
+**    CLEAR LW_MARA.
+**    SELECT SINGLE * FROM MARA INTO LW_MARA
+**      WHERE MATNR = GWA_ITEM-MATNR.
+**    IF LW_MARA-MTART = 'ZSP'.
+*
+    GWA_ITEMS_IN-STORE_LOC  = GW_INPUT_ITEM-STORAGE_LOCATION. "STORAGE LOCATION
+    GWA_ITEMS_IN-ROUTE  = GV_ROUTE. "ROUTE
+    GWA_ITEMS_IN-ORDERID = P_AUFNR.
+
+    IF GW_INPUT_ITEM-STORAGE_LOCATION IS NOT INITIAL.
+      CLEAR: LW_T001L,LV_LGORT.
+      CONDENSE GW_INPUT_ITEM-STORAGE_LOCATION NO-GAPS.
+      LV_LGORT = GW_INPUT_ITEM-STORAGE_LOCATION.
+      SELECT SINGLE * FROM T001L INTO LW_T001L
+        WHERE LGORT = LV_LGORT.
+*      IF SY-SUBRC = 0.
+*        GWA_ITEMS_IN-PLANT = LW_T001L-WERKS.
+*      ELSE.
+        GWA_ITEMS_IN-PLANT = '1000'.
+*      ENDIF.
+    ENDIF.
+*
+**    ENDIF.
+***<< INS ISS CH| 12.05.2017 14:19:35
+
+              .
+
+
+    APPEND GWA_ITEMS_IN TO GT_ITEMS_IN.
+
+    CLEAR: GWA_ITEMS_INX.
+    GWA_ITEMS_INX-ITM_NUMBER = 'X'. "ITEM NO
+    GWA_ITEMS_INX-MATERIAL   = 'X'. "MATERIAL
+    GWA_ITEMS_INX-STORE_LOC   = 'X'. "STORAGE LOCATION
+    GWA_ITEMS_INX-PLANT   = 'X'. "PLANT
+    GWA_ITEMS_INX-ROUTE  = 'X'. "ROUTE
+    GWA_ITEMS_INX-ORDERID = 'X'. "IO
+    IF R_PRE EQ 'X'.
+      GWA_ITEMS_IN-ITEM_CATEG  = 'X'. "Item category
+    ENDIF.
+    APPEND GWA_ITEMS_INX TO GT_ITEMS_INX.
+
+
+
+
+ENDFORM.                    " ITEM
+
+*&---------------------------------------------------------------------*
+*&      FORM  SCHEDULE
+*&---------------------------------------------------------------------*
+*       TEXT
+*----------------------------------------------------------------------*
+*  -->  P1        TEXT
+*  <--  P2        TEXT
+*----------------------------------------------------------------------*
+FORM SCHEDULE .
+
+
+
+*  LOOP AT GT_ITEM INTO GWA_ITEM.
+    CLEAR GWA_SCHED_IN.
+    GWA_SCHED_IN-ITM_NUMBER = GW_INPUT_ITEM-SO_ITEM. "ITEM NO
+    GWA_SCHED_IN-REQ_QTY    = GW_INPUT_ITEM-QTY."QTY
+    GWA_SCHED_IN-REQ_DATE    = GW_INPUT_HEADER-DOC_DATE."FIRST DATE
+    GWA_SCHED_IN-DLV_DATE    = GW_INPUT_HEADER-DOC_DATE."FIRST DATE
+    GWA_SCHED_IN-SCHED_TYPE    = P_ETTYP."Schedule item cat
+    APPEND GWA_SCHED_IN TO GT_SCHED_IN.
+
+*  ENDLOOP.
+
+    CLEAR: GWA_SCHED_INX.
+    GWA_SCHED_INX-ITM_NUMBER = 'X'. "ITEM NO
+    GWA_SCHED_INX-REQ_QTY    = 'X'."QTY
+    GWA_SCHED_IN-REQ_DATE    = 'X'."FIRST DATE
+    GWA_SCHED_IN-DLV_DATE    = 'X'."FIRST DATE
+    GWA_SCHED_IN-SCHED_TYPE    = 'X'. "Schedule item cat
+    APPEND GWA_SCHED_INX TO GT_SCHED_INX.
+
+
+ENDFORM.                    " SCHEDULE
+
+*&---------------------------------------------------------------------*
+*&      FORM  BAPI_SO_CREATE
+*&---------------------------------------------------------------------*
+*       TEXT
+*----------------------------------------------------------------------*
+*  -->  P1        TEXT
+*  <--  P2        TEXT
+*----------------------------------------------------------------------*
+FORM BAPI_SO_CREATE USING P_VBELN.
+
+  REFRESH GT_RETURN.
+
+  IF P_VBELN IS NOT INITIAL.
+
+    CALL FUNCTION 'BAPI_SALESORDER_CREATEFROMDAT2'
+      EXPORTING
+        SALESDOCUMENTIN               = P_VBELN
+        ORDER_HEADER_IN               = GWA_HEADER_IN
+        ORDER_HEADER_INX              = GWA_HEADER_INX
+        LOGIC_SWITCH                  = 'B'
+*      IMPORTING
+*        SALESDOCUMENT                 = P_VBELN
+      TABLES
+        RETURN                        = GT_RETURN
+*        ORDER_ITEMS_IN                = GT_ITEMS_IN
+*        ORDER_ITEMS_INX               = GT_ITEMS_INX
+        ORDER_PARTNERS                = GT_PARTNERS
+*        ORDER_SCHEDULES_IN            = GT_SCHED_IN
+*        ORDER_SCHEDULES_INX           = GT_SCHED_INX
+*        ORDER_CONDITIONS_IN           = GT_COND_IN
+*        ORDER_CONDITIONS_INX          = GT_COND_INX
+        ORDER_TEXT                    = GT_SO_TEXT
+        PARTNERADDRESSES              = PARTNERADDRESSES
+        .
+
+
+
+  ELSE.
+    CALL FUNCTION 'BAPI_SALESORDER_CREATEFROMDAT2'
+      EXPORTING
+*        SALESDOCUMENTIN               = P_VBELN
+        ORDER_HEADER_IN               = GWA_HEADER_IN
+*        ORDER_HEADER_INX              = GWA_HEADER_INX
+*         SENDER                        =
+*         BINARY_RELATIONSHIPTYPE       =
+*         INT_NUMBER_ASSIGNMENT         =
+*         BEHAVE_WHEN_ERROR             =
+*         LOGIC_SWITCH                  =
+*         TESTRUN                       =
+*         CONVERT                       = ' '
+      IMPORTING
+        SALESDOCUMENT                 = P_VBELN
+      TABLES
+        RETURN                        = GT_RETURN
+        ORDER_ITEMS_IN                = GT_ITEMS_IN
+        ORDER_ITEMS_INX               = GT_ITEMS_INX
+        ORDER_PARTNERS                = GT_PARTNERS
+        ORDER_SCHEDULES_IN            = GT_SCHED_IN
+        ORDER_SCHEDULES_INX           = GT_SCHED_INX
+        ORDER_CONDITIONS_IN           = GT_COND_IN
+        ORDER_CONDITIONS_INX          = GT_COND_INX
+*         ORDER_CFGS_REF                =
+*         ORDER_CFGS_INST               =
+*         ORDER_CFGS_PART_OF            =
+*         ORDER_CFGS_VALUE              =
+*         ORDER_CFGS_BLOB               =
+*         ORDER_CFGS_VK                 =
+*         ORDER_CFGS_REFINST            =
+*         ORDER_CCARD                   =
+        ORDER_TEXT                    = GT_SO_TEXT
+*         ORDER_KEYS                    =
+*         EXTENSIONIN                   =
+         PARTNERADDRESSES              = PARTNERADDRESSES
+        .
+  ENDIF.
+ENDFORM.                    " BAPI_SO_CREATE
+
+*&---------------------------------------------------------------------*
+*&      FORM  F_APPROVE_HEADER
+*&---------------------------------------------------------------------*
+*       TEXT
+*----------------------------------------------------------------------*
+*  -->  P1        TEXT
+*  <--  P2        TEXT
+*----------------------------------------------------------------------*
+FORM F_APPROVE_HEADER .
+  DATA : JEST_INS  TYPE JEST_UPD OCCURS 0 WITH HEADER LINE,
+         JEST_UPD  TYPE TABLE OF JEST_UPD ,
+         JSTO_INS TYPE TABLE OF  JSTO,
+         JSTO_UPD  TYPE TABLE OF JSTO_UPD,
+         OBJ_DEL  TYPE TABLE OF ONR00.
+
+  DATA : LS_JEST_INS LIKE LINE OF JEST_INS,
+         LS_JEST_UPD LIKE LINE OF JEST_UPD,
+         LS_JSTO_INS LIKE LINE OF JSTO_INS,
+         LS_JSTO_UPD LIKE LINE OF JSTO_UPD,
+         LS_OBJ_DEL  LIKE LINE OF OBJ_DEL.
+
+  DATA : LS_JEST TYPE JEST,
+         LT_JEST TYPE TABLE OF JEST.
+
+  SELECT SINGLE *
+    FROM JEST
+    INTO LS_JEST
+*    WHERE OBJNR EQ GS_RESULT-OBJNRH
+     WHERE OBJNR EQ GW_VBAK-OBJNR
+      AND STAT  EQ 'E0003'.
+  IF SY-SUBRC = 0.
+    LS_JEST-INACT = SPACE.
+    LS_JEST-CHGNR = LS_JEST-CHGNR + 1.
+    MOVE-CORRESPONDING LS_JEST TO LS_JEST_UPD.
+    LS_JEST_UPD-CHGKZ = 'X'.
+    APPEND LS_JEST_UPD TO JEST_UPD.
+  ELSE.
+    JEST_INS-MANDT = SY-MANDT.
+*    JEST_INS-OBJNR = GS_RESULT-OBJNRH.
+    JEST_INS-OBJNR = GW_VBAK-OBJNR.
+    JEST_INS-STAT  = 'E0003'.
+    JEST_INS-INACT = SPACE.
+    JEST_INS-CHGNR = 1.
+    JEST_INS-CHGKZ = 'X'.
+    APPEND JEST_INS TO JEST_INS.
+  ENDIF.
+
+  SELECT *
+    FROM JEST
+    INTO TABLE LT_JEST
+*    WHERE OBJNR EQ GS_RESULT-OBJNRH
+    WHERE OBJNR EQ GW_VBAK-OBJNR
+*
+      AND ( STAT  EQ 'E0001' OR
+            STAT  EQ 'E0002' OR
+            STAT  EQ 'E0004' )
+      AND INACT EQ SPACE.
+  LOOP AT LT_JEST INTO LS_JEST.
+    LS_JEST-INACT = 'X'.
+    LS_JEST-CHGNR = LS_JEST-CHGNR + 1.
+    MOVE-CORRESPONDING LS_JEST TO LS_JEST_UPD.
+    LS_JEST_UPD-CHGKZ = 'X'.
+    APPEND LS_JEST_UPD TO JEST_UPD.
+    CLEAR : LS_JEST.
+  ENDLOOP.
+
+  CALL FUNCTION 'STATUS_UPDATE'
+    TABLES
+      JEST_INS      = JEST_INS
+      JEST_UPD      = JEST_UPD
+      JSTO_INS      = JSTO_INS
+      JSTO_UPD      = JSTO_UPD
+      OBJ_DEL       = OBJ_DEL
+    EXCEPTIONS
+      ERROR_MESSAGE = 1
+      OTHERS        = 2.
+  IF SY-SUBRC = 0.
+    PERFORM F_CHANGE_BLOCK.
+  ENDIF.
+  COMMIT WORK AND WAIT.
+
+*  IF GS_RESULT-VKGRP EQ '242' OR
+*     GS_RESULT-VKGRP EQ '247' OR
+*     GS_RESULT-VKGRP EQ '248'.
+    PERFORM F_APP_AIR_STAFF_HEADER.
+*  ENDIF.
+
+ENDFORM.                    " F_APPROVE_HEADER
+
+*&---------------------------------------------------------------------*
+*&      FORM  F_APPROVE_DETAIL
+*&---------------------------------------------------------------------*
+*       TEXT
+*----------------------------------------------------------------------*
+*  -->  P1        TEXT
+*  <--  P2        TEXT
+*----------------------------------------------------------------------*
+FORM F_APPROVE_DETAIL .
+*  PERFORM F_APP_DETAIL_NOT_STAFF.
+  CALL FUNCTION 'ZSTATUS_CHANGE_EXTERN_SDS'
+    EXPORTING
+      OBJNR                = GW_VBAK-OBJNR
+      ESTAT_INACTIVE       = 'E0012'
+*        ESTAT_ACTIVE         = SPACE
+      STSMA                = 'ZSDS0003'
+    EXCEPTIONS
+      CANNOT_UPDATE        = 1
+                       .
+*  IF GS_RESULT-VKGRP EQ '242' OR
+*     GS_RESULT-VKGRP EQ '247' OR
+*     GS_RESULT-VKGRP EQ '248'.
+    PERFORM F_APP_AIR_STAFF.
+*  ENDIF.
+
+ENDFORM.                    " F_APPROVE_DETAIL
+
+*&---------------------------------------------------------------------*
+*&      FORM  F_CHANGE_BLOCK
+*&---------------------------------------------------------------------*
+*       TEXT
+*----------------------------------------------------------------------*
+*  -->  P1        TEXT
+*  <--  P2        TEXT
+*----------------------------------------------------------------------*
+FORM F_CHANGE_BLOCK .
+
+  DATA : SALESDOCUMENT    TYPE  BAPIVBELN-VBELN,
+         ORDER_HEADER_IN  TYPE  BAPISDH1,
+         ORDER_HEADER_INX TYPE  BAPISDH1X.
+
+  DATA : LV_VGBEL TYPE VBAK-VGBEL.
+
+  DATA : RETURN  TYPE TABLE OF  BAPIRET2,
+         LS_RETURN  TYPE  BAPIRET2.
+
+  SALESDOCUMENT               = GW_VBAK-VBELN.
+
+  ORDER_HEADER_IN-DLV_BLOCK   = SPACE.
+  ORDER_HEADER_INX-UPDATEFLAG = 'U'.
+  ORDER_HEADER_INX-DLV_BLOCK  = 'X'.
+
+  CALL FUNCTION 'BAPI_SALESORDER_CHANGE'
+    EXPORTING
+      SALESDOCUMENT    = SALESDOCUMENT
+      ORDER_HEADER_IN  = ORDER_HEADER_IN
+      ORDER_HEADER_INX = ORDER_HEADER_INX
+    TABLES
+      RETURN           = RETURN
+    EXCEPTIONS
+      ERROR_MESSAGE    = 1
+      OTHERS           = 2.
+
+  COMMIT WORK AND WAIT.
+
+
+  SELECT SINGLE VGBEL
+    FROM VBAK
+    INTO LV_VGBEL
+    WHERE VBELN EQ SALESDOCUMENT.
+
+  CALL FUNCTION 'DEQUEUE_EVVBAKE'
+    EXPORTING
+      VBELN         = SALESDOCUMENT
+      _SCOPE        = '2'
+    EXCEPTIONS
+      ERROR_MESSAGE = 1
+      OTHERS        = 2.
+  COMMIT WORK AND WAIT.
+
+  IF LV_VGBEL IS NOT INITIAL.
+    CALL FUNCTION 'DEQUEUE_EVVBAKE'
+      EXPORTING
+        VBELN         = LV_VGBEL
+        _SCOPE        = '2'
+      EXCEPTIONS
+        ERROR_MESSAGE = 1
+        OTHERS        = 2.
+  ENDIF.
+  COMMIT WORK AND WAIT.
+
+
+ENDFORM.                    " F_CHANGE_BLOCK
+
+
+*&---------------------------------------------------------------------*
+*&      FORM  F_CHANGE_BLOCK
+*&---------------------------------------------------------------------*
+*       TEXT
+*----------------------------------------------------------------------*
+*  -->  P1        TEXT
+*  <--  P2        TEXT
+*----------------------------------------------------------------------*
+FORM F_CHANGE_WHT .
+
+  DATA : SALESDOCUMENT    TYPE  BAPIVBELN-VBELN,
+         ORDER_HEADER_IN  TYPE  BAPISDHD1,
+         ORDER_HEADER_INX TYPE  BAPISDHD1X.
+
+  DATA : LV_VGBEL TYPE VBAK-VGBEL.
+
+  DATA : RETURN  TYPE TABLE OF  BAPIRET2,
+         LS_RETURN  TYPE  BAPIRET2.
+
+  SALESDOCUMENT               = GW_VBAK-VBELN.
+
+  ORDER_HEADER_IN-DLV_BLOCK   = SPACE.
+  ORDER_HEADER_INX-UPDATEFLAG = 'U'.
+  ORDER_HEADER_INX-DLV_BLOCK  = 'X'.
+
+*  CALL FUNCTION 'BAPI_SALESORDER_CHANGE'
+*    EXPORTING
+*      SALESDOCUMENT    = SALESDOCUMENT
+*      ORDER_HEADER_IN  = ORDER_HEADER_IN
+*      ORDER_HEADER_INX = ORDER_HEADER_INX
+**      LOGIC_SWITCH     =
+*    TABLES
+*      RETURN         = RETURN
+*      CONDITIONS_IN  = GT_COND_IN_WHT
+*      CONDITIONS_INX = GT_COND_INX_WHT
+*    EXCEPTIONS
+*      ERROR_MESSAGE    = 1
+*      OTHERS           = 2.
+
+
+  CALL FUNCTION 'SD_SALESDOCUMENT_CHANGE'
+    EXPORTING
+     SALESDOCUMENT               = SALESDOCUMENT
+     ORDER_HEADER_IN             = ORDER_HEADER_IN
+      ORDER_HEADER_INX            = ORDER_HEADER_INX
+    TABLES
+      RETURN                      = RETURN
+     CONDITIONS_IN               = GT_COND_IN_WHT
+     CONDITIONS_INX              = GT_COND_INX_WHT
+    EXCEPTIONS
+     INCOV_NOT_IN_ITEM           = 1
+     OTHERS                      = 2
+            .
+  IF sy-subrc <> 0.
+* Implement suitable error handling here
+  ENDIF.
+
+
+
+  COMMIT WORK AND WAIT.
+
+
+  SELECT SINGLE VGBEL
+    FROM VBAK
+    INTO LV_VGBEL
+    WHERE VBELN EQ SALESDOCUMENT.
+
+  CALL FUNCTION 'DEQUEUE_EVVBAKE'
+    EXPORTING
+      VBELN         = SALESDOCUMENT
+      _SCOPE        = '2'
+    EXCEPTIONS
+      ERROR_MESSAGE = 1
+      OTHERS        = 2.
+  COMMIT WORK AND WAIT.
+
+  IF LV_VGBEL IS NOT INITIAL.
+    CALL FUNCTION 'DEQUEUE_EVVBAKE'
+      EXPORTING
+        VBELN         = LV_VGBEL
+        _SCOPE        = '2'
+      EXCEPTIONS
+        ERROR_MESSAGE = 1
+        OTHERS        = 2.
+  ENDIF.
+  COMMIT WORK AND WAIT.
+
+
+ENDFORM.                    " F_CHANGE_BLOCK
+
+*&---------------------------------------------------------------------*
+*&      FORM  F_LINE_CREDIT
+*&---------------------------------------------------------------------*
+*       TEXT
+*----------------------------------------------------------------------*
+*  -->  P1        TEXT
+*  <--  P2        TEXT
+*----------------------------------------------------------------------*
+FORM F_LINE_CREDIT .
+  DATA : JEST_INS  TYPE JEST_UPD OCCURS 0 WITH HEADER LINE,
+         JEST_UPD  TYPE TABLE OF  JEST_UPD ,
+         JSTO_INS TYPE TABLE OF  JSTO,
+         JSTO_UPD  TYPE TABLE OF  JSTO_UPD,
+         OBJ_DEL  TYPE TABLE OF ONR00.
+
+  DATA : LS_JEST_INS LIKE LINE OF JEST_INS,
+         LS_JEST_UPD LIKE LINE OF JEST_UPD,
+         LS_JSTO_INS LIKE LINE OF JSTO_INS,
+         LS_JSTO_UPD LIKE LINE OF JSTO_UPD,
+         LS_OBJ_DEL  LIKE LINE OF OBJ_DEL.
+
+  DATA : LS_JEST TYPE JEST,
+         LT_JEST TYPE TABLE OF JEST.
+
+  SELECT SINGLE *
+    FROM JEST
+    INTO LS_JEST
+    WHERE OBJNR EQ GW_VBAK-OBJNR
+      AND STAT  EQ 'E0008'.
+  IF SY-SUBRC = 0.
+    LS_JEST-INACT = 'X'.
+    LS_JEST-CHGNR = LS_JEST-CHGNR + 1.
+    MOVE-CORRESPONDING LS_JEST TO LS_JEST_UPD.
+    LS_JEST_UPD-CHGKZ = 'X'.
+    APPEND LS_JEST_UPD TO JEST_UPD.
+  ELSE.
+    JEST_INS-MANDT = SY-MANDT.
+    JEST_INS-OBJNR = GW_VBAK-OBJNR.
+    JEST_INS-STAT  = 'E0008'.
+    JEST_INS-INACT = 'X'.
+    JEST_INS-CHGNR = 1.
+    JEST_INS-CHGKZ = 'X'.
+    APPEND JEST_INS TO JEST_INS.
+  ENDIF.
+
+  CALL FUNCTION 'STATUS_UPDATE'
+    TABLES
+      JEST_INS      = JEST_INS
+      JEST_UPD      = JEST_UPD
+      JSTO_INS      = JSTO_INS
+      JSTO_UPD      = JSTO_UPD
+      OBJ_DEL       = OBJ_DEL
+    EXCEPTIONS
+      ERROR_MESSAGE = 1
+      OTHERS        = 2.
+  IF SY-SUBRC = 0.
+
+  ENDIF.
+  COMMIT WORK AND WAIT.
+
+ENDFORM.                    " F_LINE_CREDIT
+*&---------------------------------------------------------------------*
+*&      FORM  F_LINE_ACCOUNT
+*&---------------------------------------------------------------------*
+*       TEXT
+*----------------------------------------------------------------------*
+*  -->  P1        TEXT
+*  <--  P2        TEXT
+*----------------------------------------------------------------------*
+FORM F_LINE_ACCOUNT .
+
+  DATA : JEST_INS  TYPE JEST_UPD OCCURS 0 WITH HEADER LINE,
+         JEST_UPD  TYPE TABLE OF  JEST_UPD ,
+         JSTO_INS TYPE TABLE OF  JSTO,
+         JSTO_UPD  TYPE TABLE OF  JSTO_UPD,
+         OBJ_DEL  TYPE TABLE OF ONR00.
+
+  DATA : LS_JEST_INS LIKE LINE OF JEST_INS,
+         LS_JEST_UPD LIKE LINE OF JEST_UPD,
+         LS_JSTO_INS LIKE LINE OF JSTO_INS,
+         LS_JSTO_UPD LIKE LINE OF JSTO_UPD,
+         LS_OBJ_DEL  LIKE LINE OF OBJ_DEL.
+
+  DATA : LS_JEST TYPE JEST,
+         LT_JEST TYPE TABLE OF JEST.
+
+  SELECT SINGLE *
+    FROM JEST
+    INTO LS_JEST
+    WHERE OBJNR EQ GW_VBAK-OBJNR
+      AND STAT  EQ 'E0007'.
+  IF SY-SUBRC = 0.
+    LS_JEST-INACT = 'X'.
+    LS_JEST-CHGNR = LS_JEST-CHGNR + 1.
+    MOVE-CORRESPONDING LS_JEST TO LS_JEST_UPD.
+    LS_JEST_UPD-CHGKZ = 'X'.
+    APPEND LS_JEST_UPD TO JEST_UPD.
+  ELSE.
+    JEST_INS-MANDT = SY-MANDT.
+    JEST_INS-OBJNR = GW_VBAK-OBJNR.
+    JEST_INS-STAT  = 'E0007'.
+    JEST_INS-INACT = 'X'.
+    JEST_INS-CHGNR = 1.
+    JEST_INS-CHGKZ = 'X'.
+    APPEND JEST_INS TO JEST_INS.
+  ENDIF.
+
+  CALL FUNCTION 'STATUS_UPDATE'
+    TABLES
+      JEST_INS      = JEST_INS
+      JEST_UPD      = JEST_UPD
+      JSTO_INS      = JSTO_INS
+      JSTO_UPD      = JSTO_UPD
+      OBJ_DEL       = OBJ_DEL
+    EXCEPTIONS
+      ERROR_MESSAGE = 1
+      OTHERS        = 2.
+  IF SY-SUBRC = 0.
+
+  ENDIF.
+  COMMIT WORK AND WAIT.
+
+ENDFORM.                    " F_LINE_ACCOUNT
+*&---------------------------------------------------------------------*
+*&      FORM  F_APP_AIR_STAFF_HEADER
+*&---------------------------------------------------------------------*
+*       TEXT
+*----------------------------------------------------------------------*
+*  -->  P1        TEXT
+*  <--  P2        TEXT
+*----------------------------------------------------------------------*
+FORM F_APP_AIR_STAFF_HEADER .
+
+  PERFORM F_CREDIT_HEADER.
+  PERFORM F_CREDIT_ITEM.
+
+ENDFORM.                    " F_APP_AIR_STAFF_HEADER
+
+*&---------------------------------------------------------------------*
+*&      FORM  F_CREDIT
+*&---------------------------------------------------------------------*
+*       TEXT
+*----------------------------------------------------------------------*
+*  -->  P1        TEXT
+*  <--  P2        TEXT
+*----------------------------------------------------------------------*
+FORM F_CREDIT_HEADER.
+  DATA : JEST_INS  TYPE JEST_UPD OCCURS 0 WITH HEADER LINE,
+         JEST_UPD  TYPE TABLE OF  JEST_UPD ,
+         JSTO_INS TYPE TABLE OF  JSTO,
+         JSTO_UPD  TYPE TABLE OF  JSTO_UPD,
+         OBJ_DEL  TYPE TABLE OF ONR00.
+
+  DATA : LS_JEST_INS LIKE LINE OF JEST_INS,
+         LS_JEST_UPD LIKE LINE OF JEST_UPD,
+         LS_JSTO_INS LIKE LINE OF JSTO_INS,
+         LS_JSTO_UPD LIKE LINE OF JSTO_UPD,
+         LS_OBJ_DEL  LIKE LINE OF OBJ_DEL.
+
+  DATA : LS_JEST TYPE JEST,
+         LT_JEST TYPE TABLE OF JEST.
+
+  SELECT SINGLE *
+    FROM JEST
+    INTO LS_JEST
+    WHERE OBJNR EQ GW_VBAK-OBJNR
+      AND STAT  EQ 'E0005'.
+  IF SY-SUBRC = 0.
+    LS_JEST-INACT = 'X'.
+    LS_JEST-CHGNR = LS_JEST-CHGNR + 1.
+    MOVE-CORRESPONDING LS_JEST TO LS_JEST_UPD.
+    LS_JEST_UPD-CHGKZ = 'X'.
+    APPEND LS_JEST_UPD TO JEST_UPD.
+  ELSE.
+    JEST_INS-MANDT = SY-MANDT.
+    JEST_INS-OBJNR = GW_VBAK-OBJNR.
+    JEST_INS-STAT  = 'E0005'.
+    JEST_INS-INACT = 'X'.
+    JEST_INS-CHGNR = 1.
+    JEST_INS-CHGKZ = 'X'.
+    APPEND JEST_INS TO JEST_INS.
+  ENDIF.
+
+  CALL FUNCTION 'STATUS_UPDATE'
+    TABLES
+      JEST_INS      = JEST_INS
+      JEST_UPD      = JEST_UPD
+      JSTO_INS      = JSTO_INS
+      JSTO_UPD      = JSTO_UPD
+      OBJ_DEL       = OBJ_DEL
+    EXCEPTIONS
+      ERROR_MESSAGE = 1
+      OTHERS        = 2.
+  IF SY-SUBRC = 0.
+
+  ENDIF.
+  COMMIT WORK AND WAIT.
+
+ENDFORM.                    " F_CREDIT
+
+
+*&---------------------------------------------------------------------*
+*&      FORM  F_CREDIT
+*&---------------------------------------------------------------------*
+*       TEXT
+*----------------------------------------------------------------------*
+*  -->  P1        TEXT
+*  <--  P2        TEXT
+*----------------------------------------------------------------------*
+FORM F_CREDIT_ITEM.
+  DATA : JEST_INS  TYPE JEST_UPD OCCURS 0 WITH HEADER LINE,
+         JEST_UPD  TYPE TABLE OF  JEST_UPD ,
+         JSTO_INS TYPE TABLE OF  JSTO,
+         JSTO_UPD  TYPE TABLE OF  JSTO_UPD,
+         OBJ_DEL  TYPE TABLE OF ONR00.
+
+  DATA : LS_JEST_INS LIKE LINE OF JEST_INS,
+         LS_JEST_UPD LIKE LINE OF JEST_UPD,
+         LS_JSTO_INS LIKE LINE OF JSTO_INS,
+         LS_JSTO_UPD LIKE LINE OF JSTO_UPD,
+         LS_OBJ_DEL  LIKE LINE OF OBJ_DEL.
+
+  DATA : LS_JEST TYPE JEST,
+         LT_JEST TYPE TABLE OF JEST.
+
+  LOOP AT GT_VBAP1 INTO GW_VBAP1.
+
+        SELECT SINGLE *
+          FROM JEST
+          INTO LS_JEST
+          WHERE OBJNR EQ GW_VBAP1-OBJNR
+            AND STAT  EQ 'E0002'.
+        IF SY-SUBRC = 0.
+          LS_JEST-INACT = 'X'.
+          LS_JEST-CHGNR = LS_JEST-CHGNR + 1.
+          MOVE-CORRESPONDING LS_JEST TO LS_JEST_UPD.
+          LS_JEST_UPD-CHGKZ = 'X'.
+          APPEND LS_JEST_UPD TO JEST_UPD.
+        ELSE.
+          JEST_INS-MANDT = SY-MANDT.
+          JEST_INS-OBJNR = GW_VBAP1-OBJNR.
+          JEST_INS-STAT  = 'E0002'.
+          JEST_INS-INACT = 'X'.
+          JEST_INS-CHGNR = 1.
+          JEST_INS-CHGKZ = 'X'.
+          APPEND JEST_INS TO JEST_INS.
+        ENDIF.
+
+        CALL FUNCTION 'STATUS_UPDATE'
+          TABLES
+            JEST_INS      = JEST_INS
+            JEST_UPD      = JEST_UPD
+            JSTO_INS      = JSTO_INS
+            JSTO_UPD      = JSTO_UPD
+            OBJ_DEL       = OBJ_DEL
+          EXCEPTIONS
+            ERROR_MESSAGE = 1
+            OTHERS        = 2.
+        IF SY-SUBRC = 0.
+
+        ENDIF.
+        COMMIT WORK AND WAIT.
+   ENDLOOP.
+
+ENDFORM.                    " F_CREDIT
+*&---------------------------------------------------------------------*
+*&      FORM  F_APP_AIR_STAFF
+*&---------------------------------------------------------------------*
+*       TEXT
+*----------------------------------------------------------------------*
+*  -->  P1        TEXT
+*  <--  P2        TEXT
+*----------------------------------------------------------------------*
+FORM F_APP_AIR_STAFF .
+
+  PERFORM F_LINE_CREDIT.
+  PERFORM F_LINE_ACCOUNT.
+
+ENDFORM.                    " F_APP_AIR_STAFF

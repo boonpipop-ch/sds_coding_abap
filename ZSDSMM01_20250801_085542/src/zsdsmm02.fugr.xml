@@ -1,0 +1,64 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<abapGit version="v1.0.0" serializer="LCL_OBJECT_FUGR" serializer_version="v1.0.0">
+ <asx:abap xmlns:asx="http://www.sap.com/abapxml" version="1.0">
+  <asx:values>
+   <AREAT>Process Approve PO</AREAT>
+   <INCLUDES>
+    <SOBJ_NAME>LZSDSMM02TOP</SOBJ_NAME>
+    <SOBJ_NAME>SAPLZSDSMM02</SOBJ_NAME>
+   </INCLUDES>
+   <FUNCTIONS>
+    <item>
+     <FUNCNAME>Z_SDSMM_CHECK_CHG_PO</FUNCNAME>
+     <SHORT_TEXT>Check Change PO</SHORT_TEXT>
+     <IMPORT>
+      <RSIMP>
+       <PARAMETER>IS_PO_HEADER</PARAMETER>
+       <REFERENCE>X</REFERENCE>
+       <TYP>MEPOHEADER</TYP>
+      </RSIMP>
+      <RSIMP>
+       <PARAMETER>LT_PO_ITEM</PARAMETER>
+       <REFERENCE>X</REFERENCE>
+       <TYP>TAB_MEPOITEM</TYP>
+      </RSIMP>
+     </IMPORT>
+     <EXPORT>
+      <RSEXP>
+       <PARAMETER>E_CHANGE</PARAMETER>
+       <REFERENCE>X</REFERENCE>
+       <TYP>FLAG</TYP>
+      </RSEXP>
+      <RSEXP>
+       <PARAMETER>E_MESSAGE</PARAMETER>
+       <REFERENCE>X</REFERENCE>
+       <TYP>CHAR50</TYP>
+      </RSEXP>
+     </EXPORT>
+     <DOCUMENTATION>
+      <RSFDO>
+       <PARAMETER>IS_PO_HEADER</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>Purchase Order Header Data</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>LT_PO_ITEM</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>Purchase Order Item</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>E_CHANGE</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>&apos;X&apos; = Can change</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>E_MESSAGE</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>Error Message</STEXT>
+      </RSFDO>
+     </DOCUMENTATION>
+    </item>
+   </FUNCTIONS>
+  </asx:values>
+ </asx:abap>
+</abapGit>

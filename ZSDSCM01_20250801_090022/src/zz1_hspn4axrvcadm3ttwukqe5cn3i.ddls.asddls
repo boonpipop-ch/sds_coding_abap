@@ -1,0 +1,8 @@
+@AbapCatalog.internal.setChange: 'FLDADD_NO_ASS_INFLUENCE'
+@AbapCatalog.sqlViewAppendName: 'ZZ1_BEDCFDAB44BD'
+
+extend view C_EXPIRINGSRVCCONTRITMDETAILS with ZZ1_HSPN4AXRVCADM3TTWUKQE5CN3I
+  
+{ 
+  _ServiceDocumentExt.ZZ1_PARTNER_SEGMENT as ZZ1_PARTNER_SEGMENT
+}

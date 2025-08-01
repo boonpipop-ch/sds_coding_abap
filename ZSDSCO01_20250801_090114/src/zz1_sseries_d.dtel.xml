@@ -1,0 +1,59 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<abapGit version="v1.0.0" serializer="LCL_OBJECT_DTEL" serializer_version="v1.0.0">
+ <asx:abap xmlns:asx="http://www.sap.com/abapxml" version="1.0">
+  <asx:values>
+   <DD04V>
+    <ROLLNAME>ZZ1_SSERIES_D</ROLLNAME>
+    <DDLANGUAGE>E</DDLANGUAGE>
+    <DOMNAME>CFD_CUSTOM_CODE_DESCRIPTION</DOMNAME>
+    <LOGFLAG>X</LOGFLAG>
+    <HEADLEN>55</HEADLEN>
+    <SCRLEN3>40</SCRLEN3>
+    <DDTEXT>Ext. Material Group (Desc.)</DDTEXT>
+    <REPTEXT>Ext. Material Group (Desc.)</REPTEXT>
+    <SCRTEXT_L>Ext. Material Group (Desc.)</SCRTEXT_L>
+    <DTELMASTER>E</DTELMASTER>
+    <REFKIND>D</REFKIND>
+   </DD04V>
+   <I18N_LANGS>
+    <LANGU>2</LANGU>
+    <LANGU>7</LANGU>
+    <LANGU>D</LANGU>
+    <LANGU>J</LANGU>
+    <LANGU>쁩</LANGU>
+   </I18N_LANGS>
+   <DD04_TEXTS>
+    <item>
+     <DDLANGUAGE>2</DDLANGUAGE>
+     <DDTEXT>กลุ่มวัสดุภายนอก(คำอธิบาย)</DDTEXT>
+     <REPTEXT>กลุ่มวัสดุภายนอก(คำอธิบาย)</REPTEXT>
+     <SCRTEXT_L>กลุ่มวัสดุภายนอก(คำอธิบาย)</SCRTEXT_L>
+    </item>
+    <item>
+     <DDLANGUAGE>7</DDLANGUAGE>
+     <DDTEXT>Kpln Bahan Luaran (Prhln)</DDTEXT>
+     <REPTEXT>Kpln Bahan Luaran (Prhln)</REPTEXT>
+     <SCRTEXT_L>Kpln Bahan Luaran (Prhln)</SCRTEXT_L>
+    </item>
+    <item>
+     <DDLANGUAGE>D</DDLANGUAGE>
+     <DDTEXT>Externe Warengruppe (Beschr.)</DDTEXT>
+     <REPTEXT>Externe Warengruppe (Beschr.)</REPTEXT>
+     <SCRTEXT_L>Externe Warengruppe (Beschr.)</SCRTEXT_L>
+    </item>
+    <item>
+     <DDLANGUAGE>J</DDLANGUAGE>
+     <DDTEXT>外部品目グループ(内容説明)</DDTEXT>
+     <REPTEXT>外部品目グループ(内容説明)</REPTEXT>
+     <SCRTEXT_L>外部品目グループ(内容説明)</SCRTEXT_L>
+    </item>
+    <item>
+     <DDLANGUAGE>쁩</DDLANGUAGE>
+     <DDTEXT>Nhóm v.tư b.ngoài (Desc.)</DDTEXT>
+     <REPTEXT>Nhóm v.tư b.ngoài (Desc.)</REPTEXT>
+     <SCRTEXT_L>Nhóm v.tư b.ngoài (Desc.)</SCRTEXT_L>
+    </item>
+   </DD04_TEXTS>
+  </asx:values>
+ </asx:abap>
+</abapGit>

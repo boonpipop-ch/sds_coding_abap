@@ -1,0 +1,53 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<abapGit version="v1.0.0" serializer="LCL_OBJECT_CLAS" serializer_version="v1.0.0">
+ <asx:abap xmlns:asx="http://www.sap.com/abapxml" version="1.0">
+  <asx:values>
+   <VSEOCLASS>
+    <CLSNAME>ZCL_SDSFI_JV_CHECK</CLSNAME>
+    <LANGU>E</LANGU>
+    <DESCRIPT>Class for check Jouney Voucher with K2</DESCRIPT>
+    <STATE>1</STATE>
+    <CLSCCINCL>X</CLSCCINCL>
+    <FIXPT>X</FIXPT>
+    <UNICODE>X</UNICODE>
+   </VSEOCLASS>
+   <DESCRIPTIONS>
+    <SEOCOMPOTX>
+     <CMPNAME>CONSTRUCTOR</CMPNAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Constructor</DESCRIPT>
+    </SEOCOMPOTX>
+    <SEOCOMPOTX>
+     <CMPNAME>GET_BODY_TEXT</CMPNAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Get Body Text</DESCRIPT>
+    </SEOCOMPOTX>
+    <SEOCOMPOTX>
+     <CMPNAME>GET_HEADER</CMPNAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Get Header</DESCRIPT>
+    </SEOCOMPOTX>
+    <SEOCOMPOTX>
+     <CMPNAME>GET_METHOD</CMPNAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Get Method</DESCRIPT>
+    </SEOCOMPOTX>
+    <SEOCOMPOTX>
+     <CMPNAME>GET_URL</CMPNAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Get URL</DESCRIPT>
+    </SEOCOMPOTX>
+    <SEOCOMPOTX>
+     <CMPNAME>GET_USER_PASS</CMPNAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Get User Pass</DESCRIPT>
+    </SEOCOMPOTX>
+    <SEOCOMPOTX>
+     <CMPNAME>START_PROCESS</CMPNAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Start Process</DESCRIPT>
+    </SEOCOMPOTX>
+   </DESCRIPTIONS>
+  </asx:values>
+ </asx:abap>
+</abapGit>

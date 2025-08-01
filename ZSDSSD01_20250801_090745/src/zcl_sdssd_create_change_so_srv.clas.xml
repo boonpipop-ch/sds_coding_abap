@@ -1,0 +1,1128 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<abapGit version="v1.0.0" serializer="LCL_OBJECT_CLAS" serializer_version="v1.0.0">
+ <asx:abap xmlns:asx="http://www.sap.com/abapxml" version="1.0">
+  <asx:values>
+   <VSEOCLASS>
+    <CLSNAME>ZCL_SDSSD_CREATE_CHANGE_SO_SRV</CLSNAME>
+    <LANGU>E</LANGU>
+    <DESCRIPT>Create/Change Sales Order</DESCRIPT>
+    <STATE>1</STATE>
+    <CLSCCINCL>X</CLSCCINCL>
+    <FIXPT>X</FIXPT>
+    <UNICODE>X</UNICODE>
+   </VSEOCLASS>
+   <TPOOL>
+    <item>
+     <ID>I</ID>
+     <KEY>E01</KEY>
+     <ENTRY>Please maintain constant values &amp; in Table ZSDSCAC001</ENTRY>
+     <LENGTH>106</LENGTH>
+    </item>
+    <item>
+     <ID>I</ID>
+     <KEY>E02</KEY>
+     <ENTRY>Missing Salesforce ID</ENTRY>
+     <LENGTH>42</LENGTH>
+    </item>
+    <item>
+     <ID>I</ID>
+     <KEY>E03</KEY>
+     <ENTRY>Duplicate Salesforce ID</ENTRY>
+     <LENGTH>46</LENGTH>
+    </item>
+    <item>
+     <ID>I</ID>
+     <KEY>E04</KEY>
+     <ENTRY>Missing Document date</ENTRY>
+     <LENGTH>42</LENGTH>
+    </item>
+    <item>
+     <ID>I</ID>
+     <KEY>E05</KEY>
+     <ENTRY>Wrong Date format. Please use format YYYY-MM-DD</ENTRY>
+     <LENGTH>90</LENGTH>
+    </item>
+    <item>
+     <ID>I</ID>
+     <KEY>E06</KEY>
+     <ENTRY>Sales Order No. must be empty for create mode</ENTRY>
+     <LENGTH>90</LENGTH>
+    </item>
+    <item>
+     <ID>I</ID>
+     <KEY>E07</KEY>
+     <ENTRY>Missing indicator flag : &apos;X&apos; for Create or &apos;U&apos; for Change</ENTRY>
+     <LENGTH>114</LENGTH>
+    </item>
+    <item>
+     <ID>I</ID>
+     <KEY>E08</KEY>
+     <ENTRY>Quotation No. &amp; does not exist</ENTRY>
+     <LENGTH>60</LENGTH>
+    </item>
+    <item>
+     <ID>I</ID>
+     <KEY>E09</KEY>
+     <ENTRY>Missing Sales Order Type</ENTRY>
+     <LENGTH>48</LENGTH>
+    </item>
+    <item>
+     <ID>I</ID>
+     <KEY>E10</KEY>
+     <ENTRY>Sales Order Type does not exist</ENTRY>
+     <LENGTH>62</LENGTH>
+    </item>
+    <item>
+     <ID>I</ID>
+     <KEY>E11</KEY>
+     <ENTRY>Missing Distribution Channel</ENTRY>
+     <LENGTH>56</LENGTH>
+    </item>
+    <item>
+     <ID>I</ID>
+     <KEY>E12</KEY>
+     <ENTRY>Distribution Channel  does not exist</ENTRY>
+     <LENGTH>72</LENGTH>
+    </item>
+    <item>
+     <ID>I</ID>
+     <KEY>E13</KEY>
+     <ENTRY>Missing Sales Office</ENTRY>
+     <LENGTH>40</LENGTH>
+    </item>
+    <item>
+     <ID>I</ID>
+     <KEY>E14</KEY>
+     <ENTRY>Sales Office does not exist</ENTRY>
+     <LENGTH>54</LENGTH>
+    </item>
+    <item>
+     <ID>I</ID>
+     <KEY>E15</KEY>
+     <ENTRY>Missing Sales Group</ENTRY>
+     <LENGTH>29</LENGTH>
+    </item>
+    <item>
+     <ID>I</ID>
+     <KEY>E16</KEY>
+     <ENTRY>Sales Group does not exist</ENTRY>
+     <LENGTH>52</LENGTH>
+    </item>
+    <item>
+     <ID>I</ID>
+     <KEY>E17</KEY>
+     <ENTRY>Missing Payment term</ENTRY>
+     <LENGTH>40</LENGTH>
+    </item>
+    <item>
+     <ID>I</ID>
+     <KEY>E18</KEY>
+     <ENTRY>Payment term does not exist</ENTRY>
+     <LENGTH>54</LENGTH>
+    </item>
+    <item>
+     <ID>I</ID>
+     <KEY>E23</KEY>
+     <ENTRY>Missing Customer Sold-to</ENTRY>
+     <LENGTH>48</LENGTH>
+    </item>
+    <item>
+     <ID>I</ID>
+     <KEY>E25</KEY>
+     <ENTRY>Customer Sold-to does not exist</ENTRY>
+     <LENGTH>62</LENGTH>
+    </item>
+    <item>
+     <ID>I</ID>
+     <KEY>E26</KEY>
+     <ENTRY>Please Input customer name (one-time)</ENTRY>
+     <LENGTH>74</LENGTH>
+    </item>
+    <item>
+     <ID>I</ID>
+     <KEY>E27</KEY>
+     <ENTRY>Please Input customer address (one-time)</ENTRY>
+     <LENGTH>80</LENGTH>
+    </item>
+    <item>
+     <ID>I</ID>
+     <KEY>E28</KEY>
+     <ENTRY>Missing Customer Ship-to</ENTRY>
+     <LENGTH>48</LENGTH>
+    </item>
+    <item>
+     <ID>I</ID>
+     <KEY>E29</KEY>
+     <ENTRY>Missing Customer Bill-to</ENTRY>
+     <LENGTH>48</LENGTH>
+    </item>
+    <item>
+     <ID>I</ID>
+     <KEY>E30</KEY>
+     <ENTRY>Missing Customer Payer</ENTRY>
+     <LENGTH>44</LENGTH>
+    </item>
+    <item>
+     <ID>I</ID>
+     <KEY>E31</KEY>
+     <ENTRY>Missing Customer Sales Employee</ENTRY>
+     <LENGTH>62</LENGTH>
+    </item>
+    <item>
+     <ID>I</ID>
+     <KEY>E32</KEY>
+     <ENTRY>Missing Item Number in Schedule Line</ENTRY>
+     <LENGTH>72</LENGTH>
+    </item>
+    <item>
+     <ID>I</ID>
+     <KEY>E33</KEY>
+     <ENTRY>Item: Missing indicator flag : &apos;X&apos; for Create or &apos;U&apos; for Change</ENTRY>
+     <LENGTH>126</LENGTH>
+    </item>
+    <item>
+     <ID>I</ID>
+     <KEY>E34</KEY>
+     <ENTRY>Please input valid amount</ENTRY>
+     <LENGTH>50</LENGTH>
+    </item>
+    <item>
+     <ID>I</ID>
+     <KEY>E35</KEY>
+     <ENTRY>Missing Item Number</ENTRY>
+     <LENGTH>29</LENGTH>
+    </item>
+    <item>
+     <ID>I</ID>
+     <KEY>E36</KEY>
+     <ENTRY>Missing material number</ENTRY>
+     <LENGTH>46</LENGTH>
+    </item>
+    <item>
+     <ID>I</ID>
+     <KEY>E37</KEY>
+     <ENTRY>Material Number does not exist</ENTRY>
+     <LENGTH>60</LENGTH>
+    </item>
+    <item>
+     <ID>I</ID>
+     <KEY>E38</KEY>
+     <ENTRY>Missing target quantity</ENTRY>
+     <LENGTH>46</LENGTH>
+    </item>
+    <item>
+     <ID>I</ID>
+     <KEY>E39</KEY>
+     <ENTRY>Missing sales unit</ENTRY>
+     <LENGTH>28</LENGTH>
+    </item>
+    <item>
+     <ID>I</ID>
+     <KEY>E40</KEY>
+     <ENTRY>Invalid unit:</ENTRY>
+     <LENGTH>23</LENGTH>
+    </item>
+    <item>
+     <ID>I</ID>
+     <KEY>E41</KEY>
+     <ENTRY>Missing Plant</ENTRY>
+     <LENGTH>23</LENGTH>
+    </item>
+    <item>
+     <ID>I</ID>
+     <KEY>E42</KEY>
+     <ENTRY>Plant does not exist</ENTRY>
+     <LENGTH>40</LENGTH>
+    </item>
+    <item>
+     <ID>I</ID>
+     <KEY>E43</KEY>
+     <ENTRY>Storage Location does not exist</ENTRY>
+     <LENGTH>62</LENGTH>
+    </item>
+    <item>
+     <ID>I</ID>
+     <KEY>E44</KEY>
+     <ENTRY>Missing Item Category</ENTRY>
+     <LENGTH>42</LENGTH>
+    </item>
+    <item>
+     <ID>I</ID>
+     <KEY>E45</KEY>
+     <ENTRY>Item Category does not exist</ENTRY>
+     <LENGTH>56</LENGTH>
+    </item>
+    <item>
+     <ID>I</ID>
+     <KEY>E46</KEY>
+     <ENTRY>Missing WBS for SDS Project Order</ENTRY>
+     <LENGTH>66</LENGTH>
+    </item>
+    <item>
+     <ID>I</ID>
+     <KEY>E47</KEY>
+     <ENTRY>LOB has not found</ENTRY>
+     <LENGTH>27</LENGTH>
+    </item>
+    <item>
+     <ID>I</ID>
+     <KEY>E48</KEY>
+     <ENTRY>Reason for reject has not found</ENTRY>
+     <LENGTH>62</LENGTH>
+    </item>
+    <item>
+     <ID>I</ID>
+     <KEY>E49</KEY>
+     <ENTRY>Schedule Line: Missing indicator flag : &apos;I&apos; for Insert or &apos;U&apos; for Change or &apos;D&apos; for Delete</ENTRY>
+     <LENGTH>132</LENGTH>
+    </item>
+    <item>
+     <ID>I</ID>
+     <KEY>E50</KEY>
+     <ENTRY>Item: Invalid Higher Level</ENTRY>
+     <LENGTH>52</LENGTH>
+    </item>
+    <item>
+     <ID>I</ID>
+     <KEY>E51</KEY>
+     <ENTRY>Item: Invalid Item Number</ENTRY>
+     <LENGTH>50</LENGTH>
+    </item>
+    <item>
+     <ID>I</ID>
+     <KEY>E54</KEY>
+     <ENTRY>Schedule Line: Missing Request Date</ENTRY>
+     <LENGTH>70</LENGTH>
+    </item>
+    <item>
+     <ID>I</ID>
+     <KEY>E55</KEY>
+     <ENTRY>Schedule Line: Missing Request Quantity</ENTRY>
+     <LENGTH>78</LENGTH>
+    </item>
+    <item>
+     <ID>I</ID>
+     <KEY>E56</KEY>
+     <ENTRY>Schedule Line: Invalid Request Quantity</ENTRY>
+     <LENGTH>78</LENGTH>
+    </item>
+    <item>
+     <ID>I</ID>
+     <KEY>E58</KEY>
+     <ENTRY>Sales Order No. must not be empty for change mode</ENTRY>
+     <LENGTH>98</LENGTH>
+    </item>
+    <item>
+     <ID>I</ID>
+     <KEY>E59</KEY>
+     <ENTRY>Sales Order &amp; does not exist</ENTRY>
+     <LENGTH>42</LENGTH>
+    </item>
+    <item>
+     <ID>I</ID>
+     <KEY>E60</KEY>
+     <ENTRY>Schedule Line: Missing indicator flag :  &apos;I&apos; for Insert or &apos;U&apos; for Change or &apos;D&apos; for Delete</ENTRY>
+     <LENGTH>132</LENGTH>
+    </item>
+    <item>
+     <ID>I</ID>
+     <KEY>E61</KEY>
+     <ENTRY>Item: Missing indicator flag : Missing indicator flag : &apos;I&apos; for Insert or &apos;U&apos; for Change or &apos;D&apos; for Delete</ENTRY>
+     <LENGTH>132</LENGTH>
+    </item>
+    <item>
+     <ID>I</ID>
+     <KEY>E62</KEY>
+     <ENTRY>Sales order type requires a reference to a quotation</ENTRY>
+     <LENGTH>104</LENGTH>
+    </item>
+    <item>
+     <ID>I</ID>
+     <KEY>E63</KEY>
+     <ENTRY>====== Over Credit or Overdue ======</ENTRY>
+     <LENGTH>72</LENGTH>
+    </item>
+    <item>
+     <ID>I</ID>
+     <KEY>E64</KEY>
+     <ENTRY>The billing has already completed.  You cannot change the sales order &amp;.</ENTRY>
+     <LENGTH>132</LENGTH>
+    </item>
+    <item>
+     <ID>I</ID>
+     <KEY>E65</KEY>
+     <ENTRY>Qty ยังไม่ถูก Confirm</ENTRY>
+     <LENGTH>42</LENGTH>
+    </item>
+    <item>
+     <ID>I</ID>
+     <KEY>T01</KEY>
+     <ENTRY>Sales organization</ENTRY>
+     <LENGTH>28</LENGTH>
+    </item>
+    <item>
+     <ID>I</ID>
+     <KEY>T02</KEY>
+     <ENTRY>Division</ENTRY>
+     <LENGTH>18</LENGTH>
+    </item>
+    <item>
+     <ID>I</ID>
+     <KEY>T03</KEY>
+     <ENTRY>COMPANYCODE</ENTRY>
+     <LENGTH>11</LENGTH>
+    </item>
+    <item>
+     <ID>I</ID>
+     <KEY>T04</KEY>
+     <ENTRY>One-time customer</ENTRY>
+     <LENGTH>27</LENGTH>
+    </item>
+    <item>
+     <ID>I</ID>
+     <KEY>T05</KEY>
+     <ENTRY>Project Order Type</ENTRY>
+     <LENGTH>28</LENGTH>
+    </item>
+    <item>
+     <ID>I</ID>
+     <KEY>T06</KEY>
+     <ENTRY>Item category for billing plan item</ENTRY>
+     <LENGTH>70</LENGTH>
+    </item>
+    <item>
+     <ID>I</ID>
+     <KEY>T07</KEY>
+     <ENTRY>SALESTYPEPRJ_ITEMCAT</ENTRY>
+     <LENGTH>40</LENGTH>
+    </item>
+    <item>
+     <ID>I</ID>
+     <KEY>T08</KEY>
+     <ENTRY>CONDITION_TYPE</ENTRY>
+     <LENGTH>24</LENGTH>
+    </item>
+    <item>
+     <ID>I</ID>
+     <KEY>T09</KEY>
+     <ENTRY>Credit Expire date</ENTRY>
+     <LENGTH>28</LENGTH>
+    </item>
+    <item>
+     <ID>I</ID>
+     <KEY>T10</KEY>
+     <ENTRY>ITEMCAT_HEADER_BOM</ENTRY>
+     <LENGTH>28</LENGTH>
+    </item>
+   </TPOOL>
+   <DESCRIPTIONS>
+    <SEOCOMPOTX>
+     <CMPNAME>APPEND_EXTENSION</CMPNAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Append Extension BAPE_VBAK / BAPE_VBAP</DESCRIPT>
+    </SEOCOMPOTX>
+    <SEOCOMPOTX>
+     <CMPNAME>APPEND_RESPONSE</CMPNAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Append response table</DESCRIPT>
+    </SEOCOMPOTX>
+    <SEOCOMPOTX>
+     <CMPNAME>BILLING_SCHEDULE_SAVE</CMPNAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Save Billing Plan Header</DESCRIPT>
+    </SEOCOMPOTX>
+    <SEOCOMPOTX>
+     <CMPNAME>GET_CREDIT_MESSAGE</CMPNAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Get credit message</DESCRIPT>
+    </SEOCOMPOTX>
+    <SEOCOMPOTX>
+     <CMPNAME>GET_ITEM_SCHEDULE_LINE</CMPNAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Get Item number and Schedule line number from message</DESCRIPT>
+    </SEOCOMPOTX>
+    <SEOCOMPOTX>
+     <CMPNAME>GRT_COMPANYCODE</CMPNAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Table Type for BUKRS_RAN</DESCRIPT>
+    </SEOCOMPOTX>
+    <SEOCOMPOTX>
+     <CMPNAME>GRT_CONDITION_TYPE</CMPNAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Range table for KSCHL</DESCRIPT>
+    </SEOCOMPOTX>
+    <SEOCOMPOTX>
+     <CMPNAME>GRT_DIVISION</CMPNAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Table Type for Range of SPART data element</DESCRIPT>
+    </SEOCOMPOTX>
+    <SEOCOMPOTX>
+     <CMPNAME>GRT_ITEMCATBILLINGPLAN</CMPNAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Mass Costing of Sales Orders: PSTYV</DESCRIPT>
+    </SEOCOMPOTX>
+    <SEOCOMPOTX>
+     <CMPNAME>GRT_ITEMCAT_HEADER_BOM</CMPNAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Mass Costing of Sales Orders: PSTYV</DESCRIPT>
+    </SEOCOMPOTX>
+    <SEOCOMPOTX>
+     <CMPNAME>GRT_ONETIMECUST</CMPNAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Range Table for Customer Number</DESCRIPT>
+    </SEOCOMPOTX>
+    <SEOCOMPOTX>
+     <CMPNAME>GRT_SALESORG</CMPNAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Table Type for Range of VKORG data element</DESCRIPT>
+    </SEOCOMPOTX>
+    <SEOCOMPOTX>
+     <CMPNAME>GRT_SALESTYPEPRJ</CMPNAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Range: Sales Document Type</DESCRIPT>
+    </SEOCOMPOTX>
+    <SEOCOMPOTX>
+     <CMPNAME>GRT_SALESTYPEPRJ_ITEMCAT</CMPNAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Range: Item Cat Type</DESCRIPT>
+    </SEOCOMPOTX>
+    <SEOCOMPOTX>
+     <CMPNAME>GT_BDCDATA</CMPNAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Table Type for BDCDATA</DESCRIPT>
+    </SEOCOMPOTX>
+    <SEOCOMPOTX>
+     <CMPNAME>SALES_ORDER_CHANGE</CMPNAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Sales order change</DESCRIPT>
+    </SEOCOMPOTX>
+    <SEOCOMPOTX>
+     <CMPNAME>SALES_ORDER_CREATE</CMPNAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Sales order creation</DESCRIPT>
+    </SEOCOMPOTX>
+    <SEOCOMPOTX>
+     <CMPNAME>SALES_ORDER_PROCESS</CMPNAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Process sales order data</DESCRIPT>
+    </SEOCOMPOTX>
+    <SEOCOMPOTX>
+     <CMPNAME>VALIDATE_AMOUNT</CMPNAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Validate amount</DESCRIPT>
+    </SEOCOMPOTX>
+    <SEOCOMPOTX>
+     <CMPNAME>VALIDATE_BILLINGPLAN</CMPNAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Validate header data</DESCRIPT>
+    </SEOCOMPOTX>
+    <SEOCOMPOTX>
+     <CMPNAME>VALIDATE_DATE</CMPNAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Validate date</DESCRIPT>
+    </SEOCOMPOTX>
+    <SEOCOMPOTX>
+     <CMPNAME>VALIDATE_HEADER</CMPNAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Validate header data</DESCRIPT>
+    </SEOCOMPOTX>
+    <SEOCOMPOTX>
+     <CMPNAME>VALIDATE_HEADER_CHANGE</CMPNAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Validate header data(Change)</DESCRIPT>
+    </SEOCOMPOTX>
+    <SEOCOMPOTX>
+     <CMPNAME>VALIDATE_HEADER_CREATE</CMPNAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Validate header data(Create)</DESCRIPT>
+    </SEOCOMPOTX>
+    <SEOCOMPOTX>
+     <CMPNAME>VALIDATE_INPUT</CMPNAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Validate input data</DESCRIPT>
+    </SEOCOMPOTX>
+    <SEOCOMPOTX>
+     <CMPNAME>VALIDATE_ITEM</CMPNAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Validate header data</DESCRIPT>
+    </SEOCOMPOTX>
+    <SEOCOMPOTX>
+     <CMPNAME>VALIDATE_ITEM_CHANGE</CMPNAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Validate header data(Change)</DESCRIPT>
+    </SEOCOMPOTX>
+    <SEOCOMPOTX>
+     <CMPNAME>VALIDATE_ITEM_CREATE</CMPNAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Validate header data(Create)</DESCRIPT>
+    </SEOCOMPOTX>
+   </DESCRIPTIONS>
+   <DESCRIPTIONS_SUB>
+    <SEOSUBCOTX>
+     <CMPNAME>APPEND_EXTENSION</CMPNAME>
+     <SCONAME>EXTENSIONIN</SCONAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Ref. structure for BAPI parameter ExtensionIn/ExtensionOut</DESCRIPT>
+    </SEOSUBCOTX>
+    <SEOSUBCOTX>
+     <CMPNAME>APPEND_EXTENSION</CMPNAME>
+     <SCONAME>EXTENSIONIN_T</SCONAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>BAPI Extension</DESCRIPT>
+    </SEOSUBCOTX>
+    <SEOSUBCOTX>
+     <CMPNAME>APPEND_RESPONSE</CMPNAME>
+     <SCONAME>CS_SALESORDER</SCONAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>JSON Structure Create/Change SO From Salesforce (Header)</DESCRIPT>
+    </SEOSUBCOTX>
+    <SEOSUBCOTX>
+     <CMPNAME>APPEND_RESPONSE</CMPNAME>
+     <SCONAME>CT_RESPONSE</SCONAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Table Type for Response Message Structure</DESCRIPT>
+    </SEOSUBCOTX>
+    <SEOSUBCOTX>
+     <CMPNAME>APPEND_RESPONSE</CMPNAME>
+     <SCONAME>IF_MESSAGE</SCONAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Message Text</DESCRIPT>
+    </SEOSUBCOTX>
+    <SEOSUBCOTX>
+     <CMPNAME>APPEND_RESPONSE</CMPNAME>
+     <SCONAME>IF_STATUS</SCONAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Single-Character Flag</DESCRIPT>
+    </SEOSUBCOTX>
+    <SEOSUBCOTX>
+     <CMPNAME>APPEND_TEXT</CMPNAME>
+     <SCONAME>LANGU</SCONAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Language Key</DESCRIPT>
+    </SEOSUBCOTX>
+    <SEOSUBCOTX>
+     <CMPNAME>APPEND_TEXT</CMPNAME>
+     <SCONAME>TEXTS</SCONAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Table of Row Type BAPISDTEXT</DESCRIPT>
+    </SEOSUBCOTX>
+    <SEOSUBCOTX>
+     <CMPNAME>APPEND_TEXT</CMPNAME>
+     <SCONAME>TEXT_ID</SCONAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Text ID</DESCRIPT>
+    </SEOSUBCOTX>
+    <SEOSUBCOTX>
+     <CMPNAME>APPEND_TEXT</CMPNAME>
+     <SCONAME>TEXT_LINE</SCONAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>RFC Transfer Field - Length 800</DESCRIPT>
+    </SEOSUBCOTX>
+    <SEOSUBCOTX>
+     <CMPNAME>AVAILABILITY_CHECK_S4</CMPNAME>
+     <SCONAME>AVAL_STOCK</SCONAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>ATP Server: Total Issues</DESCRIPT>
+    </SEOSUBCOTX>
+    <SEOSUBCOTX>
+     <CMPNAME>AVAILABILITY_CHECK_S4</CMPNAME>
+     <SCONAME>MATNR</SCONAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Material Number</DESCRIPT>
+    </SEOSUBCOTX>
+    <SEOSUBCOTX>
+     <CMPNAME>AVAILABILITY_CHECK_S4</CMPNAME>
+     <SCONAME>WERKS</SCONAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Plant Table for National (Centrally Agreed) Contracts</DESCRIPT>
+    </SEOSUBCOTX>
+    <SEOSUBCOTX>
+     <CMPNAME>AVAILABILITY_CHECK_S4_UPD</CMPNAME>
+     <SCONAME>AVAL_STOCK</SCONAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>ATP Server: Total Issues</DESCRIPT>
+    </SEOSUBCOTX>
+    <SEOSUBCOTX>
+     <CMPNAME>AVAILABILITY_CHECK_S4_UPD</CMPNAME>
+     <SCONAME>BMENG</SCONAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Confirmed Quantity</DESCRIPT>
+    </SEOSUBCOTX>
+    <SEOSUBCOTX>
+     <CMPNAME>AVAILABILITY_CHECK_S4_UPD</CMPNAME>
+     <SCONAME>MATNR</SCONAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Material Number</DESCRIPT>
+    </SEOSUBCOTX>
+    <SEOSUBCOTX>
+     <CMPNAME>AVAILABILITY_CHECK_S4_UPD</CMPNAME>
+     <SCONAME>WERKS</SCONAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Plant</DESCRIPT>
+    </SEOSUBCOTX>
+    <SEOSUBCOTX>
+     <CMPNAME>BDC_DYNPRO</CMPNAME>
+     <SCONAME>DYNPRO</SCONAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Undefined range (can be used for patch levels)</DESCRIPT>
+    </SEOSUBCOTX>
+    <SEOSUBCOTX>
+     <CMPNAME>BDC_DYNPRO</CMPNAME>
+     <SCONAME>PROGRAM</SCONAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>30 Characters</DESCRIPT>
+    </SEOSUBCOTX>
+    <SEOSUBCOTX>
+     <CMPNAME>BDC_FIELD</CMPNAME>
+     <SCONAME>FNAM</SCONAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>30 Characters</DESCRIPT>
+    </SEOSUBCOTX>
+    <SEOSUBCOTX>
+     <CMPNAME>BDC_FIELD</CMPNAME>
+     <SCONAME>FVAL</SCONAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>30 Characters</DESCRIPT>
+    </SEOSUBCOTX>
+    <SEOSUBCOTX>
+     <CMPNAME>GET_CONSTANTS</CMPNAME>
+     <SCONAME>CT_RESPONSE</SCONAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Table Type for Response Message Structure</DESCRIPT>
+    </SEOSUBCOTX>
+    <SEOSUBCOTX>
+     <CMPNAME>GET_CREDIT_MESSAGE</CMPNAME>
+     <SCONAME>AUART</SCONAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Sales Document Type</DESCRIPT>
+    </SEOSUBCOTX>
+    <SEOSUBCOTX>
+     <CMPNAME>GET_CREDIT_MESSAGE</CMPNAME>
+     <SCONAME>FSCM_CREDIT_MESSAGES</SCONAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Messages from Credit Check</DESCRIPT>
+    </SEOSUBCOTX>
+    <SEOSUBCOTX>
+     <CMPNAME>GET_CREDIT_MESSAGE</CMPNAME>
+     <SCONAME>MESSAGE</SCONAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Message Text</DESCRIPT>
+    </SEOSUBCOTX>
+    <SEOSUBCOTX>
+     <CMPNAME>GET_CREDIT_MESSAGE</CMPNAME>
+     <SCONAME>MESSAGE_STATUS</SCONAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Message Status</DESCRIPT>
+    </SEOSUBCOTX>
+    <SEOSUBCOTX>
+     <CMPNAME>GET_ITEM_SCHEDULE_LINE</CMPNAME>
+     <SCONAME>ITEM_NO</SCONAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Sales Document Item</DESCRIPT>
+    </SEOSUBCOTX>
+    <SEOSUBCOTX>
+     <CMPNAME>GET_ITEM_SCHEDULE_LINE</CMPNAME>
+     <SCONAME>MESSAGE</SCONAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Message Text</DESCRIPT>
+    </SEOSUBCOTX>
+    <SEOSUBCOTX>
+     <CMPNAME>GET_ITEM_SCHEDULE_LINE</CMPNAME>
+     <SCONAME>MESSAGE_ID</SCONAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Application Area</DESCRIPT>
+    </SEOSUBCOTX>
+    <SEOSUBCOTX>
+     <CMPNAME>GET_ITEM_SCHEDULE_LINE</CMPNAME>
+     <SCONAME>MESSAGE_NUMBER</SCONAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Message number</DESCRIPT>
+    </SEOSUBCOTX>
+    <SEOSUBCOTX>
+     <CMPNAME>GET_ITEM_SCHEDULE_LINE</CMPNAME>
+     <SCONAME>SCHEDULE_LINE_NO</SCONAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Schedule Line Number</DESCRIPT>
+    </SEOSUBCOTX>
+    <SEOSUBCOTX>
+     <CMPNAME>SALES_ORDER_CHANGE</CMPNAME>
+     <SCONAME>CS_SALESORDER</SCONAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>JSON Structure Create/Change SO From Salesforce (Header)</DESCRIPT>
+    </SEOSUBCOTX>
+    <SEOSUBCOTX>
+     <CMPNAME>SALES_ORDER_CHANGE</CMPNAME>
+     <SCONAME>CT_RESPONSE</SCONAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Table Type for Response Message Structure</DESCRIPT>
+    </SEOSUBCOTX>
+    <SEOSUBCOTX>
+     <CMPNAME>SALES_ORDER_CHANGE</CMPNAME>
+     <SCONAME>CT_SALESORDERITEM</SCONAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Table Type for Structure Create/Change SO (Item)</DESCRIPT>
+    </SEOSUBCOTX>
+    <SEOSUBCOTX>
+     <CMPNAME>SALES_ORDER_CHANGE</CMPNAME>
+     <SCONAME>CT_SCHEDULELINE</SCONAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Table Type for Create/Change SO (Schedule Line)</DESCRIPT>
+    </SEOSUBCOTX>
+    <SEOSUBCOTX>
+     <CMPNAME>SALES_ORDER_CHANGE</CMPNAME>
+     <SCONAME>IF_TESTRUN</SCONAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>General Flag</DESCRIPT>
+    </SEOSUBCOTX>
+    <SEOSUBCOTX>
+     <CMPNAME>SALES_ORDER_CREATE</CMPNAME>
+     <SCONAME>CS_SALESORDER</SCONAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>JSON Structure Create/Change SO From Salesforce (Header)</DESCRIPT>
+    </SEOSUBCOTX>
+    <SEOSUBCOTX>
+     <CMPNAME>SALES_ORDER_CREATE</CMPNAME>
+     <SCONAME>CT_RESPONSE</SCONAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Table Type for Response Message Structure</DESCRIPT>
+    </SEOSUBCOTX>
+    <SEOSUBCOTX>
+     <CMPNAME>SALES_ORDER_CREATE</CMPNAME>
+     <SCONAME>CT_SALESORDERITEM</SCONAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Table Type for Structure Create/Change SO (Item)</DESCRIPT>
+    </SEOSUBCOTX>
+    <SEOSUBCOTX>
+     <CMPNAME>SALES_ORDER_CREATE</CMPNAME>
+     <SCONAME>CT_SCHEDULELINE</SCONAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Table Type for Create/Change SO (Schedule Line)</DESCRIPT>
+    </SEOSUBCOTX>
+    <SEOSUBCOTX>
+     <CMPNAME>SALES_ORDER_CREATE</CMPNAME>
+     <SCONAME>EF_SALES_DOC</SCONAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Sales and Distribution Document Number</DESCRIPT>
+    </SEOSUBCOTX>
+    <SEOSUBCOTX>
+     <CMPNAME>SALES_ORDER_CREATE</CMPNAME>
+     <SCONAME>IF_TESTRUN</SCONAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>General Flag</DESCRIPT>
+    </SEOSUBCOTX>
+    <SEOSUBCOTX>
+     <CMPNAME>SALES_ORDER_PROCESS</CMPNAME>
+     <SCONAME>CS_SALESORDER</SCONAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>JSON Structure Create/Change SO From Salesforce</DESCRIPT>
+    </SEOSUBCOTX>
+    <SEOSUBCOTX>
+     <CMPNAME>SALES_ORDER_PROCESS</CMPNAME>
+     <SCONAME>CT_RESPONSE</SCONAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Table Type for Response Message Structure</DESCRIPT>
+    </SEOSUBCOTX>
+    <SEOSUBCOTX>
+     <CMPNAME>SALES_ORDER_PROCESS</CMPNAME>
+     <SCONAME>CT_SALESORDERITEM</SCONAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Table Type for Structure Create/Change SO (Item)</DESCRIPT>
+    </SEOSUBCOTX>
+    <SEOSUBCOTX>
+     <CMPNAME>SALES_ORDER_PROCESS</CMPNAME>
+     <SCONAME>CT_SCHEDULELINE</SCONAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Table Type for Create/Change SO (Schedule Line)</DESCRIPT>
+    </SEOSUBCOTX>
+    <SEOSUBCOTX>
+     <CMPNAME>SALES_ORDER_PROCESS</CMPNAME>
+     <SCONAME>EF_SALES_DOC</SCONAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Sales and Distribution Document Number</DESCRIPT>
+    </SEOSUBCOTX>
+    <SEOSUBCOTX>
+     <CMPNAME>SALES_ORDER_PROCESS</CMPNAME>
+     <SCONAME>IF_TESTRUN</SCONAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>General Flag</DESCRIPT>
+    </SEOSUBCOTX>
+    <SEOSUBCOTX>
+     <CMPNAME>VALIDATE_AMOUNT</CMPNAME>
+     <SCONAME>AMOUNT_IN</SCONAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Char 20</DESCRIPT>
+    </SEOSUBCOTX>
+    <SEOSUBCOTX>
+     <CMPNAME>VALIDATE_AMOUNT</CMPNAME>
+     <SCONAME>AMOUNT_OUT</SCONAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Char 20</DESCRIPT>
+    </SEOSUBCOTX>
+    <SEOSUBCOTX>
+     <CMPNAME>VALIDATE_AMOUNT</CMPNAME>
+     <SCONAME>CS_RESPONSE</SCONAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>SDS: REST Response Message Structure</DESCRIPT>
+    </SEOSUBCOTX>
+    <SEOSUBCOTX>
+     <CMPNAME>VALIDATE_BILLINGPLAN</CMPNAME>
+     <SCONAME>CS_BILLINGPLAN</SCONAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Table Type for Response Message Structure</DESCRIPT>
+    </SEOSUBCOTX>
+    <SEOSUBCOTX>
+     <CMPNAME>VALIDATE_BILLINGPLAN</CMPNAME>
+     <SCONAME>CT_RESPONSE</SCONAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Table Type for Response Message Structure</DESCRIPT>
+    </SEOSUBCOTX>
+    <SEOSUBCOTX>
+     <CMPNAME>VALIDATE_BILLINGPLAN</CMPNAME>
+     <SCONAME>EF_INVALID</SCONAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>General Flag</DESCRIPT>
+    </SEOSUBCOTX>
+    <SEOSUBCOTX>
+     <CMPNAME>VALIDATE_BILLINGPLAN</CMPNAME>
+     <SCONAME>IF_RECORD_MODE</SCONAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Single-Character Flag</DESCRIPT>
+    </SEOSUBCOTX>
+    <SEOSUBCOTX>
+     <CMPNAME>VALIDATE_DATE</CMPNAME>
+     <SCONAME>CS_RESPONSE</SCONAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Table Type for Response Message Structure</DESCRIPT>
+    </SEOSUBCOTX>
+    <SEOSUBCOTX>
+     <CMPNAME>VALIDATE_DATE</CMPNAME>
+     <SCONAME>DATE_IN</SCONAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Character Field with Length 10</DESCRIPT>
+    </SEOSUBCOTX>
+    <SEOSUBCOTX>
+     <CMPNAME>VALIDATE_DATE</CMPNAME>
+     <SCONAME>DATE_OUT</SCONAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Character Field with Length 10</DESCRIPT>
+    </SEOSUBCOTX>
+    <SEOSUBCOTX>
+     <CMPNAME>VALIDATE_HEADER</CMPNAME>
+     <SCONAME>CS_SALESORDER</SCONAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>JSON Structure Create/Change SO From Salesforce (Header)</DESCRIPT>
+    </SEOSUBCOTX>
+    <SEOSUBCOTX>
+     <CMPNAME>VALIDATE_HEADER</CMPNAME>
+     <SCONAME>CT_RESPONSE</SCONAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Table Type for Response Message Structure</DESCRIPT>
+    </SEOSUBCOTX>
+    <SEOSUBCOTX>
+     <CMPNAME>VALIDATE_HEADER</CMPNAME>
+     <SCONAME>EF_INVALID</SCONAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>General Flag</DESCRIPT>
+    </SEOSUBCOTX>
+    <SEOSUBCOTX>
+     <CMPNAME>VALIDATE_HEADER</CMPNAME>
+     <SCONAME>IF_RECORD_MODE</SCONAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Single-Character Flag</DESCRIPT>
+    </SEOSUBCOTX>
+    <SEOSUBCOTX>
+     <CMPNAME>VALIDATE_HEADER_CHANGE</CMPNAME>
+     <SCONAME>CS_SALESORDER</SCONAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>JSON Structure Create/Change SO From Salesforce (Header)</DESCRIPT>
+    </SEOSUBCOTX>
+    <SEOSUBCOTX>
+     <CMPNAME>VALIDATE_HEADER_CHANGE</CMPNAME>
+     <SCONAME>CT_RESPONSE</SCONAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Table Type for Response Message Structure</DESCRIPT>
+    </SEOSUBCOTX>
+    <SEOSUBCOTX>
+     <CMPNAME>VALIDATE_HEADER_CHANGE</CMPNAME>
+     <SCONAME>EF_INVALID</SCONAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>General Flag</DESCRIPT>
+    </SEOSUBCOTX>
+    <SEOSUBCOTX>
+     <CMPNAME>VALIDATE_HEADER_CHANGE</CMPNAME>
+     <SCONAME>IF_RECORD_MODE</SCONAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Single-Character Flag</DESCRIPT>
+    </SEOSUBCOTX>
+    <SEOSUBCOTX>
+     <CMPNAME>VALIDATE_HEADER_CREATE</CMPNAME>
+     <SCONAME>CS_SALESORDER</SCONAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>JSON Structure Create/Change SO From Salesforce (Header)</DESCRIPT>
+    </SEOSUBCOTX>
+    <SEOSUBCOTX>
+     <CMPNAME>VALIDATE_HEADER_CREATE</CMPNAME>
+     <SCONAME>CT_RESPONSE</SCONAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Table Type for Response Message Structure</DESCRIPT>
+    </SEOSUBCOTX>
+    <SEOSUBCOTX>
+     <CMPNAME>VALIDATE_HEADER_CREATE</CMPNAME>
+     <SCONAME>EF_INVALID</SCONAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>General Flag</DESCRIPT>
+    </SEOSUBCOTX>
+    <SEOSUBCOTX>
+     <CMPNAME>VALIDATE_HEADER_CREATE</CMPNAME>
+     <SCONAME>IF_RECORD_MODE</SCONAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Single-Character Flag</DESCRIPT>
+    </SEOSUBCOTX>
+    <SEOSUBCOTX>
+     <CMPNAME>VALIDATE_INPUT</CMPNAME>
+     <SCONAME>CS_SALESORDER</SCONAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>JSON Structure Create/Change SO From Salesforce (Header)</DESCRIPT>
+    </SEOSUBCOTX>
+    <SEOSUBCOTX>
+     <CMPNAME>VALIDATE_INPUT</CMPNAME>
+     <SCONAME>CT_RESPONSE</SCONAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Table Type for Response Message Structure</DESCRIPT>
+    </SEOSUBCOTX>
+    <SEOSUBCOTX>
+     <CMPNAME>VALIDATE_INPUT</CMPNAME>
+     <SCONAME>CT_SALESORDERITEM</SCONAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Table Type for Structure Create/Change SO (Item)</DESCRIPT>
+    </SEOSUBCOTX>
+    <SEOSUBCOTX>
+     <CMPNAME>VALIDATE_INPUT</CMPNAME>
+     <SCONAME>CT_SCHEDULELINE</SCONAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Table Type for Create/Change SO (Schedule Line)</DESCRIPT>
+    </SEOSUBCOTX>
+    <SEOSUBCOTX>
+     <CMPNAME>VALIDATE_INPUT</CMPNAME>
+     <SCONAME>EF_INVALID</SCONAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>General Flag</DESCRIPT>
+    </SEOSUBCOTX>
+    <SEOSUBCOTX>
+     <CMPNAME>VALIDATE_INPUT</CMPNAME>
+     <SCONAME>IF_RECORD_MODE</SCONAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Single-Character Flag</DESCRIPT>
+    </SEOSUBCOTX>
+    <SEOSUBCOTX>
+     <CMPNAME>VALIDATE_ITEM</CMPNAME>
+     <SCONAME>CS_SALESORDER</SCONAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>JSON Structure Create/Change SO From Salesforce (Header)</DESCRIPT>
+    </SEOSUBCOTX>
+    <SEOSUBCOTX>
+     <CMPNAME>VALIDATE_ITEM</CMPNAME>
+     <SCONAME>CT_RESPONSE</SCONAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Table Type for Response Message Structure</DESCRIPT>
+    </SEOSUBCOTX>
+    <SEOSUBCOTX>
+     <CMPNAME>VALIDATE_ITEM</CMPNAME>
+     <SCONAME>CT_SALESORDERITEM</SCONAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Table Type for Structure Create/Change SO (Item)</DESCRIPT>
+    </SEOSUBCOTX>
+    <SEOSUBCOTX>
+     <CMPNAME>VALIDATE_ITEM</CMPNAME>
+     <SCONAME>CT_SCHEDULELINE</SCONAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Table Type for Create/Change SO (Schedule Line)</DESCRIPT>
+    </SEOSUBCOTX>
+    <SEOSUBCOTX>
+     <CMPNAME>VALIDATE_ITEM</CMPNAME>
+     <SCONAME>EF_INVALID</SCONAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>General Flag</DESCRIPT>
+    </SEOSUBCOTX>
+    <SEOSUBCOTX>
+     <CMPNAME>VALIDATE_ITEM</CMPNAME>
+     <SCONAME>IF_RECORD_MODE</SCONAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Single-Character Flag</DESCRIPT>
+    </SEOSUBCOTX>
+    <SEOSUBCOTX>
+     <CMPNAME>VALIDATE_ITEM_CHANGE</CMPNAME>
+     <SCONAME>CS_SALESORDER</SCONAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>JSON Structure Create/Change SO From Salesforce (Header)</DESCRIPT>
+    </SEOSUBCOTX>
+    <SEOSUBCOTX>
+     <CMPNAME>VALIDATE_ITEM_CHANGE</CMPNAME>
+     <SCONAME>CT_RESPONSE</SCONAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Table Type for Response Message Structure</DESCRIPT>
+    </SEOSUBCOTX>
+    <SEOSUBCOTX>
+     <CMPNAME>VALIDATE_ITEM_CHANGE</CMPNAME>
+     <SCONAME>CT_SALESORDERITEM</SCONAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Table Type for Structure Create/Change SO (Item)</DESCRIPT>
+    </SEOSUBCOTX>
+    <SEOSUBCOTX>
+     <CMPNAME>VALIDATE_ITEM_CHANGE</CMPNAME>
+     <SCONAME>CT_SCHEDULELINE</SCONAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Table Type for Create/Change SO (Schedule Line)</DESCRIPT>
+    </SEOSUBCOTX>
+    <SEOSUBCOTX>
+     <CMPNAME>VALIDATE_ITEM_CHANGE</CMPNAME>
+     <SCONAME>EF_INVALID</SCONAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>General Flag</DESCRIPT>
+    </SEOSUBCOTX>
+    <SEOSUBCOTX>
+     <CMPNAME>VALIDATE_ITEM_CHANGE</CMPNAME>
+     <SCONAME>IF_RECORD_MODE</SCONAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Single-Character Flag</DESCRIPT>
+    </SEOSUBCOTX>
+    <SEOSUBCOTX>
+     <CMPNAME>VALIDATE_ITEM_CREATE</CMPNAME>
+     <SCONAME>CS_SALESORDER</SCONAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>JSON Structure Create/Change SO From Salesforce (Header)</DESCRIPT>
+    </SEOSUBCOTX>
+    <SEOSUBCOTX>
+     <CMPNAME>VALIDATE_ITEM_CREATE</CMPNAME>
+     <SCONAME>CT_RESPONSE</SCONAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Table Type for Response Message Structure</DESCRIPT>
+    </SEOSUBCOTX>
+    <SEOSUBCOTX>
+     <CMPNAME>VALIDATE_ITEM_CREATE</CMPNAME>
+     <SCONAME>CT_SALESORDERITEM</SCONAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Table Type for Structure Create/Change SO (Item)</DESCRIPT>
+    </SEOSUBCOTX>
+    <SEOSUBCOTX>
+     <CMPNAME>VALIDATE_ITEM_CREATE</CMPNAME>
+     <SCONAME>CT_SCHEDULELINE</SCONAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Table Type for Create/Change SO (Schedule Line)</DESCRIPT>
+    </SEOSUBCOTX>
+    <SEOSUBCOTX>
+     <CMPNAME>VALIDATE_ITEM_CREATE</CMPNAME>
+     <SCONAME>EF_INVALID</SCONAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>General Flag</DESCRIPT>
+    </SEOSUBCOTX>
+    <SEOSUBCOTX>
+     <CMPNAME>VALIDATE_ITEM_CREATE</CMPNAME>
+     <SCONAME>IF_RECORD_MODE</SCONAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Single-Character Flag</DESCRIPT>
+    </SEOSUBCOTX>
+   </DESCRIPTIONS_SUB>
+  </asx:values>
+ </asx:abap>
+</abapGit>

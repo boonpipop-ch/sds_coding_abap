@@ -1,0 +1,746 @@
+*&---------------------------------------------------------------------*
+*& Include          ZSDSMMR0420_CLASS
+*&---------------------------------------------------------------------*
+CLASS LCL_UTIL DEFINITION.
+  PUBLIC SECTION.
+    METHODS :
+      CONSTRUCTOR.
+    CLASS-METHODS :
+      CONVERT_ALPHA_IN  IMPORTING I_DATA TYPE ANY
+                        EXPORTING E_DATA TYPE ANY,
+      CONVERT_ALPHA_OUT IMPORTING I_DATA TYPE ANY
+                        EXPORTING E_DATA TYPE ANY.
+
+ENDCLASS.
+CLASS LCL_UTIL IMPLEMENTATION.
+  METHOD CONSTRUCTOR.
+
+  ENDMETHOD.
+  METHOD CONVERT_ALPHA_IN.
+
+    CALL FUNCTION 'CONVERSION_EXIT_ALPHA_INPUT'
+      EXPORTING
+        INPUT  = I_DATA
+      IMPORTING
+        OUTPUT = E_DATA.
+
+  ENDMETHOD.
+  METHOD CONVERT_ALPHA_OUT.
+    CALL FUNCTION 'CONVERSION_EXIT_ALPHA_outPUT'
+      EXPORTING
+        INPUT  = I_DATA
+      IMPORTING
+        OUTPUT = E_DATA.
+
+  ENDMETHOD.
+ENDCLASS.
+CLASS LCL_DATA DEFINITION.
+  PUBLIC SECTION.
+    METHODS :
+      CONSTRUCTOR,
+      START_PROCESS.
+    CLASS-METHODS :
+      GET_DATA,
+      GET_ADDTIONAL_DATA,
+      SHOW_REPORT,
+      SET_LAYOUT_OUTPUT,
+      BUILD_FCAT,
+      SET_SORT,
+      SET_ALV_GRID,
+      HTML_TOP_OF_PAGE,
+      CREATE_PO,
+      POP_UP_VENDOR,
+      COMMIT,
+      CREATE_PR RETURNING VALUE(R) TYPE EBAN-EBELN.
+    CLASS-DATA :
+      LO TYPE REF TO LCL_DATA.
+ENDCLASS.
+CLASS LCL_DATA IMPLEMENTATION.
+  METHOD CONSTRUCTOR.
+
+  ENDMETHOD.
+  METHOD GET_DATA.
+    IF LO IS INITIAL.
+      CREATE OBJECT LO.
+    ENDIF.
+
+    LO->START_PROCESS( ).
+  ENDMETHOD.
+  METHOD START_PROCESS.
+    SELECT ZSDSMMT006~WEBNO,
+           EBAN~BANFN,
+           EBAN~BNFPO,
+           EBAN~ERDAT,
+           EBAN~ERNAM,
+           EBAN~MATNR,
+           EBAN~TXZ01,
+           EBAN~MENGE,
+           EBAN~MEINS,
+           EBAN~PREIS,
+           EBAN~WAERS,
+           EBAN~LFDAT,
+           EBAN~SAKTO,
+           EBAN~KOSTL,
+           EBKN~AUFNR,
+           EBKN~PS_PSP_PNR,
+           EBAN~BSMNG,
+           EBAN~EBELN,
+           EBAN~EBELP
+      FROM ZSDSMMT006
+      LEFT JOIN EBAN ON ZSDSMMT006~BANFN EQ EBAN~BANFN
+      LEFT JOIN EBKN ON EBAN~BANFN EQ EBKN~BANFN AND
+                        EBAN~BNFPO EQ EBKN~BNFPO AND
+                        EBKN~ZEBKN EQ 1
+      WHERE ZSDSMMT006~WEBNO IN @S_WEBNO
+        AND ZSDSMMT006~BANFN IN @S_BANFN
+        AND ZSDSMMT006~ERDAT IN @S_SUBMD
+        AND ZSDSMMT006~ERNAM IN @S_SUBMB
+        AND ZSDSMMT006~FLAGD EQ @ABAP_FALSE
+      ORDER BY EBAN~BNFPO
+      INTO TABLE @GT_RESULT.
+
+
+  ENDMETHOD.
+  METHOD GET_ADDTIONAL_DATA.
+    FIELD-SYMBOLS <LFS_RESULT> LIKE LINE OF GT_RESULT.
+
+    DATA : BEGIN OF LS_STATUS,
+             WEBNO TYPE ZSDSMMT001-BANFN,
+             STATU TYPE ZSDSMMT001-STATU,
+             ACTBY TYPE ZSDSMMT001-ACTBY,
+           END OF LS_STATUS.
+    DATA LT_STATUS LIKE TABLE OF LS_STATUS.
+
+    SELECT  A~WEBNO,
+            ZSDSMMT001~STATU,
+            ZSDSMMT001~ACTBY
+      FROM @GT_RESULT AS A
+      INNER JOIN ZSDSMMT001 ON A~WEBNO EQ ZSDSMMT001~BANFN
+      WHERE ZSDSMMT001~RUNNG EQ ( SELECT MAX( RUNNG )
+                                    FROM ZSDSMMT001
+                                   WHERE BANFN EQ A~WEBNO )
+      INTO TABLE @LT_STATUS.
+
+    LOOP AT GT_RESULT ASSIGNING <LFS_RESULT>.
+      <LFS_RESULT>-REMAI = <LFS_RESULT>-MENGE - <LFS_RESULT>-BSMNG.
+
+      READ TABLE LT_STATUS INTO LS_STATUS
+      WITH KEY WEBNO = <LFS_RESULT>.
+      IF SY-SUBRC EQ 0.
+        <LFS_RESULT>-STATU = LS_STATUS-STATU.
+        <LFS_RESULT>-ACTBY = LS_STATUS-ACTBY.
+        IF <LFS_RESULT>-STATU EQ 'COM'.
+          CLEAR : <LFS_RESULT>-ACTBY.
+        ENDIF.
+      ENDIF.
+
+      IF <LFS_RESULT>-BANFN IS NOT INITIAL AND
+         <LFS_RESULT>-REMAI EQ <LFS_RESULT>-MENGE.
+        <LFS_RESULT>-PRSTU = 'OPEN'.
+      ELSEIF <LFS_RESULT>-REMAI NE 0.
+        <LFS_RESULT>-PRSTU = 'PARTIAL'.
+      ELSEIF <LFS_RESULT>-BANFN IS NOT INITIAL AND
+             <LFS_RESULT>-REMAI EQ 0.
+        <LFS_RESULT>-PRSTU = 'COMPLEATED'.
+      ELSE.
+        <LFS_RESULT>-PRSTU = 'WAITING'.
+      ENDIF.
+    ENDLOOP.
+  ENDMETHOD.
+  METHOD SHOW_REPORT.
+    SET_LAYOUT_OUTPUT( ).
+    BUILD_FCAT( ).
+    SET_SORT( ).
+    SET_ALV_GRID( ).
+  ENDMETHOD.
+  METHOD SET_LAYOUT_OUTPUT.
+*    CONSTANTS : BEGIN OF LC_CON,
+*                  CHK_FILED TYPE C LENGTH 5 VALUE 'CHECK',
+*                END OF LC_CON.
+    GS_LAYOUT-ZEBRA             = GC_X.
+    GS_LAYOUT-COLWIDTH_OPTIMIZE = GC_X.
+*    GS_LAYOUT-BOX_FIELDNAME     = LC_CON-CHK_FILED.
+  ENDMETHOD.
+  METHOD BUILD_FCAT.
+    DATA:
+       LS_FCAT TYPE SLIS_FIELDCAT_ALV.
+
+*    CONSTANTS : BEGIN OF LC_CON,
+*                  CHK_FILED TYPE C LENGTH 5 VALUE 'CHECK',
+*                  CHK_NAME  TYPE C LENGTH 3 VALUE 'CHK',
+*                END OF LC_CON.
+*
+*    CLEAR LS_FCAT.
+*    LS_FCAT-FIELDNAME   = LC_CON-CHK_FILED.
+*    LS_FCAT-SELTEXT_S   = LC_CON-CHK_NAME.
+*    LS_FCAT-SELTEXT_M   = LC_CON-CHK_NAME.
+*    LS_FCAT-SELTEXT_L   = LC_CON-CHK_FILED.
+*    LS_FCAT-CHECKBOX    = ABAP_TRUE.
+*    LS_FCAT-INPUT       = ABAP_TRUE.
+*    LS_FCAT-EDIT        = ABAP_TRUE.
+*    APPEND LS_FCAT TO GT_FCAT.
+
+    DATA : LV_RUNNING  TYPE I,
+           LV_DATA     TYPE C LENGTH 6 VALUE 'TEXT-',
+           LV_RUN_TEXT TYPE C LENGTH 2.
+
+    CONSTANTS : LC_F TYPE C VALUE 'F',
+                LC_T TYPE C VALUE 'T',
+                LC_d TYPE C VALUE 'D'.
+
+    FIELD-SYMBOLS <LFS> TYPE ANY.
+
+    DATA : LV_TEXT TYPE C LENGTH 8.
+*Field
+    CLEAR : LS_FCAT.
+    DO 99 TIMES.
+      ADD 1 TO LV_RUNNING.
+      LV_RUN_TEXT = LV_RUNNING.
+
+      LCL_UTIL=>CONVERT_ALPHA_IN( EXPORTING I_DATA = LV_RUN_TEXT
+                                  IMPORTING E_Data = LV_RUN_TEXT ).
+
+      IF <LFS> IS ASSIGNED.
+        UNASSIGN <LFS>.
+      ENDIF.
+      CONCATENATE LV_DATA LC_F LV_RUN_TEXT INTO LV_TEXT.
+      ASSIGN (LV_TEXT) TO <LFS>.
+      IF <LFS> IS NOT ASSIGNED.
+        EXIT.
+      ENDIF.
+      LS_FCAT-FIELDNAME = <LFS>.
+*Teble Ref
+      IF <LFS> IS ASSIGNED.
+        UNASSIGN <LFS>.
+      ENDIF.
+      CONCATENATE LV_DATA LC_T LV_RUN_TEXT INTO LV_TEXT.
+      ASSIGN (LV_TEXT) TO <LFS>.
+      IF <LFS> IS ASSIGNED.
+        LS_FCAT-REF_TABNAME = <LFS>.
+      ENDIF.
+*Description
+      IF <LFS> IS ASSIGNED.
+        UNASSIGN <LFS>.
+      ENDIF.
+      CONCATENATE LV_DATA LC_D LV_RUN_TEXT INTO LV_TEXT.
+      ASSIGN (LV_TEXT) TO <LFS>.
+      IF <LFS> IS ASSIGNED.
+        LS_FCAT-SELTEXT_S = <LFS>.
+        LS_FCAT-SELTEXT_M = <LFS>.
+        LS_FCAT-SELTEXT_L = <LFS>.
+      ENDIF.
+      APPEND LS_FCAT TO GT_FCAT.
+      CLEAR LS_FCAT.
+    ENDDO.
+
+  ENDMETHOD.
+  METHOD SET_SORT.
+**  CLEAR gs_sort.
+**  gs_sort-fieldname = 'LIFNR'.
+**  gs_sort-spos = '1'.
+**  gs_sort-up = 'X'.
+***  gs_sort-subtot = 'X'.
+**  APPEND gs_sort TO gt_sort.
+  ENDMETHOD.
+  METHOD SET_ALV_GRID.
+*SAPLKKBL
+    CALL FUNCTION 'REUSE_ALV_GRID_DISPLAY'
+      EXPORTING
+        I_CALLBACK_PROGRAM      = SY-REPID
+        "I_CALLBACK_PF_STATUS_SET = 'PF_STATUS_1'
+        I_callback_user_command = 'USER_COMMAND'
+*       I_CALLBACK_TOP_OF_PAGE  = ' '
+*       i_html_height_top       = 12
+*       I_CALLBACK_HTML_TOP_OF_PAGE       = 'HTML_TOP_OF_PAGE'
+*       I_CALLBACK_HTML_END_OF_LIST       = ' '
+*       I_STRUCTURE_NAME        =
+*       I_BACKGROUND_ID         = ' '
+*       I_GRID_TITLE            =
+*       I_GRID_SETTINGS         =
+        IS_LAYOUT               = GS_LAYOUT
+        IT_FIELDCAT             = GT_FCAT
+*       IT_EXCLUDING            =
+*       IT_SPECIAL_GROUPS       =
+        IT_SORT                 = GT_SORT
+*       IT_FILTER               =
+*       IS_SEL_HIDE             =
+        I_DEFAULT               = GC_X
+        I_SAVE                  = GC_A
+*       IS_VARIANT              =
+*       IT_EVENTS               =
+*       IT_EVENT_EXIT           =
+*       IS_PRINT                =
+*       IS_REPREP_ID            =
+*       I_SCREEN_START_COLUMN   = 0
+*       I_SCREEN_START_LINE     = 0
+*       I_SCREEN_END_COLUMN     = 0
+*       I_SCREEN_END_LINE       = 0
+*       I_HTML_HEIGHT_TOP       = 0
+*       I_HTML_HEIGHT_END       = 0
+*       IT_ALV_GRAPHICS         =
+*       IT_HYPERLINK            =
+*       IT_ADD_FIELDCAT         =
+*       IT_EXCEPT_QINFO         =
+*       IR_SALV_FULLSCREEN_ADAPTER        =
+* IMPORTING
+*       E_EXIT_CAUSED_BY_CALLER =
+*       ES_EXIT_CAUSED_BY_USER  =
+      TABLES
+        T_OUTTAB                = GT_RESULT
+      EXCEPTIONS
+        PROGRAM_ERROR           = 1
+        OTHERS                  = 2.
+    IF SY-SUBRC <> 0.
+* MESSAGE ID SY-MSGID TYPE SY-MSGTY NUMBER SY-MSGNO
+*         WITH SY-MSGV1 SY-MSGV2 SY-MSGV3 SY-MSGV4.
+    ENDIF.
+
+  ENDMETHOD.
+  METHOD HTML_TOP_OF_PAGE.
+*  DATA: text TYPE sdydo_text_element.
+*
+*  CALL METHOD document->add_gap
+*    EXPORTING
+*      width = 100.
+*  text =  'Company Code Data'.
+*  CALL METHOD document->add_text
+*    EXPORTING
+*      text      = text
+*      sap_style = 'HEADING'.
+*
+*  CALL METHOD document->new_line.
+*  CALL METHOD document->new_line.
+*  CALL METHOD document->new_line.
+*
+*  text = 'User Name : '.
+*  CALL METHOD document->add_text
+*    EXPORTING
+*      text         = text
+*      sap_emphasis = 'Strong'.
+*
+*  CALL METHOD document->add_gap
+*    EXPORTING
+*      width = 6.
+*
+*  text = sy-uname.
+*  CALL METHOD document->add_text
+*    EXPORTING
+*      text      = text
+*      sap_style = 'Key'.
+*
+*  CALL METHOD document->add_gap
+*    EXPORTING
+*      width = 50.
+*
+*
+*  text = 'Date : '.
+*  CALL METHOD document->add_text
+*    EXPORTING
+*      text         = text
+*      sap_emphasis = 'Strong'.
+*
+*  CALL METHOD document->add_gap
+*    EXPORTING
+*      width = 6.
+*
+*  text = sy-datum.
+*  CALL METHOD document->add_text
+*    EXPORTING
+*      text      = text
+*      sap_style = 'Key'.
+*
+*  CALL METHOD document->add_gap
+*    EXPORTING
+*      width = 50.
+*
+*  text = 'Time : '.
+*  CALL METHOD document->add_text
+*    EXPORTING
+*      text         = text
+*      sap_emphasis = 'Strong'.
+*
+*  CALL METHOD document->add_gap
+*    EXPORTING
+*      width = 6.
+*
+*  text = sy-uzeit.
+*  CALL METHOD document->add_text
+*    EXPORTING
+*      text      = text
+*      sap_style = 'Key'.
+*
+*  CALL METHOD document->new_line.
+*  CALL METHOD document->new_line.
+  ENDMETHOD.
+  METHOD CREATE_PO.
+    DATA : POHEADER	         TYPE BAPIMEPOHEADER,
+           POHEADERX         TYPE BAPIMEPOHEADERX,
+           POADDRVENDOR	     TYPE BAPIMEPOADDRVENDOR,
+           TESTRUN           TYPE BAPIFLAG-BAPIFLAG,
+           MEMORY_UNCOMPLETE TYPE BAPIFLAG-BAPIFLAG,
+           MEMORY_COMPLETE   TYPE BAPIFLAG-BAPIFLAG,
+           POEXPIMPHEADER	   TYPE BAPIEIKP,
+           POEXPIMPHEADERX   TYPE BAPIEIKPX,
+           VERSIONS	         TYPE BAPIMEDCM,
+           NO_MESSAGING	     TYPE BAPIFLAG-BAPIFLAG,
+           NO_MESSAGE_REQ	   TYPE BAPIFLAG-BAPIFLAG,
+           NO_AUTHORITY	     TYPE BAPIFLAG-BAPIFLAG,
+           NO_PRICE_FROM_PO	 TYPE BAPIFLAG-BAPIFLAG.
+
+    DATA : EXPPURCHASEORDER	 TYPE BAPIMEPOHEADER-PO_NUMBER,
+           EXPHEADER         TYPE BAPIMEPOHEADER,
+           EXPPOEXPIMPHEADER TYPE BAPIEIKP.
+
+    DATA : RETURN                 TYPE TABLE OF BAPIRET2,
+           POITEM                 TYPE TABLE OF BAPIMEPOITEM,
+           POITEMX                TYPE TABLE OF BAPIMEPOITEMX,
+           POADDRDELIVERY         TYPE TABLE OF BAPIMEPOADDRDELIVERY,
+           POSCHEDULE             TYPE TABLE OF BAPIMEPOSCHEDULE,
+           POSCHEDULEX            TYPE TABLE OF BAPIMEPOSCHEDULX,
+           POACCOUNT              TYPE TABLE OF BAPIMEPOACCOUNT,
+           POACCOUNTPROFITSEGMENT TYPE TABLE OF BAPIMEPOACCOUNTPROFITSEGMENT,
+           POACCOUNTX             TYPE TABLE OF BAPIMEPOACCOUNTX,
+           POCONDHEADER           TYPE TABLE OF BAPIMEPOCONDHEADER,
+           POCONDHEADERX          TYPE TABLE OF BAPIMEPOCONDHEADERX,
+           POCOND                 TYPE TABLE OF BAPIMEPOCOND,
+           POCONDX                TYPE TABLE OF BAPIMEPOCONDX,
+           POLIMITS               TYPE TABLE OF BAPIESUHC,
+           POCONTRACTLIMITS       TYPE TABLE OF BAPIESUCC,
+           POSERVICES             TYPE TABLE OF BAPIESLLC,
+           POSRVACCESSVALUES      TYPE TABLE OF BAPIESKLC,
+           POSERVICESTEXT	        TYPE TABLE OF BAPIESLLTX,
+           EXTENSIONIN            TYPE TABLE OF BAPIPAREX,
+           EXTENSIONOUT	          TYPE TABLE OF BAPIPAREX,
+           POEXPIMPITEM	          TYPE TABLE OF BAPIEIPO,
+           POEXPIMPITEMX         	TYPE TABLE OF BAPIEIPOX,
+           POTEXTHEADER	          TYPE TABLE OF BAPIMEPOTEXTHEADER,
+           POTEXTITEM	            TYPE TABLE OF BAPIMEPOTEXT,
+           ALLVERSIONS            TYPE TABLE OF BAPIMEDCM_ALLVERSIONS,
+           POPARTNER             	TYPE TABLE OF BAPIEKKOP,
+           POCOMPONENTS	          TYPE TABLE OF BAPIMEPOCOMPONENT,
+           POCOMPONENTSX          TYPE TABLE OF BAPIMEPOCOMPONENTX,
+           POSHIPPING	            TYPE TABLE OF BAPIITEMSHIP,
+           POSHIPPINGX           	TYPE TABLE OF BAPIITEMSHIPX,
+           POSHIPPINGEXP          TYPE TABLE OF BAPIMEPOSHIPPEXP,
+           NFMETALLITMS           TYPE TABLE OF /NFM/BAPIDOCITM.
+
+    DATA : LS_RETURN                 LIKE LINE OF RETURN,
+           LS_POITEM                 LIKE LINE OF POITEM,
+           LS_POITEMX                LIKE LINE OF POITEMX,
+           LS_POADDRDELIVERY         LIKE LINE OF POADDRDELIVERY,
+           LS_POSCHEDULE             LIKE LINE OF POSCHEDULE,
+           LS_POSCHEDULEX            LIKE LINE OF POSCHEDULEX,
+           LS_POACCOUNT              LIKE LINE OF POACCOUNT,
+           LS_POACCOUNTPROFITSEGMENT LIKE LINE OF POACCOUNTPROFITSEGMENT,
+           LS_POACCOUNTX             LIKE LINE OF POACCOUNTX,
+           LS_POCONDHEADER           LIKE LINE OF POCONDHEADER,
+           LS_POCONDHEADERX          LIKE LINE OF POCONDHEADERX,
+           LS_POCOND                 LIKE LINE OF POCOND,
+           LS_POCONDX                LIKE LINE OF POCONDX,
+           LS_POLIMITS               LIKE LINE OF POLIMITS,
+           LS_POCONTRACTLIMITS       LIKE LINE OF POCONTRACTLIMITS,
+           LS_POSERVICES             LIKE LINE OF POSERVICES,
+           LS_POSRVACCESSVALUES      LIKE LINE OF POSRVACCESSVALUES,
+           LS_POSERVICESTEXT         LIKE LINE OF POSERVICESTEXT,
+           LS_EXTENSIONIN            LIKE LINE OF EXTENSIONIN,
+           LS_EXTENSIONOUT           LIKE LINE OF EXTENSIONOUT,
+           LS_POEXPIMPITEM           LIKE LINE OF POEXPIMPITEM,
+           LS_POEXPIMPITEMX          LIKE LINE OF POEXPIMPITEMX,
+           LS_POTEXTHEADER           LIKE LINE OF POTEXTHEADER,
+           LS_POTEXTITEM             LIKE LINE OF POTEXTITEM,
+           LS_ALLVERSIONS            LIKE LINE OF ALLVERSIONS,
+           LS_POPARTNER              LIKE LINE OF POPARTNER,
+           LS_POCOMPONENTS           LIKE LINE OF POCOMPONENTS,
+           LS_POCOMPONENTSX          LIKE LINE OF POCOMPONENTSX,
+           LS_POSHIPPING             LIKE LINE OF POSHIPPING,
+           LS_POSHIPPINGX            LIKE LINE OF POSHIPPINGX,
+           LS_POSHIPPINGEXP          LIKE LINE OF POSHIPPINGEXP,
+           LS_NFMETALLITMS           LIKE LINE OF NFMETALLITMS.
+
+    DATA : LV_MESSAGE TYPE C LENGTH 255,
+           I_EBELN    TYPE EKKO-EBELN.
+
+    DATA : LV_LINE TYPE I.
+
+    CONSTANTS : BEGIN OF LC_CON,
+                  COMCODE TYPE C LENGTH 4 VALUE '1000',
+                  A       TYPE C LENGTH 1 VALUE 'A',
+                  ZGE1    TYPE C LENGTH 4 VALUE 'ZGE1',
+                  ZGFA    TYPE C LENGTH 4 VALUE 'ZGFA',
+                  G01     TYPE C LENGTH 3 VALUE 'G01',
+                  G02     TYPE C LENGTH 3 VALUE 'G02',
+                END OF LC_CON.
+
+    SELECT *
+      FROM EBAN
+      INTO TABLE @DATA(LT_EBAN)
+      WHERE BANFN EQ @GS_RESULT-BANFN.
+    IF SY-SUBRC EQ 0.
+      CLEAR : GV_VENDOR,GV_PO_TYPE,GV_PUR_GROUP.
+      POP_UP_VENDOR( ).
+    ELSE.
+      CLEAR : GV_VENDOR,GV_PO_TYPE,GV_PUR_GROUP.
+    ENDIF.
+
+    IF GV_VENDOR IS NOT INITIAL AND
+       LT_EBAN   IS NOT INITIAL.
+
+      POHEADER-DOC_TYPE  = GV_PO_TYPE.
+      POHEADER-PUR_GROUP = GV_PUR_GROUP.
+
+*      READ TABLE LT_EBAN
+*      WITH KEY KNTTP = LC_CON-A TRANSPORTING NO FIELDS.
+*      IF SY-SUBRC EQ 0.
+*        POHEADER-DOC_TYPE  = LC_CON-ZGFA.
+*        POHEADER-PUR_GROUP = LC_CON-G02.
+*      ELSE.
+*        POHEADER-DOC_TYPE  = LC_CON-ZGE1.
+*        POHEADER-PUR_GROUP = LC_CON-G01.
+*      ENDIF.
+
+      POHEADER-COMP_CODE = LC_CON-COMCODE.
+      POHEADER-PURCH_ORG = LC_CON-COMCODE.
+      POHEADER-VENDOR    = GV_VENDOR.
+
+      POHEADERX-DOC_TYPE  = ABAP_TRUE.
+      POHEADERX-COMP_CODE = ABAP_TRUE.
+      POHEADERX-PURCH_ORG = ABAP_TRUE.
+      POHEADERX-PUR_GROUP = ABAP_TRUE.
+      POHEADERX-VENDOR    = ABAP_TRUE.
+*--------------------------------------------------------------------*
+* Item
+*--------------------------------------------------------------------*
+      LOOP AT LT_EBAN INTO DATA(LS_EBAN).
+        CASE LS_EBAN-MENGE - LS_EBAN-BSMNG.
+          WHEN 0.
+            CONTINUE.
+        ENDCASE.
+
+        ADD 1 TO LV_LINE.
+        LS_POITEM-PO_ITEM    = LV_LINE.
+        LS_POITEM-PREQ_NO    = LS_EBAN-BANFN.
+        LS_POITEM-PREQ_ITEM  = LS_EBAN-BNFPO.
+        DATA(LV_LEN) = STRLEN( LS_EBAN-MATNR ).
+        IF LV_LEN LE 18.
+          LS_POITEM-MATERIAL      = LS_EBAN-MATNR.
+        ELSE.
+          LS_POITEM-MATERIAL_LONG = LS_EBAN-MATNR.
+        ENDIF.
+        LS_POITEM-SHORT_TEXT = LS_EBAN-TXZ01.
+*        LS_POITEM-MATL_GROUP = LS_EBAN-MATKL.
+*        LS_POITEM-PLANT      = LC_CON-COMCODE.
+        LS_POITEM-PO_UNIT    = LS_EBAN-MEINS.
+        LS_POITEM-QUANTITY   = LS_EBAN-MENGE.
+        LS_POITEM-NET_PRICE  = LS_EBAN-PREIS.
+        LS_POITEM-PO_PRICE   = '1'.
+        LS_POITEM-PO_ITEM    = |{ LS_POITEM-PO_ITEM ALPHA = IN }|.
+        APPEND LS_POITEM TO POITEM.
+
+        LS_POITEMX-PO_ITEM    = LS_POITEM-PO_ITEM.
+        LS_POITEMX-PREQ_NO    = ABAP_TRUE.
+        LS_POITEMX-PREQ_ITEM  = ABAP_TRUE.
+        LS_POITEMX-PO_ITEMX   = ABAP_TRUE.
+
+*        LS_POITEMX-MATL_GROUP = ABAP_TRUE.
+*        LS_POITEMX-PLANT      = ABAP_TRUE.
+        LS_POITEMX-PO_UNIT    = ABAP_TRUE.
+        LS_POITEMX-QUANTITY   = ABAP_TRUE.
+        IF LS_EBAN-MATNR IS NOT INITIAL.
+*          LS_POITEMX-MATERIAL   = ABAP_TRUE.
+          IF LV_LEN LE 18.
+            LS_POITEMX-MATERIAL      = ABAP_TRUE.
+          ELSE.
+            LS_POITEMX-MATERIAL_LONG = ABAP_TRUE.
+          ENDIF.
+          LS_POITEMX-SHORT_TEXT = ABAP_TRUE.
+          LS_POITEMX-NET_PRICE  = ABAP_TRUE.
+          LS_POITEMX-PO_PRICE   = ABAP_TRUE.
+        ENDIF.
+        APPEND LS_POITEMX TO POITEMX.
+
+*        LS_POSCHEDULE-PO_ITEM        = LS_POITEM-PO_ITEM.
+*        LS_POSCHEDULE-SCHED_LINE     = LS_POITEM-PO_ITEM.
+*        LS_POSCHEDULE-DELIVERY_DATE  = LS_EBAN-LFDAT.
+*        LS_POSCHEDULE-QUANTITY       = LS_EBAN-MENGE.
+*        LS_POSCHEDULE-SCHED_LINE     = |{ LS_POSCHEDULE-SCHED_LINE ALPHA = IN }|.
+*        APPEND LS_POSCHEDULE TO POSCHEDULE.
+*
+*        LS_POSCHEDULEX-PO_ITEM        = LS_POSCHEDULE-PO_ITEM.
+*        LS_POSCHEDULEX-SCHED_LINE     = LS_POSCHEDULE-SCHED_LINE.
+*        LS_POSCHEDULEX-DELIVERY_DATE  = ABAP_TRUE.
+*        LS_POSCHEDULEX-QUANTITY       = ABAP_TRUE.
+*        APPEND LS_POSCHEDULEX TO POSCHEDULEX.
+
+        CLEAR : LS_POITEM,LS_POSCHEDULE,GS_RESULT,LS_POSCHEDULEX,LS_POITEMX.
+      ENDLOOP.
+*--------------------------------------------------------------------*
+* Create PO
+*--------------------------------------------------------------------*
+      CALL FUNCTION 'BAPI_PO_CREATE1'
+        EXPORTING
+          POHEADER          = POHEADER
+          POHEADERX         = POHEADERX
+*         POADDRVENDOR      = POADDRVENDOR
+*         TESTRUN           = TESTRUN
+*         MEMORY_UNCOMPLETE = MEMORY_UNCOMPLETE
+*         MEMORY_COMPLETE   = MEMORY_COMPLETE
+*         POEXPIMPHEADER    = POEXPIMPHEADER
+*         POEXPIMPHEADERX   = POEXPIMPHEADERX
+*         VERSIONS          = VERSIONS
+*         NO_MESSAGING      = NO_MESSAGING
+*         NO_MESSAGE_REQ    = NO_MESSAGE_REQ
+*         NO_AUTHORITY      = NO_AUTHORITY
+          NO_PRICE_FROM_PO  = NO_PRICE_FROM_PO
+        IMPORTING
+          EXPPURCHASEORDER  = EXPPURCHASEORDER
+          EXPHEADER         = EXPHEADER
+          EXPPOEXPIMPHEADER = EXPPOEXPIMPHEADER
+        TABLES
+          RETURN            = RETURN
+          POITEM            = POITEM
+          POITEMX           = POITEMX
+*         POADDRDELIVERY    = POADDRDELIVERY
+          POSCHEDULE        = POSCHEDULE
+          POSCHEDULEX       = POSCHEDULEX
+*         POACCOUNT         = POACCOUNT
+*         POACCOUNTPROFITSEGMENT       = POACCOUNTPROFITSEGMENT
+*         POACCOUNTX        = POACCOUNTX
+*         POCONDHEADER      = POCONDHEADER
+*         POCONDHEADERX     = POCONDHEADERX
+*         POCOND            = POCOND
+*         POCONDX           = POCONDX
+*         POLIMITS          = POLIMITS
+*         POCONTRACTLIMITS  = POCONTRACTLIMITS
+*         POSERVICES        = POSERVICES
+*         POSRVACCESSVALUES = POSRVACCESSVALUES
+*         POSERVICESTEXT    = POSERVICESTEXT
+*         EXTENSIONIN       = EXTENSIONIN
+*         EXTENSIONOUT      = EXTENSIONOUT
+*         POEXPIMPITEM      = POEXPIMPITEM
+*         POEXPIMPITEMX     = POEXPIMPITEMX
+*         POTEXTHEADER      = POTEXTHEADER
+*         POTEXTITEM        = POTEXTITEM
+*         ALLVERSIONS       = ALLVERSIONS
+*         POPARTNER         = POPARTNER
+*         POCOMPONENTS      = POCOMPONENTS
+*         POCOMPONENTSX     = POCOMPONENTSX
+*         POSHIPPING        = POSHIPPING
+*         POSHIPPINGX       = POSHIPPINGX
+*         POSHIPPINGEXP     = POSHIPPINGEXP
+        .
+
+      COMMIT( ).
+
+
+      IF EXPPURCHASEORDER IS NOT INITIAL.
+        CONCATENATE 'PO' EXPPURCHASEORDER 'has been created already.' INTO LV_MESSAGE SEPARATED BY SPACE.
+        MESSAGE S001 WITH LV_MESSAGE.
+
+        I_EBELN = EXPPURCHASEORDER.
+        CALL FUNCTION 'ME_DISPLAY_PURCHASE_DOCUMENT'
+          EXPORTING
+            I_EBELN              = I_EBELN
+          EXCEPTIONS
+            NOT_FOUND            = 1
+            NO_AUTHORITY         = 2
+            INVALID_CALL         = 3
+            PREVIEW_NOT_POSSIBLE = 4
+            OTHERS               = 5.
+        IF SY-SUBRC <> 0.
+* MESSAGE ID SY-MSGID TYPE SY-MSGTY NUMBER SY-MSGNO
+*         WITH SY-MSGV1 SY-MSGV2 SY-MSGV3 SY-MSGV4.
+        ENDIF.
+        LEAVE TO SCREEN 0.
+      ELSE.
+        READ TABLE RETURN INTO LS_RETURN
+        WITH KEY TYPE = 'E'.
+        IF SY-SUBRC = 0.
+          LV_MESSAGE = LS_RETURN-MESSAGE.
+          MESSAGE S001 WITH LV_MESSAGE DISPLAY LIKE 'E'.
+        ENDIF.
+      ENDIF.
+    ENDIF.
+  ENDMETHOD.
+  METHOD POP_UP_VENDOR.
+    CALL SCREEN 101 STARTING AT 5 5.
+*    DATA : LT_FIELDS TYPE TABLE OF SVAL,
+*           LS_FIELDS TYPE SVAL.
+*
+*    DATA : RETURNCODE.
+*
+*    LS_FIELDS-TABNAME   = TEXT-101.
+*    LS_FIELDS-FIELDNAME = TEXT-102.
+*    LS_FIELDS-FIELDTEXT = TEXT-103.
+*    APPEND LS_FIELDS TO LT_FIELDS.
+*
+*    CALL FUNCTION 'POPUP_GET_VALUES'
+*      EXPORTING
+*        POPUP_TITLE     = TEXT-104
+*      IMPORTING
+*        RETURNCODE      = RETURNCODE
+*      TABLES
+*        FIELDS          = LT_FIELDS
+*      EXCEPTIONS
+*        ERROR_IN_FIELDS = 1
+*        OTHERS          = 2.
+*    IF SY-SUBRC <> 0.
+** MESSAGE ID SY-MSGID TYPE SY-MSGTY NUMBER SY-MSGNO
+**         WITH SY-MSGV1 SY-MSGV2 SY-MSGV3 SY-MSGV4.
+*    ENDIF.
+*
+*    LOOP AT LT_FIELDS INTO LS_FIELDS.
+*      REPLACE ALL OCCURRENCES OF PCRE '[ ]+' IN LS_FIELDS-VALUE WITH ''.
+*      GV_VENDOR = LS_FIELDS-VALUE.
+*      GV_VENDOR = |{ GV_VENDOR }|.
+*    ENDLOOP.
+  ENDMETHOD.
+  METHOD COMMIT.
+    CALL FUNCTION 'BAPI_TRANSACTION_COMMIT'
+      EXPORTING
+        WAIT          = 'X'
+*   IMPORTING
+*       RETURN        =
+      EXCEPTIONS
+        ERROR_MESSAGE = 1
+        OTHERS        = 2.
+  ENDMETHOD.
+  METHOD CREATE_PR.
+    DATA : LV_OUTPUT  TYPE  BANFN,
+           LV_MESSAGE TYPE  CHAR255.
+
+    CLEAR : LV_OUTPUT,LV_MESSAGE.
+    CALL FUNCTION 'Z_SDSMM_CREATE_PR'
+      EXPORTING
+        I_GET_DATA_FROM_K2 = ABAP_TRUE
+        I_WEBNO            = GS_RESULT-WEBNO
+        I_SEND_MAIL        = ABAP_TRUE
+      IMPORTING
+        E_OUTPUT           = LV_OUTPUT
+        E_MESSAGE          = LV_MESSAGE.
+    IF LV_OUTPUT IS NOT INITIAL.
+      R = LV_OUTPUT.
+    ELSE.
+      MESSAGE S001 WITH LV_MESSAGE DISPLAY LIKE GC_E.
+    ENDIF.
+
+  ENDMETHOD.
+ENDCLASS.
+*----------------------------------------------------------------------*
+* CLASS lcl_event_receiver DEFINITION
+*----------------------------------------------------------------------*
+CLASS EVENT_CLASS DEFINITION.
+*Handling double click
+  PUBLIC SECTION.
+    METHODS:
+    HANDLE_DOUBLE_CLICK
+    FOR EVENT DOUBLE_CLICK OF CL_GUI_ALV_GRID IMPORTING E_ROW E_COLUMN ES_ROW_NO.
+ENDCLASS. "lcl_event_receiver DEFINITION
+*----------------------------------------------------------------------*
+*----------------------------------------------------------------------*
+* CLASS lcl_event_receiver IMPLEMENTATION
+*----------------------------------------------------------------------*
+CLASS EVENT_CLASS IMPLEMENTATION.
+  METHOD HANDLE_DOUBLE_CLICK.
+
+  ENDMETHOD. "handle_double_click
+ENDCLASS. "lcl_event_receiver IMPLEMENTATION

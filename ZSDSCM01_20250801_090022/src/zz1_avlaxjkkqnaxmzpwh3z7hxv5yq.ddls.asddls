@@ -1,0 +1,8 @@
+@AbapCatalog.internal.setChange: 'FLDADD_NO_ASS_INFLUENCE'
+@AbapCatalog.sqlViewAppendName: 'ZZ1_B7FED3977470'
+
+extend view C_EXPIRINGSRVCCONTRITMDETAILS with ZZ1_AVLAXJKKQNAXMZPWH3Z7HXV5YQ
+  
+{ 
+  _ServiceDocumentExt.ZZ1_PROACTIVITY as ZZ1_PROACTIVITY
+}

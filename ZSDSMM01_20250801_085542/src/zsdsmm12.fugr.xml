@@ -1,0 +1,273 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<abapGit version="v1.0.0" serializer="LCL_OBJECT_FUGR" serializer_version="v1.0.0">
+ <asx:abap xmlns:asx="http://www.sap.com/abapxml" version="1.0">
+  <asx:values>
+   <AREAT>Physical Count</AREAT>
+   <INCLUDES>
+    <SOBJ_NAME>LZSDSMM12F01</SOBJ_NAME>
+    <SOBJ_NAME>LZSDSMM12P01</SOBJ_NAME>
+    <SOBJ_NAME>LZSDSMM12TOP</SOBJ_NAME>
+    <SOBJ_NAME>SAPLZSDSMM12</SOBJ_NAME>
+   </INCLUDES>
+   <FUNCTIONS>
+    <item>
+     <FUNCNAME>Z_SDSMM_PHYSICAL_COUNT_FG</FUNCNAME>
+     <REMOTE_CALL>R</REMOTE_CALL>
+     <SHORT_TEXT>Physical Count FG</SHORT_TEXT>
+     <IMPORT>
+      <RSIMP>
+       <PARAMETER>I_INPUT</PARAMETER>
+       <OPTIONAL>X</OPTIONAL>
+       <TYP>ZSDSMMT024</TYP>
+      </RSIMP>
+      <RSIMP>
+       <PARAMETER>I_MODE</PARAMETER>
+       <OPTIONAL>X</OPTIONAL>
+       <TYP>CHAR10</TYP>
+      </RSIMP>
+     </IMPORT>
+     <CHANGING>
+      <RSCHA>
+       <PARAMETER>T_OUTPUT</PARAMETER>
+       <OPTIONAL>X</OPTIONAL>
+       <TYP>ZSDSMMS059</TYP>
+      </RSCHA>
+     </CHANGING>
+     <EXPORT>
+      <RSEXP>
+       <PARAMETER>E_MESTYPE</PARAMETER>
+       <TYP>CHAR1</TYP>
+      </RSEXP>
+      <RSEXP>
+       <PARAMETER>E_MESSAGE</PARAMETER>
+       <TYP>CHAR255</TYP>
+      </RSEXP>
+     </EXPORT>
+     <TABLES>
+      <RSTBL>
+       <PARAMETER>T_SEARCH</PARAMETER>
+       <DBSTRUCT>ZSDSFIS142</DBSTRUCT>
+      </RSTBL>
+     </TABLES>
+     <DOCUMENTATION>
+      <RSFDO>
+       <PARAMETER>I_INPUT</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>Check Physical Count</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>I_MODE</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>Character Field with Length 10</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>E_MESTYPE</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>Single-Character Flag</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>E_MESSAGE</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>Char255</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>T_SEARCH</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>Return Data Physical Count fix Asset</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>T_OUTPUT</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>Data Return Physical Count SP</STEXT>
+      </RSFDO>
+     </DOCUMENTATION>
+    </item>
+    <item>
+     <FUNCNAME>Z_SDSMM_PHYSICAL_COUNT_FIX</FUNCNAME>
+     <REMOTE_CALL>R</REMOTE_CALL>
+     <SHORT_TEXT>Physical Count Fix Asset</SHORT_TEXT>
+     <IMPORT>
+      <RSIMP>
+       <PARAMETER>I_INPUT</PARAMETER>
+       <OPTIONAL>X</OPTIONAL>
+       <TYP>ZSDSFIT050</TYP>
+      </RSIMP>
+      <RSIMP>
+       <PARAMETER>I_MODE</PARAMETER>
+       <OPTIONAL>X</OPTIONAL>
+       <TYP>CHAR10</TYP>
+      </RSIMP>
+     </IMPORT>
+     <EXPORT>
+      <RSEXP>
+       <PARAMETER>E_MESTYPE</PARAMETER>
+       <TYP>CHAR1</TYP>
+      </RSEXP>
+      <RSEXP>
+       <PARAMETER>E_MESSAGE</PARAMETER>
+       <TYP>CHAR255</TYP>
+      </RSEXP>
+      <RSEXP>
+       <PARAMETER>ET_RETURN</PARAMETER>
+       <TYP>ZSDSFIS142_TT</TYP>
+      </RSEXP>
+      <RSEXP>
+       <PARAMETER>ET_REPORT</PARAMETER>
+       <TYP>ZSDSFIS182_TT</TYP>
+      </RSEXP>
+      <RSEXP>
+       <PARAMETER>E_SEARCH</PARAMETER>
+       <TYP>CHAR255</TYP>
+      </RSEXP>
+      <RSEXP>
+       <PARAMETER>E_KOSTL</PARAMETER>
+       <TYP>KOSTL</TYP>
+      </RSEXP>
+      <RSEXP>
+       <PARAMETER>E_PERNR</PARAMETER>
+       <TYP>PERNR_D</TYP>
+      </RSEXP>
+      <RSEXP>
+       <PARAMETER>E_ASSET</PARAMETER>
+       <TYP>ANLN1</TYP>
+      </RSEXP>
+      <RSEXP>
+       <PARAMETER>E_SUBST</PARAMETER>
+       <TYP>ANLN2</TYP>
+      </RSEXP>
+     </EXPORT>
+     <DOCUMENTATION>
+      <RSFDO>
+       <PARAMETER>I_INPUT</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>Fisical Count FA(Input)</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>I_MODE</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>Character Field with Length 10</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>E_MESTYPE</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>Single-Character Flag</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>E_MESSAGE</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>Char255</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>ET_RETURN</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>Return Data Physical Count fix Asset</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>ET_REPORT</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>Report Asset</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>E_SEARCH</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>Char255</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>E_KOSTL</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>Cost Center</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>E_PERNR</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>Personnel Number</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>E_ASSET</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>Main Asset Number</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>E_SUBST</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>Asset Subnumber</STEXT>
+      </RSFDO>
+     </DOCUMENTATION>
+    </item>
+    <item>
+     <FUNCNAME>Z_SDSMM_PHYSICAL_COUNT_SP</FUNCNAME>
+     <REMOTE_CALL>R</REMOTE_CALL>
+     <SHORT_TEXT>Physical Count Spart Part</SHORT_TEXT>
+     <IMPORT>
+      <RSIMP>
+       <PARAMETER>I_INPUT</PARAMETER>
+       <OPTIONAL>X</OPTIONAL>
+       <TYP>ZSDSMMT025</TYP>
+      </RSIMP>
+      <RSIMP>
+       <PARAMETER>I_MODE</PARAMETER>
+       <OPTIONAL>X</OPTIONAL>
+       <TYP>CHAR10</TYP>
+      </RSIMP>
+     </IMPORT>
+     <CHANGING>
+      <RSCHA>
+       <PARAMETER>T_OUTPUT</PARAMETER>
+       <OPTIONAL>X</OPTIONAL>
+       <TYP>ZSDSMMS059</TYP>
+      </RSCHA>
+     </CHANGING>
+     <EXPORT>
+      <RSEXP>
+       <PARAMETER>E_MESTYPE</PARAMETER>
+       <TYP>CHAR1</TYP>
+      </RSEXP>
+      <RSEXP>
+       <PARAMETER>E_MESSAGE</PARAMETER>
+       <TYP>CHAR255</TYP>
+      </RSEXP>
+     </EXPORT>
+     <TABLES>
+      <RSTBL>
+       <PARAMETER>T_SEARCH</PARAMETER>
+       <DBSTRUCT>ZSDSFIS142</DBSTRUCT>
+       <OPTIONAL>X</OPTIONAL>
+      </RSTBL>
+     </TABLES>
+     <DOCUMENTATION>
+      <RSFDO>
+       <PARAMETER>I_INPUT</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>Check Physical Count</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>I_MODE</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>Character Field with Length 10</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>E_MESTYPE</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>Single-Character Flag</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>E_MESSAGE</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>Char255</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>T_SEARCH</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>Return Data Physical Count fix Asset</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>T_OUTPUT</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>Data Return Physical Count SP</STEXT>
+      </RSFDO>
+     </DOCUMENTATION>
+    </item>
+   </FUNCTIONS>
+  </asx:values>
+ </asx:abap>
+</abapGit>

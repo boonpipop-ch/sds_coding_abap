@@ -1,0 +1,22 @@
+"Name: \PR:RCNMASSSTATUS\FO:SET_MASS_STATUS\SE:END\EI
+ENHANCEMENT 0 ZSDS_PS_RCNMASSSTATUS1.
+
+* SDS Interface Project/WBS Status
+  DATA: LT_OBJECT TYPE ZSDSPSS013_TT.
+
+* Keep only success status
+  DATA(LT_RESULT_SUCCESS) = GT_RESULT[].
+  DELETE LT_RESULT_SUCCESS WHERE MESSAGE_TYPE NE 'S'.
+  LT_OBJECT = CORRESPONDING #( LT_RESULT_SUCCESS ).
+
+  IF TEST EQ SPACE AND     "Not a test run
+     SYS EQ 'X' AND        "Checkbox system status
+     SET EQ 'X'.           "Checkbox set status
+
+*   Prepare to interface Project/WBS status
+    ZCL_SDSPS_PROJ_WBS_STATUS_INTF=>PROCESS_DATA(
+          EXPORTING IT_OBJECT = LT_OBJECT
+                    IF_SYSTEM_STATUS = S_SYS_STAT ).
+  ENDIF.
+
+ENDENHANCEMENT.

@@ -1,0 +1,12 @@
+@AbapCatalog.internal.setChange: 'FLDADD_NO_ASS_INFLUENCE'
+@AbapCatalog.sqlViewAppendName: 'ZZ1_0D99A0C8A5D3'
+
+extend view I_GLACCOUNTLINEITEMCUBE with ZZ1_22Q33B6BOB2VFTKYMSR242WQC4
+    association [0..1] to ZZ1_ZZPHA_V as _ZZ1_ZZPHA_MSE
+  on  $projection.ZZ1_ZZPHA_MSE = _ZZ1_ZZPHA_MSE.Code 
+ 
+{ 
+@ObjectModel.foreignKey.association: '_ZZ1_ZZPHA_MSE'
+  _Extension.ZZ1_ZZPHA_MSE as ZZ1_ZZPHA_MSE,
+  _ZZ1_ZZPHA_MSE
+}

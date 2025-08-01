@@ -1,0 +1,202 @@
+<?sap.transform simple?>
+<tt:transform xmlns:tt="http://www.sap.com/transformation-templates" xmlns:ddic="http://www.sap.com/abapxml/types/dictionary">
+
+  <tt:root name="DATA" type="ddic:ZSDSPSS002"/>
+  <tt:template>
+
+    <!-- Project Defination-->
+    <object>
+      <tt:group>
+        <tt:cond frq="?">
+          <str name="SFProjectCode">
+            <tt:value ref="DATA.USR00"/>
+            <tt:assign to-ref="DATA.UPDFLG.USR00" val="'X'"/>
+          </str>
+        </tt:cond>
+        <tt:cond frq="?">
+          <str name="ProjectDefinition">
+            <tt:value ref="DATA.PSPID"/>
+            <tt:assign to-ref="DATA.UPDFLG.PSPID" val="'X'"/>
+          </str>
+        </tt:cond>
+        <tt:cond frq="1">
+          <str name="Description">
+            <tt:value ref="DATA.POST1"/>
+            <tt:assign to-ref="DATA.UPDFLG.POST1" val="'X'"/>
+          </str>
+        </tt:cond>
+        <tt:cond frq="1">
+          <str name="PlanStartDate">
+            <tt:value ref="DATA.PLFAZ"/>
+            <tt:assign to-ref="DATA.UPDFLG.PLFAZ" val="'X'"/>
+          </str>
+        </tt:cond>
+        <tt:cond frq="1">
+          <str name="PlanFinishDate">
+            <tt:value ref="DATA.PLSEZ"/>
+            <tt:assign to-ref="DATA.UPDFLG.PLSEZ" val="'X'"/>
+          </str>
+        </tt:cond>
+        <tt:cond frq="?">
+          <str name="PICProjectOwner">
+            <tt:value ref="DATA.USR01"/>
+            <tt:assign to-ref="DATA.UPDFLG.USR01" val="'X'"/>
+          </str>
+        </tt:cond>
+        <tt:cond frq="?">
+          <str name="OpportunityCategory">
+            <tt:value ref="DATA.USR02"/>
+            <tt:assign to-ref="DATA.UPDFLG.USR02" val="'X'"/>
+          </str>
+        </tt:cond>
+        <tt:cond frq="?">
+          <str name="CDUCHLocation">
+            <tt:value ref="DATA.USR03"/>
+            <tt:assign to-ref="DATA.UPDFLG.USR03" val="'X'"/>
+          </str>
+        </tt:cond>
+        <tt:cond frq="?">
+          <num name="NoOfStoreys">
+            <tt:value ref="DATA.USR04"/>
+            <tt:assign to-ref="DATA.UPDFLG.USR04" val="'X'"/>
+          </num>
+        </tt:cond>
+        <tt:cond frq="?">
+          <str name="IsPrivate">
+            <tt:value ref="DATA.USR10"/>
+            <tt:assign to-ref="DATA.UPDFLG.USR10" val="'X'"/>
+          </str>
+        </tt:cond>
+        <tt:cond frq="?">
+          <str name="SalesOffice">
+            <tt:value ref="DATA.VKBUR"/>
+            <tt:assign to-ref="DATA.UPDFLG.VKBUR" val="'X'"/>
+          </str>
+        </tt:cond>
+        <tt:cond frq="?">
+          <str name="SalesGroup">
+            <tt:value ref="DATA.VKGRP"/>
+            <tt:assign to-ref="DATA.UPDFLG.VKGRP" val="'X'"/>
+          </str>
+        </tt:cond>
+        <tt:cond frq="?">
+          <str name="ProjectType">
+            <tt:value ref="DATA.PRJTY"/>
+            <tt:assign to-ref="DATA.UPDFLG.PRJTY" val="'X'"/>
+          </str>
+        </tt:cond>
+        <tt:cond frq="?">
+          <str name="ResponseStatus">
+            <tt:value ref="DATA.RESP_STATUS"/>
+          </str>
+        </tt:cond>
+        <tt:cond frq="?">
+          <str name="ResponseMessage">
+            <tt:value ref="DATA.RESP_MESSAGE"/>
+          </str>
+        </tt:cond>
+      </tt:group>
+      <array name="WBS">
+        <tt:cond check="exist(DATA.WBSELEM)">
+          <tt:loop ref="DATA.WBSELEM">
+            <!-- WBS Elements -->
+            <object>
+              <tt:group>
+                <tt:cond frq="?">
+                  <str name="REFID">
+                    <tt:value ref="$ref.USR01"/>
+                    <tt:assign to-ref="$ref.UPDFLG.USR01" val="'X'"/>
+                  </str>
+                </tt:cond>
+                <tt:cond frq="?">
+                  <str name="WBS">
+                    <tt:value ref="$ref.POSID"/>
+                    <tt:assign to-ref="$ref.UPDFLG.POSID" val="'X'"/>
+                  </str>
+                </tt:cond>
+                <tt:cond frq="1">
+                  <str name="WBSdescription">
+                    <tt:value ref="$ref.POST1"/>
+                    <tt:assign to-ref="$ref.UPDFLG.POST1" val="'X'"/>
+                  </str>
+                </tt:cond>
+                <tt:cond frq="1">
+                  <str name="BasicStartDate">
+                    <tt:value ref="$ref.PSTRT"/>
+                    <tt:assign to-ref="$ref.UPDFLG.PSTRT" val="'X'"/>
+                  </str>
+                </tt:cond>
+                <tt:cond frq="1">
+                  <str name="BasicFinishDate">
+                    <tt:value ref="$ref.PENDE"/>
+                    <tt:assign to-ref="$ref.UPDFLG.PENDE" val="'X'"/>
+                  </str>
+                </tt:cond>
+                <tt:cond frq="?">
+                  <str name="ItemType">
+                    <tt:value ref="$ref.ITMTY"/>
+                    <tt:assign to-ref="$ref.UPDFLG.ITMTY" val="'X'"/>
+                  </str>
+                </tt:cond>
+                <tt:cond frq="?">
+                  <str name="Activity">
+                    <tt:value ref="$ref.ACTTY"/>
+                    <tt:assign to-ref="$ref.UPDFLG.ACTTY" val="'X'"/>
+                  </str>
+                </tt:cond>
+                <tt:cond frq="?">
+                  <str name="WBSProjectType">
+                    <tt:value ref="$ref.PRART"/>
+                    <tt:assign to-ref="$ref.UPDFLG.PRART" val="'X'"/>
+                  </str>
+                </tt:cond>
+                <tt:cond frq="?">
+                  <num name="WBSlevel">
+                    <tt:value ref="$ref.STUFE"/>
+                    <tt:assign to-ref="$ref.UPDFLG.STUFE" val="'X'"/>
+                  </num>
+                </tt:cond>
+                <tt:cond frq="?">
+                  <str name="eMemo">
+                    <tt:value ref="$ref.USR03"/>
+                    <tt:assign to-ref="$ref.UPDFLG.USR03" val="'X'"/>
+                  </str>
+                </tt:cond>
+                <tt:cond frq="?">
+                  <str name="ResponsibleCostCenter">
+                    <tt:value ref="$ref.FKSTL"/>
+                    <tt:assign to-ref="$ref.UPDFLG.FKSTL" val="'X'"/>
+                  </str>
+                </tt:cond>
+                <tt:cond frq="?">
+                  <str name="RequestingCostCenter">
+                    <tt:value ref="$ref.AKSTL"/>
+                    <tt:assign to-ref="$ref.UPDFLG.AKSTL" val="'X'"/>
+                  </str>
+                </tt:cond>
+                <tt:cond frq="?">
+                  <str name="APUP">
+                    <tt:value ref="$ref.APUP"/>
+                    <tt:assign to-ref="$ref.UPDFLG.APUP" val="'X'"/>
+                  </str>
+                </tt:cond>
+                <tt:cond frq="?">
+                  <str name="Status">
+                    <tt:value ref="$ref.RESP_STATUS"/>
+                  </str>
+                </tt:cond>
+                <tt:cond frq="?">
+                  <str name="Message">
+                    <tt:value ref="$ref.RESP_MESSAGE"/>
+                  </str>
+                </tt:cond>
+              </tt:group>
+
+            </object>
+          </tt:loop>
+        </tt:cond>
+      </array>
+
+    </object>
+  </tt:template>
+</tt:transform>

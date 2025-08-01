@@ -1,0 +1,8 @@
+@AbapCatalog.internal.setChange: 'FLDADD_NO_ASS_INFLUENCE'
+@AbapCatalog.sqlViewAppendName: 'ZZ1_C4EE62DA3D79'
+
+extend view C_EXPIRINGSRVCCONTRITMDETAILS with ZZ1_P4MVMQN76IC2SYWGQKF34XSWLU
+  
+{ 
+  _ServiceDocumentExt.ZZ1_ERROR_CODE as ZZ1_ERROR_CODE
+}

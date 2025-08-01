@@ -1,0 +1,75 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<abapGit version="v1.0.0" serializer="LCL_OBJECT_CLAS" serializer_version="v1.0.0">
+ <asx:abap xmlns:asx="http://www.sap.com/abapxml" version="1.0">
+  <asx:values>
+   <VSEOCLASS>
+    <CLSNAME>ZCL_ZSDSFI_BP_PROCESS_DPC_EXT</CLSNAME>
+    <LANGU>E</LANGU>
+    <DESCRIPT>Data Provider Secondary Class</DESCRIPT>
+    <STATE>1</STATE>
+    <CLSCCINCL>X</CLSCCINCL>
+    <FIXPT>X</FIXPT>
+    <UNICODE>X</UNICODE>
+   </VSEOCLASS>
+   <TPOOL>
+    <item>
+     <ID>I</ID>
+     <KEY>E01</KEY>
+     <ENTRY>Please input data.</ENTRY>
+     <LENGTH>28</LENGTH>
+    </item>
+   </TPOOL>
+   <DESCRIPTIONS>
+    <SEOCOMPOTX>
+     <CMPNAME>CUSTOME_CREATE_DEEP_ENTITY</CMPNAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Entity : Create Deep Entity Set</DESCRIPT>
+    </SEOCOMPOTX>
+   </DESCRIPTIONS>
+   <DESCRIPTIONS_SUB>
+    <SEOSUBCOTX>
+     <CMPNAME>CUSTOME_CREATE_DEEP_ENTITY</CMPNAME>
+     <SCONAME>/IWBEP/CX_MGW_BUSI_EXCEPTION</SCONAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Business Exception</DESCRIPT>
+    </SEOSUBCOTX>
+    <SEOSUBCOTX>
+     <CMPNAME>CUSTOME_CREATE_DEEP_ENTITY</CMPNAME>
+     <SCONAME>/IWBEP/CX_MGW_TECH_EXCEPTION</SCONAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Technical Exception</DESCRIPT>
+    </SEOSUBCOTX>
+    <SEOSUBCOTX>
+     <CMPNAME>CUSTOME_CREATE_DEEP_ENTITY</CMPNAME>
+     <SCONAME>IO_DATA_PROVIDER</SCONAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>MGW Entry Data Provider</DESCRIPT>
+    </SEOSUBCOTX>
+    <SEOSUBCOTX>
+     <CMPNAME>CUSTOME_CREATE_DEEP_ENTITY</CMPNAME>
+     <SCONAME>IO_EXPAND</SCONAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Expand Comparator Interface</DESCRIPT>
+    </SEOSUBCOTX>
+    <SEOSUBCOTX>
+     <CMPNAME>CUSTOME_CREATE_DEEP_ENTITY</CMPNAME>
+     <SCONAME>IO_TECH_REQUEST_CONTEXT</SCONAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Request Details for Entity Create Operation</DESCRIPT>
+    </SEOSUBCOTX>
+    <SEOSUBCOTX>
+     <CMPNAME>CUSTOME_CREATE_DEEP_ENTITY</CMPNAME>
+     <SCONAME>IT_KEY_TAB</SCONAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>table for name value pairs</DESCRIPT>
+    </SEOSUBCOTX>
+    <SEOSUBCOTX>
+     <CMPNAME>CUSTOME_CREATE_DEEP_ENTITY</CMPNAME>
+     <SCONAME>IT_NAVIGATION_PATH</SCONAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>table of navigation paths</DESCRIPT>
+    </SEOSUBCOTX>
+   </DESCRIPTIONS_SUB>
+  </asx:values>
+ </asx:abap>
+</abapGit>

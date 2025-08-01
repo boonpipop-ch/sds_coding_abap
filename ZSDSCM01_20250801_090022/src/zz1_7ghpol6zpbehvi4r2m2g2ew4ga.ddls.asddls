@@ -1,0 +1,8 @@
+@AbapCatalog.internal.setChange: 'FLDADD_NO_ASS_INFLUENCE'
+@AbapCatalog.sqlViewAppendName: 'ZZ1_DCE6888E0A4C'
+
+extend view A_BUSSOLNQTANSERVICEITEM with ZZ1_7GHPOL6ZPBEHVI4R2M2G2EW4GA
+  
+{ 
+  _Extension.ZZ1_VENDOR_TEAM as ZZ1_VENDOR_TEAM
+}

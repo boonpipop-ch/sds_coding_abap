@@ -1,0 +1,8 @@
+@AbapCatalog.internal.setChange: 'FLDADD_NO_ASS_INFLUENCE'
+@AbapCatalog.sqlViewAppendName: 'ZZ1_13D781BDB3FD'
+
+extend view FIN_SUBVAL_ACCTGSRVCDOC with ZZ1_BMCDBWOSVDFG7XA7MFK5FPDNPM
+  
+{ 
+  _SrvcDocument.ZZ1_DELIVERY_ORD as ZZ1_DELIVERY_ORD
+}

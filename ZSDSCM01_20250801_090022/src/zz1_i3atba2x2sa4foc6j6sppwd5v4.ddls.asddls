@@ -1,0 +1,8 @@
+@AbapCatalog.internal.setChange: 'FLDADD_NO_ASS_INFLUENCE'
+@AbapCatalog.sqlViewAppendName: 'ZZ1_30DBF5721870'
+
+extend view C_SRVCCONTRFINANCECARD with ZZ1_I3ATBA2X2SA4FOC6J6SPPWD5V4
+  
+{ 
+  _ServiceDocumentExt.ZZ1_RESULT_PROGRESS as ZZ1_RESULT_PROGRESS
+}

@@ -1,0 +1,606 @@
+*&---------------------------------------------------------------------*
+*& Include          ZSDSFIR0670_CLASS
+*&---------------------------------------------------------------------*
+CLASS LCL_UTIL DEFINITION.
+  PUBLIC SECTION.
+    METHODS :
+      CONSTRUCTOR.
+    CLASS-METHODS :
+      CONVERT_ALPHA_IN  IMPORTING I_DATA TYPE ANY
+                        EXPORTING E_DATA TYPE ANY,
+      CONVERT_ALPHA_OUT IMPORTING I_DATA TYPE ANY
+                        EXPORTING E_DATA TYPE ANY.
+
+ENDCLASS.
+CLASS LCL_UTIL IMPLEMENTATION.
+  METHOD CONSTRUCTOR.
+
+  ENDMETHOD.
+  METHOD CONVERT_ALPHA_IN.
+
+    CALL FUNCTION 'CONVERSION_EXIT_ALPHA_INPUT'
+      EXPORTING
+        INPUT  = I_DATA
+      IMPORTING
+        OUTPUT = E_DATA.
+
+  ENDMETHOD.
+  METHOD CONVERT_ALPHA_OUT.
+    CALL FUNCTION 'CONVERSION_EXIT_ALPHA_outPUT'
+      EXPORTING
+        INPUT  = I_DATA
+      IMPORTING
+        OUTPUT = E_DATA.
+
+  ENDMETHOD.
+ENDCLASS.
+CLASS LCL_DATA DEFINITION.
+  PUBLIC SECTION.
+    METHODS :
+      CONSTRUCTOR,
+      START_PROCESS.
+    CLASS-METHODS :
+      GET_DATA,
+      GET_ADDTIONAL_DATA,
+      SHOW_REPORT,
+      SET_LAYOUT_OUTPUT,
+      BUILD_FCAT,
+      SET_SORT,
+      SET_ALV_GRID,
+      HTML_TOP_OF_PAGE,
+      SAVE,
+      ADD_NEW,
+      DELETE_LINE,
+      update_ZSDSFIC027,
+      CHECK_DELETE_DATA.
+    CLASS-DATA :
+      LO TYPE REF TO LCL_DATA.
+ENDCLASS.
+CLASS LCL_DATA IMPLEMENTATION.
+  METHOD CONSTRUCTOR.
+
+  ENDMETHOD.
+  METHOD GET_DATA.
+    IF LO IS INITIAL.
+      CREATE OBJECT LO.
+    ENDIF.
+
+    LO->START_PROCESS( ).
+  ENDMETHOD.
+  METHOD START_PROCESS.
+    SELECT *
+      FROM ZSDSFIC034
+      WHERE PIC_PERNR IN @S_PERNR
+      INTO CORRESPONDING FIELDS OF TABLE @GT_RESULT.
+  ENDMETHOD.
+  METHOD GET_ADDTIONAL_DATA.
+*    FIELD-SYMBOLS <LFS_RESULT> LIKE LINE OF GT_RESULT.
+*    LOOP AT GT_RESULT ASSIGNING <LFS_RESULT>.
+*
+*    ENDLOOP.
+  ENDMETHOD.
+  METHOD SHOW_REPORT.
+    SET_LAYOUT_OUTPUT( ).
+    BUILD_FCAT( ).
+    SET_SORT( ).
+    SET_ALV_GRID( ).
+  ENDMETHOD.
+  METHOD SET_LAYOUT_OUTPUT.
+    CONSTANTS : BEGIN OF LC_CON,
+                  CHK_FILED TYPE C LENGTH 5 VALUE 'CHECK',
+                END OF LC_CON.
+    GS_LAYOUT-ZEBRA             = GC_X.
+    GS_LAYOUT-COLWIDTH_OPTIMIZE = GC_X.
+    GS_LAYOUT-BOX_FIELDNAME     = LC_CON-CHK_FILED.
+  ENDMETHOD.
+  METHOD BUILD_FCAT.
+    DATA:
+       LS_FCAT TYPE SLIS_FIELDCAT_ALV.
+
+*    CONSTANTS : BEGIN OF LC_CON,
+*                  CHK_FILED TYPE C LENGTH 5 VALUE 'CHECK',
+*                  CHK_NAME  TYPE C LENGTH 3 VALUE 'CHK',
+*                END OF LC_CON.
+*
+*    CLEAR LS_FCAT.
+*    LS_FCAT-FIELDNAME   = LC_CON-CHK_FILED.
+*    LS_FCAT-SELTEXT_S   = LC_CON-CHK_NAME.
+*    LS_FCAT-SELTEXT_M   = LC_CON-CHK_NAME.
+*    LS_FCAT-SELTEXT_L   = LC_CON-CHK_FILED.
+*    LS_FCAT-CHECKBOX    = ABAP_TRUE.
+*    LS_FCAT-INPUT       = ABAP_TRUE.
+*    LS_FCAT-EDIT        = ABAP_TRUE.
+*    APPEND LS_FCAT TO GT_FCAT.
+
+    DATA : LV_RUNNING  TYPE I,
+           LV_DATA     TYPE C LENGTH 6 VALUE 'TEXT-',
+           LV_RUN_TEXT TYPE C LENGTH 2.
+
+    CONSTANTS : LC_F TYPE C VALUE 'F',
+                LC_T TYPE C VALUE 'T',
+                LC_d TYPE C VALUE 'D'.
+
+    FIELD-SYMBOLS <LFS> TYPE ANY.
+
+    DATA : LV_TEXT TYPE C LENGTH 8.
+*Field
+    CLEAR : LS_FCAT.
+    DO 99 TIMES.
+      ADD 1 TO LV_RUNNING.
+      LV_RUN_TEXT = LV_RUNNING.
+
+      LCL_UTIL=>CONVERT_ALPHA_IN( EXPORTING I_DATA = LV_RUN_TEXT
+                                  IMPORTING E_Data = LV_RUN_TEXT ).
+
+      IF <LFS> IS ASSIGNED.
+        UNASSIGN <LFS>.
+      ENDIF.
+      CONCATENATE LV_DATA LC_F LV_RUN_TEXT INTO LV_TEXT.
+      ASSIGN (LV_TEXT) TO <LFS>.
+      IF <LFS> IS NOT ASSIGNED.
+        EXIT.
+      ENDIF.
+      LS_FCAT-FIELDNAME = <LFS>.
+*Teble Ref
+      IF <LFS> IS ASSIGNED.
+        UNASSIGN <LFS>.
+      ENDIF.
+      CONCATENATE LV_DATA LC_T LV_RUN_TEXT INTO LV_TEXT.
+      ASSIGN (LV_TEXT) TO <LFS>.
+      IF <LFS> IS ASSIGNED.
+        LS_FCAT-REF_TABNAME = <LFS>.
+      ENDIF.
+*Description
+      IF <LFS> IS ASSIGNED.
+        UNASSIGN <LFS>.
+      ENDIF.
+      CONCATENATE LV_DATA LC_D LV_RUN_TEXT INTO LV_TEXT.
+      ASSIGN (LV_TEXT) TO <LFS>.
+      IF <LFS> IS ASSIGNED.
+        LS_FCAT-SELTEXT_S = <LFS>.
+        LS_FCAT-SELTEXT_M = <LFS>.
+        LS_FCAT-SELTEXT_L = <LFS>.
+      ENDIF.
+
+      IF LV_RUNNING NE 2.
+        LS_FCAT-EDIT = ABAP_TRUE.
+        APPEND LS_FCAT TO GT_FCAT.
+      ENDIF.
+      CLEAR LS_FCAT.
+    ENDDO.
+
+  ENDMETHOD.
+  METHOD SET_SORT.
+**  CLEAR gs_sort.
+**  gs_sort-fieldname = 'LIFNR'.
+**  gs_sort-spos = '1'.
+**  gs_sort-up = 'X'.
+***  gs_sort-subtot = 'X'.
+**  APPEND gs_sort TO gt_sort.
+  ENDMETHOD.
+  METHOD SET_ALV_GRID.
+*SAPLKKBL
+    CALL FUNCTION 'REUSE_ALV_GRID_DISPLAY'
+      EXPORTING
+        I_CALLBACK_PROGRAM       = SY-REPID
+        I_CALLBACK_PF_STATUS_SET = 'PF_STATUS_1'
+        I_callback_user_command  = 'USER_COMMAND'
+*       I_CALLBACK_TOP_OF_PAGE   = ' '
+*       i_html_height_top        = 12
+*       I_CALLBACK_HTML_TOP_OF_PAGE       = 'HTML_TOP_OF_PAGE'
+*       I_CALLBACK_HTML_END_OF_LIST       = ' '
+*       I_STRUCTURE_NAME         =
+*       I_BACKGROUND_ID          = ' '
+*       I_GRID_TITLE             =
+*       I_GRID_SETTINGS          =
+        IS_LAYOUT                = GS_LAYOUT
+        IT_FIELDCAT              = GT_FCAT
+*       IT_EXCLUDING             =
+*       IT_SPECIAL_GROUPS        =
+        IT_SORT                  = GT_SORT
+*       IT_FILTER                =
+*       IS_SEL_HIDE              =
+        I_DEFAULT                = GC_X
+        I_SAVE                   = GC_A
+*       IS_VARIANT               =
+*       IT_EVENTS                =
+*       IT_EVENT_EXIT            =
+*       IS_PRINT                 =
+*       IS_REPREP_ID             =
+*       I_SCREEN_START_COLUMN    = 0
+*       I_SCREEN_START_LINE      = 0
+*       I_SCREEN_END_COLUMN      = 0
+*       I_SCREEN_END_LINE        = 0
+*       I_HTML_HEIGHT_TOP        = 0
+*       I_HTML_HEIGHT_END        = 0
+*       IT_ALV_GRAPHICS          =
+*       IT_HYPERLINK             =
+*       IT_ADD_FIELDCAT          =
+*       IT_EXCEPT_QINFO          =
+*       IR_SALV_FULLSCREEN_ADAPTER        =
+* IMPORTING
+*       E_EXIT_CAUSED_BY_CALLER  =
+*       ES_EXIT_CAUSED_BY_USER   =
+      TABLES
+        T_OUTTAB                 = GT_RESULT
+      EXCEPTIONS
+        PROGRAM_ERROR            = 1
+        OTHERS                   = 2.
+    IF SY-SUBRC <> 0.
+* MESSAGE ID SY-MSGID TYPE SY-MSGTY NUMBER SY-MSGNO
+*         WITH SY-MSGV1 SY-MSGV2 SY-MSGV3 SY-MSGV4.
+    ENDIF.
+
+  ENDMETHOD.
+  METHOD HTML_TOP_OF_PAGE.
+*  DATA: text TYPE sdydo_text_element.
+*
+*  CALL METHOD document->add_gap
+*    EXPORTING
+*      width = 100.
+*  text =  'Company Code Data'.
+*  CALL METHOD document->add_text
+*    EXPORTING
+*      text      = text
+*      sap_style = 'HEADING'.
+*
+*  CALL METHOD document->new_line.
+*  CALL METHOD document->new_line.
+*  CALL METHOD document->new_line.
+*
+*  text = 'User Name : '.
+*  CALL METHOD document->add_text
+*    EXPORTING
+*      text         = text
+*      sap_emphasis = 'Strong'.
+*
+*  CALL METHOD document->add_gap
+*    EXPORTING
+*      width = 6.
+*
+*  text = sy-uname.
+*  CALL METHOD document->add_text
+*    EXPORTING
+*      text      = text
+*      sap_style = 'Key'.
+*
+*  CALL METHOD document->add_gap
+*    EXPORTING
+*      width = 50.
+*
+*
+*  text = 'Date : '.
+*  CALL METHOD document->add_text
+*    EXPORTING
+*      text         = text
+*      sap_emphasis = 'Strong'.
+*
+*  CALL METHOD document->add_gap
+*    EXPORTING
+*      width = 6.
+*
+*  text = sy-datum.
+*  CALL METHOD document->add_text
+*    EXPORTING
+*      text      = text
+*      sap_style = 'Key'.
+*
+*  CALL METHOD document->add_gap
+*    EXPORTING
+*      width = 50.
+*
+*  text = 'Time : '.
+*  CALL METHOD document->add_text
+*    EXPORTING
+*      text         = text
+*      sap_emphasis = 'Strong'.
+*
+*  CALL METHOD document->add_gap
+*    EXPORTING
+*      width = 6.
+*
+*  text = sy-uzeit.
+*  CALL METHOD document->add_text
+*    EXPORTING
+*      text      = text
+*      sap_style = 'Key'.
+*
+*  CALL METHOD document->new_line.
+*  CALL METHOD document->new_line.
+  ENDMETHOD.
+  METHOD SAVE.
+
+*    DATA : BEGIN OF LS_PIC,
+*             PIC_PERNR TYPE ZSDSFIC034-PIC_PERNR,
+*           END OF LS_PIC.
+*    DATA : LT_PIC LIKE HASHED TABLE OF LS_PIC WITH UNIQUE KEY PIC_PERNR.
+*    LT_PIC =  CORRESPONDING #( GT_RESULT DISCARDING DUPLICATES ).
+
+    DATA : LR_PIC TYPE RANGE OF ZSDSFIC034-PIC_PERNR.
+
+    DATA : LT_RESULT LIKE GT_RESULT.
+
+    DATA : LV_LINE TYPE I.
+
+    DATA : ls_ZSDSFIC034 TYPE ZSDSFIC034.
+
+    CHECK_DELETE_DATA( ).
+
+    LR_PIC =  VALUE #( FOR LS_TMP IN GT_RESULT ( SIGN  = 'I' OPTION = 'EQ' LOW = LS_TMP-PIC_PERNR ) ).
+
+    SORT LR_PIC.
+    DELETE ADJACENT DUPLICATES FROM LR_PIC.
+
+    DELETE FROM ZSDSFIC034 WHERE PIC_PERNR IN LR_PIC[].
+    DELETE FROM ZSDSFIC027 WHERE PIC_PERNR IN LR_PIC[].
+
+    COMMIT WORK AND WAIT.
+    LT_RESULT = GT_RESULT.
+
+    SORT LT_RESULT BY PIC_PERNR.
+
+    LOOP AT LT_RESULT INTO GS_RESULT.
+      AT NEW PIC_PERNR.
+        CLEAR : LV_LINE.
+      ENDAT.
+      ADD 1 TO LV_LINE.
+
+      ls_ZSDSFIC034-PIC_PERNR = GS_RESULT-PIC_PERNR.
+      ls_ZSDSFIC034-SEQNO     = LV_LINE.
+      ls_ZSDSFIC034-FR_KUNNR  = GS_RESULT-FR_KUNNR.
+      ls_ZSDSFIC034-TO_KUNNR  = GS_RESULT-TO_KUNNR.
+      ls_ZSDSFIC034-BUKRS     = GS_RESULT-BUKRS.
+      ls_ZSDSFIC034-VKORG     = GS_RESULT-VKORG.
+
+      IF ls_ZSDSFIC034-BUKRS IS INITIAL.
+        ls_ZSDSFIC034-BUKRS = '1000'.
+      ENDIF.
+
+      IF ls_ZSDSFIC034-VKORG IS INITIAL.
+        ls_ZSDSFIC034-VKORG = '1000'.
+      ENDIF.
+
+      ls_ZSDSFIC034-FR_VTWEG  = GS_RESULT-FR_VTWEG.
+      ls_ZSDSFIC034-TO_VTWEG  = GS_RESULT-TO_VTWEG.
+      ls_ZSDSFIC034-FR_SPART  = GS_RESULT-FR_SPART.
+      ls_ZSDSFIC034-TO_SPART  = GS_RESULT-TO_SPART.
+      ls_ZSDSFIC034-VKBUR     = GS_RESULT-VKBUR.
+      ls_ZSDSFIC034-VKBUR_TO  = GS_RESULT-VKBUR_TO.
+      ls_ZSDSFIC034-FR_VKGRP  = GS_RESULT-FR_VKGRP.
+      ls_ZSDSFIC034-TO_VKGRP  = GS_RESULT-TO_VKGRP.
+      ls_ZSDSFIC034-FR_BUSAB  = GS_RESULT-FR_BUSAB.
+      ls_ZSDSFIC034-TO_BUSAB  = GS_RESULT-TO_BUSAB.
+      ls_ZSDSFIC034-ZCRT_DATE = SY-DATUM.
+      ls_ZSDSFIC034-ZCRT_TIME = SY-UZEIT.
+      ls_ZSDSFIC034-ZCRT_USER = SY-UNAME.
+
+      MODIFY ZSDSFIC034 FROM ls_ZSDSFIC034.
+      COMMIT WORK AND WAIT.
+
+      CLEAR : GS_RESULT.
+    ENDLOOP.
+
+    UPDATE_ZSDSFIC027( ).
+
+    MESSAGE S998 WITH TEXT-S01.
+
+  ENDMETHOD.
+  METHOD ADD_NEW.
+    DATA LS_RESULT LIKE LINE OF GT_RESULT.
+    LS_RESULT-BUKRS = '1000'.
+    LS_RESULT-VKORG = '1000'.
+    APPEND LS_RESULT TO GT_RESULT.
+  ENDMETHOD.
+  METHOD DELETE_LINE.
+
+    LOOP AT GT_RESULT INTO GS_RESULT WHERE CHECK EQ ABAP_TRUE.
+      GS_DELETE-PIC_PERNR = GS_RESULT-PIC_PERNR.
+      APPEND GS_DELETE TO GT_DELETE.
+    ENDLOOP.
+
+    DELETE GT_RESULT WHERE CHECK EQ ABAP_TRUE.
+
+  ENDMETHOD.
+  METHOD UPDATE_ZSDSFIC027.
+
+    DATA : LS_ZSDSFIC027 TYPE ZSDSFIC027.
+
+    DATA : LV_LINE TYPE I.
+
+    DATA : LR_VTWEG TYPE RANGE OF ZSDSFIC027-FR_VTWEG,
+           LR_SPART TYPE RANGE OF ZSDSFIC027-FR_SPART,
+           LR_VKBUR TYPE RANGE OF ZSDSFIC027-VKBUR,
+           LR_VKGRP TYPE RANGE OF ZSDSFIC027-FR_VKGRP,
+           LR_BUSAB TYPE RANGE OF ZSDSFIC027-FR_BUSAB.
+
+    DATA : LT_RESULT LIKE GT_RESULT.
+    LT_RESULT = GT_RESULT.
+    SORT LT_RESULT BY PIC_PERNR.
+
+    LOOP AT LT_RESULT INTO GS_RESULT.
+      AT NEW PIC_PERNR.
+        CLEAR : LV_LINE.
+      ENDAT.
+
+      LS_ZSDSFIC027-PIC_PERNR = GS_RESULT-PIC_PERNR.
+      LS_ZSDSFIC027-SEQNO     = LV_LINE.
+      IF GS_RESULT-FR_KUNNR   IS INITIAL.
+        LS_ZSDSFIC027-FR_KUNNR  = '1'.
+        LS_ZSDSFIC027-TO_KUNNR  = '9999999999'.
+      ELSE.
+        LS_ZSDSFIC027-FR_KUNNR  = GS_RESULT-FR_KUNNR.
+        LS_ZSDSFIC027-TO_KUNNR  = GS_RESULT-TO_KUNNR.
+      ENDIF.
+
+
+      IF GS_RESULT-FR_VTWEG  IS INITIAL.
+        LS_ZSDSFIC027-FR_VTWEG = '0'.
+        LS_ZSDSFIC027-TO_VTWEG = 'ZZ'.
+      ELSE.
+        LS_ZSDSFIC027-FR_VTWEG = GS_RESULT-FR_VTWEG.
+        LS_ZSDSFIC027-TO_VTWEG = GS_RESULT-TO_VTWEG.
+      ENDIF.
+
+      IF GS_RESULT-FR_SPART  IS INITIAL.
+        LS_ZSDSFIC027-FR_SPART = '0'.
+        LS_ZSDSFIC027-TO_SPART = 'ZZ'.
+      ELSE.
+        LS_ZSDSFIC027-FR_SPART = GS_RESULT-FR_SPART.
+        LS_ZSDSFIC027-TO_SPART = GS_RESULT-TO_VTWEG.
+      ENDIF.
+
+      IF GS_RESULT-FR_BUSAB  IS INITIAL.
+        LS_ZSDSFIC027-FR_BUSAB  = '0'.
+        LS_ZSDSFIC027-TO_BUSAB  = 'ZZ'.
+      ELSE.
+        LS_ZSDSFIC027-FR_BUSAB  = GS_RESULT-FR_BUSAB.
+        LS_ZSDSFIC027-TO_BUSAB  = GS_RESULT-TO_BUSAB.
+      ENDIF.
+
+      IF GS_RESULT-FR_VKGRP  IS INITIAL.
+        LS_ZSDSFIC027-FR_VKGRP  = '0'.
+        LS_ZSDSFIC027-TO_VKGRP  = 'ZZZ'.
+      ELSE.
+        LS_ZSDSFIC027-FR_VKGRP  = GS_RESULT-FR_VKGRP.
+        LS_ZSDSFIC027-TO_VKGRP  = GS_RESULT-TO_VKGRP.
+      ENDIF.
+
+      LS_ZSDSFIC027-BUKRS     = GS_RESULT-BUKRS.
+      LS_ZSDSFIC027-VKORG     = GS_RESULT-VKORG.
+
+      IF LS_ZSDSFIC027-BUKRS IS INITIAL.
+        LS_ZSDSFIC027-BUKRS = '1000'.
+      ENDIF.
+
+      IF LS_ZSDSFIC027-VKORG IS INITIAL.
+        LS_ZSDSFIC027-VKORG = '1000'.
+      ENDIF.
+
+      CLEAR : LR_VTWEG[],LR_SPART[],LR_VKBUR[],LR_VKGRP[],LR_BUSAB[].
+*      IF GS_RESULT-TO_VTWEG IS NOT INITIAL.
+*        LR_VTWEG =  VALUE #( ( SIGN  = 'I' OPTION = 'BT' LOW = GS_RESULT-FR_VTWEG HIGH = GS_RESULT-TO_VTWEG ) ).
+*      ELSEIF GS_RESULT-FR_VTWEG IS NOT INITIAL.
+*        LR_VTWEG =  VALUE #( ( SIGN  = 'I' OPTION = 'EQ' LOW = GS_RESULT-FR_VTWEG ) ).
+*      ELSE.
+*        CLEAR : LR_VTWEG[].
+*      ENDIF.
+*
+*      IF GS_RESULT-TO_SPART IS NOT INITIAL.
+*        LR_SPART =  VALUE #( ( SIGN  = 'I' OPTION = 'BT' LOW = GS_RESULT-FR_SPART HIGH = GS_RESULT-TO_SPART ) ).
+*      ELSEIF GS_RESULT-FR_SPART IS NOT INITIAL.
+*        LR_SPART =  VALUE #( ( SIGN  = 'I' OPTION = 'EQ' LOW = GS_RESULT-FR_SPART ) ).
+*      ELSE.
+*        CLEAR : LR_SPART[].
+*      ENDIF.
+
+      IF GS_RESULT-VKBUR_TO IS NOT INITIAL.
+        LR_VKBUR =  VALUE #( ( SIGN  = 'I' OPTION = 'BT' LOW = GS_RESULT-VKBUR HIGH = GS_RESULT-VKBUR_TO ) ).
+      ELSEIF GS_RESULT-VKBUR IS NOT INITIAL.
+        LR_VKBUR =  VALUE #( ( SIGN  = 'I' OPTION = 'EQ' LOW = GS_RESULT-VKBUR ) ).
+      ELSE.
+        CLEAR : LR_VKBUR[].
+      ENDIF.
+
+*      IF GS_RESULT-TO_VKGRP IS NOT INITIAL.
+*        LR_VKGRP =  VALUE #( ( SIGN  = 'I' OPTION = 'BT' LOW = GS_RESULT-FR_VKGRP HIGH = GS_RESULT-TO_VKGRP ) ).
+*      ELSEIF GS_RESULT-FR_VKGRP IS NOT INITIAL.
+*        LR_VKGRP =  VALUE #( ( SIGN  = 'I' OPTION = 'EQ' LOW = GS_RESULT-FR_VKGRP ) ).
+*      ELSE.
+*        CLEAR : LR_VKGRP[].
+*      ENDIF.
+*
+*      IF GS_RESULT-TO_BUSAB IS NOT INITIAL.
+*        LR_BUSAB =  VALUE #( ( SIGN  = 'I' OPTION = 'BT' LOW = GS_RESULT-FR_BUSAB HIGH = GS_RESULT-TO_BUSAB ) ).
+*      ELSEIF GS_RESULT-FR_BUSAB IS NOT INITIAL.
+*        LR_BUSAB =  VALUE #( ( SIGN  = 'I' OPTION = 'EQ' LOW = GS_RESULT-FR_BUSAB ) ).
+*      ELSE.
+*        CLEAR : LR_BUSAB[].
+*      ENDIF.
+
+*      SELECT VTWEG
+*        FROM TVTW
+*        WHERE VTWEG IN @LR_VTWEG[]
+*          AND HIDE  EQ @SPACE
+*      INTO TABLE @DATA(LT_VTWEG).
+*
+*      SELECT SPART
+*        FROM TSPA
+*        WHERE SPART IN @LR_SPART[]
+*          AND HIDE  EQ @SPACE
+*      INTO TABLE @DATA(LT_SPART).
+
+      SELECT VKBUR
+        FROM TVBUR
+        WHERE VKBUR IN @lr_VKBUR[]
+      INTO TABLE @DATA(LT_VKBUR).
+
+*      SELECT VKGRP
+*        FROM TVKGR
+*        WHERE VKGRP IN @LR_VKGRP[]
+*           AND HIDE  EQ @SPACE
+*       INTO TABLE @DATA(LT_VKGRP).
+*
+*      SELECT BUSAB
+*        FROM T001S
+*        WHERE BUKRS EQ @LS_ZSDSFIC027-BUKRS
+*          AND BUSAB IN @LR_BUSAB[]
+*        INTO TABLE @DATA(LT_BUSAB).
+
+*      CLEAR :  LV_LINE.
+*      LOOP AT LT_VTWEG INTO DATA(LS_VTWEG).
+*        LOOP AT LT_SPART  INTO DATA(LS_SPART).
+      LOOP AT LT_VKBUR INTO DATA(LS_VKBUR).
+*            LOOP AT LT_VKGRP INTO DATA(LS_VKGRP).
+*              LOOP AT LT_BUSAB INTO DATA(LS_BUSAB).
+        ADD 1 TO  LV_LINE.
+        LS_ZSDSFIC027-SEQNO     = LV_LINE.
+*              LS_ZSDSFIC027-FR_VTWEG  = LS_VTWEG-VTWEG.
+*              LS_ZSDSFIC027-FR_SPART  = LS_SPART-SPART.
+        LS_ZSDSFIC027-VKBUR     = LS_VKBUR-VKBUR.
+*              LS_ZSDSFIC027-FR_VKGRP  = LS_VKGRP-VKGRP.
+        LS_ZSDSFIC027-ZCRT_DATE = SY-DATUM.
+        LS_ZSDSFIC027-ZCRT_TIME = SY-UZEIT.
+        LS_ZSDSFIC027-ZCRT_USER = SY-UNAME.
+        LS_ZSDSFIC027-ZUPD_DATE = SY-DATUM.
+        LS_ZSDSFIC027-ZUPD_TIME = SY-UZEIT.
+        LS_ZSDSFIC027-ZUPD_USER = SY-UNAME.
+        MODIFY ZSDSFIC027 FROM LS_ZSDSFIC027.
+        COMMIT WORK AND WAIT.
+*              ENDLOOP.
+*            ENDLOOP.
+*          ENDLOOP.
+*        ENDLOOP.
+      ENDLOOP.
+    ENDLOOP.
+
+  ENDMETHOD.
+  METHOD CHECK_DELETE_DATA.
+    IF GT_DELETE IS NOT INITIAL.
+      SORT GT_DELETE.
+      DELETE ADJACENT DUPLICATES FROM GT_DELETE.
+      LOOP AT GT_DELETE INTO GS_DELETE.
+        DELETE FROM ZSDSFIC027 WHERE PIC_PERNR EQ GS_DELETE-PIC_PERNR.
+        COMMIT WORK AND WAIT.
+      ENDLOOP.
+    ENDIF.
+  ENDMETHOD.
+ENDCLASS.
+*----------------------------------------------------------------------*
+* CLASS lcl_event_receiver DEFINITION
+*----------------------------------------------------------------------*
+CLASS EVENT_CLASS DEFINITION.
+*Handling double click
+  PUBLIC SECTION.
+    METHODS:
+    HANDLE_DOUBLE_CLICK
+    FOR EVENT DOUBLE_CLICK OF CL_GUI_ALV_GRID IMPORTING E_ROW E_COLUMN ES_ROW_NO.
+ENDCLASS. "lcl_event_receiver DEFINITION
+*----------------------------------------------------------------------*
+*----------------------------------------------------------------------*
+* CLASS lcl_event_receiver IMPLEMENTATION
+*----------------------------------------------------------------------*
+CLASS EVENT_CLASS IMPLEMENTATION.
+  METHOD HANDLE_DOUBLE_CLICK.
+
+  ENDMETHOD. "handle_double_click
+ENDCLASS. "lcl_event_receiver IMPLEMENTATION

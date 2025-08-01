@@ -1,0 +1,710 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<abapGit version="v1.0.0" serializer="LCL_OBJECT_FUGR" serializer_version="v1.0.0">
+ <asx:abap xmlns:asx="http://www.sap.com/abapxml" version="1.0">
+  <asx:values>
+   <AREAT>Business Partner Function Group</AREAT>
+   <INCLUDES>
+    <SOBJ_NAME>LZSDSFI02F01</SOBJ_NAME>
+    <SOBJ_NAME>LZSDSFI02F02</SOBJ_NAME>
+    <SOBJ_NAME>LZSDSFI02F03</SOBJ_NAME>
+    <SOBJ_NAME>LZSDSFI02F04</SOBJ_NAME>
+    <SOBJ_NAME>LZSDSFI02TOP</SOBJ_NAME>
+    <SOBJ_NAME>SAPLZSDSFI02</SOBJ_NAME>
+   </INCLUDES>
+   <FUNCTIONS>
+    <item>
+     <FUNCNAME>Z_SDSFI_CHANGE_BP</FUNCNAME>
+     <SHORT_TEXT>Business Partner Change Process</SHORT_TEXT>
+     <IMPORT>
+      <RSIMP>
+       <PARAMETER>IV_MODE</PARAMETER>
+       <OPTIONAL>X</OPTIONAL>
+       <TYP>ZSDSDE_INF_MODE</TYP>
+      </RSIMP>
+      <RSIMP>
+       <PARAMETER>IV_BP</PARAMETER>
+       <OPTIONAL>X</OPTIONAL>
+       <TYP>BU_PARTNER</TYP>
+      </RSIMP>
+      <RSIMP>
+       <PARAMETER>IV_TEST</PARAMETER>
+       <OPTIONAL>X</OPTIONAL>
+       <TYP>BOOLE_D</TYP>
+      </RSIMP>
+      <RSIMP>
+       <PARAMETER>IS_CENTRAL</PARAMETER>
+       <OPTIONAL>X</OPTIONAL>
+       <TYP>ZSDSFIS003</TYP>
+      </RSIMP>
+      <RSIMP>
+       <PARAMETER>IT_BP_ROLE</PARAMETER>
+       <OPTIONAL>X</OPTIONAL>
+       <TYP>ZSDSFIS089_TT</TYP>
+      </RSIMP>
+      <RSIMP>
+       <PARAMETER>IT_ADDRESS</PARAMETER>
+       <OPTIONAL>X</OPTIONAL>
+       <TYP>ZSDSFIS010_TT</TYP>
+      </RSIMP>
+      <RSIMP>
+       <PARAMETER>IS_CUSTOMER</PARAMETER>
+       <OPTIONAL>X</OPTIONAL>
+       <TYP>ZSDSFIS078</TYP>
+      </RSIMP>
+      <RSIMP>
+       <PARAMETER>IT_PARTNER</PARAMETER>
+       <OPTIONAL>X</OPTIONAL>
+       <TYP>ZSDSFIS083_TT</TYP>
+      </RSIMP>
+      <RSIMP>
+       <PARAMETER>IT_CONTACT</PARAMETER>
+       <OPTIONAL>X</OPTIONAL>
+       <TYP>ZSDSFIS082_TT</TYP>
+      </RSIMP>
+      <RSIMP>
+       <PARAMETER>IS_VENDOR</PARAMETER>
+       <OPTIONAL>X</OPTIONAL>
+       <TYP>ZSDSFIS084</TYP>
+      </RSIMP>
+      <RSIMP>
+       <PARAMETER>IV_PARTN_CAT</PARAMETER>
+       <OPTIONAL>X</OPTIONAL>
+       <TYP>BU_TYPE</TYP>
+      </RSIMP>
+      <RSIMP>
+       <PARAMETER>IV_SHIPTO</PARAMETER>
+       <OPTIONAL>X</OPTIONAL>
+       <TYP>BOOLE_D</TYP>
+      </RSIMP>
+      <RSIMP>
+       <PARAMETER>IV_CONTACT</PARAMETER>
+       <OPTIONAL>X</OPTIONAL>
+       <TYP>BOOLE_D</TYP>
+      </RSIMP>
+      <RSIMP>
+       <PARAMETER>IT_SALES_AREA</PARAMETER>
+       <OPTIONAL>X</OPTIONAL>
+       <TYP>ZSDSSDS123_TT</TYP>
+      </RSIMP>
+     </IMPORT>
+     <CHANGING>
+      <RSCHA>
+       <PARAMETER>ES_CENTRAL</PARAMETER>
+       <OPTIONAL>X</OPTIONAL>
+       <TYP>ZSDSFIS003</TYP>
+      </RSCHA>
+      <RSCHA>
+       <PARAMETER>ET_BP_ROLE</PARAMETER>
+       <OPTIONAL>X</OPTIONAL>
+       <TYP>ZSDSFIS089_TT</TYP>
+      </RSCHA>
+      <RSCHA>
+       <PARAMETER>ET_ADDRESS</PARAMETER>
+       <OPTIONAL>X</OPTIONAL>
+       <TYP>ZSDSFIS010_TT</TYP>
+      </RSCHA>
+      <RSCHA>
+       <PARAMETER>ES_CUSTOMER</PARAMETER>
+       <OPTIONAL>X</OPTIONAL>
+       <TYP>ZSDSFIS078</TYP>
+      </RSCHA>
+      <RSCHA>
+       <PARAMETER>ET_PARTNER</PARAMETER>
+       <OPTIONAL>X</OPTIONAL>
+       <TYP>ZSDSFIS083_TT</TYP>
+      </RSCHA>
+      <RSCHA>
+       <PARAMETER>ET_CONTACT</PARAMETER>
+       <OPTIONAL>X</OPTIONAL>
+       <TYP>ZSDSFIS082_TT</TYP>
+      </RSCHA>
+      <RSCHA>
+       <PARAMETER>ES_VENDOR</PARAMETER>
+       <OPTIONAL>X</OPTIONAL>
+       <TYP>ZSDSFIS084</TYP>
+      </RSCHA>
+      <RSCHA>
+       <PARAMETER>ET_RETURN</PARAMETER>
+       <OPTIONAL>X</OPTIONAL>
+       <TYP>BAPIRET2_T</TYP>
+      </RSCHA>
+     </CHANGING>
+     <DOCUMENTATION>
+      <RSFDO>
+       <PARAMETER>IV_MODE</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>Mode for Business Partner Mode</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>IV_BP</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>Business Partner Number</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>IV_TEST</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>Data element for domain BOOLE: TRUE (=&apos;X&apos;) and FALSE (=&apos; &apos;)</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>IS_CENTRAL</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>K2 : Structure for business partner (CentralData)</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>IT_BP_ROLE</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>K2 : Table Type for business partner (Role)</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>IT_ADDRESS</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>K2 : Table Type for business partner (AddressData)</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>IS_CUSTOMER</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>K2 : Structure for business partner (Customer Data)</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>IT_PARTNER</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>K2 : Table Type for business partner (Partner Function)</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>IT_CONTACT</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>K2 : Table Type for business partner (Contact Person)</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>IS_VENDOR</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>K2 : Structure for business partner (Vendor)</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>IV_PARTN_CAT</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>Business Partner Category</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>IV_SHIPTO</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>Ship-to update flag</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>IV_CONTACT</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>Contact update flag</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>IT_SALES_AREA</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>Salse Area Type table type</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>ES_CENTRAL</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>K2 : Structure for business partner (CentralData)</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>ET_BP_ROLE</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>K2 : Table Type for business partner (Role)</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>ET_ADDRESS</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>K2 : Table Type for business partner (AddressData)</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>ES_CUSTOMER</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>K2 : Structure for business partner (Customer Data)</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>ET_PARTNER</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>K2 : Table Type for business partner (Partner Function)</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>ET_CONTACT</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>K2 : Table Type for business partner (Contact Person)</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>ES_VENDOR</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>K2 : Structure for business partner (Vendor)</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>ET_RETURN</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>Return table</STEXT>
+      </RSFDO>
+     </DOCUMENTATION>
+    </item>
+    <item>
+     <FUNCNAME>Z_SDSFI_CREATE_BP</FUNCNAME>
+     <REMOTE_CALL>R</REMOTE_CALL>
+     <SHORT_TEXT>Business Partner Creation</SHORT_TEXT>
+     <IMPORT>
+      <RSIMP>
+       <PARAMETER>IV_MODE</PARAMETER>
+       <OPTIONAL>X</OPTIONAL>
+       <TYP>ZSDSDE_INF_MODE</TYP>
+      </RSIMP>
+      <RSIMP>
+       <PARAMETER>IV_BP</PARAMETER>
+       <OPTIONAL>X</OPTIONAL>
+       <TYP>BU_PARTNER</TYP>
+      </RSIMP>
+      <RSIMP>
+       <PARAMETER>IV_PARTN_CAT</PARAMETER>
+       <OPTIONAL>X</OPTIONAL>
+       <TYP>BU_TYPE</TYP>
+      </RSIMP>
+      <RSIMP>
+       <PARAMETER>IV_BU_GROUP</PARAMETER>
+       <OPTIONAL>X</OPTIONAL>
+       <TYP>BU_GROUP</TYP>
+      </RSIMP>
+      <RSIMP>
+       <PARAMETER>IV_K2_REFNO</PARAMETER>
+       <OPTIONAL>X</OPTIONAL>
+       <TYP>BU_BPEXT</TYP>
+      </RSIMP>
+      <RSIMP>
+       <PARAMETER>IV_SFDC_REFNO</PARAMETER>
+       <OPTIONAL>X</OPTIONAL>
+       <TYP>BU_BPEXT</TYP>
+      </RSIMP>
+      <RSIMP>
+       <PARAMETER>IV_TEST</PARAMETER>
+       <OPTIONAL>X</OPTIONAL>
+       <TYP>BOOLE_D</TYP>
+      </RSIMP>
+      <RSIMP>
+       <PARAMETER>IV_CREATED_BY</PARAMETER>
+       <OPTIONAL>X</OPTIONAL>
+       <TYP>PERSNO</TYP>
+      </RSIMP>
+      <RSIMP>
+       <PARAMETER>IS_CENTRAL</PARAMETER>
+       <OPTIONAL>X</OPTIONAL>
+       <TYP>ZSDSFIS003</TYP>
+      </RSIMP>
+      <RSIMP>
+       <PARAMETER>IT_BP_ROLE</PARAMETER>
+       <OPTIONAL>X</OPTIONAL>
+       <TYP>ZSDSFIS089_TT</TYP>
+      </RSIMP>
+      <RSIMP>
+       <PARAMETER>IT_ADDRESS</PARAMETER>
+       <OPTIONAL>X</OPTIONAL>
+       <TYP>ZSDSFIS010_TT</TYP>
+      </RSIMP>
+      <RSIMP>
+       <PARAMETER>IS_CUSTOMER</PARAMETER>
+       <OPTIONAL>X</OPTIONAL>
+       <TYP>ZSDSFIS078</TYP>
+      </RSIMP>
+      <RSIMP>
+       <PARAMETER>IT_PARTNER</PARAMETER>
+       <OPTIONAL>X</OPTIONAL>
+       <TYP>ZSDSFIS083_TT</TYP>
+      </RSIMP>
+      <RSIMP>
+       <PARAMETER>IT_CONTACT</PARAMETER>
+       <OPTIONAL>X</OPTIONAL>
+       <TYP>ZSDSFIS082_TT</TYP>
+      </RSIMP>
+      <RSIMP>
+       <PARAMETER>IS_VENDOR</PARAMETER>
+       <OPTIONAL>X</OPTIONAL>
+       <TYP>ZSDSFIS084</TYP>
+      </RSIMP>
+     </IMPORT>
+     <EXPORT>
+      <RSEXP>
+       <PARAMETER>ET_RETURN</PARAMETER>
+       <TYP>BAPIRET2_T</TYP>
+      </RSEXP>
+      <RSEXP>
+       <PARAMETER>ET_PARTNER</PARAMETER>
+       <TYP>ZSDSFIS083_TT</TYP>
+      </RSEXP>
+      <RSEXP>
+       <PARAMETER>ET_CONTACT</PARAMETER>
+       <TYP>ZSDSFIS082_TT</TYP>
+      </RSEXP>
+      <RSEXP>
+       <PARAMETER>EV_PARTNER</PARAMETER>
+       <TYP>BU_PARTNER</TYP>
+      </RSEXP>
+     </EXPORT>
+     <DOCUMENTATION>
+      <RSFDO>
+       <PARAMETER>IV_MODE</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>Mode for Business Partner Mode</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>IV_BP</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>Business Partner Number</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>IV_PARTN_CAT</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>Business Partner Category</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>IV_BU_GROUP</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>Business Partner Grouping</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>IV_K2_REFNO</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>Business Partner Number in External System</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>IV_SFDC_REFNO</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>Business Partner Number in External System</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>IV_TEST</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>Data element for domain BOOLE: TRUE (=&apos;X&apos;) and FALSE (=&apos; &apos;)</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>IV_CREATED_BY</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>Created By</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>IS_CENTRAL</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>K2 : Structure for business partner (CentralData)</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>IT_BP_ROLE</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>K2 : Table Type for business partner (Role)</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>IT_ADDRESS</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>K2 : Table Type for business partner (AddressData)</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>IS_CUSTOMER</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>K2 : Structure for business partner (Customer Data)</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>IT_PARTNER</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>K2 : Table Type for business partner (Partner Function)</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>IT_CONTACT</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>K2 : Table Type for business partner (Contact Person)</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>IS_VENDOR</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>K2 : Structure for business partner (Vendor)</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>ET_RETURN</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>Return table</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>ET_PARTNER</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>K2 : Table Type for business partner (Partner Function)</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>ET_CONTACT</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>K2 : Table Type for business partner (Contact Person)</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>EV_PARTNER</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>Business Partner Number</STEXT>
+      </RSFDO>
+     </DOCUMENTATION>
+    </item>
+    <item>
+     <FUNCNAME>Z_SDSFI_DEL_BP</FUNCNAME>
+     <SHORT_TEXT>Business Partner Deletion</SHORT_TEXT>
+     <IMPORT>
+      <RSIMP>
+       <PARAMETER>IV_BP</PARAMETER>
+       <REFERENCE>X</REFERENCE>
+       <TYP>BU_PARTNER</TYP>
+      </RSIMP>
+      <RSIMP>
+       <PARAMETER>IV_MODE</PARAMETER>
+       <REFERENCE>X</REFERENCE>
+       <TYP>ZSDSDE_INF_MODE</TYP>
+      </RSIMP>
+      <RSIMP>
+       <PARAMETER>IV_DEL</PARAMETER>
+       <REFERENCE>X</REFERENCE>
+       <TYP>CHAR01</TYP>
+      </RSIMP>
+     </IMPORT>
+     <EXPORT>
+      <RSEXP>
+       <PARAMETER>ET_RETURN</PARAMETER>
+       <TYP>BAPIRET2_T</TYP>
+      </RSEXP>
+     </EXPORT>
+     <DOCUMENTATION>
+      <RSFDO>
+       <PARAMETER>IV_BP</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>Business Partner Number</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>IV_MODE</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>Mode for Business Partner Mode</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>IV_DEL</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>Flag for delete/undelete</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>ET_RETURN</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>Return table</STEXT>
+      </RSFDO>
+     </DOCUMENTATION>
+    </item>
+    <item>
+     <FUNCNAME>Z_SDSFI_GET_BP_DETAIL</FUNCNAME>
+     <SHORT_TEXT>Function for get Business partner detail</SHORT_TEXT>
+     <IMPORT>
+      <RSIMP>
+       <PARAMETER>IV_PARTNER</PARAMETER>
+       <OPTIONAL>X</OPTIONAL>
+       <TYP>BU_PARTNER</TYP>
+      </RSIMP>
+      <RSIMP>
+       <PARAMETER>IV_MODE</PARAMETER>
+       <OPTIONAL>X</OPTIONAL>
+       <TYP>ZSDSDE_INF_MODE</TYP>
+      </RSIMP>
+     </IMPORT>
+     <EXPORT>
+      <RSEXP>
+       <PARAMETER>EV_PARTN_CAT</PARAMETER>
+       <TYP>BU_TYPE</TYP>
+      </RSEXP>
+      <RSEXP>
+       <PARAMETER>EV_BU_GROUP</PARAMETER>
+       <TYP>BU_GROUP</TYP>
+      </RSEXP>
+      <RSEXP>
+       <PARAMETER>EV_K2_REFNO</PARAMETER>
+       <TYP>BU_BPEXT</TYP>
+      </RSEXP>
+      <RSEXP>
+       <PARAMETER>EV_SFDC_REFNO</PARAMETER>
+       <TYP>BU_BPEXT</TYP>
+      </RSEXP>
+      <RSEXP>
+       <PARAMETER>ES_CENTRAL</PARAMETER>
+       <TYP>ZSDSFIS003</TYP>
+      </RSEXP>
+      <RSEXP>
+       <PARAMETER>ET_BP_ROLE</PARAMETER>
+       <TYP>ZSDSFIS089_TT</TYP>
+      </RSEXP>
+      <RSEXP>
+       <PARAMETER>ET_ADDRESS</PARAMETER>
+       <TYP>ZSDSFIS010_TT</TYP>
+      </RSEXP>
+      <RSEXP>
+       <PARAMETER>ES_CUSTOMER</PARAMETER>
+       <TYP>ZSDSFIS078</TYP>
+      </RSEXP>
+      <RSEXP>
+       <PARAMETER>ET_PARTNER</PARAMETER>
+       <TYP>ZSDSFIS083_TT</TYP>
+      </RSEXP>
+      <RSEXP>
+       <PARAMETER>ET_CONTACT</PARAMETER>
+       <TYP>ZSDSFIS082_TT</TYP>
+      </RSEXP>
+      <RSEXP>
+       <PARAMETER>ES_VENDOR</PARAMETER>
+       <TYP>ZSDSFIS084</TYP>
+      </RSEXP>
+      <RSEXP>
+       <PARAMETER>ET_RETURN</PARAMETER>
+       <TYP>BAPIRET2_T</TYP>
+      </RSEXP>
+      <RSEXP>
+       <PARAMETER>ES_BLOCK</PARAMETER>
+       <TYP>ZSDSFIS116</TYP>
+      </RSEXP>
+     </EXPORT>
+     <DOCUMENTATION>
+      <RSFDO>
+       <PARAMETER>IV_PARTNER</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>Business Partner Number</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>IV_MODE</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>Mode for Business Partner Mode</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>EV_PARTN_CAT</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>Business Partner Category</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>EV_BU_GROUP</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>Business Partner Grouping</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>EV_K2_REFNO</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>Business Partner Number in External System</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>EV_SFDC_REFNO</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>Business Partner Number in External System</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>ES_CENTRAL</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>K2 : Structure for business partner (CentralData)</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>ET_BP_ROLE</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>K2 : Table Type for business partner (Role)</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>ET_ADDRESS</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>K2 : Table Type for business partner (AddressData)</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>ES_CUSTOMER</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>K2 : Structure for business partner (Customer Data)</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>ET_PARTNER</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>K2 : Table Type for business partner (Partner Function)</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>ET_CONTACT</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>K2 : Table Type for business partner (Contact Person)</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>ES_VENDOR</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>K2 : Structure for business partner (Vendor)</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>ET_RETURN</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>Return table</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>ES_BLOCK</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>K2 : Block/Unblock Sales Process</STEXT>
+      </RSFDO>
+     </DOCUMENTATION>
+    </item>
+    <item>
+     <FUNCNAME>Z_SDSFI_GET_BP_LIST</FUNCNAME>
+     <SHORT_TEXT>Function for get Business partner list</SHORT_TEXT>
+     <IMPORT>
+      <RSIMP>
+       <PARAMETER>IV_PARTNER</PARAMETER>
+       <REFERENCE>X</REFERENCE>
+       <TYP>BU_PARTNER</TYP>
+      </RSIMP>
+      <RSIMP>
+       <PARAMETER>IV_TYPE</PARAMETER>
+       <REFERENCE>X</REFERENCE>
+       <TYP>BU_TYPE</TYP>
+      </RSIMP>
+     </IMPORT>
+     <EXPORT>
+      <RSEXP>
+       <PARAMETER>EX_LIST</PARAMETER>
+       <TYP>ZSDSFIS114_TT</TYP>
+      </RSEXP>
+     </EXPORT>
+     <DOCUMENTATION>
+      <RSFDO>
+       <PARAMETER>IV_PARTNER</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>Business Partner Number</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>IV_TYPE</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>Business Partner Category</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>EX_LIST</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>Table Type : ZSDSFIS114</STEXT>
+      </RSFDO>
+     </DOCUMENTATION>
+    </item>
+    <item>
+     <FUNCNAME>Z_SDSFI_SALES_BLOCK_PROCESS</FUNCNAME>
+     <REMOTE_CALL>R</REMOTE_CALL>
+     <SHORT_TEXT>K2 : Function for block sales process</SHORT_TEXT>
+     <IMPORT>
+      <RSIMP>
+       <PARAMETER>IT_BLOCK</PARAMETER>
+       <OPTIONAL>X</OPTIONAL>
+       <TYP>ZSDSFIS116_TT</TYP>
+      </RSIMP>
+     </IMPORT>
+     <EXPORT>
+      <RSEXP>
+       <PARAMETER>ET_BLOCK</PARAMETER>
+       <TYP>ZSDSFIS116_TT</TYP>
+      </RSEXP>
+     </EXPORT>
+     <DOCUMENTATION>
+      <RSFDO>
+       <PARAMETER>IT_BLOCK</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>K2 : Table Type for sales block process</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>ET_BLOCK</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>K2 : Table Type for sales block process</STEXT>
+      </RSFDO>
+     </DOCUMENTATION>
+    </item>
+   </FUNCTIONS>
+  </asx:values>
+ </asx:abap>
+</abapGit>

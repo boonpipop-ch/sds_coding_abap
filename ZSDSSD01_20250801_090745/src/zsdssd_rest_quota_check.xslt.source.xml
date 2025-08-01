@@ -1,0 +1,128 @@
+<?sap.transform simple?>
+<tt:transform xmlns:tt="http://www.sap.com/transformation-templates" xmlns:ddic="http://www.sap.com/abapxml/types/dictionary">
+
+  <tt:root name="DATA" type="ddic:ZSDSSDS104"/>
+  <tt:template>
+    <object>
+      <array name="ListMaterial">
+        <tt:cond check="exist(DATA.OBJECT)">
+          <tt:loop ref="DATA.OBJECT">
+            <object>
+              <!-- List Material -->
+              <tt:group>
+                <tt:cond frq="1">
+                  <!-- ? = Optional, 1 = Required-->
+                  <str name="MaterialNumber">
+                    <tt:value ref="$ref.MATNR"/>
+                  </str>
+                </tt:cond>
+                <tt:cond frq="?">
+                  <str name="Description">
+                    <tt:value ref="$ref.MAKTX"/>
+                  </str>
+                </tt:cond>
+                <tt:cond frq="?">
+                  <str name="UOM">
+                    <tt:value ref="$ref.MEINS"/>
+                  </str>
+                </tt:cond>
+                <tt:cond frq="?">
+                  <num name="TotalStock">
+                    <tt:value ref="$ref.TOTAL_QTY"/>
+                  </num>
+                </tt:cond>
+                <tt:cond frq="?">
+                  <num name="CurrentURStock">
+                    <tt:value ref="$ref.URSTOCK"/>
+                  </num>
+                </tt:cond>
+                <tt:cond frq="?">
+                  <num name="POQty">
+                    <tt:value ref="$ref.PO_QTY"/>
+                  </num>
+                </tt:cond>
+                <tt:cond frq="?">
+                  <num name="PlanQuotaStock">
+                    <tt:value ref="$ref.QUOTA_QTY"/>
+                  </num>
+                </tt:cond>
+                <tt:cond frq="?">
+                  <num name="PlanAvailableFreeStock">
+                    <tt:value ref="$ref.FREE_QTY"/>
+                  </num>
+                </tt:cond>
+                <tt:cond frq="?">
+                  <str name="ResponseStatus">
+                    <tt:value ref="$ref.RESP_STATUS"/>
+                  </str>
+                </tt:cond>
+                <tt:cond frq="?">
+                  <str name="ResponseMessage">
+                    <tt:value ref="$ref.RESP_MESSAGE"/>
+                  </str>
+                </tt:cond>
+              </tt:group>
+              <!-- Quota Group -->
+              <array name="QuotaGroup">
+                <tt:cond check="exist($ref.QUOTAGROUP)">
+                  <tt:loop ref="$ref.QUOTAGROUP">
+                    <object>
+                      <tt:group>
+
+                        <tt:cond frq="?">
+                          <str name="QuotaGroup">
+                            <tt:value ref="$ref.QUOTAGRP_DESC"/>
+                          </str>
+                        </tt:cond>
+                        <tt:cond frq="?">
+                          <num name="CurrentPlanAllocatedQuota">
+                            <tt:value ref="$ref.00_ALLOC_QUOTA"/>
+                          </num>
+                        </tt:cond>
+                        <tt:cond frq="?">
+                          <num name="CurrentOrderQty">
+                            <tt:value ref="$ref.00_SO_QTY"/>
+                          </num>
+                        </tt:cond>
+                        <tt:cond frq="?">
+                          <num name="CurrentRemainQuota">
+                            <tt:value ref="$ref.00_REMAIN_QUOTA"/>
+                          </num>
+                        </tt:cond>
+                        <tt:cond frq="?">
+                          <str name="CurrentLastDay">
+                            <tt:value ref="$ref.00_DAY_LAST"/>
+                          </str>
+                        </tt:cond>
+                        <tt:cond frq="?">
+                          <num name="NextPlanAllocatedQuota">
+                            <tt:value ref="$ref.01_ALLOC_QUOTA"/>
+                          </num>
+                        </tt:cond>
+                        <tt:cond frq="?">
+                          <num name="NextOrderQty">
+                            <tt:value ref="$ref.01_SO_QTY"/>
+                          </num>
+                        </tt:cond>
+                        <tt:cond frq="?">
+                          <num name="NextRemainQuota">
+                            <tt:value ref="$ref.01_REMAIN_QUOTA"/>
+                          </num>
+                        </tt:cond>
+                        <tt:cond frq="?">
+                          <str name="NextLastDay">
+                            <tt:value ref="$ref.01_DAY_LAST"/>
+                          </str>
+                        </tt:cond>
+                      </tt:group>
+                    </object>
+                  </tt:loop>
+                </tt:cond>
+              </array>
+            </object>
+          </tt:loop>
+        </tt:cond>
+      </array>
+    </object>
+  </tt:template>
+</tt:transform>

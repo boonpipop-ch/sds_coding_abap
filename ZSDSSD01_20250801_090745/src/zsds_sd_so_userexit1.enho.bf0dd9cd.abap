@@ -1,0 +1,13 @@
+"Name: \PR:SAPMV45A\FO:USEREXIT_SAVE_DOCUMENT\SE:END\EI
+ENHANCEMENT 0 ZSDS_SD_SO_USEREXIT1.
+
+  ZCL_SDSSD_SALESORDER_ENH=>USEREXIT_SAVE_DOCUMENT(
+        EXPORTING
+                  IS_TRTYP  = T180-TRTYP
+                  IS_VBAK   = VBAK
+                  IT_XVBKD  = XVBKD[]
+                  IT_YVBKD  = YVBKD[]
+                  IT_XVBAP  = XVBAP[]
+                  IT_YVBAP  = YVBAP[]  ).
+
+ENDENHANCEMENT.

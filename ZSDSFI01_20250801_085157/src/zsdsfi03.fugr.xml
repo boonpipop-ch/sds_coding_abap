@@ -1,0 +1,112 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<abapGit version="v1.0.0" serializer="LCL_OBJECT_FUGR" serializer_version="v1.0.0">
+ <asx:abap xmlns:asx="http://www.sap.com/abapxml" version="1.0">
+  <asx:values>
+   <AREAT>Customer JSON format</AREAT>
+   <INCLUDES>
+    <SOBJ_NAME>LZSDSFI03TOP</SOBJ_NAME>
+    <SOBJ_NAME>SAPLZSDSFI03</SOBJ_NAME>
+   </INCLUDES>
+   <FUNCTIONS>
+    <item>
+     <FUNCNAME>Z_SDSFI_CUSTOMER_JSON</FUNCNAME>
+     <REMOTE_CALL>R</REMOTE_CALL>
+     <SHORT_TEXT>JSON Customer</SHORT_TEXT>
+     <IMPORT>
+      <RSIMP>
+       <PARAMETER>I_BUKRS</PARAMETER>
+       <OPTIONAL>X</OPTIONAL>
+       <TYP>BUKRS</TYP>
+      </RSIMP>
+      <RSIMP>
+       <PARAMETER>IR_KUNNR</PARAMETER>
+       <OPTIONAL>X</OPTIONAL>
+       <TYP>J_3RS_SO_KUNNR</TYP>
+      </RSIMP>
+      <RSIMP>
+       <PARAMETER>IR_ERDAT</PARAMETER>
+       <OPTIONAL>X</OPTIONAL>
+       <TYP>/ACCGO/CAS_TT_BUDAT_RANGE</TYP>
+      </RSIMP>
+      <RSIMP>
+       <PARAMETER>I_ETAX</PARAMETER>
+       <OPTIONAL>X</OPTIONAL>
+       <TYP>FLAG</TYP>
+      </RSIMP>
+      <RSIMP>
+       <PARAMETER>I_EMAIL</PARAMETER>
+       <OPTIONAL>X</OPTIONAL>
+       <TYP>FLAG</TYP>
+      </RSIMP>
+      <RSIMP>
+       <PARAMETER>I_AL11</PARAMETER>
+       <OPTIONAL>X</OPTIONAL>
+       <TYP>CHAR255</TYP>
+      </RSIMP>
+     </IMPORT>
+     <EXPORT>
+      <RSEXP>
+       <PARAMETER>ET_RETURN</PARAMETER>
+       <TYP>STRING_TABLE</TYP>
+      </RSEXP>
+      <RSEXP>
+       <PARAMETER>E_MESSAGE</PARAMETER>
+       <TYP>CHAR255</TYP>
+      </RSEXP>
+      <RSEXP>
+       <PARAMETER>E_MESTYPE</PARAMETER>
+       <TYP>FLAG</TYP>
+      </RSEXP>
+     </EXPORT>
+     <DOCUMENTATION>
+      <RSFDO>
+       <PARAMETER>I_BUKRS</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>Company Code</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>IR_KUNNR</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>Structure for customer range</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>IR_ERDAT</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>date range</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>I_ETAX</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>Only Table E-Tax</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>I_EMAIL</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>Case Email Blank</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>I_AL11</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>Char255</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>ET_RETURN</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>Return result</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>E_MESSAGE</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>Message</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>E_MESTYPE</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>Message Type</STEXT>
+      </RSFDO>
+     </DOCUMENTATION>
+    </item>
+   </FUNCTIONS>
+  </asx:values>
+ </asx:abap>
+</abapGit>

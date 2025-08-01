@@ -1,0 +1,8 @@
+@AbapCatalog.internal.setChange: 'FLDADD_NO_ASS_INFLUENCE'
+@AbapCatalog.sqlViewAppendName: 'ZZ1_004FC0969133'
+
+extend view FIN_SUBVAL_ACCTGSRVCDOC with ZZ1_UPMN5CQ7HHHTFR53RYFGZJOZU4
+  
+{ 
+  _SrvcDocument.ZZ1_BREAK_POSITION as ZZ1_BREAK_POSITION
+}

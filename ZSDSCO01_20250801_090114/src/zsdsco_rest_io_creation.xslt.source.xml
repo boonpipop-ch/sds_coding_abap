@@ -1,0 +1,121 @@
+<?sap.transform simple?>
+<!--<tt:transform xmlns:tt="http://www.sap.com/transformation-templates" xmlns:ddic="http://www.sap.com/abapxml/types/dictionary" xmlns:def="http://www.sap.com/abapxml/types/defined">-->
+  <tt:transform xmlns:tt="http://www.sap.com/transformation-templates" xmlns:ddic="http://www.sap.com/abapxml/types/dictionary">
+  <tt:root name="DATA" type="ddic:ZSDSCOS007"/>
+  <tt:template>
+    <object>
+
+      <str name="Description">
+        <tt:value ref="DATA.ORDERMASTER.K2_ORDER_NAME"/>
+      </str>
+      <str name="GroupCode">
+        <tt:value ref="DATA.ORDERMASTER.K2_CODE"/>
+      </str>
+      <str name="FiscalYear">
+        <tt:value ref="DATA.ORDERMASTER.K2_YEAR"/>
+      </str>
+      <str name="ResponsCostCenter">
+        <tt:value ref="DATA.ORDERMASTER.K2_RESPCCTR"/>
+      </str>
+      <str name="RequestCostCenter">
+        <tt:value ref="DATA.ORDERMASTER.K2_REQUEST_CCTR"/>
+      </str>
+      <str name="MemoNo">
+        <tt:value ref="DATA.ORDERMASTER.K2_MEMO"/>
+      </str>
+
+      <!-- Response     -->
+      <str name="InternalNumber">
+        <tt:value ref="DATA.AUFNR"/>
+      </str>
+      <str name="ResponseStatus">
+        <tt:value ref="DATA.RESP_STATUS"/>
+      </str>
+
+      <str name="ResponseMessage">
+        <tt:value ref="DATA.RESP_MESSAGE"/>
+      </str>
+
+      <tt:cond check="exist(DATA.PLANNINGTAB)">
+        <array name="Planning">
+          <tt:loop ref="DATA.PLANNINGTAB">
+            <!-- Response-->
+            <object>
+              <str name="K2Memo">
+                <tt:value ref="$ref.K2MEMO"/>
+              </str>
+              <str name="OrderNumber">
+                <tt:value ref="$ref.AUFNR"/>
+              </str>
+              <str name="CostElement">
+                <tt:value ref="$ref.KSTAR"/>
+              </str>
+              <str name="CurrencyKey">
+                <tt:value ref="$ref.WAERS"/>
+              </str>
+              <str name="Period001">
+                <tt:value ref="$ref.WOG001"/>
+              </str>
+              <str name="Period002">
+                <tt:value ref="$ref.WOG002"/>
+              </str>
+              <str name="Period003">
+                <tt:value ref="$ref.WOG003"/>
+              </str>
+              <str name="Period004">
+                <tt:value ref="$ref.WOG004"/>
+              </str>
+              <str name="Period005">
+                <tt:value ref="$ref.WOG005"/>
+              </str>
+              <str name="Period006">
+                <tt:value ref="$ref.WOG006"/>
+              </str>
+              <str name="Period007">
+                <tt:value ref="$ref.WOG007"/>
+              </str>
+              <str name="Period008">
+                <tt:value ref="$ref.WOG008"/>
+              </str>
+              <str name="Period009">
+                <tt:value ref="$ref.WOG009"/>
+              </str>
+              <str name="Period010">
+                <tt:value ref="$ref.WOG010"/>
+              </str>
+              <str name="Period011">
+                <tt:value ref="$ref.WOG011"/>
+              </str>
+              <str name="Period012">
+                <tt:value ref="$ref.WOG012"/>
+              </str>
+              <str name="PeriodTOT">
+                <tt:value ref="$ref.WOGTOT"/>
+              </str>
+            </object>
+          </tt:loop>
+        </array>
+      </tt:cond>
+
+
+      <tt:cond check="exist(DATA.RESPONSE)">
+        <array name="Response">
+          <tt:loop ref="DATA.RESPONSE">
+            <!-- Response-->
+            <object>
+              <!--              <tt:group>-->
+              <str name="Status">
+                <tt:value ref="$ref.RESP_STATUS"/>
+              </str>
+              <str name="Message">
+                <tt:value ref="$ref.RESP_MESSAGE"/>
+              </str>
+              <!--              </tt:group>-->
+            </object>
+          </tt:loop>
+        </array>
+      </tt:cond>
+
+    </object>
+  </tt:template>
+</tt:transform>

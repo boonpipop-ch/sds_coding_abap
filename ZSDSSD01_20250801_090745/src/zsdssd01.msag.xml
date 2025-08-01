@@ -1,0 +1,212 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<abapGit version="v1.0.0" serializer="LCL_OBJECT_MSAG" serializer_version="v1.0.0">
+ <asx:abap xmlns:asx="http://www.sap.com/abapxml" version="1.0">
+  <asx:values>
+   <T100A>
+    <ARBGB>ZSDSSD01</ARBGB>
+    <MASTERLANG>E</MASTERLANG>
+    <STEXT>SDS Message Class for Sales Distribution</STEXT>
+   </T100A>
+   <T100>
+    <T100>
+     <SPRSL>E</SPRSL>
+     <ARBGB>ZSDSSD01</ARBGB>
+     <MSGNR>000</MSGNR>
+     <TEXT>&amp; &amp; &amp; &amp;</TEXT>
+    </T100>
+    <T100>
+     <SPRSL>E</SPRSL>
+     <ARBGB>ZSDSSD01</ARBGB>
+     <MSGNR>001</MSGNR>
+     <TEXT>The term of payment is more than term of payment in master data</TEXT>
+    </T100>
+    <T100>
+     <SPRSL>E</SPRSL>
+     <ARBGB>ZSDSSD01</ARBGB>
+     <MSGNR>003</MSGNR>
+     <TEXT>No data found.</TEXT>
+    </T100>
+    <T100>
+     <SPRSL>E</SPRSL>
+     <ARBGB>ZSDSSD01</ARBGB>
+     <MSGNR>004</MSGNR>
+     <TEXT>Please select item(s) to be processed.</TEXT>
+    </T100>
+    <T100>
+     <SPRSL>E</SPRSL>
+     <ARBGB>ZSDSSD01</ARBGB>
+     <MSGNR>005</MSGNR>
+     <TEXT>Sales order &amp;1 is currently locked by user &amp;2.</TEXT>
+    </T100>
+    <T100>
+     <SPRSL>E</SPRSL>
+     <ARBGB>ZSDSSD01</ARBGB>
+     <MSGNR>006</MSGNR>
+     <TEXT>Customer &amp;1 is currently being processed by user &amp;2.</TEXT>
+    </T100>
+    <T100>
+     <SPRSL>E</SPRSL>
+     <ARBGB>ZSDSSD01</ARBGB>
+     <MSGNR>007</MSGNR>
+     <TEXT>Invalid Schedline &amp;1 &amp;2 &amp;3. Please refresh data and try again.</TEXT>
+    </T100>
+    <T100>
+     <SPRSL>E</SPRSL>
+     <ARBGB>ZSDSSD01</ARBGB>
+     <MSGNR>008</MSGNR>
+     <TEXT>Schedule line &amp;1 &amp;2 &amp;3 is not in delivery block status.</TEXT>
+    </T100>
+    <T100>
+     <SPRSL>E</SPRSL>
+     <ARBGB>ZSDSSD01</ARBGB>
+     <MSGNR>009</MSGNR>
+     <TEXT>Schedule line &amp;1 &amp;2 &amp;3 was already &amp;4.</TEXT>
+    </T100>
+    <T100>
+     <SPRSL>E</SPRSL>
+     <ARBGB>ZSDSSD01</ARBGB>
+     <MSGNR>010</MSGNR>
+     <TEXT>Schedule line &amp;1 &amp;2 &amp;3 is not yet approved by Co-Operator.</TEXT>
+    </T100>
+    <T100>
+     <SPRSL>E</SPRSL>
+     <ARBGB>ZSDSSD01</ARBGB>
+     <MSGNR>011</MSGNR>
+     <TEXT>Sched. line &amp;1 &amp;2 &amp;3 was not yet assigned advance receive amount.</TEXT>
+    </T100>
+    <T100>
+     <SPRSL>E</SPRSL>
+     <ARBGB>ZSDSSD01</ARBGB>
+     <MSGNR>012</MSGNR>
+     <TEXT>Schedule line &amp;1 &amp;2 &amp;3 was already approved by Manager.</TEXT>
+    </T100>
+    <T100>
+     <SPRSL>E</SPRSL>
+     <ARBGB>ZSDSSD01</ARBGB>
+     <MSGNR>013</MSGNR>
+     <TEXT>Schedule line &amp;1 &amp;2 &amp;3 is not yet approved.</TEXT>
+    </T100>
+    <T100>
+     <SPRSL>E</SPRSL>
+     <ARBGB>ZSDSSD01</ARBGB>
+     <MSGNR>014</MSGNR>
+     <TEXT>Operation completed. Please check result in column &quot;Message&quot;.</TEXT>
+    </T100>
+    <T100>
+     <SPRSL>E</SPRSL>
+     <ARBGB>ZSDSSD01</ARBGB>
+     <MSGNR>015</MSGNR>
+     <TEXT>Schedule line &amp;1 &amp;2 &amp;3 is not needed for Adv.Receive assignment.</TEXT>
+    </T100>
+    <T100>
+     <SPRSL>E</SPRSL>
+     <ARBGB>ZSDSSD01</ARBGB>
+     <MSGNR>016</MSGNR>
+     <TEXT>Please select entries for same customer code/AdvRec Group.</TEXT>
+    </T100>
+    <T100>
+     <SPRSL>E</SPRSL>
+     <ARBGB>ZSDSSD01</ARBGB>
+     <MSGNR>017</MSGNR>
+     <TEXT>Amount entered must not greater than advance receive amount &amp;1.</TEXT>
+    </T100>
+    <T100>
+     <SPRSL>E</SPRSL>
+     <ARBGB>ZSDSSD01</ARBGB>
+     <MSGNR>018</MSGNR>
+     <TEXT>Advance receive amount is not yet completely assigned to sched.line item.</TEXT>
+    </T100>
+    <T100>
+     <SPRSL>E</SPRSL>
+     <ARBGB>ZSDSSD01</ARBGB>
+     <MSGNR>019</MSGNR>
+     <TEXT>Automatically determine Advance receive amount processed.</TEXT>
+    </T100>
+    <T100>
+     <SPRSL>E</SPRSL>
+     <ARBGB>ZSDSSD01</ARBGB>
+     <MSGNR>020</MSGNR>
+     <TEXT>Error during save entries into table ZSDSSDT010.</TEXT>
+    </T100>
+    <T100>
+     <SPRSL>E</SPRSL>
+     <ARBGB>ZSDSSD01</ARBGB>
+     <MSGNR>021</MSGNR>
+     <TEXT>Advance receive assignement has been saved successfully.</TEXT>
+    </T100>
+    <T100>
+     <SPRSL>E</SPRSL>
+     <ARBGB>ZSDSSD01</ARBGB>
+     <MSGNR>022</MSGNR>
+     <TEXT>Advance receive assignement has been deleted.</TEXT>
+    </T100>
+    <T100>
+     <SPRSL>E</SPRSL>
+     <ARBGB>ZSDSSD01</ARBGB>
+     <MSGNR>023</MSGNR>
+     <TEXT>Advance Receive amount is not yet assigned.</TEXT>
+    </T100>
+    <T100>
+     <SPRSL>E</SPRSL>
+     <ARBGB>ZSDSSD01</ARBGB>
+     <MSGNR>024</MSGNR>
+     <TEXT>Wait for service confirmation</TEXT>
+    </T100>
+    <T100>
+     <SPRSL>E</SPRSL>
+     <ARBGB>ZSDSSD01</ARBGB>
+     <MSGNR>025</MSGNR>
+     <TEXT>Item &amp;1: Out of Allocate</TEXT>
+    </T100>
+    <T100>
+     <SPRSL>E</SPRSL>
+     <ARBGB>ZSDSSD01</ARBGB>
+     <MSGNR>026</MSGNR>
+     <TEXT>Item &amp;1: Material Over Quota &amp;2 &amp;3</TEXT>
+    </T100>
+    <T100>
+     <SPRSL>E</SPRSL>
+     <ARBGB>ZSDSSD01</ARBGB>
+     <MSGNR>027</MSGNR>
+     <TEXT>Please input value</TEXT>
+    </T100>
+    <T100>
+     <SPRSL>E</SPRSL>
+     <ARBGB>ZSDSSD01</ARBGB>
+     <MSGNR>028</MSGNR>
+     <TEXT>&amp;1 is required</TEXT>
+    </T100>
+    <T100>
+     <SPRSL>E</SPRSL>
+     <ARBGB>ZSDSSD01</ARBGB>
+     <MSGNR>029</MSGNR>
+     <TEXT>Invalid SO &amp;1/ Item &amp;2/ Schedule line &amp;3</TEXT>
+    </T100>
+    <T100>
+     <SPRSL>E</SPRSL>
+     <ARBGB>ZSDSSD01</ARBGB>
+     <MSGNR>030</MSGNR>
+     <TEXT>Error occured during preview form or file already opened.</TEXT>
+    </T100>
+    <T100>
+     <SPRSL>E</SPRSL>
+     <ARBGB>ZSDSSD01</ARBGB>
+     <MSGNR>031</MSGNR>
+     <TEXT>No data found to submit to Etax.</TEXT>
+    </T100>
+    <T100>
+     <SPRSL>E</SPRSL>
+     <ARBGB>ZSDSSD01</ARBGB>
+     <MSGNR>032</MSGNR>
+     <TEXT>Item &amp;1: Out of Allocate, but under product control.</TEXT>
+    </T100>
+    <T100>
+     <SPRSL>E</SPRSL>
+     <ARBGB>ZSDSSD01</ARBGB>
+     <MSGNR>033</MSGNR>
+     <TEXT>Customer not match with Atl. Tax Classific.</TEXT>
+    </T100>
+   </T100>
+  </asx:values>
+ </asx:abap>
+</abapGit>

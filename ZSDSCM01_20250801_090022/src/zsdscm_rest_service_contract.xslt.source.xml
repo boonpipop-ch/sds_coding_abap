@@ -1,0 +1,278 @@
+<?sap.transform simple?>
+<tt:transform xmlns:tt="http://www.sap.com/transformation-templates" xmlns:ddic="http://www.sap.com/abapxml/types/dictionary">
+
+  <tt:root name="DATA" type="ddic:ZSDSCMS005"/>
+  <tt:template>
+
+    <!-- Header Data-->
+    <object>
+      <tt:group>
+
+        <tt:cond frq="?">
+          <str name="SAPContractNo">
+            <tt:value ref="DATA.SVC_NO"/>
+            <tt:assign to-ref="DATA.UPDFLG.SVC_NO" val="'X'"/>
+          </str>
+        </tt:cond>
+        <tt:cond frq="?">
+          <str name="ContractType">
+            <tt:value ref="DATA.PROCESS_TYPE"/>
+            <tt:assign to-ref="DATA.UPDFLG.PROCESS_TYPE" val="'X'"/>
+          </str>
+        </tt:cond>
+        <tt:cond frq="1">
+          <str name="SFContractNo">
+            <tt:value ref="DATA.SF_CONTRACT_NO"/>
+            <tt:assign to-ref="DATA.UPDFLG.SF_CONTRACT_NO" val="'X'"/>
+          </str>
+        </tt:cond>
+        <tt:cond frq="1">
+          <str name="Flag">
+            <tt:value ref="DATA.ZMODE"/>
+            <tt:assign to-ref="DATA.UPDFLG.ZMODE" val="'X'"/>
+          </str>
+        </tt:cond>
+        <tt:cond frq="?">
+          <str name="SFQuoteNo">
+            <tt:value ref="DATA.SF_QUOT_NO"/>
+            <tt:assign to-ref="DATA.UPDFLG.SF_QUOT_NO" val="'X'"/>
+          </str>
+        </tt:cond>
+        <tt:cond frq="?">
+          <str name="StartDate">
+            <tt:value ref="DATA.START_DATE"/>
+            <tt:assign to-ref="DATA.UPDFLG.START_DATE" val="'X'"/>
+          </str>
+        </tt:cond>
+        <tt:cond frq="?">
+          <str name="EndDate">
+            <tt:value ref="DATA.END_DATE"/>
+            <tt:assign to-ref="DATA.UPDFLG.END_DATE" val="'X'"/>
+          </str>
+        </tt:cond>
+        <tt:cond frq="?">
+          <str name="Description">
+            <tt:value ref="DATA.DESCRIPTION"/>
+            <tt:assign to-ref="DATA.UPDFLG.DESCRIPTION" val="'X'"/>
+          </str>
+        </tt:cond>
+        <tt:cond frq="?">
+          <str name="PaymentTerm">
+            <tt:value ref="DATA.PMNTTRMS"/>
+            <tt:assign to-ref="DATA.UPDFLG.PMNTTRMS" val="'X'"/>
+          </str>
+        </tt:cond>
+        <tt:cond frq="?">
+          <str name="SalesOffice">
+            <tt:value ref="DATA.SALES_OFFICE"/>
+            <tt:assign to-ref="DATA.UPDFLG.SALES_OFFICE" val="'X'"/>
+          </str>
+        </tt:cond>
+        <tt:cond frq="?">
+          <str name="SalesGroup">
+            <tt:value ref="DATA.SALES_GROUP"/>
+            <tt:assign to-ref="DATA.UPDFLG.SALES_GROUP" val="'X'"/>
+          </str>
+        </tt:cond>
+        <tt:cond frq="?">
+          <str name="WBS">
+            <tt:value ref="DATA.WBS"/>
+            <tt:assign to-ref="DATA.UPDFLG.WBS" val="'X'"/>
+          </str>
+        </tt:cond>
+        <tt:cond frq="?">
+          <str name="BillingMethod">
+            <tt:value ref="DATA.ZZ1_BILL_METHOD"/>
+            <tt:assign to-ref="DATA.UPDFLG.ZZ1_BILL_METHOD" val="'X'"/>
+          </str>
+        </tt:cond>
+        <tt:cond frq="?">
+          <str name="Status">
+            <tt:value ref="DATA.STATUS"/>
+            <tt:assign to-ref="DATA.UPDFLG.STATUS" val="'X'"/>
+          </str>
+        </tt:cond>
+        <tt:cond frq="?">
+          <str name="ResponseStatus">
+            <tt:value ref="DATA.RESP_STATUS"/>
+          </str>
+        </tt:cond>
+        <tt:cond frq="?">
+          <str name="ResponseMessage">
+            <tt:value ref="DATA.RESP_MESSAGE"/>
+          </str>
+        </tt:cond>
+
+      </tt:group>
+
+      <array name="Partner">
+        <tt:cond check="exist(DATA.PARTNER)">
+          <tt:loop ref="DATA.PARTNER">
+            <!-- Partner Data -->
+            <object>
+              <tt:group>
+                <tt:cond frq="1">
+                  <str name="Function">
+                    <tt:value ref="$ref.PARTNER_FCT"/>
+                  </str>
+                </tt:cond>
+                <tt:cond frq="1">
+                  <str name="BPNumber">
+                    <tt:value ref="$ref.PARTNER_NO"/>
+                  </str>
+                </tt:cond>
+              </tt:group>
+
+            </object>
+          </tt:loop>
+        </tt:cond>
+      </array>
+
+      <array name="ServiceContractItem">
+        <tt:cond check="exist(DATA.ITEM)">
+          <tt:loop name="item" ref="DATA.ITEM">
+            <!-- Item Data -->
+            <object>
+              <tt:group>
+                <tt:cond frq="1">
+                  <str name="ItemNo">
+                    <tt:value ref="$item.NUMBER_INT"/>
+                    <tt:assign to-ref="$item.UPDFLG.NUMBER_INT" val="'X'"/>
+                  </str>
+                </tt:cond>
+                <tt:cond frq="?">
+                  <str name="Category">
+                    <tt:value ref="$item.ITM_TYPE"/>
+                    <tt:assign to-ref="$item.UPDFLG.ITM_TYPE" val="'X'"/>
+                  </str>
+                </tt:cond>
+                <tt:cond frq="?">
+                  <str name="Product">
+                    <tt:value ref="$item.PRODUCT_ID"/>
+                    <tt:assign to-ref="$item.UPDFLG.PRODUCT_ID" val="'X'"/>
+                  </str>
+                </tt:cond>
+                <tt:cond frq="?">
+                  <num name="Quantity">
+                    <tt:value ref="$item.QUANTITY"/>
+                    <tt:assign to-ref="$item.UPDFLG.QUANTITY" val="'X'"/>
+                  </num>
+                </tt:cond>
+                <tt:cond frq="?">
+                  <num name="Amount">
+                    <tt:value ref="$item.AMOUNT"/>
+                    <tt:assign to-ref="$item.UPDFLG.AMOUNT" val="'X'"/>
+                  </num>
+                </tt:cond>
+                <tt:cond frq="1">
+                  <str name="Flag">
+                    <tt:value ref="$item.ZMODE"/>
+                    <tt:assign to-ref="$item.UPDFLG.ZMODE" val="'X'"/>
+                  </str>
+                </tt:cond>
+                <tt:cond frq="?">
+                  <str name="WBS">
+                    <tt:value ref="$item.WBS"/>
+                    <tt:assign to-ref="$item.UPDFLG.WBS" val="'X'"/>
+                  </str>
+                </tt:cond>
+                <tt:cond frq="?">
+                  <str name="ConditionType">
+                    <tt:value ref="$item.COND_TYPE"/>
+                    <tt:assign to-ref="$item.UPDFLG.COND_TYPE" val="'X'"/>
+                  </str>
+                </tt:cond>
+                <tt:cond frq="?">
+                  <num name="DiscountPer">
+                    <tt:value ref="$item.DISC_PERCT"/>
+                    <tt:assign to-ref="$item.UPDFLG.DISC_PERCT" val="'X'"/>
+                  </num>
+                </tt:cond>
+                <tt:cond frq="?">
+                  <num name="DiscountVal">
+                    <tt:value ref="$item.DISC_AMOUNT"/>
+                    <tt:assign to-ref="$item.UPDFLG.DISC_AMOUNT" val="'X'"/>
+                  </num>
+                </tt:cond>
+                <tt:cond frq="?">
+                  <str name="Status">
+                    <tt:value ref="$item.STATUS"/>
+                    <tt:assign to-ref="$item.UPDFLG.STATUS" val="'X'"/>
+                  </str>
+                </tt:cond>
+              </tt:group>
+
+              <tt:cond check="exist($item.REF_EQUIPMENT)">
+                <array name="RefEquipment">
+                  <tt:loop name="refequip" ref="$item.REF_EQUIPMENT">
+                    <!-- Reference Equipment Data -->
+                    <object>
+                      <tt:group>
+                        <tt:cond frq="1">
+                          <str name="EquipmentID">
+                            <tt:value ref="$refequip.EQUIPMENT_ID"/>
+                          </str>
+                        </tt:cond>
+                      </tt:group>
+                    </object>
+                  </tt:loop>
+                </array>
+              </tt:cond>
+
+              <tt:cond check="exist($item.BILLPLAN)">
+                <array name="Billing">
+                  <tt:loop name="billplan" ref="$item.BILLPLAN">
+                    <!-- Billing Plan Data -->
+                    <object>
+                      <tt:group>
+                        <tt:cond frq="1">
+                          <str name="BillingDate">
+                            <tt:value ref="$billplan.BILL_DATE"/>
+                          </str>
+                        </tt:cond>
+                        <tt:cond frq="?">
+                          <str name="Description">
+                            <tt:value ref="$billplan.DESCRIPTION"/>
+                          </str>
+                        </tt:cond>
+                        <tt:cond frq="1">
+                          <num name="NetAmount">
+                            <tt:value ref="$billplan.NET_VALUE"/>
+                          </num>
+                        </tt:cond>
+                      </tt:group>
+                    </object>
+                  </tt:loop>
+                </array>
+              </tt:cond>
+
+            </object>
+          </tt:loop>
+        </tt:cond>
+      </array>
+
+      <tt:cond check="not-initial(DATA.RESPONSE)">
+        <array name="Response">
+          <tt:loop ref="DATA.RESPONSE">
+            <!-- Response-->
+            <object>
+              <tt:group>
+                <tt:cond frq="?">
+                  <str name="Status">
+                    <tt:value ref="$ref.RESP_STATUS"/>
+                  </str>
+                </tt:cond>
+                <tt:cond frq="?">
+                  <str name="Message">
+                    <tt:value ref="$ref.RESP_MESSAGE"/>
+                  </str>
+                </tt:cond>
+              </tt:group>
+            </object>
+          </tt:loop>
+        </array>
+      </tt:cond>
+
+    </object>
+  </tt:template>
+</tt:transform>

@@ -1,0 +1,2255 @@
+*----------------------------------------------------------------------*
+***INCLUDE LZSDSFI01F01.
+*----------------------------------------------------------------------*
+*&---------------------------------------------------------------------*
+*&      Form  F_COMMIT
+*&---------------------------------------------------------------------*
+*       text
+*----------------------------------------------------------------------*
+*  -->  p1        text
+*  <--  p2        text
+*----------------------------------------------------------------------*
+FORM F_COMMIT .
+  CALL FUNCTION 'BAPI_TRANSACTION_COMMIT'
+    EXPORTING
+      WAIT = 'X'.
+ENDFORM.                    " F_COMMIT
+*&---------------------------------------------------------------------*
+*&      Form  F_GET_DEBIT_CREDIT_INDICATOR
+*&---------------------------------------------------------------------*
+*       text
+*----------------------------------------------------------------------*
+*      -->P_LT_TBSL  text
+*----------------------------------------------------------------------*
+FORM F_GET_DEBIT_CREDIT_INDICATOR  TABLES FT_TBSL
+                                          FT_GL STRUCTURE ZSDSFIS002.
+  DATA : BEGIN OF LS_TBSL,
+           BSCHL TYPE TBSL-BSCHL,
+           SHKZG TYPE TBSL-SHKZG,
+         END OF LS_TBSL.
+  DATA LT_TBSL LIKE TABLE OF LS_TBSL.
+
+  SELECT BSCHL
+         SHKZG
+    FROM TBSL
+    INTO TABLE LT_TBSL
+    FOR ALL ENTRIES IN FT_GL
+    WHERE BSCHL EQ FT_GL-BSCHL.
+
+  FT_TBSL[] = LT_TBSL[].
+
+ENDFORM.                    " F_GET_DEBIT_CREDIT_INDICATOR
+*&---------------------------------------------------------------------*
+*&      Form  F_CHECK_DATA
+*&---------------------------------------------------------------------*
+*       text
+*----------------------------------------------------------------------*
+*      -->P_LS_INPUT  text
+*      <--P_LV_CHECK_DUP  text
+*----------------------------------------------------------------------*
+FORM F_CHECK_DATA  USING    LS_INPUT TYPE ZSDSFIS013
+                   CHANGING LV_CHECK_DUP
+                            LV_BELNR.
+
+  DATA : BEGIN OF LS_BKPF,
+           BELNR TYPE BKPF-BELNR,
+           XBLNR TYPE BKPF-XBLNR,
+         END OF LS_BKPF.
+
+  SELECT SINGLE XBLNR BELNR
+    FROM BKPF
+    INTO (LS_BKPF-XBLNR,LS_BKPF-BELNR)
+    WHERE XBLNR EQ LS_INPUT-XBLNR
+      AND BLART EQ GC_CON-DOC_TYPE.
+  IF SY-SUBRC EQ 0.
+    LV_CHECK_DUP = ABAP_TRUE.
+    LV_BELNR     = LS_BKPF-BELNR.
+  ENDIF.
+
+ENDFORM.                    " F_CHECK_DATA
+*&---------------------------------------------------------------------*
+*& Form F_POST_FI
+*&---------------------------------------------------------------------*
+*& text
+*&---------------------------------------------------------------------*
+*&      --> IT_DETAIL
+*&      --> I_HEADER
+*&      --> I_DOCTYPE
+*&      --> I_K2DOC
+*&      <-- E_OUTPUT
+*&      <-- E_MESSAGE
+*&---------------------------------------------------------------------*
+FORM F_POST_FI  TABLES LT_DETAIL  STRUCTURE ZSDSFIS014
+                 USING UV_DOCTYPE TYPE      CHAR10
+                       UV_K2DOC   TYPE      CHAR50
+                       UV_COMCODE TYPE      CHAR4
+              CHANGING CS_HEADER  TYPE      ZSDSFIS013
+                       CV_OUTPUT  TYPE      BELNR_D
+                       CV_MESSAGE TYPE      CHAR255.
+
+  DATA : BEGIN OF GS_T030K,
+           MWSKZ TYPE T030K-MWSKZ,
+           KONTS TYPE T030K-KONTS,
+         END OF GS_T030K.
+  DATA GT_T030K LIKE TABLE OF GS_T030K.
+
+  DATA : BEGIN OF LS_WHT,
+           WT_WITHCD TYPE ZSDSFIS014-WT_WITHCD,
+           WT_QBSHB  TYPE ZSDSFIS014-WT_QBSHB,
+         END OF LS_WHT.
+  DATA LT_WHT LIKE TABLE OF LS_WHT.
+
+  DATA : BEGIN OF LS_TAXRATE,
+           MWSKZ TYPE T007A-MWSKZ,
+           KBETR TYPE KONP-KBETR,
+         END OF LS_TAXRATE.
+  DATA LT_TAXRATE LIKE TABLE OF LS_TAXRATE.
+
+
+  DATA GS_DETAIL LIKE LINE OF LT_DETAIL.
+
+  DATA : LS_DOCUMENTHEADER    TYPE BAPIACHE09,
+         LS_CUSTOMERCPD	      TYPE BAPIACPA09,
+         LT_ACCOUNTGL         TYPE TABLE OF BAPIACGL09,
+         LS_ACCOUNTGL         TYPE BAPIACGL09,
+         LT_ACCOUNTPAYABLE    TYPE TABLE OF BAPIACAP09,
+         LS_ACCOUNTPAYABLE    TYPE BAPIACAP09,
+         LT_ACCOUNTRECEIVABLE TYPE TABLE OF BAPIACAR09,
+         LS_ACCOUNTRECEIVABLE TYPE BAPIACAR09,
+         LT_CURRENCYAMOUNT    TYPE TABLE OF BAPIACCR09,
+         LS_CURRENCYAMOUNT    TYPE BAPIACCR09,
+         LT_RETURN            TYPE TABLE OF BAPIRET2 WITH HEADER LINE,
+         LS_RETURN            TYPE BAPIRET2,
+         LT_EXTENSION2        TYPE TABLE OF BAPIPAREX,
+         LS_EXTENSION2        TYPE BAPIPAREX,
+         LT_ACCOUNTTAX        TYPE TABLE OF BAPIACTX09,
+         LS_ACCOUNTTAX        TYPE BAPIACTX09,
+         LT_ACCOUNTWT	        TYPE TABLE OF	BAPIACWT09,
+         LS_ACCOUNTWT         TYPE BAPIACWT09,
+         LT_EXTENSION         TYPE TABLE OF BAPIACEXTC,
+         LS_EXTENSION         TYPE BAPIACEXTC.
+
+  DATA : LV_ERR TYPE C.
+
+  DATA : LV_BKTXT TYPE BKPF-BKTXT.
+
+  DATA : LV_EXCH_RATE TYPE UKURSP,
+         LV_FFACT     TYPE FFACT_CURR.
+
+  DATA : I_BUKRS TYPE  BUKRS,
+         I_DATUM TYPE  DATUM.
+
+  DATA : E_PERIOD TYPE  POPER,
+         E_GJAHR  TYPE  GJAHR.
+
+  DATA : GV_TAXCD LIKE  BSEG-MWSKZ.
+
+  DATA : LS_DETAIL LIKE GS_DETAIL.
+
+  DATA : LV_SGTXT TYPE BSEG-SGTXT.
+
+  DATA : LV_GL_LINE LIKE LS_ACCOUNTGL-ITEMNO_ACC.
+
+  DATA : LV_TAXDT TYPE SY-DATUM,
+         LV_AMOUT TYPE VBAK-NETWR.
+
+  DATA : LV_TEXT1 TYPE C LENGTH 30,
+         LV_TEXT2 TYPE C LENGTH 30.
+
+  DATA : LV_TEXT3 TYPE C LENGTH 10.
+
+  DATA : LV_VAT LIKE GS_DETAIL-VATBAS.
+
+  I_BUKRS = UV_COMCODE.
+  I_DATUM = CS_HEADER-BUDAT.
+
+  IF CS_HEADER-WAERS NE GC_CON-THB.
+    PERFORM F_GET_EXCHANGE_RATE USING SY-DATUM
+                                      CS_HEADER-WAERS
+                             CHANGING LV_EXCH_RATE
+                                      LV_FFACT.
+
+    CS_HEADER-KURSF = LV_EXCH_RATE.
+  ENDIF.
+
+  IF LT_DETAIL[] IS NOT INITIAL.
+    SELECT CSKS~KOSTL,
+           CSKS~PRCTR
+      FROM CSKS
+      INTO TABLE @DATA(LT_PROFIT)
+      FOR ALL ENTRIES IN @LT_DETAIL
+      WHERE KOSTL EQ @LT_DETAIL-PRCTR.
+  ENDIF.
+
+*--------------------------------------------------------------------*
+* Deletail
+*--------------------------------------------------------------------*
+
+
+  LOOP AT LT_DETAIL INTO LS_DETAIL.
+    MOVE-CORRESPONDING LS_DETAIL TO GS_DETAIL.
+    CLEAR : LS_DETAIL,LS_ACCOUNTPAYABLE,LS_CURRENCYAMOUNT,LS_EXTENSION2,LS_ACCOUNTGL.
+*    IF GS_DETAIL-HKONT EQ 'OT03'.
+*      CONTINUE.
+*    ENDIF.
+
+    IF GS_DETAIL-HKONT EQ CS_HEADER-LIFNR.
+      CONTINUE.
+    ENDIF.
+    DATA(LV_COST_CENTER) = |{ GS_DETAIL-PRCTR ALPHA = IN }|.
+
+*    IF lv_ffact IS NOT INITIAL.
+*      gs_detail-vatbas = gs_detail-vatbas * lv_ffact.
+*    ENDIF.
+
+    LV_SGTXT = GS_DETAIL-SGTXT.
+
+    ADD 1 TO LV_GL_LINE.
+    LS_ACCOUNTGL-WBS_ELEMENT = GS_DETAIL-WBS.
+    LS_ACCOUNTGL-ALLOC_NMBR  = GS_DETAIL-ZUONR.    "ADD CH01
+    LS_ACCOUNTGL-ITEMNO_ACC  = LV_GL_LINE.
+    LS_ACCOUNTGL-GL_ACCOUNT  = GS_DETAIL-HKONT.
+*    LS_ACCOUNTGL-ACCT_KEY    = GC_CON-EGK.
+    PERFORM F_APHA_INPUT USING LS_ACCOUNTGL-GL_ACCOUNT.
+    LS_ACCOUNTGL-COMP_CODE  = UV_COMCODE.
+    READ TABLE LT_PROFIT INTO DATA(LS_PROFIT)
+    WITH KEY KOSTL = LV_COST_CENTER.
+    IF SY-SUBRC = 0.
+      LS_ACCOUNTGL-PROFIT_CTR = LS_PROFIT-PRCTR.
+      LS_ACCOUNTGL-COSTCENTER = GS_DETAIL-PRCTR.
+    ENDIF.
+*    READ TABLE lt_skb1 INTO ls_skb1
+*    WITH KEY saknr = ls_accountgl-gl_account
+*             mwskz = space.
+*    IF sy-subrc = 0.
+*      ls_accountgl-tax_code   = space.
+*    ELSE.
+*      ls_accountgl-tax_code   = CS_HEADER-mwskz.
+*    ENDIF.
+
+*    IF UV_DOCTYPE  EQ 'F43'.
+*      ls_accountgl-tax_code   = space.
+*    ELSE.
+*      ls_accountgl-tax_code   = CS_HEADER-mwskz.
+*    ENDIF.
+
+*    LS_ACCOUNTGL-PROFIT_CTR = GS_DETAIL-PRCTR.
+*    LS_ACCOUNTGL-COSTCENTER = GS_DETAIL-PRCTR.
+    PERFORM F_APHA_INPUT USING LS_ACCOUNTGL-COSTCENTER.
+    LS_ACCOUNTGL-ORDERID    = GS_DETAIL-AUFNR.
+    PERFORM F_APHA_INPUT USING LS_ACCOUNTGL-ORDERID .
+    LS_ACCOUNTGL-ITEM_TEXT  = GS_DETAIL-SGTXT.
+*    ls_accountgl-alloc_nmbr = gs_detail-zuonr.
+    APPEND LS_ACCOUNTGL TO LT_ACCOUNTGL.
+
+    LS_CURRENCYAMOUNT-ITEMNO_ACC  = LV_GL_LINE.
+*    ls_currencyamount-curr_type   = '10'.
+    LS_CURRENCYAMOUNT-CURRENCY    = CS_HEADER-WAERS.
+    LS_CURRENCYAMOUNT-EXCH_RATE   = CS_HEADER-KURSF.
+    IF GS_DETAIL-BSCHL EQ GC_CON-40.
+      LS_CURRENCYAMOUNT-AMT_DOCCUR  = GS_DETAIL-VATBAS.
+    ELSE.
+      LS_CURRENCYAMOUNT-AMT_DOCCUR  = GS_DETAIL-VATBAS * -1.
+    ENDIF.
+
+    ADD LS_CURRENCYAMOUNT-AMT_DOCCUR TO LV_AMOUT.
+
+    APPEND LS_CURRENCYAMOUNT TO LT_CURRENCYAMOUNT.
+
+    IF LS_CURRENCYAMOUNT-AMT_DOCCUR GE 0.
+      LS_EXTENSION2-STRUCTURE = GC_CON-ADDITIONAL_FILED.
+      CONCATENATE LS_ACCOUNTGL-ITEMNO_ACC GS_DETAIL-BSCHL GC_CON-BRNCH GC_CON-BUPLA SPACE INTO LS_EXTENSION2-VALUEPART1  RESPECTING BLANKS.
+      APPEND LS_EXTENSION2 TO LT_EXTENSION2.
+    ELSE.
+      LS_EXTENSION2-STRUCTURE = GC_CON-ADDITIONAL_FILED.
+      CONCATENATE LS_ACCOUNTGL-ITEMNO_ACC GS_DETAIL-BSCHL GC_CON-BRNCH GC_CON-BUPLA SPACE INTO LS_EXTENSION2-VALUEPART1  RESPECTING BLANKS.
+      APPEND LS_EXTENSION2 TO LT_EXTENSION2.
+    ENDIF.
+
+    ADD GS_DETAIL-VATBAS TO LV_VAT.
+
+    AT LAST.
+      IF CS_HEADER-MWSKZ IS NOT INITIAL AND
+         CS_HEADER-MWSKZ NE GC_CON-IX.
+
+        CLEAR : LS_ACCOUNTGL,LS_CURRENCYAMOUNT,LS_EXTENSION2,LS_ACCOUNTGL.
+        GV_TAXCD = CS_HEADER-MWSKZ.
+        LV_TAXDT = GS_DETAIL-TAXDT.
+*      ls_j_1hvat_off_num-nrrangenr = gs_detail-taxdt+4(2).
+*      MODIFY lt_j_1hvat_off_num FROM ls_j_1hvat_off_num TRANSPORTING nrrangenr
+*                                                               WHERE j_1hnumgr IS NOT INITIAL.
+
+*      ls_accounttax-itemno_tax      = lv_gl_line.
+        ADD 1 TO LV_GL_LINE.
+        LS_CURRENCYAMOUNT-ITEMNO_ACC  = LV_GL_LINE.
+*      ls_currencyamount-curr_type   = '10'.
+        LS_CURRENCYAMOUNT-CURRENCY    = CS_HEADER-WAERS.
+        LS_CURRENCYAMOUNT-EXCH_RATE   = CS_HEADER-KURSF.
+        LS_CURRENCYAMOUNT-AMT_DOCCUR  = GS_DETAIL-TAXAM.
+        LS_CURRENCYAMOUNT-AMT_BASE    = LV_VAT.
+        LS_CURRENCYAMOUNT-TAX_AMT     = GS_DETAIL-TAXAM.
+        APPEND LS_CURRENCYAMOUNT TO LT_CURRENCYAMOUNT.
+
+        ADD LS_CURRENCYAMOUNT-AMT_DOCCUR TO LV_AMOUT.
+
+        LS_ACCOUNTTAX-ITEMNO_ACC = LV_GL_LINE.
+
+        READ TABLE GT_T030K INTO GS_T030K
+        WITH KEY MWSKZ = CS_HEADER-MWSKZ.
+        IF SY-SUBRC = 0.
+          LS_ACCOUNTTAX-GL_ACCOUNT = GS_T030K-KONTS.
+        ENDIF.
+
+*      ls_accounttax-gl_account = '0000111103'.
+        LS_ACCOUNTTAX-COND_KEY   = GC_CON-MWVS.
+        LS_ACCOUNTTAX-ACCT_KEY   = GC_CON-VST.
+        LS_ACCOUNTTAX-TAX_CODE   = CS_HEADER-MWSKZ.
+        LS_ACCOUNTTAX-ITEMNO_TAX = GC_CON-STAR.
+
+        READ TABLE LT_TAXRATE INTO LS_TAXRATE
+        WITH KEY MWSKZ = CS_HEADER-MWSKZ.
+        IF SY-SUBRC = 0.
+          LS_ACCOUNTTAX-TAX_RATE = LS_TAXRATE-KBETR / 10.
+        ENDIF.
+
+        LS_ACCOUNTTAX-TAX_DATE = SY-DATUM.
+*
+        APPEND LS_ACCOUNTTAX TO LT_ACCOUNTTAX.
+
+        LS_EXTENSION2-STRUCTURE = GC_CON-ADDITIONAL_FILED_V2.
+        CONCATENATE LS_CURRENCYAMOUNT-ITEMNO_ACC GS_DETAIL-BSCHL GC_CON-BRNCH GC_CON-BUPLA SPACE"gs_detail-lifnr
+                          INTO LS_EXTENSION2-VALUEPART1  RESPECTING BLANKS.
+        APPEND LS_EXTENSION2 TO LT_EXTENSION2.
+
+*      IF gs_detail-taxid IS NOT INITIAL.
+*        lv_tax = gs_detail-taxid.
+*      ENDIF.
+
+*      IF gs_detail-branch IS NOT INITIAL.
+*        lv_branch = gs_detail-branch.
+*      ENDIF.
+
+*      IF gs_detail-refno IS NOT INITIAL.
+*        gv_ref = gs_detail-refno.
+*      ENDIF.
+
+      ENDIF.
+    ENDAT.
+
+*    IF gs_detail-wt_withcd IS NOT INITIAL.
+*      ls_wht-wt_withcd = gs_detail-wt_withcd.
+*      ls_wht-wt_qbshb  = gs_detail-wt_qbshb .
+*    ENDIF.
+*
+*    COLLECT ls_wht INTO lt_wht.
+
+    CLEAR : GS_T030K,GS_DETAIL,LS_WHT.
+  ENDLOOP.
+
+
+
+
+*--------------------------------------------------------------------*
+* Header
+*--------------------------------------------------------------------*
+  TRANSLATE CS_HEADER-USNAM TO UPPER CASE.
+
+  SPLIT CS_HEADER-USNAM AT SPACE INTO LV_TEXT1
+                                      LV_TEXT2.
+
+  LS_DOCUMENTHEADER-USERNAME          = LV_TEXT1."sy-uname.
+  LS_DOCUMENTHEADER-HEADER_TXT        = CS_HEADER-BKTXT.
+  LS_DOCUMENTHEADER-COMP_CODE         = UV_COMCODE.
+  LS_DOCUMENTHEADER-FISC_YEAR         = E_GJAHR.
+  IF LV_TAXDT IS INITIAL.
+    LS_DOCUMENTHEADER-DOC_DATE        = CS_HEADER-BLDAT.
+  ELSE.
+    LS_DOCUMENTHEADER-DOC_DATE        = LV_TAXDT.
+  ENDIF.
+
+  LS_DOCUMENTHEADER-PSTNG_DATE  = CS_HEADER-BUDAT.
+  LS_DOCUMENTHEADER-TRANS_DATE  = CS_HEADER-BUDAT.
+  LS_DOCUMENTHEADER-FIS_PERIOD  = CS_HEADER-MONAT.
+  LS_DOCUMENTHEADER-DOC_TYPE    = UV_DOCTYPE.
+  LS_DOCUMENTHEADER-REF_DOC_NO  = CS_HEADER-XBLNR.
+
+
+
+
+  PERFORM F_CHECK_POST TABLES LT_ACCOUNTGL
+                              LT_ACCOUNTPAYABLE
+                              LT_ACCOUNTRECEIVABLE
+                              LT_ACCOUNTTAX
+                              LT_CURRENCYAMOUNT
+                              LT_EXTENSION
+                              LT_RETURN
+                              LT_EXTENSION2
+                              LT_ACCOUNTWT
+                        USING LS_DOCUMENTHEADER
+                              LS_CUSTOMERCPD
+                              LV_ERR
+                              CV_MESSAGE.
+
+  IF LV_ERR NE ABAP_TRUE.
+
+*    IF lt_accounttax[] IS NOT INITIAL.
+*      sy-tcode = 'Z_TEST'.
+*      EXPORT lt_j_1hvat_off_num[] TO MEMORY ID 'HEADERTEXT'. " Please check code in Class ZCL_IM_BADI_AC_DOCUMENT Methods IF_EX_AC_DOCUMENT~CHANGE_AFTER_CHECK
+*    ENDIF.
+
+*    IF CS_HEADER-waers EQ 'JPY'.
+*      sy-tcode = 'Z_TEST'.
+*    ENDIF.
+
+    CALL FUNCTION 'BAPI_ACC_DOCUMENT_POST'
+      EXPORTING
+        DOCUMENTHEADER    = LS_DOCUMENTHEADER
+        CUSTOMERCPD       = LS_CUSTOMERCPD
+      TABLES
+        ACCOUNTGL         = LT_ACCOUNTGL
+        ACCOUNTPAYABLE    = LT_ACCOUNTPAYABLE
+        ACCOUNTRECEIVABLE = LT_ACCOUNTRECEIVABLE
+        ACCOUNTTAX        = LT_ACCOUNTTAX
+        CURRENCYAMOUNT    = LT_CURRENCYAMOUNT
+        EXTENSION1        = LT_EXTENSION
+        RETURN            = LT_RETURN
+        EXTENSION2        = LT_EXTENSION2
+        ACCOUNTWT         = LT_ACCOUNTWT
+      EXCEPTIONS
+        ERROR_MESSAGE     = 1
+        OTHERS            = 2.
+    IF LT_ACCOUNTTAX[] IS NOT INITIAL.
+*      FREE MEMORY ID 'HEADERTEXT'.
+    ENDIF.
+
+    READ TABLE LT_RETURN INTO LS_RETURN
+    WITH KEY TYPE = GC_CON-S.
+    IF SY-SUBRC EQ 0.
+
+*      CONCATENATE 'Document' ls_return-message_v2+0(10) 'has been saved' INTO CV_MESSAGE SEPARATED BY space.
+*        CV_OUTPUT   = ls_return-message_v2+0(10).
+*      gs_check_post-status  = gc_status-success.
+*      gs_check_post-flag    = 'S'.
+*      gs_check_post-message = CV_MESSAGE.
+      CV_OUTPUT  = LS_RETURN-MESSAGE_V2+0(10).
+
+*      APPEND gs_check_post TO gt_check_post.
+
+      PERFORM F_COMMIT.
+
+*      SELECT SINGLE bktxt
+*        FROM bkpf
+*        INTO lv_bktxt
+*        WHERE belnr EQ ls_return-message_v2+0(10)
+*          AND gjahr EQ ls_return-message_v2+14(4).
+
+
+*      CV_MESSAGE = lv_bktxt.
+      CV_MESSAGE = TEXT-S01.
+
+*      IF lv_tax IS NOT INITIAL.
+*        PERFORM f_updata_tax_code USING ls_return-message_v2+0(10)
+*                                        e_gjahr
+*                                        lv_tax.
+*        PERFORM f_commit.
+*      ENDIF.
+*
+*      IF lv_branch IS NOT INITIAL.
+*        PERFORM f_updata_branch_code USING ls_return-message_v2+0(10)
+*                                           e_gjahr
+*                                           lv_branch.
+*        PERFORM f_commit.
+*      ENDIF.
+
+    ENDIF.
+  ENDIF.
+
+ENDFORM.
+*&---------------------------------------------------------------------*
+*&      Form  F_CHECK_POST
+*&---------------------------------------------------------------------*
+*       text
+*----------------------------------------------------------------------*
+*      -->P_LT_ACCOUNTGL  text
+*      -->P_LT_ACCOUNTPAYABLE  text
+*      -->P_LT_ACCOUNTRECEIVABLE  text
+*      -->P_LT_ACCOUNTTAX  text
+*      -->P_LT_CURRENCYAMOUNT  text
+*      -->P_LT_EXTENSION  text
+*      -->P_LT_RETURN  text
+*      -->P_LT_EXTENSION2  text
+*      -->P_LT_ACCOUNTWT  text
+*      -->P_LS_DOCUMENTHEADER  text
+*      -->P_LS_CUSTOMERCPD  text
+*      -->P_LV_ERR  text
+*      -->P_CV_MESSAGE  text
+*----------------------------------------------------------------------*
+FORM F_CHECK_POST TABLES FT_ACCOUNTGL
+                         FT_ACCOUNTPAYABLE
+                         FT_ACCOUNTRECEIVABLE
+                         FT_ACCOUNTTAX
+                         FT_CURRENCYAMOUNT
+                         FT_EXTENSION
+                         FT_RETURN
+                         FT_EXTENSION2
+                         FT_ACCOUNTWT
+                  USING  FS_DOCUMENTHEADER
+                         FS_CUSTOMERCPD
+                         LV_ERROR
+                         CV_MESSAGE.
+
+
+  DATA : LS_DOCUMENTHEADER    TYPE BAPIACHE09,
+         LS_CUSTOMERCPD	      TYPE BAPIACPA09,
+         LT_ACCOUNTGL         TYPE TABLE OF BAPIACGL09,
+         LS_ACCOUNTGL         TYPE BAPIACGL09,
+         LT_ACCOUNTPAYABLE    TYPE TABLE OF BAPIACAP09,
+         LS_ACCOUNTPAYABLE    TYPE BAPIACAP09,
+         LT_ACCOUNTRECEIVABLE TYPE TABLE OF BAPIACAR09,
+         LS_ACCOUNTRECEIVABLE TYPE BAPIACAR09,
+         LT_CURRENCYAMOUNT    TYPE TABLE OF BAPIACCR09,
+         LS_CURRENCYAMOUNT    TYPE BAPIACCR09,
+         LT_RETURN            TYPE TABLE OF BAPIRET2 WITH HEADER LINE,
+         LS_RETURN            TYPE BAPIRET2,
+         LT_EXTENSION2        TYPE TABLE OF BAPIPAREX,
+         LS_EXTENSION2        TYPE BAPIPAREX,
+         LT_ACCOUNTTAX        TYPE TABLE OF BAPIACTX09,
+         LS_ACCOUNTTAX        TYPE BAPIACTX09,
+         LT_ACCOUNTWT         TYPE TABLE OF BAPIACWT09,
+         LS_ACCOUNTWT         TYPE BAPIACWT09,
+         LT_EXTENSION         TYPE TABLE OF BAPIACEXTC,
+         LS_EXTENSION         TYPE BAPIACEXTC.
+
+  LT_ACCOUNTGL[]         = FT_ACCOUNTGL[].
+  LT_ACCOUNTPAYABLE[]    = FT_ACCOUNTPAYABLE[].
+  LT_ACCOUNTRECEIVABLE[] = FT_ACCOUNTRECEIVABLE[].
+  LT_ACCOUNTTAX[]        = FT_ACCOUNTTAX[].
+  LT_CURRENCYAMOUNT[]    = FT_CURRENCYAMOUNT[].
+  LT_EXTENSION[]         = FT_EXTENSION[].
+  LT_RETURN[]            = FT_RETURN[].
+  LT_EXTENSION2[]        = FT_EXTENSION2[].
+  LT_ACCOUNTWT[]         = FT_ACCOUNTWT[].
+  LS_DOCUMENTHEADER      = FS_DOCUMENTHEADER.
+  LS_CUSTOMERCPD         = FS_CUSTOMERCPD.
+
+  CALL FUNCTION 'BAPI_ACC_DOCUMENT_CHECK'
+    EXPORTING
+      DOCUMENTHEADER    = LS_DOCUMENTHEADER
+      CUSTOMERCPD       = LS_CUSTOMERCPD
+    TABLES
+      ACCOUNTGL         = LT_ACCOUNTGL
+      ACCOUNTPAYABLE    = LT_ACCOUNTPAYABLE
+      ACCOUNTRECEIVABLE = LT_ACCOUNTRECEIVABLE
+      ACCOUNTTAX        = LT_ACCOUNTTAX
+      CURRENCYAMOUNT    = LT_CURRENCYAMOUNT
+      EXTENSION1        = LT_EXTENSION
+      RETURN            = LT_RETURN
+      EXTENSION2        = LT_EXTENSION2
+      ACCOUNTWT         = LT_ACCOUNTWT
+    EXCEPTIONS
+      ERROR_MESSAGE     = 1
+      OTHERS            = 2.
+
+  LOOP AT LT_RETURN INTO LS_RETURN WHERE TYPE = GC_CON-E.
+    LV_ERROR = ABAP_TRUE.
+*    gs_check_post-status  = gc_status-error.
+*    gs_check_post-flag    = 'E'.
+    CV_MESSAGE = LS_RETURN-MESSAGE.
+*    APPEND gs_check_post TO gt_check_post.
+  ENDLOOP.
+
+ENDFORM.                    " F_CHECK_POST
+*&---------------------------------------------------------------------*
+*&      Form  F_GET_EXCHANGE_RATE
+*&---------------------------------------------------------------------*
+*       text
+*----------------------------------------------------------------------*
+*      -->P_SY_DATUM  text
+*      -->P_CS_HEADER_WAERS  text
+*      <--P_LV_EXCH_RATE  text
+*      <--P_LV_FFACT  text
+*----------------------------------------------------------------------*
+FORM F_GET_EXCHANGE_RATE  USING LV_EINDT
+                                LV_WAERS
+                       CHANGING FV_EXCHANGE
+                                LV_FFACT.
+
+  DATA : LV_RATE_TYPE  TYPE BAPI1093_1-RATE_TYPE,
+         LV_FROM_CURR  TYPE BAPI1093_1-FROM_CURR,
+         LV_TO_CURRNCY TYPE	BAPI1093_1-TO_CURRNCY,
+         LV_DATE       TYPE	BAPI1093_2-TRANS_DATE.
+
+  DATA : LS_EXCH_RATE	TYPE BAPI1093_0,
+         LS_RETURN    TYPE  BAPIRET1.
+
+  CONSTANTS : BEGIN OF LC_EXCHANGE,
+                RATE_TYPE TYPE C LENGTH 1 VALUE 'M',
+                CURRNCY   TYPE C LENGTH 3 VALUE 'THB',
+              END OF LC_EXCHANGE.
+
+  LV_RATE_TYPE  = LC_EXCHANGE-RATE_TYPE.
+  LV_FROM_CURR  = LV_WAERS.
+  LV_TO_CURRNCY = LC_EXCHANGE-CURRNCY.
+
+  PERFORM F_FIRST_DATE USING LV_EINDT
+                    CHANGING LV_DATE.
+
+  CALL FUNCTION 'BAPI_EXCHANGERATE_GETDETAIL'
+    EXPORTING
+      RATE_TYPE  = LV_RATE_TYPE
+      FROM_CURR  = LV_FROM_CURR
+      TO_CURRNCY = LV_TO_CURRNCY
+      DATE       = LV_DATE
+    IMPORTING
+      EXCH_RATE  = LS_EXCH_RATE
+      RETURN     = LS_RETURN.
+
+*  IF ls_exch_rate-from_factor NE 0.
+*    fv_exchange = ls_exch_rate-exch_rate / ls_exch_rate-from_factor.
+*    lv_ffact    = ls_exch_rate-from_factor.
+*  ELSE.
+  FV_EXCHANGE = LS_EXCH_RATE-EXCH_RATE.
+*    lv_ffact    = ls_exch_rate-from_factor.
+*  ENDIF.
+
+ENDFORM.                    " F_GET_EXCHANGE_RATE
+*&---------------------------------------------------------------------*
+*&      Form  F_FIRST_DATE
+*&---------------------------------------------------------------------*
+*       text
+*----------------------------------------------------------------------*
+*      -->P_LV_EINDT  text
+*      <--P_LV_DATE  text
+*----------------------------------------------------------------------*
+FORM F_FIRST_DATE USING FV_EINDT
+               CHANGING FV_DATE.
+
+  DATA : LV_DATE             TYPE DATUM,
+         LV_MONTH_BEGIN_DATE TYPE DATUM,
+         LV_MONTH_END_DATE   TYPE DATUM.
+
+  LV_DATE = FV_EINDT.
+
+  CALL FUNCTION 'HR_JP_MONTH_BEGIN_END_DATE'
+    EXPORTING
+      IV_DATE             = LV_DATE
+    IMPORTING
+      EV_MONTH_BEGIN_DATE = LV_MONTH_BEGIN_DATE
+      EV_MONTH_END_DATE   = LV_MONTH_END_DATE.
+
+  FV_DATE = LV_MONTH_BEGIN_DATE.
+
+ENDFORM.                    " F_FIRST_DATE
+*&---------------------------------------------------------------------*
+*&      Form  F_APHA_INPUT
+*&---------------------------------------------------------------------*
+*       text
+*----------------------------------------------------------------------*
+*      -->P_LS_ACCOUNTGL_GL_ACCOUNT  text
+*----------------------------------------------------------------------*
+FORM F_APHA_INPUT  USING LV_ACCOUNT.
+  CALL FUNCTION 'CONVERSION_EXIT_ALPHA_INPUT'
+    EXPORTING
+      INPUT  = LV_ACCOUNT
+    IMPORTING
+      OUTPUT = LV_ACCOUNT.
+ENDFORM.                    " F_APHA_INPUT
+*&---------------------------------------------------------------------*
+*& Form F_POST_FI_PAYMETN_VOUCHER
+*&---------------------------------------------------------------------*
+*& text
+*&---------------------------------------------------------------------*
+*&      --> IT_DETAIL
+*&      --> I_HEADER
+*&      --> I_DOCTYPE
+*&      <-- E_OUTPUT
+*&      <-- E_MESSAGE
+*&---------------------------------------------------------------------*
+FORM F_POST_FI_PAYMETN_VOUCHER  TABLES IT_DETAIL  STRUCTURE ZSDSFIS014
+                                 USING UV_DOCTYPE TYPE CHAR10
+                                       UV_COMCODE
+                              CHANGING CS_HEADER  TYPE ZSDSFIS013
+                                       CV_OUTPUT  TYPE BELNR_D
+                                       CV_MESSAGE TYPE CHAR255.
+
+  DATA GS_DETAIL LIKE LINE OF IT_DETAIL.
+
+  DATA : LS_DOCUMENTHEADER    TYPE BAPIACHE09,
+         LS_CUSTOMERCPD	      TYPE BAPIACPA09,
+         LT_ACCOUNTGL         TYPE TABLE OF BAPIACGL09,
+         LS_ACCOUNTGL         TYPE BAPIACGL09,
+         LT_ACCOUNTPAYABLE    TYPE TABLE OF BAPIACAP09,
+         LS_ACCOUNTPAYABLE    TYPE BAPIACAP09,
+         LT_ACCOUNTRECEIVABLE TYPE TABLE OF BAPIACAR09,
+         LS_ACCOUNTRECEIVABLE TYPE BAPIACAR09,
+         LT_CURRENCYAMOUNT    TYPE TABLE OF BAPIACCR09,
+         LS_CURRENCYAMOUNT    TYPE BAPIACCR09,
+         LT_RETURN            TYPE TABLE OF BAPIRET2 WITH HEADER LINE,
+         LS_RETURN            TYPE BAPIRET2,
+         LT_EXTENSION2        TYPE TABLE OF BAPIPAREX,
+         LS_EXTENSION2        TYPE BAPIPAREX,
+         LT_ACCOUNTTAX        TYPE TABLE OF BAPIACTX09,
+         LS_ACCOUNTTAX        TYPE BAPIACTX09,
+         LT_ACCOUNTWT	        TYPE TABLE OF	BAPIACWT09,
+         LS_ACCOUNTWT         TYPE BAPIACWT09,
+         LT_EXTENSION         TYPE TABLE OF BAPIACEXTC,
+         LS_EXTENSION         TYPE BAPIACEXTC.
+
+  DATA : LV_ERR TYPE C.
+
+  DATA : BEGIN OF LS_TAXRATE,
+           MWSKZ TYPE T007A-MWSKZ,
+           KBETR TYPE KONP-KBETR,
+         END OF LS_TAXRATE.
+  DATA LT_TAXRATE LIKE TABLE OF LS_TAXRATE.
+
+  DATA : BEGIN OF LS_SKB1,
+           SAKNR TYPE SKB1-SAKNR,
+           MWSKZ TYPE SKB1-MWSKZ,
+         END OF LS_SKB1.
+  DATA LT_SKB1 LIKE TABLE OF LS_SKB1.
+
+  DATA : LV_TAX TYPE C LENGTH 18.
+
+  DATA : LV_BRANCH TYPE C LENGTH 5.
+
+  DATA : LV_TAXDT TYPE SY-DATUM,
+         LV_AMOUT TYPE VBAK-NETWR.
+
+  DATA : LS_TMP LIKE LINE OF IT_DETAIL.
+
+  DATA : I_BUKRS TYPE  BUKRS,
+         I_DATUM TYPE  DATUM.
+
+  DATA : E_PERIOD TYPE  POPER,
+         E_GJAHR  TYPE  GJAHR.
+
+  DATA : GV_TAXCD LIKE  BSEG-MWSKZ.
+
+  DATA : LV_SGTXT TYPE BSEG-SGTXT.
+
+  DATA : LV_TEXT1 TYPE C LENGTH 30,
+         LV_TEXT2 TYPE C LENGTH 30.
+
+  DATA : LV_TEXT3 TYPE C LENGTH 10.
+
+  DATA LV_GL_LINE LIKE LS_ACCOUNTGL-ITEMNO_ACC.
+
+  DATA : BEGIN OF LS_J_1HVAT_OFF_NUM,
+           J_1HNUMGR TYPE J_1HVAT_OFF_NUM-J_1HNUMGR,
+           NRRANGENR TYPE INRI-NRRANGENR,
+         END OF LS_J_1HVAT_OFF_NUM.
+  DATA LT_J_1HVAT_OFF_NUM LIKE TABLE OF LS_J_1HVAT_OFF_NUM.
+
+  DATA : BEGIN OF GS_T030K,
+           MWSKZ TYPE T030K-MWSKZ,
+           KONTS TYPE T030K-KONTS,
+         END OF GS_T030K.
+  DATA GT_T030K LIKE TABLE OF GS_T030K.
+
+  DATA : BEGIN OF LS_WHT,
+           WT_WITHCD TYPE ZSDSFIS014-WT_WITHCD,
+           WT_QBSHB  TYPE ZSDSFIS014-WT_QBSHB,
+         END OF LS_WHT.
+  DATA LT_WHT LIKE TABLE OF LS_WHT.
+
+  DATA LV_BKTXT TYPE BKPF-BKTXT.
+
+  DATA LV_ZTERM TYPE LFB1-ZTERM.
+
+  DATA LV_COST_CENTER TYPE CSKS-KOSTL.
+
+  DATA : BEGIN OF LC_CON,
+           RCOA TYPE C LENGTH 4 VALUE 'RCOA',
+         END OF LC_CON.
+
+  SELECT SINGLE ZTERM
+    FROM LFB1
+    INTO LV_ZTERM
+    WHERE LIFNR EQ CS_HEADER-LIFNR
+      AND BUKRS EQ UV_COMCODE.
+
+  SELECT MWSKZ
+         KONTS
+    FROM T030K
+    INTO TABLE GT_T030K
+    WHERE KTOPL EQ LC_CON-RCOA.
+
+  SELECT SAKNR
+         MWSKZ
+    FROM SKB1
+    INTO TABLE LT_SKB1
+    WHERE BUKRS EQ UV_COMCODE.
+
+  SELECT T007A~MWSKZ
+           KONP~KBETR
+      FROM T007A
+      INNER JOIN A003 ON T007A~MWSKZ EQ A003~MWSKZ
+      INNER JOIN KONP ON A003~KNUMH EQ KONP~KNUMH AND
+                         A003~KSCHL EQ KONP~KSCHL AND
+                         A003~KAPPL EQ KONP~KAPPL
+      INTO TABLE LT_TAXRATE
+      WHERE T007A~MWSKZ EQ CS_HEADER-MWSKZ
+        AND T007A~KALSM EQ GC_CON-TAXTH
+        AND A003~KAPPL  EQ GC_CON-TX
+        AND A003~ALAND  EQ GC_CON-TH.
+
+  I_BUKRS = UV_COMCODE.
+  I_DATUM = CS_HEADER-BUDAT.
+
+  CALL FUNCTION 'Z_SDSFI_GET_PERIOD_FISCAL_YEAR'
+    EXPORTING
+      I_BUKRS  = I_BUKRS
+      I_DATUM  = I_DATUM
+    IMPORTING
+      E_PERIOD = E_PERIOD
+      E_GJAHR  = E_GJAHR.
+
+  SELECT J_1HNUMGR
+    FROM J_1HVAT_OFF_NUM
+    INTO TABLE LT_J_1HVAT_OFF_NUM
+    WHERE BUKRS EQ I_BUKRS
+      AND BRNCH EQ GC_CON-BRNCH
+      AND GJAHR EQ CS_HEADER-BUDAT
+      AND BLART EQ SPACE
+      AND MWSKZ EQ CS_HEADER-MWSKZ.
+  IF SY-SUBRC = 0.
+    LS_J_1HVAT_OFF_NUM-NRRANGENR = CS_HEADER-BUDAT+4(2).
+    MODIFY LT_J_1HVAT_OFF_NUM FROM LS_J_1HVAT_OFF_NUM TRANSPORTING NRRANGENR
+                                                             WHERE J_1HNUMGR IS NOT INITIAL.
+  ENDIF.
+
+
+  DATA LV_VAT LIKE GS_DETAIL-VATBAS.
+
+  CLEAR : LV_TAXDT,GS_DETAIL,LV_AMOUT.
+  DATA LS_DETAIL LIKE GS_DETAIL.
+
+  DATA : LV_EXCH_RATE TYPE UKURSP,
+         LV_FFACT     TYPE FFACT_CURR.
+  IF CS_HEADER-WAERS NE GC_CON-THB.
+    PERFORM F_GET_EXCHANGE_RATE USING SY-DATUM
+                                      CS_HEADER-WAERS
+                             CHANGING LV_EXCH_RATE
+                                      LV_FFACT.
+
+    CS_HEADER-KURSF = LV_EXCH_RATE.
+  ENDIF.
+
+  IF IT_DETAIL IS NOT INITIAL.
+    SELECT CSKS~KOSTL,
+           CSKS~PRCTR
+      FROM CSKS
+      INTO TABLE @DATA(LT_PROFIT)
+      FOR ALL ENTRIES IN @IT_DETAIL
+      WHERE KOSTL EQ @IT_DETAIL-PRCTR.
+  ENDIF.
+*--------------------------------------------------------------------*
+* Deletail
+*--------------------------------------------------------------------*
+
+  LOOP AT IT_DETAIL INTO LS_DETAIL.
+
+    LV_COST_CENTER = |{ LS_DETAIL-PRCTR ALPHA = IN }|.
+
+    READ TABLE LT_PROFIT INTO DATA(LS_PROFIT)
+    WITH KEY KOSTL = LV_COST_CENTER.
+
+    MOVE-CORRESPONDING LS_DETAIL TO GS_DETAIL.
+    CLEAR : LS_DETAIL,LS_ACCOUNTPAYABLE,LS_CURRENCYAMOUNT,LS_EXTENSION2,LS_ACCOUNTGL.
+    IF GS_DETAIL-HKONT EQ GC_CON-OT03.
+      CONTINUE.
+    ENDIF.
+
+    IF GS_DETAIL-HKONT EQ CS_HEADER-LIFNR.
+      CONTINUE.
+    ENDIF.
+
+    LV_SGTXT = GS_DETAIL-SGTXT.
+
+    ADD 1 TO LV_GL_LINE.
+    LS_ACCOUNTGL-WBS_ELEMENT = GS_DETAIL-WBS.
+    LS_ACCOUNTGL-ALLOC_NMBR  = GS_DETAIL-ZUONR.    "ADD CH01
+    LS_ACCOUNTGL-ITEMNO_ACC  = LV_GL_LINE.
+    LS_ACCOUNTGL-GL_ACCOUNT  = GS_DETAIL-HKONT.
+*    LS_ACCOUNTGL-ACCT_KEY    = GC_CON-EGK.
+    PERFORM F_APHA_INPUT USING LS_ACCOUNTGL-GL_ACCOUNT.
+    LS_ACCOUNTGL-COMP_CODE   = UV_COMCODE.
+
+    READ TABLE LT_SKB1 INTO LS_SKB1
+    WITH KEY SAKNR = LS_ACCOUNTGL-GL_ACCOUNT
+             MWSKZ = SPACE.
+    IF SY-SUBRC = 0.
+      LS_ACCOUNTGL-TAX_CODE   = SPACE.
+    ELSE.
+      LS_ACCOUNTGL-TAX_CODE   = CS_HEADER-MWSKZ.
+    ENDIF.
+
+    LS_ACCOUNTGL-PROFIT_CTR = LS_PROFIT-PRCTR.
+    LS_ACCOUNTGL-COSTCENTER = GS_DETAIL-PRCTR.
+    PERFORM F_APHA_INPUT USING LS_ACCOUNTGL-COSTCENTER.
+    LS_ACCOUNTGL-ORDERID    = GS_DETAIL-AUFNR.
+    PERFORM F_APHA_INPUT USING LS_ACCOUNTGL-ORDERID .
+    LS_ACCOUNTGL-ITEM_TEXT  = GS_DETAIL-SGTXT.
+    APPEND LS_ACCOUNTGL TO LT_ACCOUNTGL.
+
+    LS_CURRENCYAMOUNT-ITEMNO_ACC  = LV_GL_LINE.
+    LS_CURRENCYAMOUNT-CURRENCY    = CS_HEADER-WAERS.
+    LS_CURRENCYAMOUNT-EXCH_RATE   = CS_HEADER-KURSF.
+    LS_CURRENCYAMOUNT-AMT_DOCCUR  = GS_DETAIL-VATBAS.
+
+    ADD LS_CURRENCYAMOUNT-AMT_DOCCUR TO LV_AMOUT.
+
+    APPEND LS_CURRENCYAMOUNT TO LT_CURRENCYAMOUNT.
+
+    IF LS_CURRENCYAMOUNT-AMT_DOCCUR GE 0.
+*      LS_EXTENSION2-STRUCTURE = GC_CON-ADDITIONAL_FILED.
+*      CONCATENATE LS_ACCOUNTGL-ITEMNO_ACC GC_CON-40 GC_CON-BRNCH GC_CON-BUPLA SPACE INTO LS_EXTENSION2-VALUEPART1 RESPECTING BLANKS.
+*      APPEND LS_EXTENSION2 TO LT_EXTENSION2.
+
+      LS_EXTENSION2-STRUCTURE = GC_ADDITIONAL_FILED.
+      CONCATENATE LS_ACCOUNTGL-ITEMNO_ACC
+                  GC_CON-40
+                  GC_CON-BRNCH
+                  GC_CON-BUPLA
+                  SPACE
+             INTO LS_EXTENSION2-VALUEPART1.
+      APPEND LS_EXTENSION2 TO LT_EXTENSION2.
+    ELSE.
+*      LS_EXTENSION2-STRUCTURE = GC_CON-ADDITIONAL_FILED.
+*      CONCATENATE LS_ACCOUNTGL-ITEMNO_ACC GC_CON-50 GC_CON-BRNCH GC_CON-BUPLA SPACE INTO LS_EXTENSION2-VALUEPART1 RESPECTING BLANKS.
+*      APPEND LS_EXTENSION2 TO LT_EXTENSION2.
+
+      LS_EXTENSION2-STRUCTURE = GC_ADDITIONAL_FILED.
+      CONCATENATE LS_ACCOUNTGL-ITEMNO_ACC
+                  GC_CON-50
+                  GC_CON-BRNCH
+                  GC_CON-BUPLA
+                  SPACE
+             INTO LS_EXTENSION2-VALUEPART1.
+      APPEND LS_EXTENSION2 TO LT_EXTENSION2.
+    ENDIF.
+
+    ADD GS_DETAIL-VATBAS TO LV_VAT.
+
+    AT LAST.
+      IF CS_HEADER-MWSKZ IS NOT INITIAL AND
+         CS_HEADER-MWSKZ NE GC_CON-IX.
+
+        CLEAR : LS_ACCOUNTGL,LS_CURRENCYAMOUNT,LS_EXTENSION2,LS_ACCOUNTGL.
+        GV_TAXCD = CS_HEADER-MWSKZ.
+        LV_TAXDT = GS_DETAIL-TAXDT.
+        ADD 1 TO LV_GL_LINE.
+        LS_CURRENCYAMOUNT-ITEMNO_ACC  = LV_GL_LINE.
+        LS_CURRENCYAMOUNT-CURRENCY    = CS_HEADER-WAERS.
+        LS_CURRENCYAMOUNT-EXCH_RATE   = CS_HEADER-KURSF.
+        LS_CURRENCYAMOUNT-AMT_DOCCUR  = GS_DETAIL-TAXAM.
+        LS_CURRENCYAMOUNT-AMT_BASE    = LV_VAT.
+        LS_CURRENCYAMOUNT-TAX_AMT     = GS_DETAIL-TAXAM.
+        APPEND LS_CURRENCYAMOUNT TO LT_CURRENCYAMOUNT.
+
+        ADD LS_CURRENCYAMOUNT-AMT_DOCCUR TO LV_AMOUT.
+
+        LS_ACCOUNTTAX-ITEMNO_ACC = LV_GL_LINE.
+
+        READ TABLE GT_T030K INTO GS_T030K
+        WITH KEY MWSKZ = CS_HEADER-MWSKZ.
+        IF SY-SUBRC = 0.
+          LS_ACCOUNTTAX-GL_ACCOUNT = GS_T030K-KONTS.
+        ENDIF.
+
+        LS_ACCOUNTTAX-COND_KEY   = GC_CON-MWVS.
+        LS_ACCOUNTTAX-ACCT_KEY   = GC_CON-VST.
+        LS_ACCOUNTTAX-TAX_CODE   = CS_HEADER-MWSKZ.
+        LS_ACCOUNTTAX-ITEMNO_TAX = GC_CON-STAR.
+
+        READ TABLE LT_TAXRATE INTO LS_TAXRATE
+        WITH KEY MWSKZ = CS_HEADER-MWSKZ.
+        IF SY-SUBRC = 0.
+          LS_ACCOUNTTAX-TAX_RATE = LS_TAXRATE-KBETR / 10.
+        ENDIF.
+
+        LS_ACCOUNTTAX-TAX_DATE = SY-DATUM.
+*
+        APPEND LS_ACCOUNTTAX TO LT_ACCOUNTTAX.
+
+*        LS_EXTENSION2-STRUCTURE = GC_CON-ADDITIONAL_FILED_V2.
+*        CONCATENATE LS_CURRENCYAMOUNT-ITEMNO_ACC GC_CON-40 GC_CON-BRNCH GC_CON-BUPLA SPACE INTO LS_EXTENSION2-VALUEPART1 RESPECTING BLANKS.
+
+        LS_EXTENSION2-STRUCTURE = GC_ADDITIONAL_FILED.
+        CONCATENATE LS_CURRENCYAMOUNT-ITEMNO_ACC
+                    GC_CON-40
+                    GC_CON-BRNCH
+                    GC_CON-BUPLA
+                    SPACE
+               INTO LS_EXTENSION2-VALUEPART1.
+        APPEND LS_EXTENSION2 TO LT_EXTENSION2.
+
+      ENDIF.
+    ENDAT.
+
+    IF GS_DETAIL-WT_WITHCD IS NOT INITIAL.
+      LS_WHT-WT_WITHCD = GS_DETAIL-WT_WITHCD.
+      LS_WHT-WT_QBSHB  = GS_DETAIL-WT_QBSHB .
+    ENDIF.
+
+    COLLECT LS_WHT INTO LT_WHT.
+
+    CLEAR : GS_T030K,GS_DETAIL,LS_WHT.
+  ENDLOOP.
+
+  DELETE LT_WHT WHERE WT_WITHCD IS INITIAL.
+*--------------------------------------------------------------------*
+* Vendor
+*--------------------------------------------------------------------*
+  CLEAR : LS_ACCOUNTPAYABLE,LS_CURRENCYAMOUNT,LS_EXTENSION2,LS_ACCOUNTGL.
+  ADD 1 TO LV_GL_LINE.
+
+  LS_ACCOUNTPAYABLE-ITEMNO_ACC = LV_GL_LINE.
+*  LS_ACCOUNTPAYABLE-BUS_AREA   = '0001'.
+  LS_ACCOUNTPAYABLE-VENDOR_NO  = CS_HEADER-LIFNR.
+  LS_ACCOUNTPAYABLE-PMNTTRMS   = LV_ZTERM.
+  LS_ACCOUNTPAYABLE-GL_ACCOUNT = CS_HEADER-HKONT.
+  PERFORM F_APHA_INPUT USING LS_ACCOUNTPAYABLE-VENDOR_NO.
+  LS_ACCOUNTPAYABLE-BLINE_DATE = CS_HEADER-BUDAT.
+  LS_ACCOUNTPAYABLE-COMP_CODE  = UV_COMCODE.
+  LS_ACCOUNTPAYABLE-PROFIT_CTR = GC_CON-ADMIN_PROFIT.
+  IF GV_TAXCD IS NOT INITIAL.
+    LS_ACCOUNTPAYABLE-TAX_CODE   = GV_TAXCD.
+  ELSE.
+    LS_ACCOUNTPAYABLE-TAX_CODE   = SPACE.
+  ENDIF.
+  LS_ACCOUNTPAYABLE-ITEM_TEXT = LV_SGTXT.
+  APPEND LS_ACCOUNTPAYABLE TO LT_ACCOUNTPAYABLE.
+
+  LS_CURRENCYAMOUNT-ITEMNO_ACC  = LV_GL_LINE.
+*  ls_currencyamount-curr_type   = '10'.
+  LS_CURRENCYAMOUNT-CURRENCY    = CS_HEADER-WAERS.
+  LS_CURRENCYAMOUNT-EXCH_RATE   = CS_HEADER-KURSF.
+  LS_CURRENCYAMOUNT-AMT_DOCCUR  = LV_AMOUT * -1.
+
+  IF LS_ACCOUNTGL-TAX_CODE IS NOT INITIAL.
+    LS_CURRENCYAMOUNT-AMT_BASE    = LV_VAT."gs_detail-vatbas.
+    LS_CURRENCYAMOUNT-TAX_AMT     = GS_DETAIL-TAXAM.
+  ENDIF.
+
+  APPEND LS_CURRENCYAMOUNT TO LT_CURRENCYAMOUNT.
+
+*  LS_EXTENSION2-STRUCTURE = GC_CON-ADDITIONAL_FILED_V2.
+**  CONCATENATE LS_ACCOUNTPAYABLE-ITEMNO_ACC GC_CON-31 GC_CON-BRNCH GC_ LV_TEXT3 INTO LS_EXTENSION2-VALUEPART1 RESPECTING BLANKS.
+*  CONCATENATE LS_ACCOUNTPAYABLE-ITEMNO_ACC GC_CON-31 '' '' LV_TEXT3 INTO LS_EXTENSION2-VALUEPART1 RESPECTING BLANKS.
+*  APPEND LS_EXTENSION2 TO LT_EXTENSION2.
+  LS_EXTENSION2-STRUCTURE = GC_ADDITIONAL_FILED.
+  CONCATENATE LS_ACCOUNTPAYABLE-ITEMNO_ACC
+              GC_CON-31
+              GC_CON-BRNCH
+              GC_CON-BUPLA
+              SPACE
+         INTO LS_EXTENSION2-VALUEPART1.
+  APPEND LS_EXTENSION2 TO LT_EXTENSION2.
+*--------------------------------------------------------------------*
+* Withholding tax
+*--------------------------------------------------------------------*
+  LOOP AT LT_WHT INTO LS_WHT.
+    LS_ACCOUNTWT-ITEMNO_ACC  = LS_ACCOUNTPAYABLE-ITEMNO_ACC.
+    LS_ACCOUNTWT-WT_TYPE     = GC_CON-11.
+    LS_ACCOUNTWT-WT_CODE     = LS_WHT-WT_WITHCD.
+
+    PERFORM F_APHA_INPUT  USING LS_ACCOUNTWT-WT_CODE.
+
+    LS_ACCOUNTWT-BAS_AMT_LC  = LS_WHT-WT_QBSHB.
+    LS_ACCOUNTWT-BAS_AMT_TC  = LS_WHT-WT_QBSHB.
+
+    IF LS_WHT-WT_QBSHB IS NOT INITIAL.
+      LS_ACCOUNTWT-BAS_AMT_IND = ABAP_TRUE.
+    ENDIF.
+
+    COLLECT LS_ACCOUNTWT INTO LT_ACCOUNTWT.
+    CLEAR : LS_ACCOUNTWT,LS_WHT.
+  ENDLOOP.
+  IF SY-SUBRC NE 0.
+    LS_ACCOUNTWT-ITEMNO_ACC = LS_ACCOUNTPAYABLE-ITEMNO_ACC.
+    LS_ACCOUNTWT-WT_TYPE    = '11'.
+    APPEND LS_ACCOUNTWT TO LT_ACCOUNTWT.
+  ENDIF.
+*--------------------------------------------------------------------*
+* Header
+*--------------------------------------------------------------------*
+  TRANSLATE CS_HEADER-USNAM TO UPPER CASE.
+
+  SPLIT CS_HEADER-USNAM AT SPACE INTO LV_TEXT1
+                                      LV_TEXT2.
+
+  LS_DOCUMENTHEADER-USERNAME          = LV_TEXT1.
+  LS_DOCUMENTHEADER-COMP_CODE         = UV_COMCODE.
+  LS_DOCUMENTHEADER-FISC_YEAR         = E_GJAHR.
+  IF LV_TAXDT IS INITIAL.
+    LS_DOCUMENTHEADER-DOC_DATE        = CS_HEADER-BLDAT.
+  ELSE.
+    LS_DOCUMENTHEADER-DOC_DATE        = LV_TAXDT.
+  ENDIF.
+
+  LS_DOCUMENTHEADER-PSTNG_DATE      = CS_HEADER-BUDAT.
+  LS_DOCUMENTHEADER-TRANS_DATE      = CS_HEADER-BUDAT.
+  LS_DOCUMENTHEADER-FIS_PERIOD      = E_PERIOD.
+  IF     UV_DOCTYPE  EQ GC_CON-APVI.
+    LS_DOCUMENTHEADER-DOC_TYPE        = GC_CON-KR.
+  ELSEIF UV_DOCTYPE  EQ GC_CON-F43.
+    LS_DOCUMENTHEADER-DOC_TYPE        = GC_CON-DN.
+  ENDIF.
+  LS_DOCUMENTHEADER-REF_DOC_NO    = CS_HEADER-XBLNR.
+*--------------------------------------------------------------------*
+* F-43 Case Customer
+*--------------------------------------------------------------------*
+
+  IF UV_DOCTYPE  EQ GC_CON-F43.
+    DATA LV_NAME1 TYPE LFA1-NAME1.
+    SELECT SINGLE NAME1
+      FROM LFA1
+      INTO LV_NAME1
+      WHERE LIFNR = CS_HEADER-LIFNR.
+
+    LOOP AT IT_DETAIL INTO GS_DETAIL WHERE HKONT EQ GC_CON-OT03.
+      LS_CUSTOMERCPD-NAME    = LV_NAME1.
+      LS_CUSTOMERCPD-CITY    = GC_CON-BANGKOK.
+      LS_CUSTOMERCPD-COUNTRY = GC_CON-TH.
+
+      CLEAR : LS_ACCOUNTRECEIVABLE,LS_CURRENCYAMOUNT,LS_EXTENSION2,LS_ACCOUNTGL.
+      ADD 1 TO LV_GL_LINE.
+
+      LS_ACCOUNTRECEIVABLE-ITEMNO_ACC = LV_GL_LINE.
+      LS_ACCOUNTRECEIVABLE-CUSTOMER   = GS_DETAIL-HKONT.
+      LS_ACCOUNTRECEIVABLE-COMP_CODE  = UV_COMCODE.
+      LS_ACCOUNTRECEIVABLE-PROFIT_CTR = GC_CON-ADMIN_PROFIT.
+
+      LS_ACCOUNTRECEIVABLE-ITEM_TEXT = GS_DETAIL-SGTXT.
+      APPEND LS_ACCOUNTRECEIVABLE TO LT_ACCOUNTRECEIVABLE.
+
+      LS_CURRENCYAMOUNT-ITEMNO_ACC  = LV_GL_LINE.
+      LS_CURRENCYAMOUNT-CURRENCY    = CS_HEADER-WAERS.
+      LS_CURRENCYAMOUNT-EXCH_RATE   = CS_HEADER-KURSF.
+      LS_CURRENCYAMOUNT-AMT_DOCCUR  = GS_DETAIL-VATBAS.
+      APPEND LS_CURRENCYAMOUNT TO LT_CURRENCYAMOUNT.
+
+      LS_EXTENSION2-STRUCTURE = GC_CON-ADDITIONAL_FILED_V2.
+      CONCATENATE LS_ACCOUNTRECEIVABLE-ITEMNO_ACC GC_CON-03 GC_CON-BRNCH GC_CON-BUPLA LV_TEXT3 LV_SGTXT INTO LS_EXTENSION2-VALUEPART1 RESPECTING BLANKS.
+
+      APPEND LS_EXTENSION2 TO LT_EXTENSION2.
+    ENDLOOP.
+
+
+    LOOP AT IT_DETAIL INTO GS_DETAIL WHERE HKONT EQ CS_HEADER-LIFNR.
+      CLEAR : LS_ACCOUNTPAYABLE,LS_CURRENCYAMOUNT,LS_EXTENSION2,LS_ACCOUNTGL.
+      ADD 1 TO LV_GL_LINE.
+
+      LS_ACCOUNTPAYABLE-ITEMNO_ACC = LV_GL_LINE.
+      LS_ACCOUNTPAYABLE-VENDOR_NO  = CS_HEADER-LIFNR.
+      PERFORM F_APHA_INPUT USING LS_ACCOUNTPAYABLE-VENDOR_NO.
+      LS_ACCOUNTPAYABLE-BLINE_DATE = CS_HEADER-BUDAT.
+      LS_ACCOUNTPAYABLE-COMP_CODE  = UV_COMCODE.
+      LS_ACCOUNTPAYABLE-PROFIT_CTR = CS_HEADER-PRCTR.
+      IF GV_TAXCD IS NOT INITIAL.
+        LS_ACCOUNTPAYABLE-TAX_CODE   = GV_TAXCD.
+      ELSE.
+        LS_ACCOUNTPAYABLE-TAX_CODE   = SPACE.
+      ENDIF.
+      LS_ACCOUNTPAYABLE-ITEM_TEXT = GS_DETAIL-SGTXT.
+      APPEND LS_ACCOUNTPAYABLE TO LT_ACCOUNTPAYABLE.
+
+      LS_CURRENCYAMOUNT-ITEMNO_ACC  = LV_GL_LINE.
+      LS_CURRENCYAMOUNT-CURRENCY    = CS_HEADER-WAERS.
+      LS_CURRENCYAMOUNT-EXCH_RATE   = CS_HEADER-KURSF.
+      LS_CURRENCYAMOUNT-AMT_DOCCUR  = GS_DETAIL-VATBAS * -1.
+      APPEND LS_CURRENCYAMOUNT TO LT_CURRENCYAMOUNT.
+
+      LS_EXTENSION2-STRUCTURE = GC_CON-ADDITIONAL_FILED.
+      CONCATENATE LS_ACCOUNTPAYABLE-ITEMNO_ACC GC_CON-31 GC_CON-BRNCH GC_CON-BUPLA SPACE INTO LS_EXTENSION2-VALUEPART1 RESPECTING BLANKS.
+      APPEND LS_EXTENSION2 TO LT_EXTENSION2.
+
+      LS_ACCOUNTWT-ITEMNO_ACC = LS_ACCOUNTPAYABLE-ITEMNO_ACC.
+      LS_ACCOUNTWT-WT_TYPE    = GC_CON-11.
+      LS_ACCOUNTWT-WT_CODE    = LS_WHT-WT_WITHCD.
+      LS_ACCOUNTWT-BAS_AMT_LC = LS_WHT-WT_QBSHB.
+      LS_ACCOUNTWT-BAS_AMT_TC = LS_WHT-WT_QBSHB.
+      IF LS_WHT-WT_QBSHB IS NOT INITIAL.
+        LS_ACCOUNTWT-BAS_AMT_IND = ABAP_TRUE.
+      ENDIF.
+
+      APPEND LS_ACCOUNTWT TO LT_ACCOUNTWT.
+      CLEAR : LS_ACCOUNTWT,LS_WHT.
+    ENDLOOP.
+
+  ENDIF.
+
+*--------------------------------------------------------------------*
+* Call FM
+*--------------------------------------------------------------------*
+  IF LT_ACCOUNTTAX[] IS NOT INITIAL.
+*    SY-TCODE = 'Z_TEST'.
+  ENDIF.
+
+  PERFORM F_CHECK_POST TABLES LT_ACCOUNTGL
+                              LT_ACCOUNTPAYABLE
+                              LT_ACCOUNTRECEIVABLE
+                              LT_ACCOUNTTAX
+                              LT_CURRENCYAMOUNT
+                              LT_EXTENSION
+                              LT_RETURN
+                              LT_EXTENSION2
+                              LT_ACCOUNTWT
+                        USING LS_DOCUMENTHEADER
+                              LS_CUSTOMERCPD
+                              LV_ERR
+                              CV_MESSAGE.
+
+  IF LV_ERR NE 'X'.
+
+    IF LT_ACCOUNTTAX[] IS NOT INITIAL.
+*      SY-TCODE = 'Z_TEST'.
+*      EXPORT LT_J_1HVAT_OFF_NUM[] TO MEMORY ID 'HEADERTEXT'. " Please check code in Class ZCL_IM_BADI_AC_DOCUMENT Methods IF_EX_AC_DOCUMENT~CHANGE_AFTER_CHECK
+    ENDIF.
+
+    CALL FUNCTION 'BAPI_ACC_DOCUMENT_POST'
+      EXPORTING
+        DOCUMENTHEADER    = LS_DOCUMENTHEADER
+        CUSTOMERCPD       = LS_CUSTOMERCPD
+      TABLES
+        ACCOUNTGL         = LT_ACCOUNTGL
+        ACCOUNTPAYABLE    = LT_ACCOUNTPAYABLE
+        ACCOUNTRECEIVABLE = LT_ACCOUNTRECEIVABLE
+        ACCOUNTTAX        = LT_ACCOUNTTAX
+        CURRENCYAMOUNT    = LT_CURRENCYAMOUNT
+        EXTENSION1        = LT_EXTENSION
+        RETURN            = LT_RETURN
+        EXTENSION2        = LT_EXTENSION2
+        ACCOUNTWT         = LT_ACCOUNTWT
+      EXCEPTIONS
+        ERROR_MESSAGE     = 1
+        OTHERS            = 2.
+    IF LT_ACCOUNTTAX[] IS NOT INITIAL.
+*      FREE MEMORY ID 'HEADERTEXT'.
+    ENDIF.
+
+    READ TABLE LT_RETURN INTO LS_RETURN
+    WITH KEY TYPE = GC_CON-S.
+    IF SY-SUBRC EQ 0.
+
+*      CONCATENATE 'Document' ls_return-message_v2+0(10) 'has been saved' INTO CV_MESSAGE SEPARATED BY space.
+*        CV_OUTPUT   = ls_return-message_v2+0(10).
+*      gs_check_post-status  = gc_status-success.
+*      gs_check_post-flag    = 'S'.
+*      gs_check_post-message = CV_MESSAGE.
+      CV_OUTPUT  = LS_RETURN-MESSAGE_V2+0(10).
+
+*      APPEND gs_check_post TO gt_check_post.
+
+      PERFORM F_COMMIT.
+
+      SELECT SINGLE BKTXT
+        FROM BKPF
+        INTO LV_BKTXT
+        WHERE BELNR EQ LS_RETURN-MESSAGE_V2+0(10)
+          AND GJAHR EQ LS_RETURN-MESSAGE_V2+14(4).
+
+
+      CV_MESSAGE = LV_BKTXT.
+
+    ENDIF.
+  ENDIF.
+
+ENDFORM.
+*&---------------------------------------------------------------------*
+*& Form F_POST_MIRO
+*&---------------------------------------------------------------------*
+*& text
+*&---------------------------------------------------------------------*
+*&      --> IT_DETAIL
+*&      --> I_HEADER
+*&      <-- E_OUTPUT
+*&      <-- E_MESSAGE
+*&---------------------------------------------------------------------*
+FORM F_POST_MIRO  TABLES IT_DETAIL STRUCTURE ZSDSFIS014
+                   USING UV_COMCODE
+                CHANGING CS_HEADER TYPE ZSDSFIS013
+                         E_OUTPUT  TYPE BELNR_D
+                         E_MESSAGE TYPE CHAR255.
+
+  DATA : GS_DETAIL LIKE LINE OF IT_DETAIL.
+
+  DATA : LS_HEADERDATA  TYPE BAPI_INCINV_CREATE_HEADER,
+         LS_ADDRESSDATA TYPE  BAPI_INCINV_CREATE_ADDRESSDATA,
+         LS_OILDATA     TYPE  BAPI_INCINV_CREATE_OIL.
+
+  DATA : LS_INVOICEDOCNUMBER TYPE BAPI_INCINV_FLD-INV_DOC_NO,
+         LS_FISCALYEAR       TYPE BAPI_INCINV_FLD-FISC_YEAR.
+
+  DATA : LT_ITEMDATA            TYPE TABLE OF BAPI_INCINV_CREATE_ITEM,
+         LT_ACCOUNTINGDATA      TYPE TABLE OF BAPI_INCINV_CREATE_ACCOUNT,
+         LT_GLACCOUNTDATA	      TYPE TABLE OF BAPI_INCINV_CREATE_GL_ACCOUNT,
+         LT_MATERIALDATA        TYPE TABLE OF BAPI_INCINV_CREATE_MATERIAL,
+         LT_TAXDATA	            TYPE TABLE OF BAPI_INCINV_CREATE_TAX,
+         LT_WITHTAXDATA	        TYPE TABLE OF BAPI_INCINV_CREATE_WITHTAX,
+         LT_VENDORITEMSPLITDATA	TYPE TABLE OF BAPI_INCINV_CREATE_VENDORSPLIT,
+         LT_RETURN              TYPE TABLE OF BAPIRET2,
+         LT_NFMETALLITMS        TYPE TABLE OF /NFM/BAPIDOCITM.
+
+  DATA : LS_ITEMDATA            LIKE LINE OF LT_ITEMDATA,
+         LS_TAXDATA             LIKE LINE OF LT_TAXDATA,
+         LS_VENDORITEMSPLITDATA LIKE LINE OF LT_VENDORITEMSPLITDATA,
+         LS_GLACCOUNTDATA	      LIKE LINE OF LT_GLACCOUNTDATA.
+
+  DATA : LV_RUNING TYPE I.
+
+  DATA : LV_GROSS LIKE LS_HEADERDATA-GROSS_AMOUNT.
+
+  DATA : BEGIN OF LS_MSEG,
+           MBLNR TYPE MKPF-MBLNR,
+           MJAHR TYPE MKPF-MJAHR,
+           ZEILE TYPE MSEG-ZEILE,
+           XBLNR TYPE MKPF-XBLNR,
+           MENGE TYPE MSEG-MENGE,
+           MEINS TYPE MSEG-MEINS,
+           EBELN TYPE MSEG-EBELN,
+           EBELP TYPE MSEG-EBELP,
+         END OF LS_MSEG.
+  DATA LT_MSEG LIKE TABLE OF LS_MSEG.
+
+  SELECT MKPF~MBLNR
+         MKPF~MJAHR
+         MSEG~ZEILE
+         MKPF~XBLNR
+         MSEG~MENGE
+         MSEG~MEINS
+         MSEG~EBELN
+         MSEG~EBELP
+    FROM MSEG
+    INNER JOIN MKPF ON MSEG~MBLNR EQ MKPF~MBLNR AND
+                       MSEG~MJAHR EQ MKPF~MJAHR
+    INTO TABLE LT_MSEG
+    FOR ALL ENTRIES IN IT_DETAIL
+    WHERE EBELN EQ IT_DETAIL-EBELN
+      AND EBELP EQ IT_DETAIL-EBELP
+      AND BWART EQ GC_CON-103.
+
+*--------------------------------------------------------------------*
+* Header
+*--------------------------------------------------------------------*
+  LS_HEADERDATA-INVOICE_IND  = ABAP_TRUE.
+  LS_HEADERDATA-DOC_TYPE     = GC_CON-RE.
+  LS_HEADERDATA-DOC_DATE     = CS_HEADER-BLDAT.
+  LS_HEADERDATA-PSTNG_DATE   = CS_HEADER-BUDAT.
+  LS_HEADERDATA-REF_DOC_NO   = CS_HEADER-XBLNR.
+  LS_HEADERDATA-COMP_CODE    = UV_COMCODE.
+  LS_HEADERDATA-DIFF_INV     = CS_HEADER-LIFNR.
+  LS_HEADERDATA-CURRENCY     = GC_CON-THB.
+  LS_HEADERDATA-CURRENCY_ISO = GC_CON-THB.
+  LS_HEADERDATA-EXCH_RATE    = 1.
+  LS_HEADERDATA-ITEM_TEXT    = CS_HEADER-BKTXT.
+*  ls_headerdata-dsct_days1   = CS_HEADER-payment_terms.
+*  ls_headerdata-header_txt   = CS_HEADER-bktxt.
+  LS_HEADERDATA-BLINE_DATE   = CS_HEADER-BLDAT.
+*--------------------------------------------------------------------*
+* Item
+*--------------------------------------------------------------------*
+
+  LOOP AT IT_DETAIL INTO GS_DETAIL.
+    IF GS_DETAIL-EBELN IS NOT INITIAL.
+      ADD 1 TO LV_RUNING.
+      LS_ITEMDATA-INVOICE_DOC_ITEM = LV_RUNING.
+      LS_ITEMDATA-PO_NUMBER        = GS_DETAIL-EBELN.
+      LS_ITEMDATA-PO_ITEM          = GS_DETAIL-EBELP.
+
+
+      READ TABLE LT_MSEG INTO LS_MSEG
+      WITH KEY EBELN = GS_DETAIL-EBELN
+               EBELP = GS_DETAIL-EBELP.
+      IF SY-SUBRC = 0.
+        LS_ITEMDATA-REF_DOC          = LS_MSEG-MBLNR.
+        LS_ITEMDATA-REF_DOC_YEAR     = LS_MSEG-MJAHR.
+        LS_ITEMDATA-REF_DOC_IT       = LS_MSEG-ZEILE.
+        LS_ITEMDATA-QUANTITY         = LS_MSEG-MENGE.
+*      ls_itemdata-ref_doc_no       = ls_mseg-xblnr.
+        LS_ITEMDATA-PO_UNIT          = LS_MSEG-MEINS.
+      ENDIF.
+      LS_ITEMDATA-TAX_CODE         = CS_HEADER-MWSKZ.
+      LS_ITEMDATA-ITEM_AMOUNT      = GS_DETAIL-DMBTR.
+      ADD LS_ITEMDATA-ITEM_AMOUNT TO LV_GROSS.
+
+      LS_HEADERDATA-GROSS_AMOUNT   = LV_GROSS." * ls_itemdata-quantity.
+
+      APPEND LS_ITEMDATA TO LT_ITEMDATA.
+    ELSE.
+*--------------------------------------------------------------------*
+* GL Account
+*--------------------------------------------------------------------*
+
+      LS_GLACCOUNTDATA-INVOICE_DOC_ITEM = LV_RUNING.
+      LS_GLACCOUNTDATA-GL_ACCOUNT       = GS_DETAIL-HKONT.
+      LS_GLACCOUNTDATA-ITEM_AMOUNT      = GS_DETAIL-DMBTR.
+      LS_GLACCOUNTDATA-DB_CR_IND        = GS_DETAIL-SHKZG.
+      LS_GLACCOUNTDATA-COMP_CODE        = UV_COMCODE.
+      LS_GLACCOUNTDATA-TAX_CODE         = GS_DETAIL-MWSKZ.
+      LS_GLACCOUNTDATA-ITEM_TEXT        = GS_DETAIL-SGTXT.
+      LS_GLACCOUNTDATA-PROFIT_CTR       = GS_DETAIL-PRCTR.
+
+      APPEND LS_GLACCOUNTDATA TO LT_GLACCOUNTDATA.
+    ENDIF.
+
+  ENDLOOP.
+*--------------------------------------------------------------------*
+* Tax
+*--------------------------------------------------------------------*
+  LS_TAXDATA-TAX_CODE   = CS_HEADER-MWSKZ.
+  LS_TAXDATA-TAX_AMOUNT = GS_DETAIL-TAXAM .
+
+  APPEND LS_TAXDATA TO LT_TAXDATA.
+*--------------------------------------------------------------------*
+* vendoritemsplitdata
+*--------------------------------------------------------------------*
+  LS_VENDORITEMSPLITDATA-SPLIT_KEY    = 1.
+  LS_VENDORITEMSPLITDATA-SPLIT_AMOUNT = LS_HEADERDATA-GROSS_AMOUNT + LS_TAXDATA-TAX_AMOUNT.
+
+  APPEND LS_VENDORITEMSPLITDATA TO LT_VENDORITEMSPLITDATA.
+*--------------------------------------------------------------------*
+* Post
+*--------------------------------------------------------------------*
+  LS_HEADERDATA-GROSS_AMOUNT = LS_HEADERDATA-GROSS_AMOUNT + LS_TAXDATA-TAX_AMOUNT.
+
+  CLEAR : LV_GROSS,LV_RUNING.
+  CALL FUNCTION 'BAPI_INCOMINGINVOICE_CREATE'
+    EXPORTING
+      HEADERDATA          = LS_HEADERDATA
+      ADDRESSDATA         = LS_ADDRESSDATA
+    IMPORTING
+      INVOICEDOCNUMBER    = LS_INVOICEDOCNUMBER
+      FISCALYEAR          = LS_FISCALYEAR
+    TABLES
+      ITEMDATA            = LT_ITEMDATA
+      ACCOUNTINGDATA      = LT_ACCOUNTINGDATA
+      GLACCOUNTDATA       = LT_GLACCOUNTDATA
+      MATERIALDATA        = LT_MATERIALDATA
+      TAXDATA             = LT_TAXDATA
+      WITHTAXDATA         = LT_WITHTAXDATA
+      VENDORITEMSPLITDATA = LT_VENDORITEMSPLITDATA
+      RETURN              = LT_RETURN
+    EXCEPTIONS
+      ERROR_MESSAGE       = 1
+      OTHERS              = 2.
+
+  IF LS_INVOICEDOCNUMBER IS NOT INITIAL.
+    PERFORM F_COMMIT.
+
+    E_OUTPUT  = LS_INVOICEDOCNUMBER.
+    E_MESSAGE = TEXT-105.
+
+  ELSE.
+    PERFORM F_GET_MESSAGE TABLES LT_RETURN
+                        CHANGING E_MESSAGE.
+  ENDIF.
+
+  CLEAR : LT_ITEMDATA,LT_ACCOUNTINGDATA,LT_GLACCOUNTDATA,LT_MATERIALDATA,
+          LT_TAXDATA,LT_WITHTAXDATA,LT_VENDORITEMSPLITDATA,LT_RETURN,
+          LS_TAXDATA,LS_VENDORITEMSPLITDATA.
+
+  CLEAR : LS_HEADERDATA,LS_FISCALYEAR,LS_INVOICEDOCNUMBER,LS_ADDRESSDATA.
+
+ENDFORM.
+*&---------------------------------------------------------------------*
+*& Form F_GET_MESSAGE
+*&---------------------------------------------------------------------*
+*& text
+*&---------------------------------------------------------------------*
+*&      --> LT_RETURN
+*&      <-- E_MESSAGE
+*&---------------------------------------------------------------------*
+FORM F_GET_MESSAGE  TABLES LT_RETURN STRUCTURE BAPIRET2
+                  CHANGING CV_MESSAGE.
+
+  DATA : LV_ID          TYPE BAPIRET2-ID,
+         LV_NUMBER      TYPE BAPIRET2-NUMBER,
+         LV_LANGUAGE    TYPE BAPITGA-LANGU,
+         LV_TEXTFORMAT  TYPE BAPITGA-TEXTFORMAT,
+         LV_LINKPATTERN TYPE BAPITGA-LINKMASK,
+         LV_MESSAGE_V1  TYPE BAPIRET2-MESSAGE_V1,
+         LV_MESSAGE_V2  TYPE BAPIRET2-MESSAGE_V2,
+         LV_MESSAGE_V3  TYPE BAPIRET2-MESSAGE_V3,
+         LV_MESSAGE_V4  TYPE BAPIRET2-MESSAGE_V4,
+         LV_MESSAGE     TYPE BAPIRET2-MESSAGE.
+
+  DATA LS_RETURN TYPE BAPIRET2.
+
+  READ TABLE LT_RETURN INTO LS_RETURN
+  WITH KEY TYPE = 'E'.
+  IF SY-SUBRC = 0.
+    LV_ID          = LS_RETURN-ID.
+    LV_NUMBER      = LS_RETURN-NUMBER.
+    LV_LANGUAGE    = SY-LANGU.
+    LV_TEXTFORMAT  = 'ASC'.
+    LV_MESSAGE_V1  = LS_RETURN-MESSAGE_V1.
+    LV_MESSAGE_V2  = LS_RETURN-MESSAGE_V2.
+    LV_MESSAGE_V3  = LS_RETURN-MESSAGE_V3.
+    LV_MESSAGE_V4  = LS_RETURN-MESSAGE_V4.
+
+    CALL FUNCTION 'BAPI_MESSAGE_GETDETAIL'
+      EXPORTING
+        ID         = LV_ID
+        NUMBER     = LV_NUMBER
+        LANGUAGE   = LV_LANGUAGE
+        TEXTFORMAT = LV_TEXTFORMAT
+        MESSAGE_V1 = LV_MESSAGE_V1
+        MESSAGE_V2 = LV_MESSAGE_V2
+        MESSAGE_V3 = LV_MESSAGE_V3
+        MESSAGE_V4 = LV_MESSAGE_V4
+      IMPORTING
+        MESSAGE    = LV_MESSAGE.
+
+    CV_MESSAGE = LV_MESSAGE.
+  ENDIF.
+ENDFORM.
+*&---------------------------------------------------------------------*
+*& Form F_POST_FI_CLEAR_ADVANCE
+*&---------------------------------------------------------------------*
+*& text
+*&---------------------------------------------------------------------*
+*&      --> IT_DETAIL
+*&      --> I_DOCTYPE
+*&      --> I_COMCODE
+*&      <-- LS_HEADER
+*&      <-- E_OUTPUT
+*&      <-- E_MESSAGE
+*&---------------------------------------------------------------------*
+FORM F_POST_FI_CLEAR_ADVANCE  TABLES LT_DETAIL STRUCTURE ZSDSFIS014
+                               USING UV_DOCTYPE TYPE CHAR10
+                                     UV_COMCODE
+                            CHANGING CS_HEADER  TYPE ZSDSFIS013
+                                     CV_OUTPUT  TYPE BELNR_D
+                                     CV_MESSAGE TYPE CHAR255.
+  DATA GS_DETAIL LIKE LINE OF LT_DETAIL.
+
+  DATA : LS_DOCUMENTHEADER    TYPE BAPIACHE09,
+         LS_CUSTOMERCPD	      TYPE BAPIACPA09,
+         LT_ACCOUNTGL         TYPE TABLE OF BAPIACGL09,
+         LS_ACCOUNTGL         TYPE BAPIACGL09,
+         LT_ACCOUNTPAYABLE    TYPE TABLE OF BAPIACAP09,
+         LS_ACCOUNTPAYABLE    TYPE BAPIACAP09,
+         LT_ACCOUNTRECEIVABLE TYPE TABLE OF BAPIACAR09,
+         LS_ACCOUNTRECEIVABLE TYPE BAPIACAR09,
+         LT_CURRENCYAMOUNT    TYPE TABLE OF BAPIACCR09,
+         LS_CURRENCYAMOUNT    TYPE BAPIACCR09,
+         LT_RETURN            TYPE TABLE OF BAPIRET2 WITH HEADER LINE,
+         LS_RETURN            TYPE BAPIRET2,
+         LT_EXTENSION2        TYPE TABLE OF BAPIPAREX,
+         LS_EXTENSION2        TYPE BAPIPAREX,
+         LT_ACCOUNTTAX        TYPE TABLE OF BAPIACTX09,
+         LS_ACCOUNTTAX        TYPE BAPIACTX09,
+         LT_ACCOUNTWT	        TYPE TABLE OF	BAPIACWT09,
+         LS_ACCOUNTWT         TYPE BAPIACWT09,
+         LT_EXTENSION         TYPE TABLE OF BAPIACEXTC,
+         LS_EXTENSION         TYPE BAPIACEXTC.
+
+  DATA : LV_ERR TYPE C.
+
+  DATA : BEGIN OF LS_TAXRATE,
+           MWSKZ TYPE T007A-MWSKZ,
+           KBETR TYPE KONP-KBETR,
+         END OF LS_TAXRATE.
+  DATA LT_TAXRATE LIKE TABLE OF LS_TAXRATE.
+
+  DATA : BEGIN OF LS_SKB1,
+           SAKNR TYPE SKB1-SAKNR,
+           MWSKZ TYPE SKB1-MWSKZ,
+         END OF LS_SKB1.
+  DATA LT_SKB1 LIKE TABLE OF LS_SKB1.
+
+  DATA : LV_TAX TYPE C LENGTH 18.
+
+  DATA : LV_BRANCH TYPE C LENGTH 5.
+
+  DATA : LV_TAXDT TYPE SY-DATUM,
+         LV_AMOUT TYPE VBAK-NETWR.
+
+  DATA : LS_TMP LIKE LINE OF LT_DETAIL.
+
+  DATA : I_BUKRS TYPE  BUKRS,
+         I_DATUM TYPE  DATUM.
+
+  DATA : E_PERIOD TYPE  POPER,
+         E_GJAHR  TYPE  GJAHR.
+
+  DATA : GV_TAXCD LIKE  BSEG-MWSKZ.
+
+  DATA : LV_SGTXT TYPE BSEG-SGTXT.
+
+  DATA : LV_TEXT1 TYPE C LENGTH 30,
+         LV_TEXT2 TYPE C LENGTH 30.
+
+  DATA : LV_TEXT3 TYPE C LENGTH 10.
+
+  DATA LV_GL_LINE LIKE LS_ACCOUNTGL-ITEMNO_ACC.
+
+  DATA : BEGIN OF LS_J_1HVAT_OFF_NUM,
+           J_1HNUMGR TYPE J_1HVAT_OFF_NUM-J_1HNUMGR,
+           NRRANGENR TYPE INRI-NRRANGENR,
+         END OF LS_J_1HVAT_OFF_NUM.
+  DATA LT_J_1HVAT_OFF_NUM LIKE TABLE OF LS_J_1HVAT_OFF_NUM.
+
+  DATA : BEGIN OF GS_T030K,
+           MWSKZ TYPE T030K-MWSKZ,
+           KONTS TYPE T030K-KONTS,
+         END OF GS_T030K.
+  DATA GT_T030K LIKE TABLE OF GS_T030K.
+
+  DATA : BEGIN OF LS_WHT,
+           WT_WITHCD TYPE ZSDSFIS014-WT_WITHCD,
+           WT_QBSHB  TYPE ZSDSFIS014-WT_QBSHB,
+         END OF LS_WHT.
+  DATA LT_WHT LIKE TABLE OF LS_WHT.
+
+  DATA LV_BKTXT TYPE BKPF-BKTXT.
+
+  DATA LV_ZTERM TYPE LFB1-ZTERM.
+
+  DATA: LV_BELNR TYPE BKPF-BELNR, "Accounting Document Number
+        LV_GJAHR TYPE BKPF-GJAHR, "Fisical year
+        LV_BUKRS TYPE BKPF-BUKRS. "Company code
+
+  SELECT SINGLE ZTERM
+    FROM LFB1
+    INTO LV_ZTERM
+    WHERE LIFNR EQ CS_HEADER-LIFNR
+      AND BUKRS EQ UV_COMCODE.
+
+  SELECT MWSKZ
+         KONTS
+    FROM T030K
+    INTO TABLE GT_T030K
+    WHERE KTOPL EQ UV_COMCODE.
+
+  SELECT SAKNR
+         MWSKZ
+    FROM SKB1
+    INTO TABLE LT_SKB1
+    WHERE BUKRS EQ UV_COMCODE.
+
+  SELECT T007A~MWSKZ
+           KONP~KBETR
+      FROM T007A
+      INNER JOIN A003 ON T007A~MWSKZ EQ A003~MWSKZ
+      INNER JOIN KONP ON A003~KNUMH EQ KONP~KNUMH AND
+                         A003~KSCHL EQ KONP~KSCHL AND
+                         A003~KAPPL EQ KONP~KAPPL
+      INTO TABLE LT_TAXRATE
+      WHERE T007A~MWSKZ EQ CS_HEADER-MWSKZ
+        AND T007A~KALSM EQ GC_CON-TAXTH
+        AND A003~KAPPL  EQ GC_CON-TX
+        AND A003~ALAND  EQ GC_CON-TH.
+
+
+  I_BUKRS = UV_COMCODE.
+  I_DATUM = CS_HEADER-BUDAT.
+
+  CALL FUNCTION 'Z_SDSFI_GET_PERIOD_FISCAL_YEAR'
+    EXPORTING
+      I_BUKRS  = I_BUKRS
+      I_DATUM  = I_DATUM
+    IMPORTING
+      E_PERIOD = E_PERIOD
+      E_GJAHR  = E_GJAHR.
+
+  SELECT J_1HNUMGR
+    FROM J_1HVAT_OFF_NUM
+    INTO TABLE LT_J_1HVAT_OFF_NUM
+    WHERE BUKRS EQ I_BUKRS
+      AND BRNCH EQ GC_CON-BRNCH"LT_DETAIL-branch
+      AND GJAHR EQ CS_HEADER-BUDAT+0(4)
+      AND BLART EQ SPACE
+      AND MWSKZ EQ CS_HEADER-MWSKZ.
+  IF SY-SUBRC = 0.
+    LS_J_1HVAT_OFF_NUM-NRRANGENR = CS_HEADER-BUDAT+4(2).
+    MODIFY LT_J_1HVAT_OFF_NUM FROM LS_J_1HVAT_OFF_NUM TRANSPORTING NRRANGENR
+                                                             WHERE J_1HNUMGR IS NOT INITIAL.
+  ENDIF.
+
+
+  DATA LV_VAT LIKE GS_DETAIL-VATBAS.
+
+  CLEAR : LV_TAXDT,GS_DETAIL,LV_AMOUT.
+  DATA LS_DETAIL LIKE GS_DETAIL.
+
+  DATA : LV_EXCH_RATE TYPE UKURSP,
+         LV_FFACT     TYPE FFACT_CURR.
+  IF CS_HEADER-WAERS NE GC_CON-THB.
+    PERFORM F_GET_EXCHANGE_RATE USING SY-DATUM
+                                      CS_HEADER-WAERS
+                             CHANGING LV_EXCH_RATE
+                                      LV_FFACT.
+
+    CS_HEADER-KURSF = LV_EXCH_RATE.
+  ENDIF.
+
+*--------------------------------------------------------------------*
+* Deletail
+*--------------------------------------------------------------------*
+
+
+  LOOP AT LT_DETAIL INTO LS_DETAIL.
+    MOVE-CORRESPONDING LS_DETAIL TO GS_DETAIL.
+    CLEAR : LS_DETAIL,LS_ACCOUNTPAYABLE,LS_CURRENCYAMOUNT,LS_EXTENSION2,LS_ACCOUNTGL.
+    IF GS_DETAIL-HKONT EQ GC_CON-OT03.
+      CONTINUE.
+    ENDIF.
+
+    IF GS_DETAIL-HKONT EQ CS_HEADER-LIFNR.
+      CONTINUE.
+    ENDIF.
+
+*    IF lv_ffact IS NOT INITIAL.
+*      gs_detail-vatbas = gs_detail-vatbas * lv_ffact.
+*    ENDIF.
+
+    LV_SGTXT = GS_DETAIL-SGTXT.
+
+    ADD 1 TO LV_GL_LINE.
+
+    LS_ACCOUNTGL-ITEMNO_ACC  = LV_GL_LINE.
+    LS_ACCOUNTGL-WBS_ELEMENT = GS_DETAIL-WBS.
+    LS_ACCOUNTGL-GL_ACCOUNT  = GS_DETAIL-HKONT.
+*    LS_ACCOUNTGL-ACCT_KEY    = GC_CON-EGK.
+    PERFORM F_APHA_INPUT USING LS_ACCOUNTGL-GL_ACCOUNT.
+    LS_ACCOUNTGL-COMP_CODE  = UV_COMCODE.
+
+    READ TABLE LT_SKB1 INTO LS_SKB1
+    WITH KEY SAKNR = LS_ACCOUNTGL-GL_ACCOUNT
+             MWSKZ = SPACE.
+    IF SY-SUBRC = 0.
+      LS_ACCOUNTGL-TAX_CODE   = SPACE.
+    ELSE.
+      LS_ACCOUNTGL-TAX_CODE   = CS_HEADER-MWSKZ.
+    ENDIF.
+
+*    IF UV_DOCTYPE  EQ 'F43'.
+*      ls_accountgl-tax_code   = space.
+*    ELSE.
+*      ls_accountgl-tax_code   = CS_HEADER-mwskz.
+*    ENDIF.
+
+    LS_ACCOUNTGL-PROFIT_CTR = GS_DETAIL-PRCTR.
+    LS_ACCOUNTGL-COSTCENTER = GS_DETAIL-PRCTR.
+    PERFORM F_APHA_INPUT USING LS_ACCOUNTGL-COSTCENTER.
+    LS_ACCOUNTGL-ORDERID    = GS_DETAIL-AUFNR.
+    PERFORM F_APHA_INPUT USING LS_ACCOUNTGL-ORDERID .
+    LS_ACCOUNTGL-ITEM_TEXT  = GS_DETAIL-SGTXT.
+*    ls_accountgl-alloc_nmbr = gs_detail-zuonr.
+    APPEND LS_ACCOUNTGL TO LT_ACCOUNTGL.
+
+    LS_CURRENCYAMOUNT-ITEMNO_ACC  = LV_GL_LINE.
+*    ls_currencyamount-curr_type   = '10'.
+    LS_CURRENCYAMOUNT-CURRENCY    = CS_HEADER-WAERS.
+    LS_CURRENCYAMOUNT-EXCH_RATE   = CS_HEADER-KURSF.
+    LS_CURRENCYAMOUNT-AMT_DOCCUR  = GS_DETAIL-VATBAS.
+
+    ADD LS_CURRENCYAMOUNT-AMT_DOCCUR TO LV_AMOUT.
+
+    APPEND LS_CURRENCYAMOUNT TO LT_CURRENCYAMOUNT.
+
+    IF LS_CURRENCYAMOUNT-AMT_DOCCUR GE 0.
+*      LS_EXTENSION2-STRUCTURE = GC_CON-ADDITIONAL_FILED.
+*      CONCATENATE LS_ACCOUNTGL-ITEMNO_ACC GC_CON-40 GC_CON-BRNCH GC_CON-BUPLA SPACE INTO LS_EXTENSION2-VALUEPART1.
+*      APPEND LS_EXTENSION2 TO LT_EXTENSION2.
+*      LS_EXTENSION2-STRUCTURE = GC_ADDITIONAL_FILED.
+      CONCATENATE LS_ACCOUNTGL-ITEMNO_ACC
+                  GC_CON-40
+                  GC_CON-BRNCH
+                  GC_CON-BUPLA
+                  SPACE
+             INTO LS_EXTENSION2-VALUEPART1.
+      APPEND LS_EXTENSION2 TO LT_EXTENSION2.
+    ELSE.
+*      LS_EXTENSION2-STRUCTURE = GC_CON-ADDITIONAL_FILED.
+*      CONCATENATE LS_ACCOUNTGL-ITEMNO_ACC GC_CON-50 GC_CON-BRNCH GC_CON-BUPLA SPACE INTO LS_EXTENSION2-VALUEPART1.
+*      APPEND LS_EXTENSION2 TO LT_EXTENSION2.
+*      LS_EXTENSION2-STRUCTURE = GC_ADDITIONAL_FILED.
+      CONCATENATE LS_ACCOUNTGL-ITEMNO_ACC
+                  GC_CON-50
+                  GC_CON-BRNCH
+                  GC_CON-BUPLA
+                  SPACE
+             INTO LS_EXTENSION2-VALUEPART1.
+      APPEND LS_EXTENSION2 TO LT_EXTENSION2.
+    ENDIF.
+
+    ADD GS_DETAIL-VATBAS TO LV_VAT.
+
+    AT LAST.
+      IF CS_HEADER-MWSKZ IS NOT INITIAL AND
+         CS_HEADER-MWSKZ NE GC_CON-IX.
+
+        CLEAR : LS_ACCOUNTGL,LS_CURRENCYAMOUNT,LS_EXTENSION2,LS_ACCOUNTGL.
+        GV_TAXCD = CS_HEADER-MWSKZ.
+        LV_TAXDT = GS_DETAIL-TAXDT.
+*      ls_j_1hvat_off_num-nrrangenr = gs_detail-taxdt+4(2).
+*      MODIFY lt_j_1hvat_off_num FROM ls_j_1hvat_off_num TRANSPORTING nrrangenr
+*                                                               WHERE j_1hnumgr IS NOT INITIAL.
+
+*      ls_accounttax-itemno_tax      = lv_gl_line.
+        ADD 1 TO LV_GL_LINE.
+        LS_CURRENCYAMOUNT-ITEMNO_ACC  = LV_GL_LINE.
+*      ls_currencyamount-curr_type   = '10'.
+        LS_CURRENCYAMOUNT-CURRENCY    = CS_HEADER-WAERS.
+        LS_CURRENCYAMOUNT-EXCH_RATE   = CS_HEADER-KURSF.
+        LS_CURRENCYAMOUNT-AMT_DOCCUR  = GS_DETAIL-TAXAM.
+        LS_CURRENCYAMOUNT-AMT_BASE    = LV_VAT.
+        LS_CURRENCYAMOUNT-TAX_AMT     = GS_DETAIL-TAXAM.
+        APPEND LS_CURRENCYAMOUNT TO LT_CURRENCYAMOUNT.
+
+        ADD LS_CURRENCYAMOUNT-AMT_DOCCUR TO LV_AMOUT.
+
+        LS_ACCOUNTTAX-ITEMNO_ACC = LV_GL_LINE.
+
+        READ TABLE GT_T030K INTO GS_T030K
+        WITH KEY MWSKZ = CS_HEADER-MWSKZ.
+        IF SY-SUBRC = 0.
+          LS_ACCOUNTTAX-GL_ACCOUNT = GS_T030K-KONTS.
+        ENDIF.
+
+*      ls_accounttax-gl_account = '0000111103'.
+        LS_ACCOUNTTAX-COND_KEY   = GC_CON-MWVS.
+        LS_ACCOUNTTAX-ACCT_KEY   = GC_CON-VST.
+        LS_ACCOUNTTAX-TAX_CODE   = CS_HEADER-MWSKZ.
+        LS_ACCOUNTTAX-ITEMNO_TAX = GC_CON-STAR.
+
+        READ TABLE LT_TAXRATE INTO LS_TAXRATE
+        WITH KEY MWSKZ = CS_HEADER-MWSKZ.
+        IF SY-SUBRC = 0.
+          LS_ACCOUNTTAX-TAX_RATE = LS_TAXRATE-KBETR / 10.
+        ENDIF.
+
+        LS_ACCOUNTTAX-TAX_DATE = SY-DATUM.
+*
+        APPEND LS_ACCOUNTTAX TO LT_ACCOUNTTAX.
+
+*        LS_EXTENSION2-STRUCTURE = GC_CON-ADDITIONAL_FILED_V2.
+*        CONCATENATE LS_CURRENCYAMOUNT-ITEMNO_ACC GC_CON-40 GC_CON-BRNCH GC_CON-BUPLA SPACE"gs_detail-lifnr
+*                          INTO LS_EXTENSION2-VALUEPART1 RESPECTING BLANKS.
+*        APPEND LS_EXTENSION2 TO LT_EXTENSION2.
+
+        CONCATENATE LS_CURRENCYAMOUNT-ITEMNO_ACC
+                    GC_CON-40
+                    GC_CON-BRNCH
+                    GC_CON-BUPLA
+                    SPACE
+               INTO LS_EXTENSION2-VALUEPART1.
+        APPEND LS_EXTENSION2 TO LT_EXTENSION2.
+
+*      IF gs_detail-taxid IS NOT INITIAL.
+*        lv_tax = gs_detail-taxid.
+*      ENDIF.
+
+*      IF gs_detail-branch IS NOT INITIAL.
+*        lv_branch = gs_detail-branch.
+*      ENDIF.
+
+*      IF gs_detail-refno IS NOT INITIAL.
+*        gv_ref = gs_detail-refno.
+*      ENDIF.
+
+      ENDIF.
+    ENDAT.
+
+    IF GS_DETAIL-WT_WITHCD IS NOT INITIAL.
+      LS_WHT-WT_WITHCD = GS_DETAIL-WT_WITHCD.
+      LS_WHT-WT_QBSHB  = GS_DETAIL-WT_QBSHB .
+    ENDIF.
+
+    COLLECT LS_WHT INTO LT_WHT.
+
+    CLEAR : GS_T030K,GS_DETAIL,LS_WHT.
+  ENDLOOP.
+
+  DELETE LT_WHT WHERE WT_WITHCD IS INITIAL.
+*--------------------------------------------------------------------*
+* Vendor
+*--------------------------------------------------------------------*
+  CLEAR : LS_ACCOUNTPAYABLE,LS_CURRENCYAMOUNT,LS_EXTENSION2,LS_ACCOUNTGL.
+  ADD 1 TO LV_GL_LINE.
+
+  LS_ACCOUNTPAYABLE-ITEMNO_ACC = LV_GL_LINE.
+  LS_ACCOUNTPAYABLE-VENDOR_NO  = CS_HEADER-LIFNR.
+  LS_ACCOUNTPAYABLE-PMNTTRMS   = LV_ZTERM.
+  PERFORM F_APHA_INPUT USING LS_ACCOUNTPAYABLE-VENDOR_NO.
+  LS_ACCOUNTPAYABLE-BLINE_DATE = CS_HEADER-BUDAT.
+  LS_ACCOUNTPAYABLE-COMP_CODE  = UV_COMCODE.
+  LS_ACCOUNTPAYABLE-PROFIT_CTR = GC_CON-ADMIN_PROFIT.
+  IF GV_TAXCD IS NOT INITIAL.
+    LS_ACCOUNTPAYABLE-TAX_CODE   = GV_TAXCD.
+  ELSE.
+    LS_ACCOUNTPAYABLE-TAX_CODE   = SPACE.
+  ENDIF.
+  LS_ACCOUNTPAYABLE-ITEM_TEXT = GS_DETAIL-SGTXT.
+  APPEND LS_ACCOUNTPAYABLE TO LT_ACCOUNTPAYABLE.
+
+  LS_CURRENCYAMOUNT-ITEMNO_ACC  = LV_GL_LINE.
+*  ls_currencyamount-curr_type   = '10'.
+  LS_CURRENCYAMOUNT-CURRENCY    = CS_HEADER-WAERS.
+  LS_CURRENCYAMOUNT-EXCH_RATE   = CS_HEADER-KURSF.
+  LS_CURRENCYAMOUNT-AMT_DOCCUR  = LV_AMOUT * -1.
+
+  IF LS_ACCOUNTGL-TAX_CODE IS NOT INITIAL.
+    LS_CURRENCYAMOUNT-AMT_BASE    = LV_VAT."gs_detail-vatbas.
+    LS_CURRENCYAMOUNT-TAX_AMT     = GS_DETAIL-TAXAM.
+  ENDIF.
+
+  APPEND LS_CURRENCYAMOUNT TO LT_CURRENCYAMOUNT.
+
+*  LS_EXTENSION2-STRUCTURE = GC_CON-ADDITIONAL_FILED_V2.
+*  CONCATENATE LS_ACCOUNTPAYABLE-ITEMNO_ACC GC_CON-31 GC_CON-BRNCH GC_CON-BUPLA LV_TEXT3 LV_SGTXT
+*  INTO LS_EXTENSION2-VALUEPART1 RESPECTING BLANKS.
+  CONCATENATE LS_ACCOUNTPAYABLE-ITEMNO_ACC
+              GC_CON-31
+              GC_CON-BRNCH
+              GC_CON-BUPLA
+              SPACE
+             INTO LS_EXTENSION2-VALUEPART1.
+  APPEND LS_EXTENSION2 TO LT_EXTENSION2.
+  "CONCATENATE ls_accountpayable-itemno_acc '31' '0000' '0000' space  INTO ls_extension2-valuepart1." RESPECTING BLANKS.
+  APPEND LS_EXTENSION2 TO LT_EXTENSION2.
+*--------------------------------------------------------------------*
+* Withholding tax
+*--------------------------------------------------------------------*
+  LOOP AT LT_WHT INTO LS_WHT.
+    LS_ACCOUNTWT-ITEMNO_ACC  = LS_ACCOUNTPAYABLE-ITEMNO_ACC.
+    LS_ACCOUNTWT-WT_TYPE     = GC_CON-11.
+    LS_ACCOUNTWT-WT_CODE     = LS_WHT-WT_WITHCD.
+
+    PERFORM F_APHA_INPUT  USING LS_ACCOUNTWT-WT_CODE.
+
+    LS_ACCOUNTWT-BAS_AMT_LC  = LS_WHT-WT_QBSHB.
+    LS_ACCOUNTWT-BAS_AMT_TC  = LS_WHT-WT_QBSHB.
+
+    IF LS_WHT-WT_QBSHB IS NOT INITIAL.
+      LS_ACCOUNTWT-BAS_AMT_IND = ABAP_TRUE.
+*      ls_accountwt-man_amt_ind = 'X'.
+*      ls_accountwt-man_amt_lc  = 30.
+*      ls_accountwt-man_amt_tc = 30.
+    ENDIF.
+
+    COLLECT LS_ACCOUNTWT INTO LT_ACCOUNTWT.
+    CLEAR : LS_ACCOUNTWT,LS_WHT.
+  ENDLOOP.
+  IF SY-SUBRC NE 0.
+    LS_ACCOUNTWT-ITEMNO_ACC = LS_ACCOUNTPAYABLE-ITEMNO_ACC.
+    LS_ACCOUNTWT-WT_TYPE    = '11'.
+    APPEND LS_ACCOUNTWT TO LT_ACCOUNTWT.
+  ENDIF.
+*--------------------------------------------------------------------*
+* Header
+*--------------------------------------------------------------------*
+  TRANSLATE CS_HEADER-USNAM TO UPPER CASE.
+
+  SPLIT CS_HEADER-USNAM AT SPACE INTO LV_TEXT1
+                                      LV_TEXT2.
+
+  LS_DOCUMENTHEADER-USERNAME          = LV_TEXT1."sy-uname.
+*   ls_documentheader-header_txt       = 'test header text'.
+  LS_DOCUMENTHEADER-COMP_CODE         = UV_COMCODE.
+  LS_DOCUMENTHEADER-FISC_YEAR         = E_GJAHR.
+  IF LV_TAXDT IS INITIAL.
+    LS_DOCUMENTHEADER-DOC_DATE        = CS_HEADER-BLDAT.
+  ELSE.
+    LS_DOCUMENTHEADER-DOC_DATE        = LV_TAXDT.
+  ENDIF.
+
+  LS_DOCUMENTHEADER-PSTNG_DATE      = CS_HEADER-BUDAT.
+  LS_DOCUMENTHEADER-TRANS_DATE      = CS_HEADER-BUDAT.
+  LS_DOCUMENTHEADER-FIS_PERIOD      = E_PERIOD.
+  IF     UV_DOCTYPE  EQ GC_CON-APVI.
+    LS_DOCUMENTHEADER-DOC_TYPE        = GC_CON-KR.
+  ELSEIF UV_DOCTYPE  EQ GC_CON-F43.
+    LS_DOCUMENTHEADER-DOC_TYPE        = GC_CON-DN.
+  ENDIF.
+  LS_DOCUMENTHEADER-REF_DOC_NO    = CS_HEADER-XBLNR.
+*--------------------------------------------------------------------*
+* F-43 Case Customer
+*--------------------------------------------------------------------*
+
+  IF UV_DOCTYPE  EQ GC_CON-F43.
+    DATA LV_NAME1 TYPE LFA1-NAME1.
+    SELECT SINGLE NAME1
+      FROM LFA1
+      INTO LV_NAME1
+      WHERE LIFNR = CS_HEADER-LIFNR.
+
+    LOOP AT LT_DETAIL INTO GS_DETAIL WHERE HKONT EQ GC_CON-OT03.
+      LS_CUSTOMERCPD-NAME    = LV_NAME1.
+      LS_CUSTOMERCPD-CITY    = GC_CON-BANGKOK.
+      LS_CUSTOMERCPD-COUNTRY = GC_CON-TH.
+
+      CLEAR : LS_ACCOUNTRECEIVABLE,LS_CURRENCYAMOUNT,LS_EXTENSION2,LS_ACCOUNTGL.
+      ADD 1 TO LV_GL_LINE.
+
+      LS_ACCOUNTRECEIVABLE-ITEMNO_ACC = LV_GL_LINE.
+      LS_ACCOUNTRECEIVABLE-CUSTOMER   = GS_DETAIL-HKONT.
+      LS_ACCOUNTRECEIVABLE-COMP_CODE  = UV_COMCODE.
+*      LS_ACCOUNTRECEIVABLE-PROFIT_CTR = GC_CON-P109999.
+      LS_ACCOUNTRECEIVABLE-PROFIT_CTR = GS_DETAIL-PRCTR.
+*    IF gv_taxcd IS NOT INITIAL.
+*      ls_accountpayable-tax_code   = gv_taxcd.
+*    ELSE.
+*      ls_accountpayable-tax_code   = space.
+*    ENDIF.
+      LS_ACCOUNTRECEIVABLE-ITEM_TEXT = GS_DETAIL-SGTXT.
+      APPEND LS_ACCOUNTRECEIVABLE TO LT_ACCOUNTRECEIVABLE.
+
+      LS_CURRENCYAMOUNT-ITEMNO_ACC  = LV_GL_LINE.
+*  ls_currencyamount-curr_type   = '10'.
+      LS_CURRENCYAMOUNT-CURRENCY    = CS_HEADER-WAERS.
+      LS_CURRENCYAMOUNT-EXCH_RATE   = CS_HEADER-KURSF.
+      LS_CURRENCYAMOUNT-AMT_DOCCUR  = GS_DETAIL-VATBAS.
+      APPEND LS_CURRENCYAMOUNT TO LT_CURRENCYAMOUNT.
+
+*      ls_extension2-structure = 'ZFI_EXT2_ACCITV1'.
+*      CONCATENATE ls_accountreceivable-itemno_acc '21' '0000' '0000' space INTO ls_extension2-valuepart1.
+      LS_EXTENSION2-STRUCTURE = GC_CON-ADDITIONAL_FILED_V2.
+      CONCATENATE LS_ACCOUNTRECEIVABLE-ITEMNO_ACC GC_CON-31 GC_CON-BRNCH GC_CON-BUPLA LV_TEXT3 LV_SGTXT INTO LS_EXTENSION2-VALUEPART1 RESPECTING BLANKS.
+
+      APPEND LS_EXTENSION2 TO LT_EXTENSION2.
+    ENDLOOP.
+
+
+    LOOP AT LT_DETAIL INTO GS_DETAIL WHERE HKONT EQ CS_HEADER-LIFNR.
+      CLEAR : LS_ACCOUNTPAYABLE,LS_CURRENCYAMOUNT,LS_EXTENSION2,LS_ACCOUNTGL.
+      ADD 1 TO LV_GL_LINE.
+
+      LS_ACCOUNTPAYABLE-ITEMNO_ACC = LV_GL_LINE.
+      LS_ACCOUNTPAYABLE-VENDOR_NO  = CS_HEADER-LIFNR.
+      PERFORM F_APHA_INPUT USING LS_ACCOUNTPAYABLE-VENDOR_NO.
+      LS_ACCOUNTPAYABLE-BLINE_DATE = CS_HEADER-BLDAT.
+      LS_ACCOUNTPAYABLE-COMP_CODE  = UV_COMCODE.
+      LS_ACCOUNTPAYABLE-PROFIT_CTR = CS_HEADER-PRCTR.
+      IF GV_TAXCD IS NOT INITIAL.
+        LS_ACCOUNTPAYABLE-TAX_CODE   = GV_TAXCD.
+      ELSE.
+        LS_ACCOUNTPAYABLE-TAX_CODE   = SPACE.
+      ENDIF.
+      LS_ACCOUNTPAYABLE-ITEM_TEXT = GS_DETAIL-SGTXT.
+      APPEND LS_ACCOUNTPAYABLE TO LT_ACCOUNTPAYABLE.
+
+      LS_CURRENCYAMOUNT-ITEMNO_ACC  = LV_GL_LINE.
+*  ls_currencyamount-curr_type   = '10'.
+      LS_CURRENCYAMOUNT-CURRENCY    = CS_HEADER-WAERS.
+      LS_CURRENCYAMOUNT-EXCH_RATE   = CS_HEADER-KURSF.
+      LS_CURRENCYAMOUNT-AMT_DOCCUR  = GS_DETAIL-VATBAS * -1.
+      APPEND LS_CURRENCYAMOUNT TO LT_CURRENCYAMOUNT.
+
+      LS_EXTENSION2-STRUCTURE = GC_CON-ADDITIONAL_FILED.
+      CONCATENATE LS_ACCOUNTPAYABLE-ITEMNO_ACC GC_CON-31 GC_CON-BRNCH GC_CON-BUPLA SPACE INTO LS_EXTENSION2-VALUEPART1  RESPECTING BLANKS.
+      APPEND LS_EXTENSION2 TO LT_EXTENSION2.
+
+      LS_ACCOUNTWT-ITEMNO_ACC = LS_ACCOUNTPAYABLE-ITEMNO_ACC.
+      LS_ACCOUNTWT-WT_TYPE    = GC_CON-11.
+      LS_ACCOUNTWT-WT_CODE    = LS_WHT-WT_WITHCD.
+      LS_ACCOUNTWT-BAS_AMT_LC = LS_WHT-WT_QBSHB.
+      LS_ACCOUNTWT-BAS_AMT_TC = LS_WHT-WT_QBSHB.
+*    ls_accountwt-bas_amt_l2  = ls_wht-wt_qbshb.
+*    ls_accountwt-bas_amt_l3  = ls_wht-wt_qbshb.
+      IF LS_WHT-WT_QBSHB IS NOT INITIAL.
+        LS_ACCOUNTWT-BAS_AMT_IND = ABAP_TRUE.
+      ENDIF.
+
+      APPEND LS_ACCOUNTWT TO LT_ACCOUNTWT.
+      CLEAR : LS_ACCOUNTWT,LS_WHT.
+    ENDLOOP.
+
+  ENDIF.
+
+*--------------------------------------------------------------------*
+* Call FM
+*--------------------------------------------------------------------*
+  IF LT_ACCOUNTTAX[] IS NOT INITIAL.
+*    SY-TCODE = 'Z_TEST'.
+  ENDIF.
+
+*  IF CS_HEADER-waers EQ 'JPY'.
+*    sy-tcode = 'Z_TEST'.
+*  ENDIF.
+
+  PERFORM F_CHECK_POST TABLES LT_ACCOUNTGL
+                              LT_ACCOUNTPAYABLE
+                              LT_ACCOUNTRECEIVABLE
+                              LT_ACCOUNTTAX
+                              LT_CURRENCYAMOUNT
+                              LT_EXTENSION
+                              LT_RETURN
+                              LT_EXTENSION2
+                              LT_ACCOUNTWT
+                        USING LS_DOCUMENTHEADER
+                              LS_CUSTOMERCPD
+                              LV_ERR
+                              CV_MESSAGE.
+
+  IF LV_ERR NE ABAP_TRUE.
+
+    IF LT_ACCOUNTTAX[] IS NOT INITIAL.
+*      SY-TCODE = 'Z_TEST'.
+*      EXPORT LT_J_1HVAT_OFF_NUM[] TO MEMORY ID 'HEADERTEXT'. " Please check code in Class ZCL_IM_BADI_AC_DOCUMENT Methods IF_EX_AC_DOCUMENT~CHANGE_AFTER_CHECK
+    ENDIF.
+
+*    IF CS_HEADER-waers EQ 'JPY'.
+*      sy-tcode = 'Z_TEST'.
+*    ENDIF.
+
+    CALL FUNCTION 'BAPI_ACC_DOCUMENT_POST'
+      EXPORTING
+        DOCUMENTHEADER    = LS_DOCUMENTHEADER
+        CUSTOMERCPD       = LS_CUSTOMERCPD
+      TABLES
+        ACCOUNTGL         = LT_ACCOUNTGL
+        ACCOUNTPAYABLE    = LT_ACCOUNTPAYABLE
+        ACCOUNTRECEIVABLE = LT_ACCOUNTRECEIVABLE
+        ACCOUNTTAX        = LT_ACCOUNTTAX
+        CURRENCYAMOUNT    = LT_CURRENCYAMOUNT
+        EXTENSION1        = LT_EXTENSION
+        RETURN            = LT_RETURN
+        EXTENSION2        = LT_EXTENSION2
+        ACCOUNTWT         = LT_ACCOUNTWT
+      EXCEPTIONS
+        ERROR_MESSAGE     = 1
+        OTHERS            = 2.
+    IF LT_ACCOUNTTAX[] IS NOT INITIAL.
+*      FREE MEMORY ID 'HEADERTEXT'.
+    ENDIF.
+
+    READ TABLE LT_RETURN INTO LS_RETURN
+    WITH KEY TYPE = GC_CON-S.
+    IF SY-SUBRC EQ 0.
+
+*      CONCATENATE 'Document' ls_return-message_v2+0(10) 'has been saved' INTO CV_MESSAGE SEPARATED BY space.
+*        CV_OUTPUT   = ls_return-message_v2+0(10).
+*      gs_check_post-status  = gc_status-success.
+*      gs_check_post-flag    = 'S'.
+*      gs_check_post-message = CV_MESSAGE.
+      CV_OUTPUT  = LS_RETURN-MESSAGE_V2+0(10).
+
+*      APPEND gs_check_post TO gt_check_post.
+
+      PERFORM F_COMMIT.
+
+      SELECT SINGLE BKTXT
+        FROM BKPF
+        INTO LV_BKTXT
+        WHERE BELNR EQ LS_RETURN-MESSAGE_V2+0(10)
+          AND GJAHR EQ LS_RETURN-MESSAGE_V2+14(4).
+
+
+      CV_MESSAGE = LV_BKTXT.
+
+*      IF lv_tax IS NOT INITIAL.
+*        PERFORM f_updata_tax_code USING ls_return-message_v2+0(10)
+*                                        e_gjahr
+*                                        lv_tax.
+*        PERFORM f_commit.
+*      ENDIF.
+*
+*      IF lv_branch IS NOT INITIAL.
+*        PERFORM f_updata_branch_code USING ls_return-message_v2+0(10)
+*                                           e_gjahr
+*                                           lv_branch.
+*        PERFORM f_commit.
+*      ENDIF.
+      LV_BELNR = LS_RETURN-MESSAGE_V2+0(10).
+      LV_BUKRS = LS_RETURN-MESSAGE_V2+10(4).
+      LV_GJAHR = LS_RETURN-MESSAGE_V2+14(4).
+
+      PERFORM CREATE_TEXT USING CS_HEADER
+                                LV_BUKRS
+                                LV_BELNR
+                                LV_GJAHR.
+
+    ENDIF.
+  ENDIF.
+
+ENDFORM.
+*&---------------------------------------------------------------------*
+*& Form CREATE_TEXT
+*&---------------------------------------------------------------------*
+*& text
+*&---------------------------------------------------------------------*
+*&      --> CS_HEADER
+*&      --> LV_BUKRS
+*&      --> LV_BELNR
+*&      --> LV_GJAHR
+*&---------------------------------------------------------------------*
+FORM CREATE_TEXT  USING US_HEADER TYPE ZSDSFIS013
+                        UV_BUKRS  TYPE BKPF-BUKRS
+                        UV_BELNR  TYPE BKPF-BELNR
+                        UV_GJAHR  TYPE BKPF-GJAHR.
+
+  CONSTANTS: LC_EN        TYPE THEAD-TDSPRAS  VALUE 'E',
+             LC_OBJ_BELEG TYPE THEAD-TDOBJECT VALUE 'BELEG'.
+
+  DATA: LV_FID     TYPE THEAD-TDID,
+        LV_FNAME   TYPE THEAD-TDNAME,
+        LV_FOBJECT TYPE THEAD-TDOBJECT.
+
+  DATA: LT_FLINES   TYPE STANDARD TABLE OF TLINE.
+
+  FIELD-SYMBOLS: <LFS_TLINE> TYPE TLINE.
+
+  CHECK UV_BELNR IS NOT INITIAL.
+
+  DEFINE CALL_FUNCTION.
+    CALL FUNCTION 'CREATE_TEXT'
+      EXPORTING
+        FID               = &1
+        FLANGUAGE         = LC_EN
+        FNAME             = &2
+        FOBJECT           = &3
+      TABLES
+        FLINES            = &4
+      EXCEPTIONS
+        NO_INIT           = 1
+        NO_SAVE           = 2
+        OTHERS            = 3
+              .
+    IF SY-SUBRC = 0.
+      PERFORM F_COMMIT.
+    ENDIF.
+  END-OF-DEFINITION.
+
+  "Branch
+  IF US_HEADER-BRNCH IS NOT INITIAL.
+    CLEAR: LV_FID, LV_FOBJECT, LV_FNAME, LT_FLINES[].
+    LV_FID    = GC_CON-BCOD.
+    CONCATENATE UV_BELNR
+                UV_BUKRS
+                UV_GJAHR
+          INTO LV_FNAME.
+    LV_FOBJECT = LC_OBJ_BELEG.
+
+    APPEND INITIAL LINE TO LT_FLINES ASSIGNING <LFS_TLINE>.
+    IF <LFS_TLINE> IS ASSIGNED.
+      <LFS_TLINE>-TDFORMAT = GC_CON-STAR.
+      <LFS_TLINE>-TDLINE   = US_HEADER-BRNCH.
+    ENDIF.
+    CALL_FUNCTION LV_FID LV_FNAME LV_FOBJECT LT_FLINES.
+  ENDIF.
+
+  "Tax Number
+  IF US_HEADER-STCD1 IS NOT INITIAL.
+    CLEAR: LV_FID, LV_FOBJECT, LV_FNAME, LT_FLINES[].
+    LV_FID    = GC_CON-TXID.
+    CONCATENATE UV_BELNR
+                UV_BUKRS
+                UV_GJAHR
+          INTO LV_FNAME.
+    LV_FOBJECT = LC_OBJ_BELEG.
+
+    APPEND INITIAL LINE TO LT_FLINES ASSIGNING <LFS_TLINE>.
+    IF <LFS_TLINE> IS ASSIGNED.
+      <LFS_TLINE>-TDFORMAT = GC_CON-STAR.
+      <LFS_TLINE>-TDLINE   = US_HEADER-STCD1.
+    ENDIF.
+    CALL_FUNCTION LV_FID LV_FNAME LV_FOBJECT LT_FLINES.
+  ENDIF.
+
+ENDFORM.

@@ -1,0 +1,117 @@
+class ZCL_ZSDSMM_RESERV_VAN_DPC_EXT definition
+  public
+  inheriting from ZCL_ZSDSMM_RESERV_VAN_DPC
+  create public .
+
+public section.
+
+  methods /IWBEP/IF_MGW_APPL_SRV_RUNTIME~CREATE_DEEP_ENTITY
+    redefinition .
+protected section.
+
+  methods RESERVATIONSET_GET_ENTITY
+    redefinition .
+  methods RESERVATIONSET_GET_ENTITYSET
+    redefinition .
+private section.
+ENDCLASS.
+
+
+
+CLASS ZCL_ZSDSMM_RESERV_VAN_DPC_EXT IMPLEMENTATION.
+
+
+METHOD /IWBEP/IF_MGW_APPL_SRV_RUNTIME~CREATE_DEEP_ENTITY.
+  DATA:
+    LS_DEEP_ENTITY TYPE ZCL_ZSDSMM_RESERV_VAN_MPC_EXT=>TS_RESERVATIONDEEP,
+    LS_RESERVATION TYPE ZCL_ZSDSMM_RESERV_VAN_MPC_EXT=>TS_RESERVATION,
+    LF_TEST        TYPE FLAG.
+
+  IF IO_DATA_PROVIDER IS NOT INITIAL.
+    CASE IV_ENTITY_SET_NAME.
+      WHEN 'ReservationSet'.
+        TRY.
+            CALL METHOD IO_DATA_PROVIDER->READ_ENTRY_DATA
+              IMPORTING
+                ES_DATA = LS_DEEP_ENTITY.
+            IF LS_DEEP_ENTITY IS NOT INITIAL.
+
+              MOVE-CORRESPONDING LS_DEEP_ENTITY TO LS_RESERVATION.
+
+*             Reservation processing (Create or Update) and return response
+              CALL METHOD ZCL_SDSMM_RESERV_VAN_SLOC=>RESERVATION_PROCESS
+                EXPORTING
+                  IF_TEST            = LF_TEST
+                CHANGING
+                  CS_RESERVATION_HDR = LS_RESERVATION
+                  CT_RESERVATION_ITM = LS_DEEP_ENTITY-RESERVATIONITEMSET
+                  CT_RESPONSE        = LS_DEEP_ENTITY-RESPONSESET.
+
+*             Update response header status
+              LS_DEEP_ENTITY-RESPONSE_RESERVATION_NO = LS_RESERVATION-RESPONSE_RESERVATION_NO.
+              LS_DEEP_ENTITY-RESPONSE_STATUS = LS_RESERVATION-RESPONSE_STATUS.
+              LS_DEEP_ENTITY-RESPONSE_MESSAGE = LS_RESERVATION-RESPONSE_MESSAGE.
+
+            ENDIF.
+          CATCH /IWBEP/CX_MGW_TECH_EXCEPTION.
+            "Do Nothing
+        ENDTRY.
+
+      WHEN OTHERS.
+    ENDCASE.
+
+    CALL METHOD ME->COPY_DATA_TO_REF   "Populating the ER_DEEP_ENTITY
+      EXPORTING
+        IS_DATA = LS_DEEP_ENTITY
+      CHANGING
+        CR_DATA = ER_DEEP_ENTITY.
+
+  ENDIF.
+ENDMETHOD.
+
+
+  method RESERVATIONSET_GET_ENTITY.
+**TRY.
+*CALL METHOD SUPER->RESERVATIONSET_GET_ENTITY
+*  EXPORTING
+*    IV_ENTITY_NAME          =
+*    IV_ENTITY_SET_NAME      =
+*    IV_SOURCE_NAME          =
+*    IT_KEY_TAB              =
+**    IO_REQUEST_OBJECT       =
+**    IO_TECH_REQUEST_CONTEXT =
+*    IT_NAVIGATION_PATH      =
+**  IMPORTING
+**    ER_ENTITY               =
+**    ES_RESPONSE_CONTEXT     =
+*    .
+**  CATCH /IWBEP/CX_MGW_BUSI_EXCEPTION.
+**  CATCH /IWBEP/CX_MGW_TECH_EXCEPTION.
+**ENDTRY.
+  endmethod.
+
+
+  method RESERVATIONSET_GET_ENTITYSET.
+**TRY.
+*CALL METHOD SUPER->RESERVATIONSET_GET_ENTITYSET
+*  EXPORTING
+*    IV_ENTITY_NAME           =
+*    IV_ENTITY_SET_NAME       =
+*    IV_SOURCE_NAME           =
+*    IT_FILTER_SELECT_OPTIONS =
+*    IS_PAGING                =
+*    IT_KEY_TAB               =
+*    IT_NAVIGATION_PATH       =
+*    IT_ORDER                 =
+*    IV_FILTER_STRING         =
+*    IV_SEARCH_STRING         =
+**    IO_TECH_REQUEST_CONTEXT  =
+**  IMPORTING
+**    ET_ENTITYSET             =
+**    ES_RESPONSE_CONTEXT      =
+*    .
+**  CATCH /IWBEP/CX_MGW_BUSI_EXCEPTION.
+**  CATCH /IWBEP/CX_MGW_TECH_EXCEPTION.
+**ENDTRY.
+  endmethod.
+ENDCLASS.

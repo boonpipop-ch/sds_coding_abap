@@ -1,0 +1,339 @@
+class ZCL_ZSDSFI_BP_PROCESS_DPC_EXT definition
+  public
+  inheriting from ZCL_ZSDSFI_BP_PROCESS_DPC
+  create public .
+
+public section.
+
+  types:
+    BEGIN OF ts_deep_entity,
+        bpartner       TYPE bu_partner,
+        central_data   TYPE zsdsfis003,
+        address        TYPE zsdsfis010_tt,
+        customer       TYPE zsdsfis078,
+        vendor         TYPE zsdsfis084,
+        contact_person TYPE zsdsfis082_tt,
+        partner_func   TYPE zsdsfis083_tt,
+        return         TYPE bapiret2,
+      END OF ts_deep_entity .
+
+  methods /IWBEP/IF_MGW_APPL_SRV_RUNTIME~CREATE_DEEP_ENTITY
+    redefinition .
+protected section.
+
+  methods CUSTOME_CREATE_DEEP_ENTITY
+    importing
+      !IV_ENTITY_NAME type STRING
+      !IV_ENTITY_SET_NAME type STRING
+      !IV_SOURCE_NAME type STRING
+      !IT_KEY_TAB type /IWBEP/T_MGW_NAME_VALUE_PAIR
+      !IT_NAVIGATION_PATH type /IWBEP/T_MGW_NAVIGATION_PATH
+      !IO_EXPAND type ref to /IWBEP/IF_MGW_ODATA_EXPAND
+      !IO_TECH_REQUEST_CONTEXT type ref to /IWBEP/IF_MGW_REQ_ENTITY_C
+      !IO_DATA_PROVIDER type ref to /IWBEP/IF_MGW_ENTRY_PROVIDER
+    exporting
+      !ER_DEEP_ENTITY type ZCL_ZSDSFI_BP_PROCESS_MPC_EXT=>TS_DEEP_ENTITY
+    raising
+      /IWBEP/CX_MGW_BUSI_EXCEPTION
+      /IWBEP/CX_MGW_TECH_EXCEPTION .
+
+  methods BLOCKPROCESSSET_GET_ENTITYSET
+    redefinition .
+  methods UPDATECERDITPERM_CREATE_ENTITY
+    redefinition .
+  methods UPDATECERDITPERM_GET_ENTITYSET
+    redefinition .
+PRIVATE SECTION.
+
+  CONSTANTS : BEGIN OF GC_CON,
+                CREDIT_TMP TYPE C LENGTH 18 VALUE 'updateCerditTmpSet',
+              END OF GC_CON.
+ENDCLASS.
+
+
+
+CLASS ZCL_ZSDSFI_BP_PROCESS_DPC_EXT IMPLEMENTATION.
+
+
+  METHOD /IWBEP/IF_MGW_APPL_SRV_RUNTIME~CREATE_DEEP_ENTITY.
+
+    DATA CUSTOME_CREATE_DEEP_ENTITY TYPE ZCL_ZSDSFI_BP_PROCESS_MPC_EXT=>TS_DEEP_ENTITY.
+
+    DATA : LS_TMP_PROJ TYPE ZSDSFIS120.
+
+    FIELD-SYMBOLS <LFS_DATA> TYPE ANY.
+
+    IF     IV_ENTITY_SET_NAME EQ GC_CON-CREDIT_TMP.
+      IF IO_DATA_PROVIDER IS NOT INITIAL.
+        IO_DATA_PROVIDER->READ_ENTRY_DATA( IMPORTING ES_DATA = LS_TMP_PROJ ).
+        LCL_DATA=>UPDATE_TMP_PROJECT( CHANGING C_DATA = LS_TMP_PROJ ).
+        ASSIGN LS_TMP_PROJ TO <LFS_DATA>.
+      ENDIF.
+    ELSE.
+      CALL METHOD ME->CUSTOME_CREATE_DEEP_ENTITY
+        EXPORTING
+          IV_ENTITY_NAME          = IV_ENTITY_NAME
+          IV_ENTITY_SET_NAME      = IV_ENTITY_SET_NAME
+          IV_SOURCE_NAME          = IV_SOURCE_NAME
+          IT_KEY_TAB              = IT_KEY_TAB
+          IT_NAVIGATION_PATH      = IT_NAVIGATION_PATH
+          IO_EXPAND               = IO_EXPAND
+          IO_TECH_REQUEST_CONTEXT = IO_TECH_REQUEST_CONTEXT
+          IO_DATA_PROVIDER        = IO_DATA_PROVIDER
+        IMPORTING
+          ER_DEEP_ENTITY          = CUSTOME_CREATE_DEEP_ENTITY.
+      ASSIGN CUSTOME_CREATE_DEEP_ENTITY TO <LFS_DATA>.
+    ENDIF.
+
+    COPY_DATA_TO_REF(
+    EXPORTING
+    IS_DATA = <LFS_DATA>
+    CHANGING
+    CR_DATA = ER_DEEP_ENTITY
+    ).
+
+
+  ENDMETHOD.
+
+
+  METHOD CUSTOME_CREATE_DEEP_ENTITY.
+
+    DATA: LR_DEEP_ENTITY TYPE ZCL_ZSDSFI_BP_PROCESS_MPC_EXT=>TS_DEEP_ENTITY.
+
+    DATA: LT_RETURN   TYPE BAPIRET2_T,
+          LT_PARTNER  TYPE ZSDSFIS083_TT,
+          LT_CONTACT  TYPE ZSDSFIS082_TT,
+          LV_BPARTNER TYPE BU_PARTNER,
+          LS_BLOCK    TYPE ZSDSFIS116.
+
+    "Read data
+    IO_DATA_PROVIDER->READ_ENTRY_DATA(
+    IMPORTING
+      ES_DATA = LR_DEEP_ENTITY ).
+
+    READ TABLE LR_DEEP_ENTITY-GENERALXCENTRAL INTO DATA(LS_CENTRAL)
+                                              INDEX 1.
+
+    READ TABLE LR_DEEP_ENTITY-GENERALXCUSTOMER  INTO DATA(LS_CUSTOMER)
+                                                INDEX 1.
+
+    READ TABLE LR_DEEP_ENTITY-GENERALXVENDOR  INTO DATA(LS_VENDOR)
+                                              INDEX 1.
+
+    CASE LR_DEEP_ENTITY-ACTION.
+      WHEN 'I'.
+        "Call function for create Business Partner
+        CALL FUNCTION 'Z_SDSFI_CREATE_BP'
+          EXPORTING
+            IV_MODE       = LR_DEEP_ENTITY-ACTION
+            IV_BP         = LR_DEEP_ENTITY-BPARTNER
+            IV_PARTN_CAT  = LR_DEEP_ENTITY-PARTN_CAT
+            IV_BU_GROUP   = LR_DEEP_ENTITY-BU_GROUP
+            IV_K2_REFNO   = LR_DEEP_ENTITY-K2_REFNO
+            IV_SFDC_REFNO = LR_DEEP_ENTITY-SFDC_REFNO
+            IV_TEST       = LR_DEEP_ENTITY-TEST
+            IS_CENTRAL    = LS_CENTRAL
+            IT_BP_ROLE    = LR_DEEP_ENTITY-GENERALXROLE
+            IT_ADDRESS    = LR_DEEP_ENTITY-GENERALXADDRESS
+            IS_CUSTOMER   = LS_CUSTOMER
+            IT_PARTNER    = LR_DEEP_ENTITY-GENERALXPARTNER
+            IT_CONTACT    = LR_DEEP_ENTITY-GENERALXCONTACT
+            IS_VENDOR     = LS_VENDOR
+            IV_CREATED_BY = LR_DEEP_ENTITY-CREATED_BY
+          IMPORTING
+            ET_RETURN     = LT_RETURN
+            ET_PARTNER    = LT_PARTNER
+            ET_CONTACT    = LT_CONTACT
+            EV_PARTNER    = LV_BPARTNER.
+      WHEN 'U'.
+        LV_BPARTNER = LR_DEEP_ENTITY-BPARTNER.
+        CALL FUNCTION 'Z_SDSFI_CHANGE_BP'
+          EXPORTING
+            IV_MODE         = LR_DEEP_ENTITY-ACTION
+            IV_BP           = LR_DEEP_ENTITY-BPARTNER
+            IV_TEST         = LR_DEEP_ENTITY-TEST
+            IS_CENTRAL      = LS_CENTRAL
+            IT_BP_ROLE      = LR_DEEP_ENTITY-GENERALXROLE
+            IT_ADDRESS      = LR_DEEP_ENTITY-GENERALXADDRESS
+            IS_CUSTOMER     = LS_CUSTOMER
+            IT_PARTNER      = LR_DEEP_ENTITY-GENERALXPARTNER
+            IT_CONTACT      = LR_DEEP_ENTITY-GENERALXCONTACT
+            IS_VENDOR       = LS_VENDOR
+            IV_PARTN_CAT    = LR_DEEP_ENTITY-PARTN_CAT
+            IV_SHIPTO       = LR_DEEP_ENTITY-SHIP_TO
+            IV_CONTACT      = LR_DEEP_ENTITY-CONTACT_PERSON
+            IT_SALES_AREA   = LR_DEEP_ENTITY-GENERALXSALESAREA
+          CHANGING
+            ES_CENTRAL      = LS_CENTRAL
+            ET_BP_ROLE      = LR_DEEP_ENTITY-GENERALXROLE
+            ET_ADDRESS      = LR_DEEP_ENTITY-GENERALXADDRESS
+            ES_CUSTOMER     = LS_CUSTOMER
+            ET_PARTNER      = LT_PARTNER
+            ET_CONTACT      = LT_CONTACT
+            ES_VENDOR       = LS_VENDOR
+            ET_RETURN       = LT_RETURN.
+      WHEN 'V'.
+        LV_BPARTNER = LR_DEEP_ENTITY-BPARTNER.
+        CALL FUNCTION 'Z_SDSFI_GET_BP_DETAIL'
+          EXPORTING
+            IV_PARTNER    = LR_DEEP_ENTITY-BPARTNER
+            IV_MODE       = LR_DEEP_ENTITY-ACTION
+          IMPORTING
+            EV_PARTN_CAT  = LR_DEEP_ENTITY-PARTN_CAT
+            EV_BU_GROUP   = LR_DEEP_ENTITY-BU_GROUP
+            EV_K2_REFNO   = LR_DEEP_ENTITY-K2_REFNO
+            EV_SFDC_REFNO = LR_DEEP_ENTITY-SFDC_REFNO
+            ES_CENTRAL    = LS_CENTRAL
+            ET_BP_ROLE    = LR_DEEP_ENTITY-GENERALXROLE
+            ET_ADDRESS    = LR_DEEP_ENTITY-GENERALXADDRESS
+            ES_CUSTOMER   = LS_CUSTOMER
+            ET_PARTNER    = LT_PARTNER
+            ET_CONTACT    = LT_CONTACT
+            ES_VENDOR     = LS_VENDOR
+            ET_RETURN     = LT_RETURN
+            ES_BLOCK      = LS_BLOCK.
+
+        APPEND:
+          LS_CENTRAL      TO LR_DEEP_ENTITY-GENERALXCENTRAL,
+          LS_CUSTOMER     TO LR_DEEP_ENTITY-GENERALXCUSTOMER,
+          LS_VENDOR       TO LR_DEEP_ENTITY-GENERALXVENDOR,
+          LS_BLOCK        TO LR_DEEP_ENTITY-BLOCKPROCESSING.
+
+        LOOP AT LT_PARTNER ASSIGNING FIELD-SYMBOL(<LFS_PARTNER>).
+
+          IF <LFS_PARTNER>-PARVW = 'SH'.
+            CALL FUNCTION 'CONVERSION_EXIT_PARVW_INPUT'
+              EXPORTING
+                INPUT  = <LFS_PARTNER>-PARVW
+              IMPORTING
+                OUTPUT = <LFS_PARTNER>-PARVW.
+          ENDIF.
+
+        ENDLOOP.
+
+      WHEN 'L'.
+        CALL FUNCTION 'Z_SDSFI_SALES_BLOCK_PROCESS'
+          EXPORTING
+            IT_BLOCK = LR_DEEP_ENTITY-BLOCKPROCESSING
+          IMPORTING
+            ET_BLOCK = LR_DEEP_ENTITY-BLOCKPROCESSING.
+
+      WHEN 'D'.
+        CALL FUNCTION 'Z_SDSFI_DEL_BP'
+          EXPORTING
+            IV_BP     = LR_DEEP_ENTITY-BPARTNER
+            IV_MODE   = LR_DEEP_ENTITY-ACTION
+            IV_DEL    = LR_DEEP_ENTITY-BP_DELETE
+          IMPORTING
+            ET_RETURN = LT_RETURN.
+
+      WHEN OTHERS.
+    ENDCASE.
+
+    MOVE-CORRESPONDING LR_DEEP_ENTITY TO ER_DEEP_ENTITY.
+
+    "Return value
+    ER_DEEP_ENTITY-GENERALXRETURN     = LT_RETURN.
+    ER_DEEP_ENTITY-GENERALXPARTNER    = LT_PARTNER.
+    ER_DEEP_ENTITY-GENERALXCONTACT    = LT_CONTACT.
+    ER_DEEP_ENTITY-BPARTNER           = LV_BPARTNER.
+*    er_deep_entity-blockprocessing    =
+
+
+  ENDMETHOD.
+
+
+  method BLOCKPROCESSSET_GET_ENTITYSET.
+
+    BREAK 3sds007.
+
+
+
+**TRY.
+*CALL METHOD SUPER->BLOCKPROCESSSET_GET_ENTITYSET
+*  EXPORTING
+*    IV_ENTITY_NAME           =
+*    IV_ENTITY_SET_NAME       =
+*    IV_SOURCE_NAME           =
+*    IT_FILTER_SELECT_OPTIONS =
+*    IS_PAGING                =
+*    IT_KEY_TAB               =
+*    IT_NAVIGATION_PATH       =
+*    IT_ORDER                 =
+*    IV_FILTER_STRING         =
+*    IV_SEARCH_STRING         =
+**    io_tech_request_context  =
+**  IMPORTING
+**    et_entityset             =
+**    es_response_context      =
+*    .
+**  CATCH /iwbep/cx_mgw_busi_exception.
+**  CATCH /iwbep/cx_mgw_tech_exception.
+**ENDTRY.
+  endmethod.
+
+
+  METHOD UPDATECERDITPERM_CREATE_ENTITY.
+    DATA : LS_DATA TYPE ZCL_ZSDSFI_BP_PROCESS_MPC=>TS_UPDATECERDITPERMANENT.
+
+    DATA : I_BP_NO            TYPE BU_PARTNER,
+           I_TEST             TYPE BOOLE_D,
+           I_CREDIT_LIMIT     TYPE UKM_CREDIT_LIMIT,
+           I_LIMIT_VALID_DATE TYPE UKM_VALID_DATE,
+           I_PAY_TERM         TYPE DZTERM.
+
+    IF IO_DATA_PROVIDER IS NOT INITIAL.
+      IO_DATA_PROVIDER->READ_ENTRY_DATA( IMPORTING ES_DATA = LS_DATA ).
+    ENDIF.
+
+    I_BP_NO            = LS_DATA-BPNO.
+    I_TEST             = LS_DATA-TESTRUN.
+    I_CREDIT_LIMIT     = LS_DATA-CREDITLIMIT.
+    I_LIMIT_VALID_DATE = LS_DATA-CREDITLIMITDATE.
+    I_PAY_TERM         = LS_DATA-PAYMENTTERM.
+
+    CALL FUNCTION 'Z_SDSFI_UPDAET_CREDIT'
+      EXPORTING
+        I_BP_NO            = I_BP_NO
+        I_TEST             = I_TEST
+        I_CREDIT_LIMIT     = I_CREDIT_LIMIT
+        I_LIMIT_VALID_DATE = I_LIMIT_VALID_DATE
+        I_PAY_TERM         = I_PAY_TERM
+      IMPORTING
+        E_MESTYPE          = LS_DATA-MESSAGETYPE
+        E_MESSAGE          = LS_DATA-MESSAGE.
+
+    ER_ENTITY-BPNO            = LS_DATA-BPNO.
+    ER_ENTITY-TESTRUN         = LS_DATA-TESTRUN.
+    ER_ENTITY-CREDITLIMIT     = LS_DATA-CREDITLIMIT .
+    ER_ENTITY-CREDITLIMITDATE = LS_DATA-CREDITLIMITDATE.
+    ER_ENTITY-PAYMENTTERM     = LS_DATA-PAYMENTTERM.
+    ER_ENTITY-MESSAGETYPE     = LS_DATA-MESSAGETYPE.
+    ER_ENTITY-MESSAGE         = LS_DATA-MESSAGE .
+  ENDMETHOD.
+
+
+  method UPDATECERDITPERM_GET_ENTITYSET.
+**TRY.
+*CALL METHOD SUPER->UPDATECERDITPERM_GET_ENTITYSET
+*  EXPORTING
+*    IV_ENTITY_NAME           =
+*    IV_ENTITY_SET_NAME       =
+*    IV_SOURCE_NAME           =
+*    IT_FILTER_SELECT_OPTIONS =
+*    IS_PAGING                =
+*    IT_KEY_TAB               =
+*    IT_NAVIGATION_PATH       =
+*    IT_ORDER                 =
+*    IV_FILTER_STRING         =
+*    IV_SEARCH_STRING         =
+**    IO_TECH_REQUEST_CONTEXT  =
+**  IMPORTING
+**    ET_ENTITYSET             =
+**    ES_RESPONSE_CONTEXT      =
+*    .
+**  CATCH /IWBEP/CX_MGW_BUSI_EXCEPTION.
+**  CATCH /IWBEP/CX_MGW_TECH_EXCEPTION.
+**ENDTRY.
+  endmethod.
+ENDCLASS.

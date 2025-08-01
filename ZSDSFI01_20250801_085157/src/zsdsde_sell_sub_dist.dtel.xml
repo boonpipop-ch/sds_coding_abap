@@ -1,0 +1,21 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<abapGit version="v1.0.0" serializer="LCL_OBJECT_DTEL" serializer_version="v1.0.0">
+ <asx:abap xmlns:asx="http://www.sap.com/abapxml" version="1.0">
+  <asx:values>
+   <DD04V>
+    <ROLLNAME>ZSDSDE_SELL_SUB_DIST</ROLLNAME>
+    <DDLANGUAGE>E</DDLANGUAGE>
+    <DOMNAME>CHAR6</DOMNAME>
+    <HEADLEN>17</HEADLEN>
+    <SCRLEN2>17</SCRLEN2>
+    <SCRLEN3>17</SCRLEN3>
+    <DDTEXT>Sub District (Seller)</DDTEXT>
+    <REPTEXT>ชื่อตำบล (ผู้ขาย)</REPTEXT>
+    <SCRTEXT_M>ชื่อตำบล (ผู้ขาย)</SCRTEXT_M>
+    <SCRTEXT_L>ชื่อตำบล (ผู้ขาย)</SCRTEXT_L>
+    <DTELMASTER>E</DTELMASTER>
+    <REFKIND>D</REFKIND>
+   </DD04V>
+  </asx:values>
+ </asx:abap>
+</abapGit>

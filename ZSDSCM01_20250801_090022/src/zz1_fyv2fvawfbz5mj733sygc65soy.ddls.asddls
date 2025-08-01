@@ -1,0 +1,8 @@
+@AbapCatalog.internal.setChange: 'FLDADD_NO_ASS_INFLUENCE'
+@AbapCatalog.sqlViewAppendName: 'ZZ1_3C863759CA98'
+
+extend view C_SRVCCONTRFINANCECARD with ZZ1_FYV2FVAWFBZ5MJ733SYGC65SOY
+  
+{ 
+  _ServiceDocumentExt.ZZ1_PROACTIVITY as ZZ1_PROACTIVITY
+}

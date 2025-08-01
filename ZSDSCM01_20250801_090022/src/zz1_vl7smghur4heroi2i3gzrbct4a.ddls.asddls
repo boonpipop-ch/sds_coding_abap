@@ -1,0 +1,8 @@
+@AbapCatalog.internal.setChange: 'FLDADD_NO_ASS_INFLUENCE'
+@AbapCatalog.sqlViewAppendName: 'ZZ1_3C33CCE2B242'
+
+extend view C_EXPIRINGSRVCCONTRITMDETAILS with ZZ1_VL7SMGHUR4HEROI2I3GZRBCT4A
+  
+{ 
+  _ServiceDocumentExt.ZZ1_DELIVERY_ORD as ZZ1_DELIVERY_ORD
+}

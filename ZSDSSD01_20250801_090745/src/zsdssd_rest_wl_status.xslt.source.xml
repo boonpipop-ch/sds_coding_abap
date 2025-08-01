@@ -1,0 +1,56 @@
+<?sap.transform simple?>
+<tt:transform xmlns:tt="http://www.sap.com/transformation-templates" xmlns:ddic="http://www.sap.com/abapxml/types/dictionary">
+
+  <tt:root name="DATA" type="ddic:ZSDSCMS018"/>
+  <tt:variable name="MARKED" val="1"/>
+
+  <tt:template>
+
+    <object>
+
+      <tt:group>
+
+
+        <tt:cond frq="?">
+          <str name="WarrantyLetterID">
+            <tt:value ref="DATA.WARRANTYLETTERID"/>
+          </str>
+        </tt:cond>
+
+        <tt:cond frq="?">
+          <str name="Status">
+            <tt:value ref="DATA.STATUS"/>
+          </str>
+        </tt:cond>
+
+        <tt:cond frq="?">
+          <str name="ApproveName">
+            <tt:value ref="DATA.APPROVENAME"/>
+          </str>
+        </tt:cond>
+
+        <tt:cond frq="?">
+          <str name="Position">
+            <tt:value ref="DATA.POSITION"/>
+          </str>
+        </tt:cond>
+
+
+        <tt:cond frq="?">
+          <str name="MessageType">
+            <tt:value ref="DATA.MESSAGETYPE"/>
+          </str>
+        </tt:cond>
+
+        <tt:cond frq="?">
+          <str name="MessageText">
+            <tt:value ref="DATA.MESSAGETEXT"/>
+          </str>
+        </tt:cond>
+      </tt:group>
+
+    </object>
+
+  </tt:template>
+
+</tt:transform>

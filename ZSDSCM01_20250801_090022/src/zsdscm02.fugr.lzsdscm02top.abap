@@ -1,0 +1,83 @@
+FUNCTION-POOL ZSDSCM02.                     "MESSAGE-ID ..
+
+* INCLUDE LZSDSCM02D...                      " Local class definition
+
+INCLUDE CRM_STATUS_CON.
+INCLUDE CRM_OBJECT_TYPES_CON.
+INCLUDE COM_PARTNER_PFT3.
+INCLUDE CRM_OBJECT_NAMES_CON.
+INCLUDE CRM_LEAS_CON_MISC.
+INCLUDE CRM_OBJECT_KINDS_CON.
+
+TYPES: BEGIN OF T_SOURCELIST,
+         MATNR TYPE MATNR,
+         WERKS TYPE EWERK,
+         ZEORD TYPE DZEORD,
+         LIFNR TYPE ELIFN,
+         FLIFN TYPE FLIFN,
+         EBELN TYPE EVRTN,
+         EBELP TYPE EVRTP,
+         EKORG TYPE EKORG,
+         VRTYP TYPE BSTYP,
+         EKGRP TYPE BKGRP,
+         BSTYP TYPE BSTYP,
+*         netpr TYPE bprei,
+*         waers TYPE waers,
+*         peinh TYPE epein,
+       END OF T_SOURCELIST,
+       BEGIN OF T_EKKO,
+         EBELN TYPE EBELN,
+         EBELP TYPE EBELP,
+         EKORG TYPE EKORG,
+         EKGRP TYPE BKGRP,
+         WERKS TYPE EWERK,
+         WAERS TYPE WAERS,
+         NETPR TYPE BPREI,
+         PEINH TYPE EPEIN,
+       END OF T_EKKO,
+       BEGIN OF T_EINE,
+         INFNR TYPE  INFNR,
+         MATNR TYPE  MATNR,
+         LIFNR TYPE  ELIFN,
+         EKORG TYPE  EKORG,
+         WERKS TYPE  EWERK,
+         EKGRP TYPE  BKGRP,
+         WAERS TYPE  WAERS,
+         NETPR TYPE  IPREI,
+         PEINH TYPE  EPEIN,
+       END OF T_EINE,
+
+       BEGIN OF T_PRICEINFO,
+         WAERS   TYPE  WAERS,
+         NETPR   TYPE  IPREI,
+         PEINH   TYPE  EPEIN,
+         NETPRPU TYPE IPREI,
+       END OF T_PRICEINFO,
+
+       BEGIN OF T_COND_REC,
+         KAPPL TYPE KAPPL,
+         KSCHL TYPE KSCHA,
+         EVRTN TYPE EBELN,
+         EVRTP TYPE EBELP,
+         LIFNR TYPE ELIFN,
+         MATNR TYPE MATNR,
+         EKORG TYPE EKORG,
+         WERKS TYPE WERKS_D,
+         ESOKZ TYPE ESOKZ,
+         DATBI TYPE KODATBI,
+         DATAB TYPE KODATAB,
+         KNUMH TYPE KNUMH,
+       END OF T_COND_REC,
+
+       BEGIN OF T_KONPH,
+         KNUMH TYPE KNUMH,
+         KAPPL TYPE	KAPPL,
+         KSCHL TYPE KSCHA,
+         DATAB TYPE DATAB,
+         DATBI TYPE DATBI,
+         KOPOS TYPE KOPOS,
+         KBETR TYPE KBETR,
+         KONWA TYPE KONWA,
+         KPEIN TYPE KPEIN,
+         KMEIN TYPE KMEIN,
+       END OF T_KONPH.

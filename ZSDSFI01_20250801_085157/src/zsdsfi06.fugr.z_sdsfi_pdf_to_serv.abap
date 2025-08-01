@@ -1,0 +1,72 @@
+FUNCTION Z_SDSFI_PDF_TO_SERV.
+*"----------------------------------------------------------------------
+*"*"Local Interface:
+*"  IMPORTING
+*"     REFERENCE(IM_OTF) TYPE  TSFOTF
+*"     REFERENCE(IM_FILE_NAME) TYPE  CHAR255
+*"     REFERENCE(IM_PROGRAM) TYPE  PROGRAM DEFAULT 'ZETX001'
+*"  EXCEPTIONS
+*"      ERROR
+*"----------------------------------------------------------------------
+
+  DATA: LT_TLINE  TYPE TABLE OF TLINE.
+
+  DATA: LWA_TLINE     TYPE TLINE,
+        LWA_FILE_PATH TYPE ZSDSFIS028.
+
+  DATA: LV_LEN_IN    TYPE SOOD-OBJLEN,
+        LV_PATH      TYPE STRING,
+        LV_FILE_PATH TYPE DXFIELDS-LONGPATH,
+        LCL_CX_ROOT  TYPE REF TO CX_ROOT.
+
+  CHECK IM_OTF[] IS NOT INITIAL.
+
+  CALL FUNCTION 'CONVERT_OTF'
+    EXPORTING
+      FORMAT                = 'PDF'
+      MAX_LINEWIDTH         = 210
+    IMPORTING
+      BIN_FILESIZE          = LV_LEN_IN
+    TABLES
+      OTF                   = IM_OTF
+      LINES                 = LT_TLINE
+    EXCEPTIONS
+      ERR_MAX_LINEWIDTH     = 1
+      ERR_FORMAT            = 2
+      ERR_CONV_NOT_POSSIBLE = 3
+      OTHERS                = 4.
+
+  CLEAR LV_PATH.
+
+  SELECT SINGLE LOW_VALUE INTO LWA_FILE_PATH-SAP_DIR_OUT FROM ZSDSFIC015
+    WHERE ID        = IM_PROGRAM
+      AND NAME      = 'FILE_PATH'
+      AND PARAM_EXT = 'SAP_DIR_OUT'.
+  IF SY-SUBRC = 0 AND LWA_FILE_PATH IS NOT INITIAL.
+    CONCATENATE LWA_FILE_PATH-SAP_DIR_OUT IM_FILE_NAME INTO LV_PATH. "SEPARATED BY '/'.
+  ENDIF.
+
+*  SELECT SINGLE low INTO lv_file_path FROM ZSDSFIC015
+*    WHERE repid = im_program
+*      AND param = 'FILE_PATH'
+*      AND param2 = 'SAP_DIR_OUT'.
+*  IF sy-subrc = 0 AND lv_file_path IS NOT INITIAL.
+*    CONCATENATE lv_file_path im_file_name INTO lv_path SEPARATED BY '/'.
+*  ENDIF.
+
+  TRY.
+      OPEN DATASET LV_PATH FOR OUTPUT IN BINARY MODE.
+      IF SY-SUBRC NE 0.
+        CLOSE DATASET LV_PATH.
+        RAISE ERROR.
+      ELSEIF SY-SUBRC EQ 0.
+        LOOP AT LT_TLINE INTO LWA_TLINE.
+          TRANSFER LWA_TLINE TO LV_PATH.
+        ENDLOOP.
+      ENDIF.
+      CLOSE DATASET LV_PATH.
+    CATCH CX_ROOT INTO LCL_CX_ROOT.
+      RAISE ERROR.
+  ENDTRY.
+
+ENDFUNCTION.

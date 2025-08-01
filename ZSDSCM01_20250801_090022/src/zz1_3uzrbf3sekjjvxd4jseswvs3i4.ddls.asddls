@@ -1,0 +1,8 @@
+@AbapCatalog.internal.setChange: 'FLDADD_NO_ASS_INFLUENCE'
+@AbapCatalog.sqlViewAppendName: 'ZZ1_64FF97AC3EAB'
+
+extend view C_EXPIRINGSRVCCONTRITMDETAILS with ZZ1_3UZRBF3SEKJJVXD4JSESWVS3I4
+  
+{ 
+  _ServiceDocumentExt.ZZ1_BREAK_POSITION as ZZ1_BREAK_POSITION
+}

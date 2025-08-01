@@ -1,0 +1,8 @@
+@AbapCatalog.internal.setChange: 'FLDADD_NO_ASS_INFLUENCE'
+@AbapCatalog.sqlViewAppendName: 'ZZ1_3810EC2029E9'
+
+extend view I_SERVICECONTRACTITEMCUBE with ZZ1_2MDXBMGNIPPRJHJT4SVDIAYBUM
+  
+{ 
+  _ServiceDocItemExt.ZZ1_VENDOR_TEAM as ZZ1_VENDOR_TEAM
+}

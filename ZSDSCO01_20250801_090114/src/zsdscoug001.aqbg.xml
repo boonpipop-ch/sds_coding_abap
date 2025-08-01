@@ -1,0 +1,21 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<abapGit version="v1.0.0" serializer="LCL_OBJECT_AQBG" serializer_version="v1.0.0">
+ <asx:abap xmlns:asx="http://www.sap.com/abapxml" version="1.0">
+  <asx:values>
+   <AQGDBBG>
+    <AQGDBBG>
+     <NUM>ZSDSCOUG001</NUM>
+    </AQGDBBG>
+   </AQGDBBG>
+   <AQGTB>
+    <AQGTB>
+     <SPRSL>E</SPRSL>
+     <NUM>ZSDSCOUG001</NUM>
+     <MODIF>0001</MODIF>
+     <MAXL>030</MAXL>
+     <TEXT>SDS_CO Data</TEXT>
+    </AQGTB>
+   </AQGTB>
+  </asx:values>
+ </asx:abap>
+</abapGit>

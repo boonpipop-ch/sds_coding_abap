@@ -1,0 +1,24 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<abapGit version="v1.0.0" serializer="LCL_OBJECT_NROB" serializer_version="v1.0.0">
+ <asx:abap xmlns:asx="http://www.sap.com/abapxml" version="1.0">
+  <asx:values>
+   <ATTRIBUTES>
+    <OBJECT>ZCO001</OBJECT>
+    <YEARIND>X</YEARIND>
+    <DOMLEN>NUMC10</DOMLEN>
+    <PERCENTAGE>90.0</PERCENTAGE>
+    <BUFFER>X</BUFFER>
+    <NOIVBUFFER>00000001</NOIVBUFFER>
+    <UNAME>DDIC</UNAME>
+    <UDATE>2024-06-06</UDATE>
+    <UTIME>09:23:53</UTIME>
+   </ATTRIBUTES>
+   <TEXT>
+    <LANGU>E</LANGU>
+    <OBJECT>ZCO001</OBJECT>
+    <TXT>SDS: OPEX Internal No. A%%</TXT>
+    <TXTSHORT>SDS: OPEX Internal n</TXTSHORT>
+   </TEXT>
+  </asx:values>
+ </asx:abap>
+</abapGit>

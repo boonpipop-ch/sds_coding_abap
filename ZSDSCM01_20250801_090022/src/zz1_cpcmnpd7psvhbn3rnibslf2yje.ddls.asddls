@@ -1,0 +1,8 @@
+@AbapCatalog.internal.setChange: 'FLDADD_NO_ASS_INFLUENCE'
+@AbapCatalog.sqlViewAppendName: 'ZZ1_9C232984157F'
+
+extend view FIN_SUBVAL_ACCTGSRVCDOC with ZZ1_CPCMNPD7PSVHBN3RNIBSLF2YJE
+  
+{ 
+  _SrvcDocument.ZZ1_RESULT_PROGRESS as ZZ1_RESULT_PROGRESS
+}

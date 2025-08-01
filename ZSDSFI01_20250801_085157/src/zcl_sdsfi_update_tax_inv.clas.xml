@@ -1,0 +1,65 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<abapGit version="v1.0.0" serializer="LCL_OBJECT_CLAS" serializer_version="v1.0.0">
+ <asx:abap xmlns:asx="http://www.sap.com/abapxml" version="1.0">
+  <asx:values>
+   <VSEOCLASS>
+    <CLSNAME>ZCL_SDSFI_UPDATE_TAX_INV</CLSNAME>
+    <LANGU>E</LANGU>
+    <DESCRIPT>SDS: Update Tax Invoice number</DESCRIPT>
+    <STATE>1</STATE>
+    <CLSCCINCL>X</CLSCCINCL>
+    <FIXPT>X</FIXPT>
+    <UNICODE>X</UNICODE>
+   </VSEOCLASS>
+   <DESCRIPTIONS>
+    <SEOCOMPOTX>
+     <CMPNAME>GET_CONSTANTS</CMPNAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Get GENC constants</DESCRIPT>
+    </SEOCOMPOTX>
+    <SEOCOMPOTX>
+     <CMPNAME>IS_SDS</CMPNAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Check SDS Related?</DESCRIPT>
+    </SEOCOMPOTX>
+    <SEOCOMPOTX>
+     <CMPNAME>UPDATE_TAX_INV_NUMBER</CMPNAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Update Tax Invoice number</DESCRIPT>
+    </SEOCOMPOTX>
+   </DESCRIPTIONS>
+   <DESCRIPTIONS_SUB>
+    <SEOSUBCOTX>
+     <CMPNAME>IS_SDS</CMPNAME>
+     <SCONAME>IF_BUKRS</SCONAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Company Code</DESCRIPT>
+    </SEOSUBCOTX>
+    <SEOSUBCOTX>
+     <CMPNAME>IS_SDS</CMPNAME>
+     <SCONAME>RF_RESULT</SCONAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Truth Value: True/False</DESCRIPT>
+    </SEOSUBCOTX>
+    <SEOSUBCOTX>
+     <CMPNAME>UPDATE_TAX_INV_NUMBER</CMPNAME>
+     <SCONAME>CF_XBLNR</SCONAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Reference Document Number</DESCRIPT>
+    </SEOSUBCOTX>
+    <SEOSUBCOTX>
+     <CMPNAME>UPDATE_TAX_INV_NUMBER</CMPNAME>
+     <SCONAME>CT_BKPF</SCONAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Standard Table Type for BKPF</DESCRIPT>
+    </SEOSUBCOTX>
+    <SEOSUBCOTX>
+     <CMPNAME>UPDATE_TAX_INV_NUMBER</CMPNAME>
+     <SCONAME>IT_BSEG</SCONAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Table Type for BSEG</DESCRIPT>
+    </SEOSUBCOTX>
+   </DESCRIPTIONS_SUB>
+  </asx:values>
+ </asx:abap>
+</abapGit>

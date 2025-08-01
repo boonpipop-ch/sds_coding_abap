@@ -1,0 +1,91 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<abapGit version="v1.0.0" serializer="LCL_OBJECT_CLAS" serializer_version="v1.0.0">
+ <asx:abap xmlns:asx="http://www.sap.com/abapxml" version="1.0">
+  <asx:values>
+   <VSEOCLASS>
+    <CLSNAME>ZCL_SDSPS_WBS_SUBSTITUTION</CLSNAME>
+    <LANGU>E</LANGU>
+    <DESCRIPT>SDS: WBS Substitution</DESCRIPT>
+    <STATE>1</STATE>
+    <CLSCCINCL>X</CLSCCINCL>
+    <FIXPT>X</FIXPT>
+    <UNICODE>X</UNICODE>
+   </VSEOCLASS>
+   <DESCRIPTIONS>
+    <SEOCOMPOTX>
+     <CMPNAME>GET_CONSTANTS</CMPNAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Get GENC constants</DESCRIPT>
+    </SEOCOMPOTX>
+    <SEOCOMPOTX>
+     <CMPNAME>GET_PRODH_MAP</CMPNAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Product Hierarchy Mapping</DESCRIPT>
+    </SEOCOMPOTX>
+    <SEOCOMPOTX>
+     <CMPNAME>GR_ACTIVE_BUKRS</CMPNAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Active Company</DESCRIPT>
+    </SEOCOMPOTX>
+    <SEOCOMPOTX>
+     <CMPNAME>GT_SRVGL_MAP</CMPNAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Service GL Mapping</DESCRIPT>
+    </SEOCOMPOTX>
+    <SEOCOMPOTX>
+     <CMPNAME>GT_WRTGL_MAP</CMPNAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Warranty GL Mapping</DESCRIPT>
+    </SEOCOMPOTX>
+    <SEOCOMPOTX>
+     <CMPNAME>IS_SDS</CMPNAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Check data related to SDS</DESCRIPT>
+    </SEOCOMPOTX>
+    <SEOCOMPOTX>
+     <CMPNAME>SUBSTITUTE_WBS</CMPNAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Substitute WBS</DESCRIPT>
+    </SEOCOMPOTX>
+   </DESCRIPTIONS>
+   <DESCRIPTIONS_SUB>
+    <SEOSUBCOTX>
+     <CMPNAME>GET_PRODH_MAP</CMPNAME>
+     <SCONAME>EF_SUFFIX</SCONAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>WBS Suffix (AP/UP)</DESCRIPT>
+    </SEOSUBCOTX>
+    <SEOSUBCOTX>
+     <CMPNAME>GET_PRODH_MAP</CMPNAME>
+     <SCONAME>IF_PRODH</SCONAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Product Hierarchy</DESCRIPT>
+    </SEOSUBCOTX>
+    <SEOSUBCOTX>
+     <CMPNAME>IS_SDS</CMPNAME>
+     <SCONAME>IF_BUKRS</SCONAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Company Code</DESCRIPT>
+    </SEOSUBCOTX>
+    <SEOSUBCOTX>
+     <CMPNAME>IS_SDS</CMPNAME>
+     <SCONAME>RF_RESULT</SCONAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Truth Value: True/False</DESCRIPT>
+    </SEOSUBCOTX>
+    <SEOSUBCOTX>
+     <CMPNAME>SUBSTITUTE_WBS</CMPNAME>
+     <SCONAME>CF_PSPNR</SCONAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>WBS Element</DESCRIPT>
+    </SEOSUBCOTX>
+    <SEOSUBCOTX>
+     <CMPNAME>SUBSTITUTE_WBS</CMPNAME>
+     <SCONAME>IS_COBL</SCONAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Coding Block</DESCRIPT>
+    </SEOSUBCOTX>
+   </DESCRIPTIONS_SUB>
+  </asx:values>
+ </asx:abap>
+</abapGit>

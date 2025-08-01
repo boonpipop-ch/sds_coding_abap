@@ -1,0 +1,37 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<abapGit version="v1.0.0" serializer="LCL_OBJECT_CLAS" serializer_version="v1.0.0">
+ <asx:abap xmlns:asx="http://www.sap.com/abapxml" version="1.0">
+  <asx:values>
+   <VSEOCLASS>
+    <CLSNAME>ZCL_SDSCO_CC_BUDGET_REMAIN_SRV</CLSNAME>
+    <LANGU>E</LANGU>
+    <DESCRIPT>CCA Budget Remaining</DESCRIPT>
+    <STATE>1</STATE>
+    <CLSCCINCL>X</CLSCCINCL>
+    <FIXPT>X</FIXPT>
+    <UNICODE>X</UNICODE>
+   </VSEOCLASS>
+   <DESCRIPTIONS>
+    <SEOCOMPOTX>
+     <CMPNAME>CE_DBGET</CMPNAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Cost Element Data Get</DESCRIPT>
+    </SEOCOMPOTX>
+   </DESCRIPTIONS>
+   <DESCRIPTIONS_SUB>
+    <SEOSUBCOTX>
+     <CMPNAME>CE_DBGET</CMPNAME>
+     <SCONAME>ES_RESPONSE</SCONAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>JSON Structure Cost Center Remaining Budget</DESCRIPT>
+    </SEOSUBCOTX>
+    <SEOSUBCOTX>
+     <CMPNAME>CE_DBGET</CMPNAME>
+     <SCONAME>IS_REQUEST</SCONAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>JSON Structure Cost Center Remaining Budget</DESCRIPT>
+    </SEOSUBCOTX>
+   </DESCRIPTIONS_SUB>
+  </asx:values>
+ </asx:abap>
+</abapGit>

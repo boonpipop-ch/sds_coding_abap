@@ -1,0 +1,140 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<abapGit version="v1.0.0" serializer="LCL_OBJECT_CLAS" serializer_version="v1.0.0">
+ <asx:abap xmlns:asx="http://www.sap.com/abapxml" version="1.0">
+  <asx:values>
+   <VSEOCLASS>
+    <CLSNAME>ZCL_SDSFI_BP</CLSNAME>
+    <LANGU>E</LANGU>
+    <DESCRIPT>BP Process</DESCRIPT>
+    <STATE>1</STATE>
+    <CLSCCINCL>X</CLSCCINCL>
+    <FIXPT>X</FIXPT>
+    <UNICODE>X</UNICODE>
+   </VSEOCLASS>
+   <TPOOL>
+    <item>
+     <ID>I</ID>
+     <KEY>E01</KEY>
+     <ENTRY>Cannot update! Please try again.</ENTRY>
+     <LENGTH>64</LENGTH>
+    </item>
+    <item>
+     <ID>I</ID>
+     <KEY>E02</KEY>
+     <ENTRY>Please try again.</ENTRY>
+     <LENGTH>27</LENGTH>
+    </item>
+    <item>
+     <ID>I</ID>
+     <KEY>E03</KEY>
+     <ENTRY>Please input project ID (WBS)</ENTRY>
+     <LENGTH>48</LENGTH>
+    </item>
+    <item>
+     <ID>I</ID>
+     <KEY>S01</KEY>
+     <ENTRY>Test Run Mode</ENTRY>
+     <LENGTH>23</LENGTH>
+    </item>
+    <item>
+     <ID>I</ID>
+     <KEY>S02</KEY>
+     <ENTRY>Data have been saved.</ENTRY>
+     <LENGTH>42</LENGTH>
+    </item>
+   </TPOOL>
+   <DESCRIPTIONS_SUB>
+    <SEOSUBCOTX>
+     <CMPNAME>CREATE_PA30</CMPNAME>
+     <SCONAME>IS_INFOTYPE</SCONAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Update Info Type</DESCRIPT>
+    </SEOSUBCOTX>
+    <SEOSUBCOTX>
+     <CMPNAME>CREATE_PA30</CMPNAME>
+     <SCONAME>RS_MESSAGE</SCONAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Message Info Type</DESCRIPT>
+    </SEOSUBCOTX>
+    <SEOSUBCOTX>
+     <CMPNAME>UPDATE_CREDIT</CMPNAME>
+     <SCONAME>E_MESSAGE</SCONAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Char255</DESCRIPT>
+    </SEOSUBCOTX>
+    <SEOSUBCOTX>
+     <CMPNAME>UPDATE_CREDIT</CMPNAME>
+     <SCONAME>E_MESTYPE</SCONAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>General Flag</DESCRIPT>
+    </SEOSUBCOTX>
+    <SEOSUBCOTX>
+     <CMPNAME>UPDATE_CREDIT</CMPNAME>
+     <SCONAME>I_BP_NO</SCONAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Business Partner Number</DESCRIPT>
+    </SEOSUBCOTX>
+    <SEOSUBCOTX>
+     <CMPNAME>UPDATE_CREDIT</CMPNAME>
+     <SCONAME>I_CREDIT_LIMIT</SCONAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Credit Limit</DESCRIPT>
+    </SEOSUBCOTX>
+    <SEOSUBCOTX>
+     <CMPNAME>UPDATE_CREDIT</CMPNAME>
+     <SCONAME>I_LIMIT_VALID_DATE</SCONAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Valid To Date</DESCRIPT>
+    </SEOSUBCOTX>
+    <SEOSUBCOTX>
+     <CMPNAME>UPDATE_CREDIT</CMPNAME>
+     <SCONAME>I_PAY_TERM</SCONAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Terms of Payment Key</DESCRIPT>
+    </SEOSUBCOTX>
+    <SEOSUBCOTX>
+     <CMPNAME>UPDATE_CREDIT</CMPNAME>
+     <SCONAME>I_TEST</SCONAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>General Flag</DESCRIPT>
+    </SEOSUBCOTX>
+    <SEOSUBCOTX>
+     <CMPNAME>UPDATE_TMP_PROJECT</CMPNAME>
+     <SCONAME>E_MESSAGE</SCONAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Char255</DESCRIPT>
+    </SEOSUBCOTX>
+    <SEOSUBCOTX>
+     <CMPNAME>UPDATE_TMP_PROJECT</CMPNAME>
+     <SCONAME>E_MESTYPE</SCONAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Data element for domain BOOLE: TRUE (=&apos;X&apos;) and FALSE (=&apos; &apos;)</DESCRIPT>
+    </SEOSUBCOTX>
+    <SEOSUBCOTX>
+     <CMPNAME>UPDATE_TMP_PROJECT</CMPNAME>
+     <SCONAME>IT_DATA</SCONAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Temp Project</DESCRIPT>
+    </SEOSUBCOTX>
+    <SEOSUBCOTX>
+     <CMPNAME>VALIDATE_TMP_PROJECT</CMPNAME>
+     <SCONAME>E_MESSAGE</SCONAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Char255</DESCRIPT>
+    </SEOSUBCOTX>
+    <SEOSUBCOTX>
+     <CMPNAME>VALIDATE_TMP_PROJECT</CMPNAME>
+     <SCONAME>E_MESTYPE</SCONAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Data element for domain BOOLE: TRUE (=&apos;X&apos;) and FALSE (=&apos; &apos;)</DESCRIPT>
+    </SEOSUBCOTX>
+    <SEOSUBCOTX>
+     <CMPNAME>VALIDATE_TMP_PROJECT</CMPNAME>
+     <SCONAME>IT_DATA</SCONAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Temp Project</DESCRIPT>
+    </SEOSUBCOTX>
+   </DESCRIPTIONS_SUB>
+  </asx:values>
+ </asx:abap>
+</abapGit>

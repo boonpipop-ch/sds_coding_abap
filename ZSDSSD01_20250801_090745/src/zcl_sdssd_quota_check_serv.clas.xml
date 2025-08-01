@@ -1,0 +1,78 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<abapGit version="v1.0.0" serializer="LCL_OBJECT_CLAS" serializer_version="v1.0.0">
+ <asx:abap xmlns:asx="http://www.sap.com/abapxml" version="1.0">
+  <asx:values>
+   <VSEOCLASS>
+    <CLSNAME>ZCL_SDSSD_QUOTA_CHECK_SERV</CLSNAME>
+    <LANGU>E</LANGU>
+    <DESCRIPT>SDS: Quota Check Service Class</DESCRIPT>
+    <STATE>1</STATE>
+    <CLSCCINCL>X</CLSCCINCL>
+    <FIXPT>X</FIXPT>
+    <UNICODE>X</UNICODE>
+   </VSEOCLASS>
+   <TPOOL>
+    <item>
+     <ID>I</ID>
+     <KEY>I01</KEY>
+     <ENTRY>Success</ENTRY>
+     <LENGTH>17</LENGTH>
+    </item>
+    <item>
+     <ID>I</ID>
+     <KEY>I02</KEY>
+     <ENTRY>No Data Found</ENTRY>
+     <LENGTH>23</LENGTH>
+    </item>
+   </TPOOL>
+   <DESCRIPTIONS>
+    <SEOCOMPOTX>
+     <CMPNAME>CONVERT_CUNIT_OUTPUT</CMPNAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Conversion unit of measure to output format</DESCRIPT>
+    </SEOCOMPOTX>
+    <SEOCOMPOTX>
+     <CMPNAME>GC_ERROR</CMPNAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Status</DESCRIPT>
+    </SEOCOMPOTX>
+    <SEOCOMPOTX>
+     <CMPNAME>GC_SUCCESS</CMPNAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Status</DESCRIPT>
+    </SEOCOMPOTX>
+    <SEOCOMPOTX>
+     <CMPNAME>GET_QUOTA_DATA</CMPNAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Get Quota Data</DESCRIPT>
+    </SEOCOMPOTX>
+   </DESCRIPTIONS>
+   <DESCRIPTIONS_SUB>
+    <SEOSUBCOTX>
+     <CMPNAME>CONVERT_CUNIT_OUTPUT</CMPNAME>
+     <SCONAME>EF_UNIT</SCONAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Base Unit of Measure - Output Format</DESCRIPT>
+    </SEOSUBCOTX>
+    <SEOSUBCOTX>
+     <CMPNAME>CONVERT_CUNIT_OUTPUT</CMPNAME>
+     <SCONAME>IF_UNIT</SCONAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Base Unit of Measure</DESCRIPT>
+    </SEOSUBCOTX>
+    <SEOSUBCOTX>
+     <CMPNAME>GET_QUOTA_DATA</CMPNAME>
+     <SCONAME>ES_RESPONSE</SCONAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Response: JSON Structure for Check Quota</DESCRIPT>
+    </SEOSUBCOTX>
+    <SEOSUBCOTX>
+     <CMPNAME>GET_QUOTA_DATA</CMPNAME>
+     <SCONAME>IS_REQUEST</SCONAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Request: JSON Structure for Check Quota</DESCRIPT>
+    </SEOSUBCOTX>
+   </DESCRIPTIONS_SUB>
+  </asx:values>
+ </asx:abap>
+</abapGit>

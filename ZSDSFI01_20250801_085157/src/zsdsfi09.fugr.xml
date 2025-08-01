@@ -1,0 +1,104 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<abapGit version="v1.0.0" serializer="LCL_OBJECT_FUGR" serializer_version="v1.0.0">
+ <asx:abap xmlns:asx="http://www.sap.com/abapxml" version="1.0">
+  <asx:values>
+   <AREAT>function group for bill placement</AREAT>
+   <INCLUDES>
+    <SOBJ_NAME>LZSDSFI09TOP</SOBJ_NAME>
+    <SOBJ_NAME>SAPLZSDSFI09</SOBJ_NAME>
+   </INCLUDES>
+   <FUNCTIONS>
+    <item>
+     <FUNCNAME>Z_SDSFI_BILLPL_CANCEL</FUNCNAME>
+     <UPDATE_TASK>1</UPDATE_TASK>
+     <SHORT_TEXT>Create Bill placement data</SHORT_TEXT>
+     <TABLES>
+      <RSTBL>
+       <PARAMETER>IT_ZSDSFIT033</PARAMETER>
+       <DBSTRUCT>ZSDSFIT033</DBSTRUCT>
+      </RSTBL>
+      <RSTBL>
+       <PARAMETER>IT_ZSDSFIT034</PARAMETER>
+       <DBSTRUCT>ZSDSFIT034</DBSTRUCT>
+      </RSTBL>
+      <RSTBL>
+       <PARAMETER>IT_ZSDSFIT035</PARAMETER>
+       <DBSTRUCT>ZSDSFIT035</DBSTRUCT>
+      </RSTBL>
+     </TABLES>
+     <DOCUMENTATION>
+      <RSFDO>
+       <PARAMETER>IT_ZSDSFIT033</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>Bill Placement - Header</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>IT_ZSDSFIT034</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>Bill Placement History</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>IT_ZSDSFIT035</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>Bill Placement - Item of Invoice</STEXT>
+      </RSFDO>
+     </DOCUMENTATION>
+    </item>
+    <item>
+     <FUNCNAME>Z_SDSFI_BILLPL_CREATE</FUNCNAME>
+     <UPDATE_TASK>1</UPDATE_TASK>
+     <SHORT_TEXT>Create Bill placement data</SHORT_TEXT>
+     <TABLES>
+      <RSTBL>
+       <PARAMETER>IT_ZSDSFIT033</PARAMETER>
+       <DBSTRUCT>ZSDSFIT033</DBSTRUCT>
+      </RSTBL>
+      <RSTBL>
+       <PARAMETER>IT_ZSDSFIT034</PARAMETER>
+       <DBSTRUCT>ZSDSFIT034</DBSTRUCT>
+      </RSTBL>
+      <RSTBL>
+       <PARAMETER>IT_ZSDSFIT035</PARAMETER>
+       <DBSTRUCT>ZSDSFIT035</DBSTRUCT>
+      </RSTBL>
+     </TABLES>
+     <DOCUMENTATION>
+      <RSFDO>
+       <PARAMETER>IT_ZSDSFIT033</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>Bill Placement - Header</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>IT_ZSDSFIT034</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>Bill Placement History</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>IT_ZSDSFIT035</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>Bill Placement - Item of Invoice</STEXT>
+      </RSFDO>
+     </DOCUMENTATION>
+    </item>
+    <item>
+     <FUNCNAME>Z_SDSFI_BILLPL_REPRINT</FUNCNAME>
+     <UPDATE_TASK>1</UPDATE_TASK>
+     <SHORT_TEXT>Create Bill placement data</SHORT_TEXT>
+     <TABLES>
+      <RSTBL>
+       <PARAMETER>IT_ZSDSFIT034</PARAMETER>
+       <DBSTRUCT>ZSDSFIT034</DBSTRUCT>
+      </RSTBL>
+     </TABLES>
+     <DOCUMENTATION>
+      <RSFDO>
+       <PARAMETER>IT_ZSDSFIT034</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>Bill Placement History</STEXT>
+      </RSFDO>
+     </DOCUMENTATION>
+    </item>
+   </FUNCTIONS>
+  </asx:values>
+ </asx:abap>
+</abapGit>

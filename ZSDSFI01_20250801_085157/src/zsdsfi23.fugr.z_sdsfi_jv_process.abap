@@ -1,0 +1,98 @@
+FUNCTION Z_SDSFI_JV_PROCESS.
+*"----------------------------------------------------------------------
+*"*"Local Interface:
+*"  TABLES
+*"      T_BSEG STRUCTURE  BSEG
+*"      T_BKPF STRUCTURE  BKPF
+*"----------------------------------------------------------------------
+
+  CONSTANTS LC_COMPLETE TYPE ZSDSFIT060-POSTED VALUE 'C'.
+  DATA : LV_CHECK_SDS LIKE ABAP_TRUE,
+         LT_GEN_C     TYPE TT_GEN_C,
+         LV_JV_TYP    TYPE BKPF-BLART.
+
+  DATA: LS_FIT060 TYPE ZSDSFIT060,
+        LV_SUM    TYPE BSEG-WRBTR,
+        LV_MSG    TYPE BAPIRET2-MESSAGE.
+
+*  MESSAGE 'ERROR' TYPE 'E'.
+*  RETURN.
+  PERFORM CHECK_SDS CHANGING LV_CHECK_SDS.
+  CHECK LV_CHECK_SDS EQ ABAP_TRUE AND SY-TCODE = 'FB50'.
+
+  ZCL_SDSCA_UTILITIES=>GET_GEN_C( EXPORTING IF_REPID  = GC_CON-REPID
+                                  IMPORTING ET_GEN_C = LT_GEN_C ).
+
+  READ TABLE LT_GEN_C INTO DATA(LS_GEN_C)
+                      WITH KEY PARAM = 'JV_TYPE'.
+  IF SY-SUBRC = 0.
+    LV_JV_TYP = LS_GEN_C-VALUE_LOW.
+  ENDIF.
+
+  READ TABLE T_BKPF INTO DATA(LS_BKPF)
+                    INDEX 1.
+  IF SY-SUBRC = 0.
+
+    IF LS_BKPF-BLART = LV_JV_TYP.
+      SELECT SINGLE * FROM ZSDSFIT060 INTO @LS_FIT060
+        WHERE JV_DOCNO = @LS_BKPF-XBLNR AND
+              ZDEL_FLG = @SPACE         AND
+              POSTED   = @LC_COMPLETE.
+      IF SY-SUBRC = 0.
+        LV_MSG = TEXT-E01.
+        REPLACE ALL OCCURRENCES OF '&1' IN LV_MSG WITH LS_BKPF-XBLNR.
+        MESSAGE LV_MSG TYPE 'E'.
+        EXIT.
+      ENDIF.
+
+      "JV Document Number
+      LS_FIT060-JV_DOCNO    = LS_BKPF-XBLNR.
+
+      "Calculate Amount
+      LOOP AT T_BSEG INTO DATA(LS_BSEG) WHERE BSCHL = '40'.
+
+        LS_FIT060-SUM_AMT = LS_FIT060-SUM_AMT + LS_BSEG-WRBTR.
+      ENDLOOP.
+
+      LS_FIT060-JV_DOCNO    = LS_BKPF-XBLNR.
+
+      DATA(LCL_JV_PROCESS) = NEW ZCL_SDSFI_JV_CHECK( ).
+
+      "Assign to Global vairable on SE24
+      LCL_JV_PROCESS->GS_FIT060 = LS_FIT060.
+
+      CLEAR: LCL_JV_PROCESS->GV_TEST.
+      IF SY-UCOMM = 'BU'.   "SAVE MODE
+        LCL_JV_PROCESS->GS_FIT060-POSTED = 'C'.
+      ELSE.
+        LCL_JV_PROCESS->GV_TEST   = ABAP_TRUE.
+      ENDIF.
+
+      "Start Process
+      LCL_JV_PROCESS->START_PROCESS( ).
+
+      "Return / Update Result to ZSDSFIT060
+      IF LCL_JV_PROCESS->GS_K2_RES-MESSAGETYPE = 'E'.
+        MESSAGE LCL_JV_PROCESS->GS_K2_RES-MESSAGETEXT TYPE 'E'." DISPLAY LIKE 'E'.
+      ELSE.
+        IF LCL_JV_PROCESS->GV_TEST <> ABAP_TRUE.
+          "Update table log
+          LS_FIT060-JV_DOCNO    = LS_BKPF-XBLNR.
+          LS_FIT060-ZUPD_DATE   = SY-DATUM.
+          LS_FIT060-ZUPD_TIME   = SY-UZEIT.
+          LS_FIT060-ZUPD_USER   = SY-UNAME.
+          LS_FIT060-POSTED      = LC_COMPLETE.
+          LS_FIT060-SUM_AMT     = LS_FIT060-SUM_AMT. "Update Sum amount
+          LS_FIT060-ZCRT_DATE   = SY-DATUM.
+          LS_FIT060-ZCRT_TIME   = SY-UZEIT.
+          LS_FIT060-ZCRT_PGM    = SY-CPROG.
+          LS_FIT060-ZCRT_USER   = SY-UNAME..
+          MODIFY ZSDSFIT060 FROM LS_FIT060.
+        ENDIF.
+      ENDIF.
+    ENDIF.
+
+  ENDIF.
+
+
+ENDFUNCTION.

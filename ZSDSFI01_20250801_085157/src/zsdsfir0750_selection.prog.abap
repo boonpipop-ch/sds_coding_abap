@@ -1,0 +1,52 @@
+*&---------------------------------------------------------------------*
+*& Include          ZSDSFIR0750_SELECTION
+*&---------------------------------------------------------------------*
+*-----------------------------------------------------------------------
+* P A R A M E T E R S   &   S E L E C T - O P T I O N S
+*-----------------------------------------------------------------------
+*SELECTION-SCREEN BEGIN OF BLOCK block1 WITH FRAME TITLE text-001.
+*SELECT-OPTIONS : s_vkgrp  FOR knvv-vkgrp NO INTERVALS NO-EXTENSION,
+*                 s_vhvin  FOR ztsd201-vhvin ,
+*                 s_vhcex  FOR ztsd201-vhcex ,
+*                 s_frsede FOR ztsd201-frsede,
+*                 s_tobude FOR ztsd201-tobude,
+*                 s_moved  FOR ztsd201-created_on,
+*                 s_modcd  FOR vlcvehicle-zzmodcd,
+*                 s_matnr  FOR vlcvehicle-matnr.
+*SELECTION-SCREEN END OF BLOCK block1.
+
+SELECTION-SCREEN BEGIN OF BLOCK block1 WITH FRAME TITLE TEXT-001.
+  PARAMETERS:
+    RB_BILL RADIOBUTTON GROUP G1 DEFAULT 'X' USER-COMMAND RB1,
+    RB_DO   RADIOBUTTON GROUP G1.
+SELECTION-SCREEN END OF BLOCK block1.
+SELECTION-SCREEN BEGIN OF BLOCK block2 WITH FRAME TITLE TEXT-002.
+  SELECT-OPTIONS:
+  S_BUKRS FOR BKPF-BUKRS OBLIGATORY DEFAULT 1000 NO-EXTENSION NO INTERVALS,
+  S_BILL  FOR VBRK-VBELN MODIF ID FI,
+  S_BELNR FOR BKPF-BELNR MODIF ID FI,
+  S_DO    FOR LIKP-VBELN MODIF ID DO,
+  S_KUNNR FOR BSEG-KUNNR OBLIGATORY.
+  PARAMETERS:
+    CB_OPEN AS CHECKBOX DEFAULT 'X' MODIF ID FI,
+    CB_SPEC AS CHECKBOX MODIF ID FI.
+  SELECT-OPTIONS:
+  S_BLART  FOR BKPF-BLART,
+  S_UMSKZ  FOR BSEG-UMSKZ MODIF ID FI,
+  S_XBLNR  FOR BKPF-XBLNR MODIF ID FI,
+  S_VKORGF FOR LIKP-VKORG MODIF ID FI,
+  S_VKORGD FOR LIKP-VKORG DEFAULT 1000 MODIF ID DO,
+  S_VTWEG FOR LIPS-VTWEG,
+  S_SPART FOR LIPS-SPART,
+  S_VKGRP FOR LIPS-VKGRP,
+  S_VKBUR FOR LIKP-VKBUR,
+  S_SALEM FOR VBPA-PERNR,
+  S_PIC   FOR ZSDSFIC027-PIC_PERNR,
+  S_BUSAB FOR KNB1-BUSAB.
+  PARAMETERS:
+  P_RPDAT TYPE SY-DATUM OBLIGATORY DEFAULT SY-DATUM.
+  SELECT-OPTIONS:
+  S_FLWDT FOR ZSDSFIT040-FOLLOWDT,
+  S_UPDDT FOR ZSDSFIT040-UPD_DATE.
+  PARAMETERS: P_COMP AS CHECKBOX MODIF ID DO.
+SELECTION-SCREEN END OF BLOCK block2 .

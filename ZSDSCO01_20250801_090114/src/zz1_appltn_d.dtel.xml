@@ -1,0 +1,59 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<abapGit version="v1.0.0" serializer="LCL_OBJECT_DTEL" serializer_version="v1.0.0">
+ <asx:abap xmlns:asx="http://www.sap.com/abapxml" version="1.0">
+  <asx:values>
+   <DD04V>
+    <ROLLNAME>ZZ1_APPLTN_D</ROLLNAME>
+    <DDLANGUAGE>E</DDLANGUAGE>
+    <DOMNAME>CFD_CUSTOM_CODE_DESCRIPTION</DOMNAME>
+    <LOGFLAG>X</LOGFLAG>
+    <HEADLEN>55</HEADLEN>
+    <SCRLEN3>40</SCRLEN3>
+    <DDTEXT>Project Type (Desc.)</DDTEXT>
+    <REPTEXT>Project Type (Desc.)</REPTEXT>
+    <SCRTEXT_L>Project Type (Desc.)</SCRTEXT_L>
+    <DTELMASTER>E</DTELMASTER>
+    <REFKIND>D</REFKIND>
+   </DD04V>
+   <I18N_LANGS>
+    <LANGU>2</LANGU>
+    <LANGU>7</LANGU>
+    <LANGU>D</LANGU>
+    <LANGU>J</LANGU>
+    <LANGU>쁩</LANGU>
+   </I18N_LANGS>
+   <DD04_TEXTS>
+    <item>
+     <DDLANGUAGE>2</DDLANGUAGE>
+     <DDTEXT>ประเภทโครงการ(คำอธิบาย)</DDTEXT>
+     <REPTEXT>ประเภทโครงการ(คำอธิบาย)</REPTEXT>
+     <SCRTEXT_L>ประเภทโครงการ(คำอธิบาย)</SCRTEXT_L>
+    </item>
+    <item>
+     <DDLANGUAGE>7</DDLANGUAGE>
+     <DDTEXT>Jenis Projek (Prhln)</DDTEXT>
+     <REPTEXT>Jenis Projek (Prhln)</REPTEXT>
+     <SCRTEXT_L>Jenis Projek (Prhln)</SCRTEXT_L>
+    </item>
+    <item>
+     <DDLANGUAGE>D</DDLANGUAGE>
+     <DDTEXT>Projektart (Beschr.)</DDTEXT>
+     <REPTEXT>Projektart (Beschr.)</REPTEXT>
+     <SCRTEXT_L>Projektart (Beschr.)</SCRTEXT_L>
+    </item>
+    <item>
+     <DDLANGUAGE>J</DDLANGUAGE>
+     <DDTEXT>プロジェクトタイプ(内容説明)</DDTEXT>
+     <REPTEXT>プロジェクトタイプ(内容説明)</REPTEXT>
+     <SCRTEXT_L>プロジェクトタイプ(内容説明)</SCRTEXT_L>
+    </item>
+    <item>
+     <DDLANGUAGE>쁩</DDLANGUAGE>
+     <DDTEXT>Loại dự án (Desc.)</DDTEXT>
+     <REPTEXT>Loại dự án (Desc.)</REPTEXT>
+     <SCRTEXT_L>Loại dự án (Desc.)</SCRTEXT_L>
+    </item>
+   </DD04_TEXTS>
+  </asx:values>
+ </asx:abap>
+</abapGit>

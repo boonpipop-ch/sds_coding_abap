@@ -1,0 +1,107 @@
+FUNCTION Z_SDSFI_DEL_BP.
+*"----------------------------------------------------------------------
+*"*"Local Interface:
+*"  IMPORTING
+*"     REFERENCE(IV_BP) TYPE  BU_PARTNER
+*"     REFERENCE(IV_MODE) TYPE  ZSDSDE_INF_MODE
+*"     REFERENCE(IV_DEL) TYPE  CHAR01
+*"  EXPORTING
+*"     VALUE(ET_RETURN) TYPE  BAPIRET2_T
+*"----------------------------------------------------------------------
+
+  DATA: LS_BUT000 TYPE BUT000,
+        LV_GUID   TYPE BU_PARTNER_GUID,
+        LS_BP     TYPE CVIS_EI_EXTERN,
+        LT_BP     TYPE CVIS_EI_EXTERN_T,
+        LS_RETURN TYPE BAPIRET2.
+
+  CHECK IV_MODE = 'D'.
+  GV_PARTNER = |{ IV_BP ALPHA = IN }|.
+
+  CALL FUNCTION 'BUPA_NUMBERS_GET'
+    EXPORTING
+      IV_PARTNER      = GV_PARTNER
+    IMPORTING
+      EV_PARTNER_GUID = LV_GUID
+      ES_BUT000       = LS_BUT000.
+
+  LS_BP-PARTNER-HEADER-OBJECT_TASK  = 'U'.
+  LS_BP-PARTNER-HEADER-OBJECT_INSTANCE-BPARTNERGUID = LV_GUID.
+  LS_BP-PARTNER-HEADER-OBJECT_INSTANCE-BPARTNER     = GV_PARTNER.
+
+  "Flag delete
+  LS_BP-PARTNER-CENTRAL_DATA-COMMON-DATA-BP_CENTRALDATA-CENTRALARCHIVINGFLAG  = IV_DEL.
+  LS_BP-PARTNER-CENTRAL_DATA-COMMON-DATAX-BP_CENTRALDATA-CENTRALARCHIVINGFLAG = ABAP_TRUE.
+
+  "Cancel Delete flag
+  IF IV_DEL IS INITIAL.
+    LS_BP-CUSTOMER-CENTRAL_DATA-CENTRAL-DATA-LOEVM  = SPACE.
+    LS_BP-CUSTOMER-CENTRAL_DATA-CENTRAL-DATAX-LOEVM = ABAP_TRUE.
+
+    LS_BP-VENDOR-CENTRAL_DATA-CENTRAL-DATA-LOEVM    = SPACE.
+    LS_BP-VENDOR-CENTRAL_DATA-CENTRAL-DATAX-LOEVM   = ABAP_TRUE.
+  ENDIF.
+
+*------------------------------------------------------------------------------
+* Validate data
+*------------------------------------------------------------------------------
+  CL_MD_BP_MAINTAIN=>VALIDATE_SINGLE(
+    EXPORTING
+      I_DATA        = LS_BP
+    IMPORTING
+      ET_RETURN_MAP = DATA(LT_RETURN_MAP)
+  ).
+
+  "Filter message out ->Errors occurred during call of function module BUPA_CREATE_FROM_DATA
+  PERFORM FILTER_ERROR_OUT  CHANGING LT_RETURN_MAP.
+
+  IF LINE_EXISTS( LT_RETURN_MAP[ TYPE = 'E' ] ) OR
+     LINE_EXISTS( LT_RETURN_MAP[ TYPE = 'A' ] ).
+
+    LOOP AT LT_RETURN_MAP INTO DATA(LS_RETURN_MAP)
+                          WHERE TYPE = 'E'
+                             OR TYPE = 'A'.
+      LS_RETURN-TYPE = LS_RETURN_MAP-TYPE.
+      LS_RETURN-MESSAGE = LS_RETURN_MAP-MESSAGE.
+      APPEND LS_RETURN TO ET_RETURN[].
+      EXIT. "exit loop
+    ENDLOOP.
+
+    EXIT. "Exit program
+  ENDIF.
+
+  INSERT LS_BP INTO TABLE LT_BP.
+  CL_MD_BP_MAINTAIN=>MAINTAIN(
+  EXPORTING
+    I_DATA     = LT_BP
+    I_TEST_RUN = ''
+  IMPORTING
+    E_RETURN   = DATA(LT_RETURN)
+).
+  TRY.
+      DATA(LT_OBJ_MSG) = LT_RETURN[ 1 ]-OBJECT_MSG.
+    CATCH CX_SY_ITAB_LINE_NOT_FOUND.
+      "ok to error
+  ENDTRY.
+
+  IF LINE_EXISTS( LT_OBJ_MSG[ TYPE = 'E' ] ) OR
+     LINE_EXISTS( LT_OBJ_MSG[ TYPE = 'A' ] ).
+    "Error case
+    LOOP AT LT_OBJ_MSG INTO DATA(LS_OBJ_MSG)
+                      WHERE TYPE = 'E' OR
+                            TYPE = 'A'.
+      LS_RETURN-TYPE    = LS_OBJ_MSG-TYPE.
+      LS_RETURN-MESSAGE = LS_OBJ_MSG-MESSAGE.
+    ENDLOOP.
+  ELSE.
+    CALL FUNCTION 'BAPI_TRANSACTION_COMMIT'
+      EXPORTING
+        WAIT = ABAP_TRUE.
+
+    LS_RETURN-TYPE    = 'S'.
+    LS_RETURN-MESSAGE = |{ IV_BP } has been updated.|.
+  ENDIF.
+
+  APPEND LS_RETURN TO ET_RETURN[].
+
+ENDFUNCTION.

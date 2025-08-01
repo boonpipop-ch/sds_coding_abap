@@ -1,0 +1,158 @@
+<?sap.transform simple?>
+<tt:transform xmlns:tt="http://www.sap.com/transformation-templates" xmlns:ddic="http://www.sap.com/abapxml/types/dictionary">
+
+  <tt:root name="DATA" type="ddic:ZSDSMMS032"/>
+  <tt:template>
+
+    <!-- Material request-->
+    <object>
+      <tt:group>
+
+        <tt:cond frq="1">
+          <str name="MaterialNo">
+            <tt:value ref="DATA.MATERIAL_NO"/>
+          </str>
+        </tt:cond>
+        <tt:cond frq="?">
+          <str name="ResponseStatus">
+            <tt:value ref="DATA.RESP_STATUS"/>
+          </str>
+        </tt:cond>
+        <tt:cond frq="?">
+          <str name="ResponseMessage">
+            <tt:value ref="DATA.RESP_MESSAGE"/>
+          </str>
+        </tt:cond>
+      </tt:group>
+
+      <array name="Stock">
+        <tt:cond check="exist(DATA.STOCK)">
+          <tt:loop ref="DATA.STOCK">
+            <!-- Material Elements -->
+            <object>
+              <tt:group>
+                <tt:cond frq="1">
+                  <str name="Sloc">
+                    <tt:value ref="$ref.SLOC"/>
+                  </str>
+                </tt:cond>
+
+
+                <tt:cond frq="?">
+                  <str name="SlocDesc">
+                    <tt:value ref="$ref.SLOC_DESC"/>
+                  </str>
+                </tt:cond>
+
+                <tt:cond frq="?">
+                  <str name="StorageBin">
+                    <tt:value ref="$ref.STORAGE_BIN"/>
+                  </str>
+                </tt:cond>
+
+                <tt:cond frq="?">
+                  <str name="MaterialNo">
+                    <tt:value ref="$ref.MATERIAL_NO"/>
+                  </str>
+                </tt:cond>
+
+                <tt:cond frq="?">
+                  <str name="MaterialDesc">
+                    <tt:value ref="$ref.MATERIAL_DESC"/>
+                  </str>
+                </tt:cond>
+
+                <tt:cond frq="?">
+                  <num name="UnrestrictedUse">
+                    <tt:value ref="$ref.UNRESTRICTED_USE"/>
+                  </num>
+                </tt:cond>
+
+                <tt:cond frq="?">
+                  <num name="QualityInspection">
+                    <tt:value ref="$ref.QUALITY_INSPECTION"/>
+                  </num>
+                </tt:cond>
+
+                <tt:cond frq="?">
+                  <num name="ReqQty">
+                    <tt:value ref="$ref.REQ_QTY"/>
+                  </num>
+                </tt:cond>
+
+                <tt:cond frq="?">
+                  <num name="OpenQtyStock">
+                    <tt:value ref="$ref.OPEN_QTY_STOCK"/>
+                  </num>
+                </tt:cond>
+
+                <tt:cond frq="?">
+                  <num name="BlockStkReturn">
+                    <tt:value ref="$ref.BLOCK_STK_RETURN"/>
+                  </num>
+                </tt:cond>
+
+                <tt:cond frq="?">
+                  <num name="StkInTransit">
+                    <tt:value ref="$ref.STK_IN_TRANSIT"/>
+                  </num>
+                </tt:cond>
+
+                <tt:cond frq="?">
+                  <num name="BlockStkGr">
+                    <tt:value ref="$ref.BLOCK_STK_GR"/>
+                  </num>
+                </tt:cond>
+
+                <tt:cond frq="?">
+                  <num name="SalesOrders">
+                    <tt:value ref="$ref.SALES_ORDERS"/>
+                  </num>
+                </tt:cond>
+
+                <tt:cond frq="?">
+                  <num name="TiedEmptiesStk">
+                    <tt:value ref="$ref.TIED_EMPTIES_STK"/>
+                  </num>
+                </tt:cond>
+
+                <tt:cond frq="?">
+                  <num name="OnOrderStk">
+                    <tt:value ref="$ref.ON_ORDER_STK"/>
+                  </num>
+                </tt:cond>
+
+                <tt:cond frq="?">
+                  <num name="StkInPp">
+                    <tt:value ref="$ref.STK_IN_PP"/>
+                  </num>
+                </tt:cond>
+
+                <tt:cond frq="?">
+                  <num name="RateCondAmt">
+                    <tt:value ref="$ref.RATE_COND_AMT"/>
+                  </num>
+                </tt:cond>
+
+                <tt:cond frq="?">
+                  <num name="FreeStkQty">
+                    <tt:value ref="$ref.FREE_STK_QTY"/>
+                  </num>
+                </tt:cond>
+
+                <tt:cond frq="?">
+                  <num name="MovingAvgPup">
+                    <tt:value ref="$ref.MOVING_AVG_PUP"/>
+                  </num>
+                </tt:cond>
+              </tt:group>
+
+            </object>
+          </tt:loop>
+        </tt:cond>
+      </array>
+
+
+    </object>
+  </tt:template>
+</tt:transform>

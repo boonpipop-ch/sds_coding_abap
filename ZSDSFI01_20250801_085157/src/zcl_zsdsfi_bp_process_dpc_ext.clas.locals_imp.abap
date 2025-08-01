@@ -1,0 +1,50 @@
+*"* use this source file for the definition and implementation of
+*"* local helper classes, interface definitions and type
+*"* declarations
+CLASS LCL_DATA DEFINITION.
+  PUBLIC SECTION.
+    METHODS :
+      CONSTRUCTOR.
+
+    CLASS-METHODS
+      UPDATE_TMP_PROJECT CHANGING C_DATA TYPE ZSDSFIS120.
+
+    CONSTANTS : BEGIN OF LC_CON,
+                  E TYPE C LENGTH 1 VALUE 'E',
+                END OF LC_CON.
+
+ENDCLASS.
+CLASS LCL_DATA IMPLEMENTATION.
+  METHOD CONSTRUCTOR.
+
+  ENDMETHOD.
+  METHOD UPDATE_TMP_PROJECT.
+
+    DATA : LCL_BP TYPE REF TO ZCL_SDSFI_BP.
+
+    IF LCL_BP IS NOT BOUND.
+      CREATE OBJECT LCL_BP.
+    ENDIF.
+
+    DATA : LT_TMP_PROJ TYPE TABLE OF ZSDSFIS119 WITH EMPTY KEY,
+           LS_TMP_PROJ LIKE LINE OF LT_TMP_PROJ.
+
+    LT_TMP_PROJ  = C_DATA-DETAIL.
+
+    IF LT_TMP_PROJ IS NOT INITIAL.
+
+      LCL_BP->VALIDATE_TMP_PROJECT( EXPORTING IT_DATA   = LT_TMP_PROJ
+                                    IMPORTING E_MESTYPE = C_DATA-MESSAGETYPE
+                                              E_MESSAGE = C_DATA-MESSAGE ).
+      IF C_DATA-MESSAGETYPE <> LC_CON-E.
+        LCL_BP->UPDATE_TMP_PROJECT( EXPORTING IT_DATA   = LT_TMP_PROJ
+                                    IMPORTING E_MESTYPE = C_DATA-MESSAGETYPE
+                                              E_MESSAGE = C_DATA-MESSAGE ).
+      ENDIF.
+    ELSE.
+      C_DATA-MESSAGETYPE = LC_CON-E.
+      C_DATA-MESSAGE     = TEXT-E01.
+    ENDIF.
+
+  ENDMETHOD.
+ENDCLASS.

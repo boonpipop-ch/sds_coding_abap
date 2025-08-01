@@ -1,0 +1,78 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<abapGit version="v1.0.0" serializer="LCL_OBJECT_DTEL" serializer_version="v1.0.0">
+ <asx:abap xmlns:asx="http://www.sap.com/abapxml" version="1.0">
+  <asx:values>
+   <DD04V>
+    <ROLLNAME>ZSDSDE_POSID</ROLLNAME>
+    <DDLANGUAGE>E</DDLANGUAGE>
+    <DOMNAME>CHAR24</DOMNAME>
+    <MEMORYID>PRO</MEMORYID>
+    <LOGFLAG>X</LOGFLAG>
+    <HEADLEN>24</HEADLEN>
+    <SCRLEN1>10</SCRLEN1>
+    <SCRLEN2>15</SCRLEN2>
+    <SCRLEN3>20</SCRLEN3>
+    <DDTEXT>Work Breakdown Structure Element (WBS Element)</DDTEXT>
+    <REPTEXT>WBS Element</REPTEXT>
+    <SCRTEXT_S>WBS Elem.</SCRTEXT_S>
+    <SCRTEXT_M>WBS Element</SCRTEXT_M>
+    <SCRTEXT_L>WBS Element</SCRTEXT_L>
+    <APPLCLASS>CN</APPLCLASS>
+    <DTELMASTER>D</DTELMASTER>
+    <SHLPNAME>CC_PRPM</SHLPNAME>
+    <SHLPFIELD>POSID</SHLPFIELD>
+    <DEFFDNAME>WBS_ELEMENT</DEFFDNAME>
+    <REFKIND>D</REFKIND>
+   </DD04V>
+   <I18N_LANGS>
+    <LANGU>2</LANGU>
+    <LANGU>7</LANGU>
+    <LANGU>D</LANGU>
+    <LANGU>J</LANGU>
+    <LANGU>쁩</LANGU>
+   </I18N_LANGS>
+   <DD04_TEXTS>
+    <item>
+     <DDLANGUAGE>2</DDLANGUAGE>
+     <DDTEXT>องค์ประกอบโครงสร้างแยกย่อยงาน (องค์ประกอบ WBS)</DDTEXT>
+     <REPTEXT>องค์ประกอบ WBS</REPTEXT>
+     <SCRTEXT_S>อปก. WBS</SCRTEXT_S>
+     <SCRTEXT_M>องค์ประกอบ WBS</SCRTEXT_M>
+     <SCRTEXT_L>องค์ประกอบ WBS</SCRTEXT_L>
+    </item>
+    <item>
+     <DDLANGUAGE>7</DDLANGUAGE>
+     <DDTEXT>Elemen Struktur Pecahan Kerja (Elemen WBS)</DDTEXT>
+     <REPTEXT>Elemen WBS</REPTEXT>
+     <SCRTEXT_S>Elemen WBS</SCRTEXT_S>
+     <SCRTEXT_M>Elemen WBS</SCRTEXT_M>
+     <SCRTEXT_L>Elemen WBS</SCRTEXT_L>
+    </item>
+    <item>
+     <DDLANGUAGE>D</DDLANGUAGE>
+     <DDTEXT>Projektstrukturplanelement (PSP-Element)</DDTEXT>
+     <REPTEXT>PSP-Element</REPTEXT>
+     <SCRTEXT_S>PSP-Elm</SCRTEXT_S>
+     <SCRTEXT_M>PSP-Element</SCRTEXT_M>
+     <SCRTEXT_L>PSP-Element</SCRTEXT_L>
+    </item>
+    <item>
+     <DDLANGUAGE>J</DDLANGUAGE>
+     <DDTEXT>WBS 要素</DDTEXT>
+     <REPTEXT>WBS 要素</REPTEXT>
+     <SCRTEXT_S>WBS 要素</SCRTEXT_S>
+     <SCRTEXT_M>WBS 要素</SCRTEXT_M>
+     <SCRTEXT_L>WBS 要素</SCRTEXT_L>
+    </item>
+    <item>
+     <DDLANGUAGE>쁩</DDLANGUAGE>
+     <DDTEXT>Yếu tố WBS</DDTEXT>
+     <REPTEXT>Yếu tố WBS</REPTEXT>
+     <SCRTEXT_S>Y.tố WBS</SCRTEXT_S>
+     <SCRTEXT_M>Yếu tố WBS</SCRTEXT_M>
+     <SCRTEXT_L>Yếu tố WBS</SCRTEXT_L>
+    </item>
+   </DD04_TEXTS>
+  </asx:values>
+ </asx:abap>
+</abapGit>

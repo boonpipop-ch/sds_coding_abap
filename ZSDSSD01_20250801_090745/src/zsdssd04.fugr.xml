@@ -1,0 +1,31 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<abapGit version="v1.0.0" serializer="LCL_OBJECT_FUGR" serializer_version="v1.0.0">
+ <asx:abap xmlns:asx="http://www.sap.com/abapxml" version="1.0">
+  <asx:values>
+   <AREAT>Shipment document Item</AREAT>
+   <INCLUDES>
+    <SOBJ_NAME>LZSDSSD04TOP</SOBJ_NAME>
+    <SOBJ_NAME>SAPLZSDSSD04</SOBJ_NAME>
+   </INCLUDES>
+   <FUNCTIONS>
+    <item>
+     <FUNCNAME>Z_SDSSD_UPDATE_ZSD_SHIP_DOC</FUNCNAME>
+     <SHORT_TEXT>Update Shipment document Item</SHORT_TEXT>
+     <TABLES>
+      <RSTBL>
+       <PARAMETER>PT_ZSDSSDT013</PARAMETER>
+       <DBSTRUCT>ZSDSSDT013</DBSTRUCT>
+      </RSTBL>
+     </TABLES>
+     <DOCUMENTATION>
+      <RSFDO>
+       <PARAMETER>PT_ZSDSSDT013</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>Shipment document Item</STEXT>
+      </RSFDO>
+     </DOCUMENTATION>
+    </item>
+   </FUNCTIONS>
+  </asx:values>
+ </asx:abap>
+</abapGit>

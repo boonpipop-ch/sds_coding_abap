@@ -1,0 +1,48 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<abapGit version="v1.0.0" serializer="LCL_OBJECT_CLAS" serializer_version="v1.0.0">
+ <asx:abap xmlns:asx="http://www.sap.com/abapxml" version="1.0">
+  <asx:values>
+   <VSEOCLASS>
+    <CLSNAME>ZCL_SDSSD_SEND_API</CLSNAME>
+    <LANGU>E</LANGU>
+    <DESCRIPT>SD Send API</DESCRIPT>
+    <STATE>1</STATE>
+    <CLSCCINCL>X</CLSCCINCL>
+    <FIXPT>X</FIXPT>
+    <UNICODE>X</UNICODE>
+   </VSEOCLASS>
+   <DESCRIPTIONS_SUB>
+    <SEOSUBCOTX>
+     <CMPNAME>SEND_DO_FG_TO_SONY</CMPNAME>
+     <SCONAME>E_MESTYPE</SCONAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Single-Character Flag</DESCRIPT>
+    </SEOSUBCOTX>
+    <SEOSUBCOTX>
+     <CMPNAME>SEND_DO_FG_TO_SONY</CMPNAME>
+     <SCONAME>IT_DATA</SCONAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>WMS API</DESCRIPT>
+    </SEOSUBCOTX>
+    <SEOSUBCOTX>
+     <CMPNAME>SEND_DO_SP_TO_SONY</CMPNAME>
+     <SCONAME>E_MESTYPE</SCONAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Single-Character Flag</DESCRIPT>
+    </SEOSUBCOTX>
+    <SEOSUBCOTX>
+     <CMPNAME>SEND_DO_SP_TO_SONY</CMPNAME>
+     <SCONAME>IT_DATA</SCONAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>API Sony Spare part</DESCRIPT>
+    </SEOSUBCOTX>
+    <SEOSUBCOTX>
+     <CMPNAME>SEND_DO_TO_WMS</CMPNAME>
+     <SCONAME>IT_DATA</SCONAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>WMS API</DESCRIPT>
+    </SEOSUBCOTX>
+   </DESCRIPTIONS_SUB>
+  </asx:values>
+ </asx:abap>
+</abapGit>

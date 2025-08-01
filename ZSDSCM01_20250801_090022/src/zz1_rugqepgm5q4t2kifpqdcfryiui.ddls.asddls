@@ -1,0 +1,8 @@
+@AbapCatalog.internal.setChange: 'FLDADD_NO_ASS_INFLUENCE'
+@AbapCatalog.sqlViewAppendName: 'ZZ1_96F7239BB0EA'
+
+extend view C_SRVCCONTRFINANCECARD with ZZ1_RUGQEPGM5Q4T2KIFPQDCFRYIUI
+  
+{ 
+  _ServiceDocumentExt.ZZ1_BREAK_POSITION as ZZ1_BREAK_POSITION
+}

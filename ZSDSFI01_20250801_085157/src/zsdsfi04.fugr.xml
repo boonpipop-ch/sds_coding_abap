@@ -1,0 +1,153 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<abapGit version="v1.0.0" serializer="LCL_OBJECT_FUGR" serializer_version="v1.0.0">
+ <asx:abap xmlns:asx="http://www.sap.com/abapxml" version="1.0">
+  <asx:values>
+   <AREAT>Process Create Asset</AREAT>
+   <INCLUDES>
+    <SOBJ_NAME>LZSDSFI04F01</SOBJ_NAME>
+    <SOBJ_NAME>LZSDSFI04F02</SOBJ_NAME>
+    <SOBJ_NAME>LZSDSFI04TOP</SOBJ_NAME>
+    <SOBJ_NAME>SAPLZSDSFI04</SOBJ_NAME>
+   </INCLUDES>
+   <FUNCTIONS>
+    <item>
+     <FUNCNAME>Z_SDSFI_ASSET_CREATE</FUNCNAME>
+     <SHORT_TEXT>Create Asset</SHORT_TEXT>
+     <IMPORT>
+      <RSIMP>
+       <PARAMETER>IS_INPUT</PARAMETER>
+       <REFERENCE>X</REFERENCE>
+       <TYP>ZSDSFIS011</TYP>
+      </RSIMP>
+     </IMPORT>
+     <EXPORT>
+      <RSEXP>
+       <PARAMETER>ET_RETURN</PARAMETER>
+       <REFERENCE>X</REFERENCE>
+       <TYP>ZSDSFIS012_TT</TYP>
+      </RSEXP>
+      <RSEXP>
+       <PARAMETER>E_MESSAGE</PARAMETER>
+       <REFERENCE>X</REFERENCE>
+       <TYP>CHAR255</TYP>
+      </RSEXP>
+      <RSEXP>
+       <PARAMETER>E_MESTYPE</PARAMETER>
+       <REFERENCE>X</REFERENCE>
+       <TYP>CHAR1</TYP>
+      </RSEXP>
+     </EXPORT>
+     <DOCUMENTATION>
+      <RSFDO>
+       <PARAMETER>IS_INPUT</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>Asset Class</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>ET_RETURN</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>Return Asset Number</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>E_MESSAGE</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>Char255</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>E_MESTYPE</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>Single-Character Flag</STEXT>
+      </RSFDO>
+     </DOCUMENTATION>
+    </item>
+    <item>
+     <FUNCNAME>Z_SDSFI_DISPLAY_FIX_ASSET</FUNCNAME>
+     <REMOTE_CALL>R</REMOTE_CALL>
+     <SHORT_TEXT>Display Fix Asset</SHORT_TEXT>
+     <IMPORT>
+      <RSIMP>
+       <PARAMETER>IT_FIX_ASSET_NO</PARAMETER>
+       <OPTIONAL>X</OPTIONAL>
+       <TYP>ZSDSFIS099_TT</TYP>
+      </RSIMP>
+      <RSIMP>
+       <PARAMETER>I_EMP_ID</PARAMETER>
+       <OPTIONAL>X</OPTIONAL>
+       <TYP>ANLZ-PERNR</TYP>
+      </RSIMP>
+     </IMPORT>
+     <EXPORT>
+      <RSEXP>
+       <PARAMETER>ET_RETURN</PARAMETER>
+       <TYP>ZSDSFIS098_TT</TYP>
+      </RSEXP>
+      <RSEXP>
+       <PARAMETER>E_MESTYPE</PARAMETER>
+       <TYP>CHAR1</TYP>
+      </RSEXP>
+      <RSEXP>
+       <PARAMETER>E_MESSAGE</PARAMETER>
+       <TYP>CHAR70</TYP>
+      </RSEXP>
+     </EXPORT>
+     <DOCUMENTATION>
+      <RSFDO>
+       <PARAMETER>IT_FIX_ASSET_NO</PARAMETER>
+       <KIND>P</KIND>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>I_EMP_ID</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>Personnel Number</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>ET_RETURN</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>Display Fix Asset</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>E_MESTYPE</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>Single-Character Flag</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>E_MESSAGE</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>Character field, length 70</STEXT>
+      </RSFDO>
+     </DOCUMENTATION>
+    </item>
+    <item>
+     <FUNCNAME>Z_SDSFI_TRANSFER_FIX_ASSET</FUNCNAME>
+     <REMOTE_CALL>R</REMOTE_CALL>
+     <SHORT_TEXT>Transfer Fix Asset</SHORT_TEXT>
+     <IMPORT>
+      <RSIMP>
+       <PARAMETER>IT_INPUT</PARAMETER>
+       <OPTIONAL>X</OPTIONAL>
+       <TYP>ZSDSFIS087_TT</TYP>
+      </RSIMP>
+     </IMPORT>
+     <EXPORT>
+      <RSEXP>
+       <PARAMETER>ET_MESSAGE</PARAMETER>
+       <TYP>ZSDSFIS088_TT</TYP>
+      </RSEXP>
+     </EXPORT>
+     <DOCUMENTATION>
+      <RSFDO>
+       <PARAMETER>IT_INPUT</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>For Z_SDSFI_TRANSFER_FIX_ASSET</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>ET_MESSAGE</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>For Z_SDSFI_TRANSFER_FIX_ASSET</STEXT>
+      </RSFDO>
+     </DOCUMENTATION>
+    </item>
+   </FUNCTIONS>
+  </asx:values>
+ </asx:abap>
+</abapGit>

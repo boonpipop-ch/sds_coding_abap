@@ -1,0 +1,73 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<abapGit version="v1.0.0" serializer="LCL_OBJECT_CLAS" serializer_version="v1.0.0">
+ <asx:abap xmlns:asx="http://www.sap.com/abapxml" version="1.0">
+  <asx:values>
+   <VSEOCLASS>
+    <CLSNAME>ZCL_SDSFI_ENHANCEMENT</CLSNAME>
+    <LANGU>E</LANGU>
+    <DESCRIPT>SDS FI Enhancement</DESCRIPT>
+    <STATE>1</STATE>
+    <CLSCCINCL>X</CLSCCINCL>
+    <FIXPT>X</FIXPT>
+    <UNICODE>X</UNICODE>
+   </VSEOCLASS>
+   <DESCRIPTIONS>
+    <SEOCOMPOTX>
+     <CMPNAME>GV_ITEM_TEXT</CMPNAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Item Text</DESCRIPT>
+    </SEOCOMPOTX>
+   </DESCRIPTIONS>
+   <DESCRIPTIONS_SUB>
+    <SEOSUBCOTX>
+     <CMPNAME>BTE1120</CMPNAME>
+     <SCONAME>I_BKDF</SCONAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Document Header Supplement for Recurring Entry</DESCRIPT>
+    </SEOSUBCOTX>
+    <SEOSUBCOTX>
+     <CMPNAME>BTE1120</CMPNAME>
+     <SCONAME>I_BKDFSUB</SCONAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Process Interfaces: Substitutable fields during posting</DESCRIPT>
+    </SEOSUBCOTX>
+    <SEOSUBCOTX>
+     <CMPNAME>BTE1120</CMPNAME>
+     <SCONAME>T_BKPF</SCONAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Standard Table Type for BKPF</DESCRIPT>
+    </SEOSUBCOTX>
+    <SEOSUBCOTX>
+     <CMPNAME>BTE1120</CMPNAME>
+     <SCONAME>T_BKPFSUB</SCONAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Table Type BKPF_SUBST</DESCRIPT>
+    </SEOSUBCOTX>
+    <SEOSUBCOTX>
+     <CMPNAME>BTE1120</CMPNAME>
+     <SCONAME>T_BSEC</SCONAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Table Type BSEC</DESCRIPT>
+    </SEOSUBCOTX>
+    <SEOSUBCOTX>
+     <CMPNAME>BTE1120</CMPNAME>
+     <SCONAME>T_BSEG</SCONAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Table Type for BSEG</DESCRIPT>
+    </SEOSUBCOTX>
+    <SEOSUBCOTX>
+     <CMPNAME>BTE1120</CMPNAME>
+     <SCONAME>T_BSEGSUB</SCONAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Table Type BSEG_SUBST</DESCRIPT>
+    </SEOSUBCOTX>
+    <SEOSUBCOTX>
+     <CMPNAME>CHECK_SDS</CMPNAME>
+     <SCONAME>R_RETURN</SCONAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>General Flag</DESCRIPT>
+    </SEOSUBCOTX>
+   </DESCRIPTIONS_SUB>
+  </asx:values>
+ </asx:abap>
+</abapGit>

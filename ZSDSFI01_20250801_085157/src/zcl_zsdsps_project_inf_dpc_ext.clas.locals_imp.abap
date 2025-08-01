@@ -1,0 +1,51 @@
+*"* use this source file for the definition and implementation of
+*"* local helper classes, interface definitions and type
+*"* declarations
+CLASS LCL_DATA DEFINITION.
+  PUBLIC SECTION.
+    METHODS :
+      CONSTRUCTOR.
+    CLASS-METHODS :
+      GET_WBS_INFO CHANGING CT_DATA TYPE ZSDSFIS188,
+      GET_WBS_DETAIL CHANGING CT_DATA TYPE ZSDSFIS189.
+
+ENDCLASS.
+CLASS LCL_DATA IMPLEMENTATION.
+  METHOD CONSTRUCTOR.
+
+  ENDMETHOD.
+  METHOD GET_WBS_INFO.
+
+    DATA : LR_WBS TYPE ZSDSFIS184_TT.
+
+    DATA : LV_WBS TYPE PS_POSNR.
+
+    CALL FUNCTION 'CONVERSION_EXIT_ABPSP_INPUT'
+      EXPORTING
+        INPUT     = CT_DATA-WBSNO
+      IMPORTING
+        OUTPUT    = LV_WBS
+      EXCEPTIONS
+        NOT_FOUND = 1
+        OTHERS    = 2.
+    IF SY-SUBRC <> 0.
+* Implement suitable error handling here
+    ENDIF.
+
+    LR_WBS =  VALUE #( ( SIGN  = 'I' OPTION = 'EQ' LOW = LV_WBS ) ).
+
+    CALL FUNCTION 'Z_SDSFI_PROJECT_INFO'
+      EXPORTING
+        IT_WBS      = LR_WBS
+      IMPORTING
+        ET_WBS_INFO = CT_DATA-WBS_INFO.
+  ENDMETHOD.
+  METHOD GET_WBS_DETAIL.
+    CALL FUNCTION 'Z_SDSFI_PROJECT_DETAIL'
+      EXPORTING
+        IT_WBS             = CT_DATA-WBSNO
+      IMPORTING
+        ET_WBS_DETAIL      = CT_DATA-COST_DETAIL
+        ET_WBS_COST_DETAIL = CT_DATA-REVENUE_DETAIL.
+  ENDMETHOD.
+ENDCLASS.

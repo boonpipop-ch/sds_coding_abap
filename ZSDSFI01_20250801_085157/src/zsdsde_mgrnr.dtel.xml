@@ -1,0 +1,24 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<abapGit version="v1.0.0" serializer="LCL_OBJECT_DTEL" serializer_version="v1.0.0">
+ <asx:abap xmlns:asx="http://www.sap.com/abapxml" version="1.0">
+  <asx:values>
+   <DD04V>
+    <ROLLNAME>ZSDSDE_MGRNR</ROLLNAME>
+    <DDLANGUAGE>E</DDLANGUAGE>
+    <HEADLEN>23</HEADLEN>
+    <SCRLEN1>10</SCRLEN1>
+    <SCRLEN2>19</SCRLEN2>
+    <SCRLEN3>23</SCRLEN3>
+    <DDTEXT>Manager Personal Number</DDTEXT>
+    <REPTEXT>Manager Personal Number</REPTEXT>
+    <SCRTEXT_S>MGR Num</SCRTEXT_S>
+    <SCRTEXT_M>MGR Personal Number</SCRTEXT_M>
+    <SCRTEXT_L>Manager Personal Number</SCRTEXT_L>
+    <DTELMASTER>E</DTELMASTER>
+    <DATATYPE>NUMC</DATATYPE>
+    <LENG>000008</LENG>
+    <OUTPUTLEN>000008</OUTPUTLEN>
+   </DD04V>
+  </asx:values>
+ </asx:abap>
+</abapGit>

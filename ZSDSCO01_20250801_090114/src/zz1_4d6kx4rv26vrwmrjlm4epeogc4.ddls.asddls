@@ -1,0 +1,8 @@
+@AbapCatalog.internal.setChange: 'FLDADD_NO_ASS_INFLUENCE'
+@AbapCatalog.sqlViewAppendName: 'ZZ1_0C765FCC6EEF'
+
+extend view C_PNLPLNACTLCMTMTJRNLENTRITMQ with ZZ1_4D6KX4RV26VRWMRJLM4EPEOGC4
+  
+{ 
+  I_ActualPlanJournalEntryItem.ZZ1_ZZREFTN_PAM as ZZ1_ZZREFTN_PAM
+}

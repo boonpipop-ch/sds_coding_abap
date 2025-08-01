@@ -1,0 +1,59 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<abapGit version="v1.0.0" serializer="LCL_OBJECT_DTEL" serializer_version="v1.0.0">
+ <asx:abap xmlns:asx="http://www.sap.com/abapxml" version="1.0">
+  <asx:values>
+   <DD04V>
+    <ROLLNAME>ZZ1_MVGR1_D</ROLLNAME>
+    <DDLANGUAGE>E</DDLANGUAGE>
+    <DOMNAME>CFD_CUSTOM_CODE_DESCRIPTION</DOMNAME>
+    <LOGFLAG>X</LOGFLAG>
+    <HEADLEN>55</HEADLEN>
+    <SCRLEN3>40</SCRLEN3>
+    <DDTEXT>Material Group 1 (Desc.)</DDTEXT>
+    <REPTEXT>Material Group 1 (Desc.)</REPTEXT>
+    <SCRTEXT_L>Material Group 1 (Desc.)</SCRTEXT_L>
+    <DTELMASTER>E</DTELMASTER>
+    <REFKIND>D</REFKIND>
+   </DD04V>
+   <I18N_LANGS>
+    <LANGU>2</LANGU>
+    <LANGU>7</LANGU>
+    <LANGU>D</LANGU>
+    <LANGU>J</LANGU>
+    <LANGU>쁩</LANGU>
+   </I18N_LANGS>
+   <DD04_TEXTS>
+    <item>
+     <DDLANGUAGE>2</DDLANGUAGE>
+     <DDTEXT>กลุ่มวัสดุ 1(คำอธิบาย)</DDTEXT>
+     <REPTEXT>กลุ่มวัสดุ 1(คำอธิบาย)</REPTEXT>
+     <SCRTEXT_L>กลุ่มวัสดุ 1(คำอธิบาย)</SCRTEXT_L>
+    </item>
+    <item>
+     <DDLANGUAGE>7</DDLANGUAGE>
+     <DDTEXT>Kumpulan Bahan 1 (Prhln)</DDTEXT>
+     <REPTEXT>Kumpulan Bahan 1 (Prhln)</REPTEXT>
+     <SCRTEXT_L>Kumpulan Bahan 1 (Prhln)</SCRTEXT_L>
+    </item>
+    <item>
+     <DDLANGUAGE>D</DDLANGUAGE>
+     <DDTEXT>Warengruppe 1 (Beschr.)</DDTEXT>
+     <REPTEXT>Warengruppe 1 (Beschr.)</REPTEXT>
+     <SCRTEXT_L>Warengruppe 1 (Beschr.)</SCRTEXT_L>
+    </item>
+    <item>
+     <DDLANGUAGE>J</DDLANGUAGE>
+     <DDTEXT>品目グループ 1(内容説明)</DDTEXT>
+     <REPTEXT>品目グループ 1(内容説明)</REPTEXT>
+     <SCRTEXT_L>品目グループ 1(内容説明)</SCRTEXT_L>
+    </item>
+    <item>
+     <DDLANGUAGE>쁩</DDLANGUAGE>
+     <DDTEXT>Nhóm vật tư 1 (Desc.)</DDTEXT>
+     <REPTEXT>Nhóm vật tư 1 (Desc.)</REPTEXT>
+     <SCRTEXT_L>Nhóm vật tư 1 (Desc.)</SCRTEXT_L>
+    </item>
+   </DD04_TEXTS>
+  </asx:values>
+ </asx:abap>
+</abapGit>

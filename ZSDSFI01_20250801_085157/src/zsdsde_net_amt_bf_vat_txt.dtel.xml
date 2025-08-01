@@ -1,0 +1,19 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<abapGit version="v1.0.0" serializer="LCL_OBJECT_DTEL" serializer_version="v1.0.0">
+ <asx:abap xmlns:asx="http://www.sap.com/abapxml" version="1.0">
+  <asx:values>
+   <DD04V>
+    <ROLLNAME>ZSDSDE_NET_AMT_BF_VAT_TXT</ROLLNAME>
+    <DDLANGUAGE>E</DDLANGUAGE>
+    <DOMNAME>ZSDSDM_AMT_TXT</DOMNAME>
+    <HEADLEN>55</HEADLEN>
+    <SCRLEN3>40</SCRLEN3>
+    <DDTEXT>Goods/Service Amount For Calculation Tax(Exclude Vat)</DDTEXT>
+    <REPTEXT>มูลค่าสินค้า/บริการที่นำมาคิดภาษี (ไม่รวมภาษีมูลค่าเพิ่</REPTEXT>
+    <SCRTEXT_L>มูลค่าสินค้า/บริการที่นำมาคิดภาษี (ไม่รว</SCRTEXT_L>
+    <DTELMASTER>E</DTELMASTER>
+    <REFKIND>D</REFKIND>
+   </DD04V>
+  </asx:values>
+ </asx:abap>
+</abapGit>

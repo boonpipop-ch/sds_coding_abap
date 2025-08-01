@@ -1,0 +1,8 @@
+@AbapCatalog.internal.setChange: 'FLDADD_NO_ASS_INFLUENCE'
+@AbapCatalog.sqlViewAppendName: 'ZZ1_E1762979646E'
+
+extend view FIN_SUBVAL_ACCTGSRVCDOC with ZZ1_VUPGKWNNXLZ5IJV5ZHKL7PDKTU
+  
+{ 
+  _SrvcDocument.ZZ1_PROACTIVITY as ZZ1_PROACTIVITY
+}

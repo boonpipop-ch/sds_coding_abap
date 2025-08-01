@@ -1,0 +1,108 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<abapGit version="v1.0.0" serializer="LCL_OBJECT_FUGR" serializer_version="v1.0.0">
+ <asx:abap xmlns:asx="http://www.sap.com/abapxml" version="1.0">
+  <asx:values>
+   <AREAT>Interface Material Master</AREAT>
+   <INCLUDES>
+    <SOBJ_NAME>LZSDSMM06TOP</SOBJ_NAME>
+    <SOBJ_NAME>SAPLZSDSMM06</SOBJ_NAME>
+   </INCLUDES>
+   <FUNCTIONS>
+    <item>
+     <FUNCNAME>Z_SDSMM_SEND_MAT_MASTER</FUNCNAME>
+     <REMOTE_CALL>R</REMOTE_CALL>
+     <SHORT_TEXT>Interface Material Master</SHORT_TEXT>
+     <IMPORT>
+      <RSIMP>
+       <PARAMETER>IR_DATE</PARAMETER>
+       <OPTIONAL>X</OPTIONAL>
+       <TYP>TAB_ISUR_DATUM</TYP>
+      </RSIMP>
+      <RSIMP>
+       <PARAMETER>IR_MATNR</PARAMETER>
+       <OPTIONAL>X</OPTIONAL>
+       <TYP>TAB_ISUR_RMATNR</TYP>
+      </RSIMP>
+      <RSIMP>
+       <PARAMETER>I_AL11</PARAMETER>
+       <OPTIONAL>X</OPTIONAL>
+       <TYP>CHAR255</TYP>
+      </RSIMP>
+      <RSIMP>
+       <PARAMETER>IR_LGORT</PARAMETER>
+       <OPTIONAL>X</OPTIONAL>
+       <TYP>ZSDSMMS043_TT</TYP>
+      </RSIMP>
+     </IMPORT>
+     <EXPORT>
+      <RSEXP>
+       <PARAMETER>ET_DATA_FILE</PARAMETER>
+       <TYP>EREC_T_STRING</TYP>
+      </RSEXP>
+      <RSEXP>
+       <PARAMETER>E_SEPARATOR</PARAMETER>
+       <TYP>CHAR10</TYP>
+      </RSEXP>
+      <RSEXP>
+       <PARAMETER>E_FILE_NAME</PARAMETER>
+       <TYP>STRING</TYP>
+      </RSEXP>
+      <RSEXP>
+       <PARAMETER>E_FILE_PATH</PARAMETER>
+       <TYP>STRING</TYP>
+      </RSEXP>
+      <RSEXP>
+       <PARAMETER>E_STATUS</PARAMETER>
+       <TYP>FLAG</TYP>
+      </RSEXP>
+     </EXPORT>
+     <DOCUMENTATION>
+      <RSFDO>
+       <PARAMETER>IR_DATE</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>Structure for date ranges</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>IR_MATNR</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>material range</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>I_AL11</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>Char255</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>IR_LGORT</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>Storage location range</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>ET_DATA_FILE</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>EREC_T_STRING</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>E_SEPARATOR</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>Character Field with Length 10</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>E_FILE_NAME</PARAMETER>
+       <KIND>P</KIND>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>E_FILE_PATH</PARAMETER>
+       <KIND>P</KIND>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>E_STATUS</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>General Flag</STEXT>
+      </RSFDO>
+     </DOCUMENTATION>
+    </item>
+   </FUNCTIONS>
+  </asx:values>
+ </asx:abap>
+</abapGit>

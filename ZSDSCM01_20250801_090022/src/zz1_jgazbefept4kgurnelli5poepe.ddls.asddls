@@ -1,0 +1,8 @@
+@AbapCatalog.internal.setChange: 'FLDADD_NO_ASS_INFLUENCE'
+@AbapCatalog.sqlViewAppendName: 'ZZ1_3F9F06C486AA'
+
+extend view A_BUSINESSSOLUTIONQUOTATION with ZZ1_JGAZBEFEPT4KGURNELLI5POEPE
+  
+{ 
+  _Extension.ZZ1_ERROR_CODE as ZZ1_ERROR_CODE
+}

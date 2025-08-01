@@ -1,0 +1,8 @@
+@AbapCatalog.internal.setChange: 'FLDADD_NO_ASS_INFLUENCE'
+@AbapCatalog.sqlViewAppendName: 'ZZ1_764DEF29FDB7'
+
+extend view I_GLACCOUNTLINEITEMSEMTAG with ZZ1_OBTFXUEJZIH73K4FOR6QTVQ7PQ
+  
+{ 
+  _Extension.ZZ1_ZZCAV_MSE as ZZ1_ZZCAV_MSE
+}

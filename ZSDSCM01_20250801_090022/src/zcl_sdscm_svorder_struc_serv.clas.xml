@@ -1,0 +1,37 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<abapGit version="v1.0.0" serializer="LCL_OBJECT_CLAS" serializer_version="v1.0.0">
+ <asx:abap xmlns:asx="http://www.sap.com/abapxml" version="1.0">
+  <asx:values>
+   <VSEOCLASS>
+    <CLSNAME>ZCL_SDSCM_SVORDER_STRUC_SERV</CLSNAME>
+    <LANGU>E</LANGU>
+    <DESCRIPT>SDS: Service Order Structure Service Class</DESCRIPT>
+    <STATE>1</STATE>
+    <CLSCCINCL>X</CLSCCINCL>
+    <FIXPT>X</FIXPT>
+    <UNICODE>X</UNICODE>
+   </VSEOCLASS>
+   <DESCRIPTIONS>
+    <SEOCOMPOTX>
+     <CMPNAME>MAINTAIN_SVORDER_STRUCTURE</CMPNAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Maintain Service Order Structure</DESCRIPT>
+    </SEOCOMPOTX>
+   </DESCRIPTIONS>
+   <DESCRIPTIONS_SUB>
+    <SEOSUBCOTX>
+     <CMPNAME>MAINTAIN_SVORDER_STRUCTURE</CMPNAME>
+     <SCONAME>ES_RESPONSE</SCONAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>JSON Structure for Service Order Service</DESCRIPT>
+    </SEOSUBCOTX>
+    <SEOSUBCOTX>
+     <CMPNAME>MAINTAIN_SVORDER_STRUCTURE</CMPNAME>
+     <SCONAME>IS_REQUEST</SCONAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>JSON Structure for Service Order Service</DESCRIPT>
+    </SEOSUBCOTX>
+   </DESCRIPTIONS_SUB>
+  </asx:values>
+ </asx:abap>
+</abapGit>

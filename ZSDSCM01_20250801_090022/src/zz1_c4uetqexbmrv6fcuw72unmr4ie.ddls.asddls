@@ -1,0 +1,8 @@
+@AbapCatalog.internal.setChange: 'FLDADD_NO_ASS_INFLUENCE'
+@AbapCatalog.sqlViewAppendName: 'ZZ1_72C561D520FE'
+
+extend view FIN_SUBVAL_ACCTGSRVCDOC with ZZ1_C4UETQEXBMRV6FCUW72UNMR4IE
+  
+{ 
+  _SrvcDocument.ZZ1_PARTNER_SEGMENT as ZZ1_PARTNER_SEGMENT
+}

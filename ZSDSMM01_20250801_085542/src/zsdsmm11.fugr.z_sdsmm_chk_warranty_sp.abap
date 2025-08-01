@@ -1,0 +1,99 @@
+FUNCTION Z_SDSMM_CHK_WARRANTY_SP.
+*"----------------------------------------------------------------------
+*"*"Local Interface:
+*"  IMPORTING
+*"     VALUE(P_MATNR) TYPE  MARA-MATNR
+*"     VALUE(P_NETWR) TYPE  VBAP-NETWR OPTIONAL
+*"     VALUE(P_KWERT) TYPE  KONV-KWERT OPTIONAL
+*"     VALUE(P_VTWEG) TYPE  VBAK-VTWEG
+*"     VALUE(P_VKBUR) TYPE  VBAK-VKBUR
+*"  EXPORTING
+*"     REFERENCE(ISWARRANTY) TYPE  CHAR01
+*"  TABLES
+*"      ITAB STRUCTURE  ZSDSCAC002
+*"----------------------------------------------------------------------
+  CHECK : P_MATNR IS NOT INITIAL,
+*          p_netwr IS NOT INITIAL,
+*          p_kwert IS NOT INITIAL,
+           P_VTWEG IS NOT INITIAL,
+           P_VKBUR IS NOT INITIAL,
+           ITAB[] IS NOT INITIAL.
+
+  DATA : WA           TYPE ZSDSCAC002,
+         IT_WARRANTY  TYPE TABLE OF ZSDSSDC007 WITH HEADER LINE,
+         WA_WARRANTY  TYPE ZSDSSDC007,
+         MAT_CONF     TYPE ZSDSCAC002-VALUE,
+         PRDHA        TYPE MARA-PRDHA,
+         PERCENT      TYPE P,
+         PERCENT_CONF TYPE P,
+         PH1          TYPE ZSDSSDC007-PH1,
+         PH2          TYPE ZSDSSDC007-PH2,
+         PH3          TYPE ZSDSSDC007-PH3.
+
+
+
+  SORT ITAB[] BY VALUE.
+  MAT_CONF = P_MATNR.
+
+  READ TABLE ITAB WITH KEY VALUE = MAT_CONF." BINARY SEARCH.
+
+  CHECK SY-SUBRC EQ 0.
+
+  SELECT SINGLE PRDHA INTO (PRDHA) FROM MARA WHERE MATNR EQ P_MATNR.
+  PH1   = PRDHA+0(5).
+  PH2   = PRDHA+5(5).
+  PH3   = PRDHA+10(8).
+
+  CASE P_VTWEG.
+    WHEN '10'.
+
+      SELECT SINGLE *  INTO WA_WARRANTY FROM ZSDSSDC007
+        WHERE VTWEG = P_VTWEG
+        AND VKBUR = P_VKBUR
+        AND PH1   = PH1
+        AND PH2   = PH2.
+*        AND ph3   = ph3. "Remove by Wantanee 20191120  ITR20191106-797
+
+      IF SY-SUBRC EQ 0.
+        ISWARRANTY = 'W'.
+      ENDIF.
+
+    WHEN '20'.
+      CHECK : P_NETWR IS NOT INITIAL,
+              P_KWERT IS NOT INITIAL.
+
+      SELECT SINGLE *  INTO WA_WARRANTY FROM ZSDSSDC007
+        WHERE VTWEG = P_VTWEG
+        AND VKBUR = P_VKBUR
+        AND PH1   = PH1
+        AND PH2   = PH2
+        AND PH3   = PH3.
+
+      IF SY-SUBRC EQ 0.
+        PERCENT = ( P_NETWR * 100 ) / P_KWERT.
+        IF PERCENT GE WA_WARRANTY-LP_PERCENT.
+          ISWARRANTY = 'W'.
+        ENDIF.
+      ENDIF.
+
+      CHECK ISWARRANTY IS INITIAL.
+
+      SELECT SINGLE *  INTO WA_WARRANTY FROM ZSDSSDC007
+        WHERE VTWEG = P_VTWEG
+        AND VKBUR = P_VKBUR
+        AND PH1   = PH1
+        AND PH2   = PH2.
+
+      IF SY-SUBRC EQ 0.
+        PERCENT = ( P_NETWR * 100 ) / P_KWERT.
+        IF PERCENT GE WA_WARRANTY-LP_PERCENT.
+          ISWARRANTY = 'W'.
+        ENDIF.
+      ENDIF.
+  ENDCASE.
+
+
+
+
+
+ENDFUNCTION.

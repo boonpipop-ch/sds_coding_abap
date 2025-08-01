@@ -1,0 +1,37 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<abapGit version="v1.0.0" serializer="LCL_OBJECT_CLAS" serializer_version="v1.0.0">
+ <asx:abap xmlns:asx="http://www.sap.com/abapxml" version="1.0">
+  <asx:values>
+   <VSEOCLASS>
+    <CLSNAME>ZCL_SDSCO_IO_BUDGET_REMAIN_SRV</CLSNAME>
+    <LANGU>E</LANGU>
+    <DESCRIPT>IO Budget remaining</DESCRIPT>
+    <STATE>1</STATE>
+    <CLSCCINCL>X</CLSCCINCL>
+    <FIXPT>X</FIXPT>
+    <UNICODE>X</UNICODE>
+   </VSEOCLASS>
+   <DESCRIPTIONS>
+    <SEOCOMPOTX>
+     <CMPNAME>IO_AVAILABLE_BUDGET_GET</CMPNAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>IO Available Budget</DESCRIPT>
+    </SEOCOMPOTX>
+   </DESCRIPTIONS>
+   <DESCRIPTIONS_SUB>
+    <SEOSUBCOTX>
+     <CMPNAME>IO_AVAILABLE_BUDGET_GET</CMPNAME>
+     <SCONAME>ES_RESPONSE</SCONAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>JSON Structure IO Remaining Budget</DESCRIPT>
+    </SEOSUBCOTX>
+    <SEOSUBCOTX>
+     <CMPNAME>IO_AVAILABLE_BUDGET_GET</CMPNAME>
+     <SCONAME>IS_REQUEST</SCONAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>JSON Structure IO Remaining Budget</DESCRIPT>
+    </SEOSUBCOTX>
+   </DESCRIPTIONS_SUB>
+  </asx:values>
+ </asx:abap>
+</abapGit>

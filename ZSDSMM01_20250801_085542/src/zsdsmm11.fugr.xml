@@ -1,0 +1,92 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<abapGit version="v1.0.0" serializer="LCL_OBJECT_FUGR" serializer_version="v1.0.0">
+ <asx:abap xmlns:asx="http://www.sap.com/abapxml" version="1.0">
+  <asx:values>
+   <AREAT>Check config special model for warranty</AREAT>
+   <INCLUDES>
+    <SOBJ_NAME>LZSDSMM11TOP</SOBJ_NAME>
+    <SOBJ_NAME>SAPLZSDSMM11</SOBJ_NAME>
+   </INCLUDES>
+   <FUNCTIONS>
+    <item>
+     <FUNCNAME>Z_SDSMM_CHK_WARRANTY_SP</FUNCNAME>
+     <SHORT_TEXT>Check config special model for warranty</SHORT_TEXT>
+     <IMPORT>
+      <RSIMP>
+       <PARAMETER>P_MATNR</PARAMETER>
+       <TYP>MARA-MATNR</TYP>
+      </RSIMP>
+      <RSIMP>
+       <PARAMETER>P_NETWR</PARAMETER>
+       <OPTIONAL>X</OPTIONAL>
+       <TYP>VBAP-NETWR</TYP>
+      </RSIMP>
+      <RSIMP>
+       <PARAMETER>P_KWERT</PARAMETER>
+       <OPTIONAL>X</OPTIONAL>
+       <TYP>KONV-KWERT</TYP>
+      </RSIMP>
+      <RSIMP>
+       <PARAMETER>P_VTWEG</PARAMETER>
+       <TYP>VBAK-VTWEG</TYP>
+      </RSIMP>
+      <RSIMP>
+       <PARAMETER>P_VKBUR</PARAMETER>
+       <TYP>VBAK-VKBUR</TYP>
+      </RSIMP>
+     </IMPORT>
+     <EXPORT>
+      <RSEXP>
+       <PARAMETER>ISWARRANTY</PARAMETER>
+       <REFERENCE>X</REFERENCE>
+       <TYP>CHAR01</TYP>
+      </RSEXP>
+     </EXPORT>
+     <TABLES>
+      <RSTBL>
+       <PARAMETER>ITAB</PARAMETER>
+       <DBSTRUCT>ZSDSCAC002</DBSTRUCT>
+      </RSTBL>
+     </TABLES>
+     <DOCUMENTATION>
+      <RSFDO>
+       <PARAMETER>P_MATNR</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>Material Number</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>P_NETWR</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>Net Value of the Order Item in Document Currency</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>P_KWERT</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>Condition Value</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>P_VTWEG</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>Distribution Channel</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>P_VKBUR</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>Sales Office</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>ISWARRANTY</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>Character Field of Length 1</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>ITAB</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>Constant Table for SDS Development</STEXT>
+      </RSFDO>
+     </DOCUMENTATION>
+    </item>
+   </FUNCTIONS>
+  </asx:values>
+ </asx:abap>
+</abapGit>

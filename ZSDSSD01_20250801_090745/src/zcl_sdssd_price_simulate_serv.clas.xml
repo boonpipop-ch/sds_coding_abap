@@ -1,0 +1,529 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<abapGit version="v1.0.0" serializer="LCL_OBJECT_CLAS" serializer_version="v1.0.0">
+ <asx:abap xmlns:asx="http://www.sap.com/abapxml" version="1.0">
+  <asx:values>
+   <VSEOCLASS>
+    <CLSNAME>ZCL_SDSSD_PRICE_SIMULATE_SERV</CLSNAME>
+    <LANGU>E</LANGU>
+    <DESCRIPT>SDS: Project Structure Service Class</DESCRIPT>
+    <STATE>1</STATE>
+    <CLSCCINCL>X</CLSCCINCL>
+    <FIXPT>X</FIXPT>
+    <UNICODE>X</UNICODE>
+   </VSEOCLASS>
+   <TPOOL>
+    <item>
+     <ID>I</ID>
+     <KEY>E00</KEY>
+     <ENTRY>Invalid Pricing Date value &amp;1.</ENTRY>
+     <LENGTH>100</LENGTH>
+    </item>
+    <item>
+     <ID>I</ID>
+     <KEY>E01</KEY>
+     <ENTRY>Payment Term: &amp;1 does not exist.</ENTRY>
+     <LENGTH>100</LENGTH>
+    </item>
+    <item>
+     <ID>I</ID>
+     <KEY>E02</KEY>
+     <ENTRY>Sales Group: &amp;1 does not exist.</ENTRY>
+     <LENGTH>100</LENGTH>
+    </item>
+    <item>
+     <ID>I</ID>
+     <KEY>E03</KEY>
+     <ENTRY>Material: &amp;1 does not exist.</ENTRY>
+     <LENGTH>100</LENGTH>
+    </item>
+    <item>
+     <ID>I</ID>
+     <KEY>E04</KEY>
+     <ENTRY>Sale unit: &amp;1 does not exist.</ENTRY>
+     <LENGTH>100</LENGTH>
+    </item>
+    <item>
+     <ID>I</ID>
+     <KEY>E05</KEY>
+     <ENTRY>Distribution Channel: &amp;1 does not exist</ENTRY>
+     <LENGTH>100</LENGTH>
+    </item>
+    <item>
+     <ID>I</ID>
+     <KEY>E07</KEY>
+     <ENTRY>Quotation Order Type: &amp;1 does not exist.</ENTRY>
+     <LENGTH>100</LENGTH>
+    </item>
+    <item>
+     <ID>I</ID>
+     <KEY>E99</KEY>
+     <ENTRY>An error occurred processing at QuoteItem level.</ENTRY>
+     <LENGTH>100</LENGTH>
+    </item>
+    <item>
+     <ID>I</ID>
+     <KEY>M00</KEY>
+     <ENTRY>Sales Order Type is required.</ENTRY>
+     <LENGTH>100</LENGTH>
+    </item>
+    <item>
+     <ID>I</ID>
+     <KEY>M01</KEY>
+     <ENTRY>Pricing Date is required.</ENTRY>
+     <LENGTH>100</LENGTH>
+    </item>
+    <item>
+     <ID>I</ID>
+     <KEY>M02</KEY>
+     <ENTRY>Quotation Order Type is required.</ENTRY>
+     <LENGTH>100</LENGTH>
+    </item>
+    <item>
+     <ID>I</ID>
+     <KEY>M03</KEY>
+     <ENTRY>Distribution Channel is required.</ENTRY>
+     <LENGTH>100</LENGTH>
+    </item>
+    <item>
+     <ID>I</ID>
+     <KEY>M04</KEY>
+     <ENTRY>Sales Group is required.</ENTRY>
+     <LENGTH>100</LENGTH>
+    </item>
+    <item>
+     <ID>I</ID>
+     <KEY>M05</KEY>
+     <ENTRY>Customer Sold-to is required.</ENTRY>
+     <LENGTH>100</LENGTH>
+    </item>
+    <item>
+     <ID>I</ID>
+     <KEY>M06</KEY>
+     <ENTRY>Material is required.</ENTRY>
+     <LENGTH>100</LENGTH>
+    </item>
+    <item>
+     <ID>I</ID>
+     <KEY>M07</KEY>
+     <ENTRY>Item Number is required.</ENTRY>
+     <LENGTH>100</LENGTH>
+    </item>
+    <item>
+     <ID>I</ID>
+     <KEY>M08</KEY>
+     <ENTRY>Sale unit is required.</ENTRY>
+     <LENGTH>100</LENGTH>
+    </item>
+    <item>
+     <ID>I</ID>
+     <KEY>M09</KEY>
+     <ENTRY>Payment Term is required.</ENTRY>
+     <LENGTH>100</LENGTH>
+    </item>
+    <item>
+     <ID>I</ID>
+     <KEY>S00</KEY>
+     <ENTRY>Price simulate success</ENTRY>
+     <LENGTH>100</LENGTH>
+    </item>
+   </TPOOL>
+   <DESCRIPTIONS>
+    <SEOCOMPOTX>
+     <CMPNAME>COLLECT_RESPONSE</CMPNAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Collect response table</DESCRIPT>
+    </SEOCOMPOTX>
+    <SEOCOMPOTX>
+     <CMPNAME>CONCAT_MESSAGE</CMPNAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Concatenate message</DESCRIPT>
+    </SEOCOMPOTX>
+    <SEOCOMPOTX>
+     <CMPNAME>CONVERT_UNIT_IN</CMPNAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Coversion Unit to Internal value</DESCRIPT>
+    </SEOCOMPOTX>
+    <SEOCOMPOTX>
+     <CMPNAME>CONVERT_UNIT_OUT</CMPNAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Coversion Unit to External value</DESCRIPT>
+    </SEOCOMPOTX>
+    <SEOCOMPOTX>
+     <CMPNAME>GC_REPID</CMPNAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>ABAP Program Name</DESCRIPT>
+    </SEOCOMPOTX>
+    <SEOCOMPOTX>
+     <CMPNAME>GET_CONSTANT</CMPNAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Get Gen C constant</DESCRIPT>
+    </SEOCOMPOTX>
+    <SEOCOMPOTX>
+     <CMPNAME>GET_MD_UNIT</CMPNAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Get Unit master data</DESCRIPT>
+    </SEOCOMPOTX>
+    <SEOCOMPOTX>
+     <CMPNAME>GET_SALE_FOR_MATERIAL</CMPNAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Get Sale data for material</DESCRIPT>
+    </SEOCOMPOTX>
+    <SEOCOMPOTX>
+     <CMPNAME>GF_DIVISION</CMPNAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Division</DESCRIPT>
+    </SEOCOMPOTX>
+    <SEOCOMPOTX>
+     <CMPNAME>GF_SALEORG</CMPNAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Sales Organization</DESCRIPT>
+    </SEOCOMPOTX>
+    <SEOCOMPOTX>
+     <CMPNAME>PROCESS_PRICE_SIMULATE</CMPNAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Processs Pricing simulation</DESCRIPT>
+    </SEOCOMPOTX>
+    <SEOCOMPOTX>
+     <CMPNAME>REPLACE_MESSAGE</CMPNAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Replace Message</DESCRIPT>
+    </SEOCOMPOTX>
+    <SEOCOMPOTX>
+     <CMPNAME>UPDATE_QUOTE_ITEM</CMPNAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Update pricing for QuoteItem</DESCRIPT>
+    </SEOCOMPOTX>
+    <SEOCOMPOTX>
+     <CMPNAME>VALIDATE_CUSTOMER</CMPNAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Validate Customer Master Sales Data</DESCRIPT>
+    </SEOCOMPOTX>
+    <SEOCOMPOTX>
+     <CMPNAME>VALIDATE_DIST_CHANNEL</CMPNAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Validate Distribution Channel</DESCRIPT>
+    </SEOCOMPOTX>
+    <SEOCOMPOTX>
+     <CMPNAME>VALIDATE_DOC_TYPE</CMPNAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Validate Sales Document type</DESCRIPT>
+    </SEOCOMPOTX>
+    <SEOCOMPOTX>
+     <CMPNAME>VALIDATE_HEADER</CMPNAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Validate Header data</DESCRIPT>
+    </SEOCOMPOTX>
+    <SEOCOMPOTX>
+     <CMPNAME>VALIDATE_ITEM</CMPNAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Validate Item data</DESCRIPT>
+    </SEOCOMPOTX>
+    <SEOCOMPOTX>
+     <CMPNAME>VALIDATE_PAYMENT_TERM</CMPNAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Validate payment term</DESCRIPT>
+    </SEOCOMPOTX>
+    <SEOCOMPOTX>
+     <CMPNAME>VALIDATE_REQUEST</CMPNAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Validate Request data</DESCRIPT>
+    </SEOCOMPOTX>
+    <SEOCOMPOTX>
+     <CMPNAME>VALIDATE_SALE_GROUP</CMPNAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Validate Sale Group</DESCRIPT>
+    </SEOCOMPOTX>
+   </DESCRIPTIONS>
+   <DESCRIPTIONS_SUB>
+    <SEOSUBCOTX>
+     <CMPNAME>COLLECT_RESPONSE</CMPNAME>
+     <SCONAME>CT_RESPONSE</SCONAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Table Type for Response Message Strcuture</DESCRIPT>
+    </SEOSUBCOTX>
+    <SEOSUBCOTX>
+     <CMPNAME>COLLECT_RESPONSE</CMPNAME>
+     <SCONAME>IF_REST_MESSAGE</SCONAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Response Message</DESCRIPT>
+    </SEOSUBCOTX>
+    <SEOSUBCOTX>
+     <CMPNAME>COLLECT_RESPONSE</CMPNAME>
+     <SCONAME>IF_REST_STATUS</SCONAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>REST Response Status</DESCRIPT>
+    </SEOSUBCOTX>
+    <SEOSUBCOTX>
+     <CMPNAME>CONVERT_UNIT_IN</CMPNAME>
+     <SCONAME>EF_MSG_TX</SCONAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Response Message</DESCRIPT>
+    </SEOSUBCOTX>
+    <SEOSUBCOTX>
+     <CMPNAME>CONVERT_UNIT_IN</CMPNAME>
+     <SCONAME>EF_RC</SCONAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>ABAP System Field: Return Code of ABAP Statements</DESCRIPT>
+    </SEOSUBCOTX>
+    <SEOSUBCOTX>
+     <CMPNAME>CONVERT_UNIT_IN</CMPNAME>
+     <SCONAME>EF_UNIT_IN</SCONAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Base Unit of Measure</DESCRIPT>
+    </SEOSUBCOTX>
+    <SEOSUBCOTX>
+     <CMPNAME>CONVERT_UNIT_IN</CMPNAME>
+     <SCONAME>IF_UNIT</SCONAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Base Unit of Measure</DESCRIPT>
+    </SEOSUBCOTX>
+    <SEOSUBCOTX>
+     <CMPNAME>CONVERT_UNIT_OUT</CMPNAME>
+     <SCONAME>IF_UNIT</SCONAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Base Unit of Measure</DESCRIPT>
+    </SEOSUBCOTX>
+    <SEOSUBCOTX>
+     <CMPNAME>PROCESS_PRICE_SIMULATE</CMPNAME>
+     <SCONAME>CS_RESPONSE</SCONAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>JSON Structure Simulation Price From Salesforce</DESCRIPT>
+    </SEOSUBCOTX>
+    <SEOSUBCOTX>
+     <CMPNAME>PROCESS_PRICE_SIMULATE</CMPNAME>
+     <SCONAME>IS_BAPI_SDHEAD</SCONAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Communication Fields: Sales and Distribution Document Header</DESCRIPT>
+    </SEOSUBCOTX>
+    <SEOSUBCOTX>
+     <CMPNAME>PROCESS_PRICE_SIMULATE</CMPNAME>
+     <SCONAME>IS_REQUEST</SCONAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>JSON Structure Simulation Price From Salesforce</DESCRIPT>
+    </SEOSUBCOTX>
+    <SEOSUBCOTX>
+     <CMPNAME>PROCESS_PRICE_SIMULATE</CMPNAME>
+     <SCONAME>IT_BAPI_ITEMIN</SCONAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>TT Kommunikationsfelder Vertriebsbelegposition anlegen WWW</DESCRIPT>
+    </SEOSUBCOTX>
+    <SEOSUBCOTX>
+     <CMPNAME>PROCESS_PRICE_SIMULATE</CMPNAME>
+     <SCONAME>IT_BAPI_PARTNR</SCONAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Communications Fields: SD Document Partner: WWW</DESCRIPT>
+    </SEOSUBCOTX>
+    <SEOSUBCOTX>
+     <CMPNAME>PROCESS_PRICE_SIMULATE</CMPNAME>
+     <SCONAME>IT_BAPI_SCHDL</SCONAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Table Category for BAPISCHDL</DESCRIPT>
+    </SEOSUBCOTX>
+    <SEOSUBCOTX>
+     <CMPNAME>REPLACE_MESSAGE</CMPNAME>
+     <SCONAME>IF_MSGTX</SCONAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Response Message</DESCRIPT>
+    </SEOSUBCOTX>
+    <SEOSUBCOTX>
+     <CMPNAME>REPLACE_MESSAGE</CMPNAME>
+     <SCONAME>RF_MSGTX</SCONAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Response Message</DESCRIPT>
+    </SEOSUBCOTX>
+    <SEOSUBCOTX>
+     <CMPNAME>UPDATE_QUOTE_ITEM</CMPNAME>
+     <SCONAME>CT_QUOTE_ITEM</SCONAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Table type for QuoteItem: Simulation Price From Salesforce</DESCRIPT>
+    </SEOSUBCOTX>
+    <SEOSUBCOTX>
+     <CMPNAME>UPDATE_QUOTE_ITEM</CMPNAME>
+     <SCONAME>IT_BAPI_COND</SCONAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Table Category for BAPICOND</DESCRIPT>
+    </SEOSUBCOTX>
+    <SEOSUBCOTX>
+     <CMPNAME>UPDATE_QUOTE_ITEM</CMPNAME>
+     <SCONAME>IT_BAPI_ITEMOUT</SCONAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Communication Fields: Issue SD Document Item: WWW</DESCRIPT>
+    </SEOSUBCOTX>
+    <SEOSUBCOTX>
+     <CMPNAME>UPDATE_QUOTE_ITEM</CMPNAME>
+     <SCONAME>IT_QUOTE_ITEM</SCONAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Table type for QuoteItem: Simulation Price From Salesforce</DESCRIPT>
+    </SEOSUBCOTX>
+    <SEOSUBCOTX>
+     <CMPNAME>VALIDATE_CUSTOMER</CMPNAME>
+     <SCONAME>CT_RESPONSE</SCONAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Table Type for Response Message Structure</DESCRIPT>
+    </SEOSUBCOTX>
+    <SEOSUBCOTX>
+     <CMPNAME>VALIDATE_CUSTOMER</CMPNAME>
+     <SCONAME>ET_BAPI_PARTNR</SCONAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Communications Fields: SD Document Partner: WWW</DESCRIPT>
+    </SEOSUBCOTX>
+    <SEOSUBCOTX>
+     <CMPNAME>VALIDATE_DIST_CHANNEL</CMPNAME>
+     <SCONAME>CT_RESPONSE</SCONAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Table Type for Response Message Structure</DESCRIPT>
+    </SEOSUBCOTX>
+    <SEOSUBCOTX>
+     <CMPNAME>VALIDATE_DIST_CHANNEL</CMPNAME>
+     <SCONAME>EF_VTWEG</SCONAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Distribution Channel</DESCRIPT>
+    </SEOSUBCOTX>
+    <SEOSUBCOTX>
+     <CMPNAME>VALIDATE_DIST_CHANNEL</CMPNAME>
+     <SCONAME>IF_VTWEG</SCONAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Distribution Channel</DESCRIPT>
+    </SEOSUBCOTX>
+    <SEOSUBCOTX>
+     <CMPNAME>VALIDATE_DOC_TYPE</CMPNAME>
+     <SCONAME>CT_RESPONSE</SCONAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Table Type for Response Message Structure</DESCRIPT>
+    </SEOSUBCOTX>
+    <SEOSUBCOTX>
+     <CMPNAME>VALIDATE_DOC_TYPE</CMPNAME>
+     <SCONAME>EF_AUART</SCONAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Sales Document Type</DESCRIPT>
+    </SEOSUBCOTX>
+    <SEOSUBCOTX>
+     <CMPNAME>VALIDATE_DOC_TYPE</CMPNAME>
+     <SCONAME>IF_AUART</SCONAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Sales Document Type</DESCRIPT>
+    </SEOSUBCOTX>
+    <SEOSUBCOTX>
+     <CMPNAME>VALIDATE_HEADER</CMPNAME>
+     <SCONAME>CS_RESPONSE</SCONAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>JSON Structure Simulation Price From Salesforce</DESCRIPT>
+    </SEOSUBCOTX>
+    <SEOSUBCOTX>
+     <CMPNAME>VALIDATE_HEADER</CMPNAME>
+     <SCONAME>ES_BAPI_SDHEAD</SCONAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Communication Fields: Sales and Distribution Document Header</DESCRIPT>
+    </SEOSUBCOTX>
+    <SEOSUBCOTX>
+     <CMPNAME>VALIDATE_HEADER</CMPNAME>
+     <SCONAME>ET_BAPI_PARTNR</SCONAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Communications Fields: SD Document Partner: WWW</DESCRIPT>
+    </SEOSUBCOTX>
+    <SEOSUBCOTX>
+     <CMPNAME>VALIDATE_HEADER</CMPNAME>
+     <SCONAME>IS_HEADER</SCONAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>JSON Structure Simulation Price From Salesforce</DESCRIPT>
+    </SEOSUBCOTX>
+    <SEOSUBCOTX>
+     <CMPNAME>VALIDATE_ITEM</CMPNAME>
+     <SCONAME>CS_RESPONSE</SCONAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>JSON Structure Simulation Price From Salesforce</DESCRIPT>
+    </SEOSUBCOTX>
+    <SEOSUBCOTX>
+     <CMPNAME>VALIDATE_ITEM</CMPNAME>
+     <SCONAME>IF_VKORG</SCONAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Sales Organization</DESCRIPT>
+    </SEOSUBCOTX>
+    <SEOSUBCOTX>
+     <CMPNAME>VALIDATE_ITEM</CMPNAME>
+     <SCONAME>IF_VTWEG</SCONAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Distribution Channel</DESCRIPT>
+    </SEOSUBCOTX>
+    <SEOSUBCOTX>
+     <CMPNAME>VALIDATE_PAYMENT_TERM</CMPNAME>
+     <SCONAME>CT_RESPONSE</SCONAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Table Type for Response Message Structure</DESCRIPT>
+    </SEOSUBCOTX>
+    <SEOSUBCOTX>
+     <CMPNAME>VALIDATE_PAYMENT_TERM</CMPNAME>
+     <SCONAME>EF_ZTERM</SCONAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Terms of Payment Key</DESCRIPT>
+    </SEOSUBCOTX>
+    <SEOSUBCOTX>
+     <CMPNAME>VALIDATE_PAYMENT_TERM</CMPNAME>
+     <SCONAME>IF_ZTERM</SCONAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Terms of Payment Key</DESCRIPT>
+    </SEOSUBCOTX>
+    <SEOSUBCOTX>
+     <CMPNAME>VALIDATE_REQUEST</CMPNAME>
+     <SCONAME>CS_RESPONSE</SCONAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>JSON Structure Simulation Price From Salesforce</DESCRIPT>
+    </SEOSUBCOTX>
+    <SEOSUBCOTX>
+     <CMPNAME>VALIDATE_REQUEST</CMPNAME>
+     <SCONAME>EF_INVALID</SCONAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>General Flag</DESCRIPT>
+    </SEOSUBCOTX>
+    <SEOSUBCOTX>
+     <CMPNAME>VALIDATE_REQUEST</CMPNAME>
+     <SCONAME>ES_BAPI_SDHEAD</SCONAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Communication Fields: Sales and Distribution Document Header</DESCRIPT>
+    </SEOSUBCOTX>
+    <SEOSUBCOTX>
+     <CMPNAME>VALIDATE_REQUEST</CMPNAME>
+     <SCONAME>ET_BAPI_ITEMIN</SCONAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>TT Kommunikationsfelder Vertriebsbelegposition anlegen WWW</DESCRIPT>
+    </SEOSUBCOTX>
+    <SEOSUBCOTX>
+     <CMPNAME>VALIDATE_REQUEST</CMPNAME>
+     <SCONAME>ET_BAPI_PARTNR</SCONAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Communications Fields: SD Document Partner: WWW</DESCRIPT>
+    </SEOSUBCOTX>
+    <SEOSUBCOTX>
+     <CMPNAME>VALIDATE_REQUEST</CMPNAME>
+     <SCONAME>ET_BAPI_SCHDL</SCONAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Table Category for BAPISCHDL</DESCRIPT>
+    </SEOSUBCOTX>
+    <SEOSUBCOTX>
+     <CMPNAME>VALIDATE_REQUEST</CMPNAME>
+     <SCONAME>IS_REQUEST</SCONAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>JSON Structure Simulation Price From Salesforce</DESCRIPT>
+    </SEOSUBCOTX>
+    <SEOSUBCOTX>
+     <CMPNAME>VALIDATE_SALE_GROUP</CMPNAME>
+     <SCONAME>CT_RESPONSE</SCONAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Table Type for Response Message Structure</DESCRIPT>
+    </SEOSUBCOTX>
+    <SEOSUBCOTX>
+     <CMPNAME>VALIDATE_SALE_GROUP</CMPNAME>
+     <SCONAME>EF_VKGRP</SCONAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Sales Group</DESCRIPT>
+    </SEOSUBCOTX>
+    <SEOSUBCOTX>
+     <CMPNAME>VALIDATE_SALE_GROUP</CMPNAME>
+     <SCONAME>IF_VKGRP</SCONAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Sales Document Type</DESCRIPT>
+    </SEOSUBCOTX>
+   </DESCRIPTIONS_SUB>
+  </asx:values>
+ </asx:abap>
+</abapGit>

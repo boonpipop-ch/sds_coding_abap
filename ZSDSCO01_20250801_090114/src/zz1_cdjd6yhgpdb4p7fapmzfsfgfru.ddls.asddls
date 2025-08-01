@@ -1,0 +1,8 @@
+@AbapCatalog.internal.setChange: 'FLDADD_NO_ASS_INFLUENCE'
+@AbapCatalog.sqlViewAppendName: 'ZZ1_8A01064D9D4A'
+
+extend view C_ALLOCRUNJOURNALENTRYITEM with ZZ1_CDJD6YHGPDB4P7FAPMZFSFGFRU
+  
+{ 
+  _Extension.ZZ1_ZZCAV_MSE as ZZ1_ZZCAV_MSE
+}

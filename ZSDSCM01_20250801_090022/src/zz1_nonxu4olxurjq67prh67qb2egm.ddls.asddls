@@ -1,0 +1,8 @@
+@AbapCatalog.internal.setChange: 'FLDADD_NO_ASS_INFLUENCE'
+@AbapCatalog.sqlViewAppendName: 'ZZ1_B10445AD4240'
+
+extend view E_SERVICEDOCUMENT with ZZ1_NONXU4OLXURJQ67PRH67QB2EGM
+  
+{ 
+  Persistence.ZZ1_BREAK_POSITION as ZZ1_BREAK_POSITION
+}

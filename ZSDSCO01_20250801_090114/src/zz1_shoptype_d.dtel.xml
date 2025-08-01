@@ -1,0 +1,59 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<abapGit version="v1.0.0" serializer="LCL_OBJECT_DTEL" serializer_version="v1.0.0">
+ <asx:abap xmlns:asx="http://www.sap.com/abapxml" version="1.0">
+  <asx:values>
+   <DD04V>
+    <ROLLNAME>ZZ1_SHOPTYPE_D</ROLLNAME>
+    <DDLANGUAGE>E</DDLANGUAGE>
+    <DOMNAME>CFD_CUSTOM_CODE_DESCRIPTION</DOMNAME>
+    <LOGFLAG>X</LOGFLAG>
+    <HEADLEN>55</HEADLEN>
+    <SCRLEN3>40</SCRLEN3>
+    <DDTEXT>Customer Classific. (Desc.)</DDTEXT>
+    <REPTEXT>Customer Classific. (Desc.)</REPTEXT>
+    <SCRTEXT_L>Customer Classific. (Desc.)</SCRTEXT_L>
+    <DTELMASTER>E</DTELMASTER>
+    <REFKIND>D</REFKIND>
+   </DD04V>
+   <I18N_LANGS>
+    <LANGU>2</LANGU>
+    <LANGU>7</LANGU>
+    <LANGU>D</LANGU>
+    <LANGU>J</LANGU>
+    <LANGU>쁩</LANGU>
+   </I18N_LANGS>
+   <DD04_TEXTS>
+    <item>
+     <DDLANGUAGE>2</DDLANGUAGE>
+     <DDTEXT>จำแนกหมวดหมู่ลูกค้า(คำอธิบาย)</DDTEXT>
+     <REPTEXT>จำแนกหมวดหมู่ลูกค้า(คำอธิบาย)</REPTEXT>
+     <SCRTEXT_L>จำแนกหมวดหมู่ลูกค้า(คำอธิบาย)</SCRTEXT_L>
+    </item>
+    <item>
+     <DDLANGUAGE>7</DDLANGUAGE>
+     <DDTEXT>Pengelasan Pelanggan (Prhln)</DDTEXT>
+     <REPTEXT>Pengelasan Pelanggan (Prhln)</REPTEXT>
+     <SCRTEXT_L>Pengelasan Pelanggan (Prhln)</SCRTEXT_L>
+    </item>
+    <item>
+     <DDLANGUAGE>D</DDLANGUAGE>
+     <DDTEXT>Kundenklassifiz. (Beschr.)</DDTEXT>
+     <REPTEXT>Kundenklassifiz. (Beschr.)</REPTEXT>
+     <SCRTEXT_L>Kundenklassifiz. (Beschr.)</SCRTEXT_L>
+    </item>
+    <item>
+     <DDLANGUAGE>J</DDLANGUAGE>
+     <DDTEXT>得意先分類(内容説明)</DDTEXT>
+     <REPTEXT>得意先分類(内容説明)</REPTEXT>
+     <SCRTEXT_L>得意先分類(内容説明)</SCRTEXT_L>
+    </item>
+    <item>
+     <DDLANGUAGE>쁩</DDLANGUAGE>
+     <DDTEXT>P.loại khách hàng (Desc.)</DDTEXT>
+     <REPTEXT>P.loại khách hàng (Desc.)</REPTEXT>
+     <SCRTEXT_L>P.loại khách hàng (Desc.)</SCRTEXT_L>
+    </item>
+   </DD04_TEXTS>
+  </asx:values>
+ </asx:abap>
+</abapGit>

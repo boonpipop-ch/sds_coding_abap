@@ -1,0 +1,23 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<abapGit version="v1.0.0" serializer="LCL_OBJECT_SUSO" serializer_version="v1.0.0">
+ <asx:abap xmlns:asx="http://www.sap.com/abapxml" version="1.0">
+  <asx:values>
+   <TOBJ>
+    <OBJCT>ZSDSCM001</OBJCT>
+    <FIEL1>ZSDS_SRV</FIEL1>
+    <OCLSS>CRM</OCLSS>
+   </TOBJ>
+   <TOBJT>
+    <LANGU>E</LANGU>
+    <OBJECT>ZSDSCM001</OBJECT>
+    <TTEXT>SDS: WEBGUI Configuration</TTEXT>
+   </TOBJT>
+   <TOBJVORFLG>
+    <OBJCT>ZSDSCM001</OBJCT>
+    <FLAG3>N</FLAG3>
+    <FLAG4>A</FLAG4>
+    <FLAG5>A</FLAG5>
+   </TOBJVORFLG>
+  </asx:values>
+ </asx:abap>
+</abapGit>

@@ -1,0 +1,8 @@
+@AbapCatalog.internal.setChange: 'FLDADD_NO_ASS_INFLUENCE'
+@AbapCatalog.sqlViewAppendName: 'ZZ1_73D65F4B490B'
+
+extend view A_BUSINESSSOLUTIONQUOTATION with ZZ1_BFGBF656P646KZAF652MG7ZJWU
+  
+{ 
+  _Extension.ZZ1_PARTNER_SEGMENT as ZZ1_PARTNER_SEGMENT
+}

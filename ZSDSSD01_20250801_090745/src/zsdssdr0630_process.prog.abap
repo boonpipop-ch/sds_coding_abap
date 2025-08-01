@@ -1,0 +1,52 @@
+*&---------------------------------------------------------------------*
+*& Include          ZSDSSDR0630_PROCESS
+*&---------------------------------------------------------------------*
+*-----------------------------------------------------------------------
+* I N I T I A L I Z A T I O N
+*-----------------------------------------------------------------------
+INITIALIZATION.
+
+*-----------------------------------------------------------------------
+* A T   S E L E C T I O N - S C R E E N
+*-----------------------------------------------------------------------
+AT SELECTION-SCREEN OUTPUT.
+*
+*AT SELECTION-SCREEN ON HELP REQUEST FOR <field>
+* *AT SELECTION-SCREEN ON VALUE REQUEST FOR <field>
+* *AT SELECTION-SCREEN ON <field>
+* AT SELECTION-SCREEN.
+
+*-----------------------------------------------------------------------
+* S T A R T - O F - S E L E C T I O N
+*-----------------------------------------------------------------------
+START-OF-SELECTION.
+  IF P_BAT EQ ABAP_TRUE.
+    LCL_DATA=>SET_BATCH( ).
+  ELSE.
+    LCL_DATA=>GET_DATA( ).
+  ENDIF.
+*-----------------------------------------------------------------------
+* E N D - O F - S E L E C T I O N
+*-----------------------------------------------------------------------
+END-OF-SELECTION.
+  IF P_BAT EQ SPACE.
+    IF GT_RESULT[] IS NOT INITIAL.
+      LCL_DATA=>GET_ADDTIONAL_DATA( ).
+      IF P_AUTO EQ ABAP_TRUE.
+        LCL_DATA=>SAVE( ).
+      ENDIF.
+      LCL_DATA=>SHOW_REPORT( ).
+    ELSE.
+      MESSAGE S003 DISPLAY LIKE 'E'.
+    ENDIF.
+  ENDIF.
+
+*-----------------------------------------------------------------------
+* T O P - O F – P A G E
+*-----------------------------------------------------------------------
+TOP-OF-PAGE.
+
+*-----------------------------------------------------------------------
+* AT LINE-SELECTION
+*-----------------------------------------------------------------------
+AT LINE-SELECTION.

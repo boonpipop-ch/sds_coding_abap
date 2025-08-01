@@ -1,0 +1,10 @@
+FUNCTION-POOL ZSDSFI22.                     "MESSAGE-ID ..
+
+* INCLUDE LZSDSFI22D...                      " Local class definition
+
+
+CONSTANTS:
+  BEGIN OF GC_MSG_TYPE,
+    ERROR  TYPE BAPIRET2-TYPE VALUE 'E',
+    SUCESS TYPE BAPIRET2-TYPE VALUE 'S',
+  END OF GC_MSG_TYPE.

@@ -1,0 +1,665 @@
+*&---------------------------------------------------------------------*
+*& Include          ZSDSSDR0560_CLASS
+*&---------------------------------------------------------------------*
+CLASS LCL_UTIL DEFINITION.
+  PUBLIC SECTION.
+    METHODS :
+      CONSTRUCTOR.
+    CLASS-METHODS :
+      CONVERT_ALPHA_IN  IMPORTING I_DATA TYPE ANY
+                        EXPORTING E_DATA TYPE ANY,
+      CONVERT_ALPHA_OUT IMPORTING I_DATA TYPE ANY
+                        EXPORTING E_DATA TYPE ANY.
+
+ENDCLASS.
+CLASS LCL_UTIL IMPLEMENTATION.
+  METHOD CONSTRUCTOR.
+
+  ENDMETHOD.
+  METHOD CONVERT_ALPHA_IN.
+
+    CALL FUNCTION 'CONVERSION_EXIT_ALPHA_INPUT'
+      EXPORTING
+        INPUT  = I_DATA
+      IMPORTING
+        OUTPUT = E_DATA.
+
+  ENDMETHOD.
+  METHOD CONVERT_ALPHA_OUT.
+    CALL FUNCTION 'CONVERSION_EXIT_ALPHA_outPUT'
+      EXPORTING
+        INPUT  = I_DATA
+      IMPORTING
+        OUTPUT = E_DATA.
+
+  ENDMETHOD.
+ENDCLASS.
+CLASS LCL_DATA DEFINITION.
+  PUBLIC SECTION.
+    METHODS :
+      CONSTRUCTOR,
+      START_PROCESS.
+    CLASS-METHODS :
+      GET_DATA,
+      GET_ADDTIONAL_DATA,
+      SHOW_REPORT,
+      SET_LAYOUT_OUTPUT,
+      BUILD_FCAT,
+      SET_SORT,
+      SET_ALV_GRID,
+      HTML_TOP_OF_PAGE,
+      SAVE,
+      CHECK_REM,
+      REFRESH_REMAIN,
+      ASSIGN,
+      GET_QUOTA_GROUP IMPORTING I_DATA   TYPE GTY_MAT
+                      RETURNING VALUE(R) TYPE GTY_QUOTA_MAT.
+    CLASS-DATA :
+      LO TYPE REF TO LCL_DATA.
+ENDCLASS.
+CLASS LCL_DATA IMPLEMENTATION.
+  METHOD CONSTRUCTOR.
+
+  ENDMETHOD.
+  METHOD GET_DATA.
+    IF LO IS INITIAL.
+      CREATE OBJECT LO.
+    ENDIF.
+
+    LO->START_PROCESS( ).
+  ENDMETHOD.
+  METHOD START_PROCESS.
+
+    DATA : BEGIN OF LS_SALESMAN,
+             PERNR TYPE VBPA-PERNR,
+           END OF LS_SALESMAN.
+    DATA : LT_SALESMAN LIKE HASHED TABLE OF LS_SALESMAN WITH UNIQUE KEY PERNR.
+
+    DATA : BEGIN OF LS_SUM_DATA,
+*             VKGRP TYPE VBAK-VKGRP,
+             QUOTAGRP TYPE ZSDSSDC013-QUOTAGRP,
+             MATNR    TYPE MARA-MATNR,
+             BMENG    TYPE VBEP-BMENG,
+           END OF LS_SUM_DATA.
+    DATA LT_SUM_DATA LIKE TABLE OF LS_SUM_DATA.
+
+    DATA : LS_MAT TYPE GY_MAT,
+           LT_MAT TYPE GTY_MAT.
+
+*    DATA : BEGIN OF LS_MAT,
+*             VKGRP TYPE ZSDSSDC013-VKGRP,
+*             MATNR TYPE ZSDSSDT018-MATNR,
+*           END OF LS_MAT.
+*    DATA : LT_MAT LIKE HASHED TABLE OF LS_MAT WITH UNIQUE KEY VKGRP
+*                                                              MATNR.
+
+    IF S_VBELN[] IS NOT INITIAL.
+      SELECT MATNR
+        FROM VBAP
+        WHERE VBELN IN @S_VBELN[]
+        INTO TABLE @DATA(LT_DOC_MAT).
+
+      LOOP AT LT_DOC_MAT INTO DATA(LS_DOC_MAT).
+        S_MATNR[] =  VALUE #( ( SIGN  = 'I' OPTION = 'EQ' LOW = LS_DOC_MAT-MATNR ) ).
+      ENDLOOP.
+    ENDIF.
+
+    SELECT VBEP~VBELN,
+           VBEP~POSNR,
+           VBEP~ETENR,
+           VBEP~EDATU,
+           VBEP~WMENG,
+           VBEP~BMENG,
+           VBAP~MATNR,
+           VBAP~GBSTA,
+           VBAK~KUNNR,
+           VBPA~PARVW,
+           VBPA~PERNR,
+           KNA1~NAME1,
+           KNA1~NAME2,
+           KNA1~NAME3,
+           KNA1~NAME4,
+           ZSDSSDT016~QUOTA_QTY,
+           VBAK~VKGRP,
+           ZSDSSDC013~QUOTAGRP,
+           ZSDSSDC013~QUOTAGRP_DESC,
+           ZSDSSDC031~USR02
+      FROM VBAP
+      INNER JOIN VBEP          ON VBAP~VBELN EQ VBEP~VBELN
+                              AND VBAP~POSNR EQ VBEP~POSNR
+      INNER JOIN VBAK          ON VBAP~VBELN EQ VBAK~VBELN
+       LEFT JOIN VBPA          ON VBAP~VBELN EQ VBPA~VBELN
+                              AND VBPA~POSNR EQ '000000'
+                              AND VBPA~PARVW EQ 'VE'
+      INNER JOIN KNA1          ON VBAK~KUNNR EQ  KNA1~KUNNR
+      INNER JOIN ZSDSSDC030    ON  VBAP~MATNR EQ ZSDSSDC030~MATNR
+                              AND ZSDSSDC030~FLAGD NE 'X'
+      LEFT JOIN ZSDSSDT016 ON VBAP~MATNR EQ ZSDSSDT016~MATNR AND
+                              ZSDSSDT016~DAY_FIRST LE @SY-DATUM AND
+                              ZSDSSDT016~DAY_LAST  GE @SY-DATUM
+      LEFT JOIN ZSDSSDC013 ON VBAK~VKGRP     EQ ZSDSSDC013~VKGRP AND
+                              VBAK~ZZRUNNING EQ ZSDSSDC013~RUNNING
+      LEFT JOIN PRPS       ON VBAP~PS_PSP_PNR EQ PRPS~PSPNR
+      LEFT JOIN ZSDSSDC031 ON PRPS~USR02 EQ ZSDSSDC031~USR02 AND
+                              VBAP~MATNR EQ ZSDSSDC031~MATNR AND
+                              ZSDSSDC031~ACTIV EQ @ABAP_TRUE
+      WHERE "VBAP~VBELN IN @S_VBELN AND
+            VBAP~MATNR IN @S_MATNR AND
+            VBAP~GBSTA NE 'C'      AND
+            VBAK~VBTYP EQ 'C'
+            INTO TABLE @DATA(LT_TMP).
+
+    LT_MAT      =  CORRESPONDING #( LT_TMP  DISCARDING DUPLICATES ).
+    LT_SALESMAN =  CORRESPONDING #( LT_TMP  DISCARDING DUPLICATES ).
+
+    DATA(LT_MAT_SUM) = GET_QUOTA_GROUP( LT_MAT ).
+
+    LOOP AT LT_TMP INTO DATA(LS_SUM).
+      LS_SUM_DATA-MATNR    = LS_SUM-MATNR.
+      LS_SUM_DATA-BMENG    = LS_SUM-BMENG.
+      LS_SUM_DATA-QUOTAGRP = LS_SUM-QUOTAGRP.
+      COLLECT LS_SUM_DATA INTO LT_SUM_DATA.
+    ENDLOOP.
+
+    SELECT PA0002~PERNR,
+           PA0002~NACHN,
+           PA0002~VORNA
+      FROM @LT_SALESMAN AS A
+      INNER JOIN PA0002 ON PA0002~PERNR EQ A~PERNR
+      INTO TABLE @DATA(LT_TMP2).
+
+    LOOP AT LT_TMP INTO DATA(LS_TMP)." WHERE VBELN IN S_VBELN.
+      GS_RESULT-VBELN     = LS_TMP-VBELN.
+      GS_RESULT-POSNR     = LS_TMP-POSNR.
+      GS_RESULT-ETENR     = LS_TMP-ETENR.
+      GS_RESULT-EDATU     = LS_TMP-EDATU.
+      GS_RESULT-WMENG     = LS_TMP-WMENG.
+      GS_RESULT-BMENG     = LS_TMP-BMENG.
+      GS_RESULT-MATNR     = LS_TMP-MATNR.
+      GS_RESULT-GBSTA     = LS_TMP-GBSTA.
+      GS_RESULT-KUNNR     = LS_TMP-KUNNR.
+      GS_RESULT-PARVW     = LS_TMP-PARVW.
+      GS_RESULT-PERNR     = LS_TMP-PERNR.
+      GS_RESULT-VKGRP     = LS_TMP-VKGRP.
+      GS_RESULT-QUOTAGRP  = LS_TMP-QUOTAGRP.
+      GS_RESULT-QUOTAGRP_DESC  = LS_TMP-QUOTAGRP_DESC.
+      GS_RESULT-USR02     = LS_TMP-USR02.
+
+      READ TABLE LT_MAT_SUM INTO DATA(LS_MAT_SUM)
+      WITH KEY QUOTAGRP = LS_TMP-QUOTAGRP.
+      IF SY-SUBRC EQ 0.
+        GS_RESULT-QUOTA_QTY = LS_MAT_SUM-PORTION_QTY.
+      ENDIF.
+
+      CONCATENATE LS_TMP-NAME1 LS_TMP-NAME2 LS_TMP-NAME3 LS_TMP-NAME4 INTO GS_RESULT-NAME SEPARATED BY SPACE.
+
+      READ TABLE LT_TMP2 INTO DATA(LS_TMP2)
+      WITH KEY PERNR = LS_TMP-PERNR.
+      IF SY-SUBRC = 0.
+        GS_RESULT-NACHN           = LS_TMP2-NACHN.
+        GS_RESULT-VORNA           = LS_TMP2-VORNA.
+      ENDIF.
+
+      READ TABLE LT_SUM_DATA INTO LS_SUM_DATA
+      WITH KEY MATNR    = GS_RESULT-MATNR
+               QUOTAGRP = GS_RESULT-QUOTAGRP.
+      IF SY-SUBRC EQ 0.
+        GS_RESULT-REMAIN = GS_RESULT-QUOTA_QTY - LS_SUM_DATA-BMENG.
+      ENDIF.
+
+      IF LS_TMP-USR02 IS INITIAL.
+        GS_RESULT-LINE_COLOR = 'C600'.
+      ENDIF.
+
+      APPEND GS_RESULT TO GT_RESULT.
+      CLEAR GS_RESULT.
+    ENDLOOP.
+
+    GT_RESULT_SUM = GT_RESULT.
+
+    IF S_VBELN[] IS NOT INITIAL.
+      DELETE GT_RESULT WHERE VBELN NOT IN S_VBELN[].
+    ENDIF.
+
+  ENDMETHOD.
+  METHOD GET_ADDTIONAL_DATA.
+*    FIELD-SYMBOLS <LFS_RESULT> LIKE LINE OF GT_RESULT.
+*    LOOP AT GT_RESULT ASSIGNING <LFS_RESULT>.
+*
+*    ENDLOOP.
+  ENDMETHOD.
+  METHOD SHOW_REPORT.
+    SET_LAYOUT_OUTPUT( ).
+    BUILD_FCAT( ).
+    SET_SORT( ).
+    SET_ALV_GRID( ).
+  ENDMETHOD.
+  METHOD SET_LAYOUT_OUTPUT.
+    CONSTANTS : BEGIN OF LC_CON,
+                  CHK_FILED TYPE C LENGTH 5 VALUE 'CHECK',
+                END OF LC_CON.
+    GS_LAYOUT-ZEBRA             = GC_X.
+    GS_LAYOUT-COLWIDTH_OPTIMIZE = GC_X.
+    GS_LAYOUT-BOX_FIELDNAME     = LC_CON-CHK_FILED.
+    GS_LAYOUT-INFO_FIELDNAME    = 'LINE_COLOR'.
+  ENDMETHOD.
+  METHOD BUILD_FCAT.
+    DATA:
+       LS_FCAT TYPE SLIS_FIELDCAT_ALV.
+
+*    CONSTANTS : BEGIN OF LC_CON,
+*                  CHK_FILED TYPE C LENGTH 5 VALUE 'CHECK',
+*                  CHK_NAME  TYPE C LENGTH 3 VALUE 'CHK',
+*                END OF LC_CON.
+*
+*    CLEAR LS_FCAT.
+*    LS_FCAT-FIELDNAME   = LC_CON-CHK_FILED.
+*    LS_FCAT-SELTEXT_S   = LC_CON-CHK_NAME.
+*    LS_FCAT-SELTEXT_M   = LC_CON-CHK_NAME.
+*    LS_FCAT-SELTEXT_L   = LC_CON-CHK_FILED.
+*    LS_FCAT-CHECKBOX    = ABAP_TRUE.
+*    LS_FCAT-INPUT       = ABAP_TRUE.
+*    LS_FCAT-EDIT        = ABAP_TRUE.
+*    APPEND LS_FCAT TO GT_FCAT.
+
+    DATA : LV_RUNNING  TYPE I,
+           LV_DATA     TYPE C LENGTH 6 VALUE 'TEXT-',
+           LV_RUN_TEXT TYPE C LENGTH 2.
+
+    CONSTANTS : LC_F TYPE C VALUE 'F',
+                LC_T TYPE C VALUE 'T',
+                LC_d TYPE C VALUE 'D'.
+
+    FIELD-SYMBOLS <LFS> TYPE ANY.
+
+    DATA : LV_TEXT TYPE C LENGTH 8.
+*Field
+    CLEAR : LS_FCAT.
+    DO 99 TIMES.
+      ADD 1 TO LV_RUNNING.
+      LV_RUN_TEXT = LV_RUNNING.
+
+      LCL_UTIL=>CONVERT_ALPHA_IN( EXPORTING I_DATA = LV_RUN_TEXT
+                                  IMPORTING E_Data = LV_RUN_TEXT ).
+
+      IF <LFS> IS ASSIGNED.
+        UNASSIGN <LFS>.
+      ENDIF.
+      CONCATENATE LV_DATA LC_F LV_RUN_TEXT INTO LV_TEXT.
+      ASSIGN (LV_TEXT) TO <LFS>.
+      IF <LFS> IS NOT ASSIGNED.
+        EXIT.
+      ENDIF.
+      LS_FCAT-FIELDNAME = <LFS>.
+*Teble Ref
+      IF <LFS> IS ASSIGNED.
+        UNASSIGN <LFS>.
+      ENDIF.
+      CONCATENATE LV_DATA LC_T LV_RUN_TEXT INTO LV_TEXT.
+      ASSIGN (LV_TEXT) TO <LFS>.
+      IF <LFS> IS ASSIGNED.
+        LS_FCAT-REF_TABNAME = <LFS>.
+      ENDIF.
+*Description
+      IF <LFS> IS ASSIGNED.
+        UNASSIGN <LFS>.
+      ENDIF.
+      CONCATENATE LV_DATA LC_D LV_RUN_TEXT INTO LV_TEXT.
+      ASSIGN (LV_TEXT) TO <LFS>.
+      IF <LFS> IS ASSIGNED.
+        LS_FCAT-SELTEXT_S = <LFS>.
+        LS_FCAT-SELTEXT_M = <LFS>.
+        LS_FCAT-SELTEXT_L = <LFS>.
+      ENDIF.
+
+      IF LS_FCAT-FIELDNAME = 'BMENG'.
+        LS_FCAT-INPUT       = ABAP_TRUE.
+        LS_FCAT-EDIT        = ABAP_TRUE.
+        LS_FCAT-DO_SUM      = ABAP_TRUE.
+      ENDIF.
+
+      APPEND LS_FCAT TO GT_FCAT.
+      CLEAR LS_FCAT.
+    ENDDO.
+
+  ENDMETHOD.
+  METHOD SET_SORT.
+    CLEAR GS_SORT.
+    GS_SORT-FIELDNAME = 'MATNR'.
+    GS_SORT-SPOS = '1'.
+    GS_SORT-UP = 'X'.
+    GS_SORT-SUBTOT = 'X'.
+    APPEND GS_SORT TO GT_SORT.
+
+    CLEAR GS_SORT.
+    GS_SORT-FIELDNAME = 'QUOTA_QTY'.
+    GS_SORT-SPOS = '2'.
+    GS_SORT-DOWN = 'X'.
+    APPEND GS_SORT TO GT_SORT.
+
+    CLEAR GS_SORT.
+    GS_SORT-FIELDNAME = 'QUOTAGRP_DESC'.
+    GS_SORT-SPOS = '3'.
+    GS_SORT-UP = 'X'.
+    GS_SORT-SUBTOT = 'X'.
+    APPEND GS_SORT TO GT_SORT.
+
+    CLEAR GS_SORT.
+    GS_SORT-FIELDNAME = 'VBELN'.
+    GS_SORT-SPOS = '4'.
+    GS_SORT-UP = 'X'.
+    APPEND GS_SORT TO GT_SORT.
+
+    CLEAR GS_SORT.
+    GS_SORT-FIELDNAME = 'POSNR'.
+    GS_SORT-SPOS = '5'.
+    GS_SORT-UP = 'X'.
+    APPEND GS_SORT TO GT_SORT.
+
+    CLEAR GS_SORT.
+    GS_SORT-FIELDNAME = 'ETENR'.
+    GS_SORT-SPOS = '6'.
+    GS_SORT-UP = 'X'.
+    APPEND GS_SORT TO GT_SORT.
+
+  ENDMETHOD.
+  METHOD SET_ALV_GRID.
+*SAPLKKBL
+    CALL FUNCTION 'REUSE_ALV_GRID_DISPLAY'
+      EXPORTING
+        I_CALLBACK_PROGRAM       = SY-REPID
+        I_CALLBACK_PF_STATUS_SET = 'PF_STATUS_1'
+        I_callback_user_command  = 'USER_COMMAND'
+*       I_CALLBACK_TOP_OF_PAGE   = ' '
+*       i_html_height_top        = 12
+*       I_CALLBACK_HTML_TOP_OF_PAGE       = 'HTML_TOP_OF_PAGE'
+*       I_CALLBACK_HTML_END_OF_LIST       = ' '
+*       I_STRUCTURE_NAME         =
+*       I_BACKGROUND_ID          = ' '
+*       I_GRID_TITLE             =
+*       I_GRID_SETTINGS          =
+        IS_LAYOUT                = GS_LAYOUT
+        IT_FIELDCAT              = GT_FCAT
+*       IT_EXCLUDING             =
+*       IT_SPECIAL_GROUPS        =
+        IT_SORT                  = GT_SORT
+*       IT_FILTER                =
+*       IS_SEL_HIDE              =
+        I_DEFAULT                = GC_X
+        I_SAVE                   = GC_A
+*       IS_VARIANT               =
+*       IT_EVENTS                =
+*       IT_EVENT_EXIT            =
+*       IS_PRINT                 =
+*       IS_REPREP_ID             =
+*       I_SCREEN_START_COLUMN    = 0
+*       I_SCREEN_START_LINE      = 0
+*       I_SCREEN_END_COLUMN      = 0
+*       I_SCREEN_END_LINE        = 0
+*       I_HTML_HEIGHT_TOP        = 0
+*       I_HTML_HEIGHT_END        = 0
+*       IT_ALV_GRAPHICS          =
+*       IT_HYPERLINK             =
+*       IT_ADD_FIELDCAT          =
+*       IT_EXCEPT_QINFO          =
+*       IR_SALV_FULLSCREEN_ADAPTER        =
+* IMPORTING
+*       E_EXIT_CAUSED_BY_CALLER  =
+*       ES_EXIT_CAUSED_BY_USER   =
+      TABLES
+        T_OUTTAB                 = GT_RESULT
+      EXCEPTIONS
+        PROGRAM_ERROR            = 1
+        OTHERS                   = 2.
+    IF SY-SUBRC <> 0.
+* MESSAGE ID SY-MSGID TYPE SY-MSGTY NUMBER SY-MSGNO
+*         WITH SY-MSGV1 SY-MSGV2 SY-MSGV3 SY-MSGV4.
+    ENDIF.
+
+  ENDMETHOD.
+  METHOD HTML_TOP_OF_PAGE.
+*  DATA: text TYPE sdydo_text_element.
+*
+*  CALL METHOD document->add_gap
+*    EXPORTING
+*      width = 100.
+*  text =  'Company Code Data'.
+*  CALL METHOD document->add_text
+*    EXPORTING
+*      text      = text
+*      sap_style = 'HEADING'.
+*
+*  CALL METHOD document->new_line.
+*  CALL METHOD document->new_line.
+*  CALL METHOD document->new_line.
+*
+*  text = 'User Name : '.
+*  CALL METHOD document->add_text
+*    EXPORTING
+*      text         = text
+*      sap_emphasis = 'Strong'.
+*
+*  CALL METHOD document->add_gap
+*    EXPORTING
+*      width = 6.
+*
+*  text = sy-uname.
+*  CALL METHOD document->add_text
+*    EXPORTING
+*      text      = text
+*      sap_style = 'Key'.
+*
+*  CALL METHOD document->add_gap
+*    EXPORTING
+*      width = 50.
+*
+*
+*  text = 'Date : '.
+*  CALL METHOD document->add_text
+*    EXPORTING
+*      text         = text
+*      sap_emphasis = 'Strong'.
+*
+*  CALL METHOD document->add_gap
+*    EXPORTING
+*      width = 6.
+*
+*  text = sy-datum.
+*  CALL METHOD document->add_text
+*    EXPORTING
+*      text      = text
+*      sap_style = 'Key'.
+*
+*  CALL METHOD document->add_gap
+*    EXPORTING
+*      width = 50.
+*
+*  text = 'Time : '.
+*  CALL METHOD document->add_text
+*    EXPORTING
+*      text         = text
+*      sap_emphasis = 'Strong'.
+*
+*  CALL METHOD document->add_gap
+*    EXPORTING
+*      width = 6.
+*
+*  text = sy-uzeit.
+*  CALL METHOD document->add_text
+*    EXPORTING
+*      text      = text
+*      sap_style = 'Key'.
+*
+*  CALL METHOD document->new_line.
+*  CALL METHOD document->new_line.
+  ENDMETHOD.
+  METHOD SAVE.
+
+    DATA LCL_SO TYPE REF TO ZCL_SDSSD_SALES_DOCUMENT.
+
+    DATA : LT_VBELN	 TYPE ZSDSSDS128_TT,
+           LT_RETURN TYPE ZSDSSDS124_TT.
+
+    DATA : LS_VBELN TYPE ZSDSSDS128.
+
+    DATA : BEGIN OF LS_SUM_DATA,
+             MATNR TYPE MARA-MATNR,
+             VKGRP TYPE VBAK-VKGRP,
+             BMENG TYPE VBEP-BMENG,
+           END OF LS_SUM_DATA.
+    DATA LT_SUM_DATA LIKE TABLE OF LS_SUM_DATA.
+
+    IF LCL_SO IS NOT BOUND.
+      CREATE OBJECT LCL_SO.
+    ENDIF.
+
+    LOOP AT GT_RESULT_SUM INTO DATA(LS_SUM).
+      READ TABLE GT_RESULT INTO GS_RESULT
+      WITH KEY VBELN = LS_SUM-VBELN
+               POSNR = LS_SUM-POSNR
+               ETENR = LS_SUM-ETENR.
+      IF SY-SUBRC EQ 0.
+        LS_SUM_DATA-MATNR = LS_SUM-MATNR.
+        LS_SUM_DATA-BMENG = GS_RESULT-BMENG.
+      ELSE.
+        LS_SUM_DATA-MATNR = LS_SUM-MATNR.
+        LS_SUM_DATA-BMENG = LS_SUM-BMENG.
+      ENDIF.
+      LS_SUM_DATA-VKGRP = LS_SUM-VKGRP.
+      COLLECT LS_SUM_DATA INTO LT_SUM_DATA.
+    ENDLOOP.
+
+    LOOP AT GT_RESULT ASSIGNING FIELD-SYMBOL(<LFS_DATA>) WHERE CHECK EQ ABAP_TRUE.
+      READ TABLE LT_SUM_DATA INTO LS_SUM_DATA
+      WITH KEY MATNR = <LFS_DATA>-MATNR
+               VKGRP = <LFS_DATA>-VKGRP.
+      IF SY-SUBRC EQ 0.
+        <LFS_DATA>-REMAIN = <LFS_DATA>-QUOTA_QTY - LS_SUM_DATA-BMENG.
+      ENDIF.
+
+      IF <LFS_DATA>-REMAIN GE 0.
+        LS_VBELN-VBELN = <LFS_DATA>-VBELN.
+        LS_VBELN-POSNR = <LFS_DATA>-POSNR.
+        LS_VBELN-ETENR = <LFS_DATA>-ETENR.
+        LS_VBELN-BMENG = <LFS_DATA>-BMENG.
+        APPEND LS_VBELN TO LT_VBELN.
+      ENDIF.
+    ENDLOOP.
+
+    IF LT_VBELN IS NOT INITIAL.
+      SORT LT_VBELN.
+      DELETE ADJACENT DUPLICATES FROM LT_VBELN.
+      LT_RETURN = LCL_SO->CHANGE_CONFIRM_QTY( LT_VBELN ).
+
+      IF P_EXT EQ ABAP_TRUE.
+        IF LO IS NOT BOUND.
+          CREATE OBJECT LO.
+        ENDIF.
+        LO->GET_DATA( ).
+        LOOP AT GT_RESULT INTO GS_RESULT.
+          DATA(LV_CHECK) = GS_RESULT-WMENG - GS_RESULT-BMENG ##TYPE.
+          IF LV_CHECK NE 0.
+            EXIT.
+          ENDIF.
+        ENDLOOP.
+        IF LV_CHECK NE 0.
+          MESSAGE S000 WITH TEXT-E01 DISPLAY LIKE 'E'.
+        ELSE.
+          MESSAGE S000 WITH TEXT-S01.
+          LEAVE PROGRAM.
+        ENDIF.
+      ELSE.
+        MESSAGE S000 WITH TEXT-S01.
+      ENDIF.
+    ELSE.
+      MESSAGE S000 WITH TEXT-E02 DISPLAY LIKE 'E'.
+    ENDIF.
+
+  ENDMETHOD.
+  METHOD CHECK_REM.
+    REFRESH_REMAIN( ).
+  ENDMETHOD.
+  METHOD REFRESH_REMAIN.
+    DATA : BEGIN OF LS_SUM_DATA,
+             MATNR    TYPE MARA-MATNR,
+             QUOTAGRP TYPE ZSDSSDC013-QUOTAGRP,
+             BMENG    TYPE VBEP-BMENG,
+           END OF LS_SUM_DATA.
+    DATA LT_SUM_DATA LIKE TABLE OF LS_SUM_DATA.
+
+    LOOP AT GT_RESULT_SUM INTO DATA(LS_SUM).
+      READ TABLE GT_RESULT INTO GS_RESULT
+      WITH KEY VBELN = LS_SUM-VBELN
+               POSNR = LS_SUM-POSNR
+               ETENR = LS_SUM-ETENR.
+      IF SY-SUBRC EQ 0.
+        LS_SUM_DATA-MATNR = LS_SUM-MATNR.
+        LS_SUM_DATA-BMENG = GS_RESULT-BMENG.
+      ELSE.
+        LS_SUM_DATA-MATNR = LS_SUM-MATNR.
+        LS_SUM_DATA-BMENG = LS_SUM-BMENG.
+      ENDIF.
+      LS_SUM_DATA-QUOTAGRP = LS_SUM-QUOTAGRP.
+      COLLECT LS_SUM_DATA INTO LT_SUM_DATA.
+    ENDLOOP.
+
+    LOOP AT GT_RESULT ASSIGNING FIELD-SYMBOL(<LFS_DATA>).
+      READ TABLE LT_SUM_DATA INTO LS_SUM_DATA
+      WITH KEY MATNR    = <LFS_DATA>-MATNR
+               QUOTAGRP = <LFS_DATA>-QUOTAGRP.
+      IF SY-SUBRC EQ 0.
+        <LFS_DATA>-REMAIN = <LFS_DATA>-QUOTA_QTY - LS_SUM_DATA-BMENG.
+      ENDIF.
+    ENDLOOP.
+  ENDMETHOD.
+  METHOD ASSIGN.
+
+    LOOP AT GT_RESULT ASSIGNING FIELD-SYMBOL(<LFS_RESULT>).
+      <LFS_RESULT>-BMENG = <LFS_RESULT>-WMENG.
+    ENDLOOP.
+
+    REFRESH_REMAIN( ).
+
+  ENDMETHOD.
+  METHOD GET_QUOTA_GROUP.
+
+    SELECT DISTINCT ZSDSSDC013~QUOTAGRP,
+                    A~MATNR
+      FROM @I_DATA AS A
+      INNER JOIN ZSDSSDC013 ON A~VKGRP EQ ZSDSSDC013~VKGRP
+      INTO TABLE @DATA(LT_QUOTA_GROUP).
+
+
+    SELECT ZSDSSDT018~QUOTAGRP,
+           ZSDSSDT018~MATNR,
+           SUM( ZSDSSDT018~PORTION_QTY ) AS PORTION_QTY
+      FROM  @LT_QUOTA_GROUP AS A
+      INNER JOIN ZSDSSDT018 ON A~MATNR     EQ ZSDSSDT018~MATNR    AND
+                               A~QUOTAGRP  EQ ZSDSSDT018~QUOTAGRP AND
+                               ZSDSSDT018~DAY_FIRST LE @SY-DATUM  AND
+                               ZSDSSDT018~DAY_LAST  GE @SY-DATUM
+      WHERE ZSDSSDT018~PORTION_QTY NE 0
+      GROUP BY ZSDSSDT018~QUOTAGRP, ZSDSSDT018~MATNR
+      INTO TABLE @R.
+
+  ENDMETHOD.
+ENDCLASS.
+*----------------------------------------------------------------------*
+* CLASS lcl_event_receiver DEFINITION
+*----------------------------------------------------------------------*
+CLASS EVENT_CLASS DEFINITION.
+*Handling double click
+  PUBLIC SECTION.
+    METHODS:
+    HANDLE_DOUBLE_CLICK
+    FOR EVENT DOUBLE_CLICK OF CL_GUI_ALV_GRID IMPORTING E_ROW E_COLUMN ES_ROW_NO.
+ENDCLASS. "lcl_event_receiver DEFINITION
+*----------------------------------------------------------------------*
+*----------------------------------------------------------------------*
+* CLASS lcl_event_receiver IMPLEMENTATION
+*----------------------------------------------------------------------*
+CLASS EVENT_CLASS IMPLEMENTATION.
+  METHOD HANDLE_DOUBLE_CLICK.
+
+  ENDMETHOD. "handle_double_click
+ENDCLASS. "lcl_event_receiver IMPLEMENTATION

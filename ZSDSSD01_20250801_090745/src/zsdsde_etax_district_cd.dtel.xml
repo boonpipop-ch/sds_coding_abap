@@ -1,0 +1,25 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<abapGit version="v1.0.0" serializer="LCL_OBJECT_DTEL" serializer_version="v1.0.0">
+ <asx:abap xmlns:asx="http://www.sap.com/abapxml" version="1.0">
+  <asx:values>
+   <DD04V>
+    <ROLLNAME>ZSDSDE_ETAX_DISTRICT_CD</ROLLNAME>
+    <DDLANGUAGE>E</DDLANGUAGE>
+    <DOMNAME>ZSDSDM_ETAX_DISTRICT_CD</DOMNAME>
+    <HEADLEN>20</HEADLEN>
+    <SCRLEN1>10</SCRLEN1>
+    <SCRLEN2>20</SCRLEN2>
+    <SCRLEN3>30</SCRLEN3>
+    <DDTEXT>ETAX: RD District Code</DDTEXT>
+    <REPTEXT>District Code</REPTEXT>
+    <SCRTEXT_S>District</SCRTEXT_S>
+    <SCRTEXT_M>District Code</SCRTEXT_M>
+    <SCRTEXT_L>District Code</SCRTEXT_L>
+    <DTELMASTER>E</DTELMASTER>
+    <SHLPNAME>ZSDSH_ETAX_DISTRICT</SHLPNAME>
+    <SHLPFIELD>DISTRICT_CD</SHLPFIELD>
+    <REFKIND>D</REFKIND>
+   </DD04V>
+  </asx:values>
+ </asx:abap>
+</abapGit>

@@ -1,0 +1,63 @@
+<?sap.transform simple?>
+<tt:transform xmlns:tt="http://www.sap.com/transformation-templates" xmlns:ddic="http://www.sap.com/abapxml/types/dictionary">
+
+  <tt:root name="DATA" type="ddic:ZSDSSDS109"/>
+  <tt:template>
+    <!-- Header Data-->
+    <object>
+      <tt:group>
+
+        <tt:cond frq="1">
+          <str name="DocumentNo">
+            <tt:value ref="DATA.DOCUMENT_NUMBER"/>
+          </str>
+        </tt:cond>
+        <tt:cond frq="1">
+          <str name="FisicalYear">
+            <tt:value ref="DATA.FISCALYEAR"/>
+          </str>
+        </tt:cond>
+        <tt:cond frq="1">
+          <str name="CompanyCode">
+            <tt:value ref="DATA.COMPANYCODE"/>
+          </str>
+        </tt:cond>
+        <tt:cond frq="1">
+          <str name="DocumentType">
+            <tt:value ref="DATA.DOCUMENTTYPE"/>
+          </str>
+        </tt:cond>
+        <tt:cond frq="1">
+          <str name="Branch">
+            <tt:value ref="DATA.BRANCH"/>
+          </str>
+        </tt:cond>
+        <tt:cond frq="?">
+          <tt:cond check="not-initial(DATA.INTERNALDOCNO)">
+            <str name="InternalDocNo">
+              <tt:value ref="DATA.INTERNALDOCNO"/>
+            </str>
+          </tt:cond>
+        </tt:cond>
+        <tt:cond frq="?">
+          <tt:cond check="not-initial(DATA.TRANSCODE)">
+            <str name="transCode">
+              <tt:value ref="DATA.TRANSCODE"/>
+            </str>
+          </tt:cond>
+        </tt:cond>
+        <tt:cond frq="?">
+          <tt:cond check="not-initial(DATA.PURPOSECODE)">
+            <str name="PurposeCode">
+              <tt:value ref="DATA.PURPOSECODE"/>
+            </str>
+          </tt:cond>
+        </tt:cond>
+
+      </tt:group>
+
+    </object>
+
+  </tt:template>
+
+</tt:transform>

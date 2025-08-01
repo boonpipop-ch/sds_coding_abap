@@ -1,0 +1,8 @@
+@AbapCatalog.internal.setChange: 'FLDADD_NO_ASS_INFLUENCE'
+@AbapCatalog.sqlViewAppendName: 'ZZ1_6A8B8B808C01'
+
+extend view C_EXPIRINGSRVCCONTRITMDETAILS with ZZ1_FNS34FHRSIIADMXMPWJVD34HPA
+  
+{ 
+  _ServiceDocumentExt.ZZ1_RESULT_PROGRESS as ZZ1_RESULT_PROGRESS
+}

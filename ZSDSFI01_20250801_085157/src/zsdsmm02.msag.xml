@@ -1,0 +1,260 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<abapGit version="v1.0.0" serializer="LCL_OBJECT_MSAG" serializer_version="v1.0.0">
+ <asx:abap xmlns:asx="http://www.sap.com/abapxml" version="1.0">
+  <asx:values>
+   <T100A>
+    <ARBGB>ZSDSMM02</ARBGB>
+    <MASTERLANG>E</MASTERLANG>
+    <STEXT>SDS Customer Messages for Material Master</STEXT>
+   </T100A>
+   <T100>
+    <T100>
+     <SPRSL>E</SPRSL>
+     <ARBGB>ZSDSMM02</ARBGB>
+     <MSGNR>000</MSGNR>
+     <TEXT>Data not found.</TEXT>
+    </T100>
+    <T100>
+     <SPRSL>E</SPRSL>
+     <ARBGB>ZSDSMM02</ARBGB>
+     <MSGNR>001</MSGNR>
+     <TEXT>&amp;</TEXT>
+    </T100>
+    <T100>
+     <SPRSL>E</SPRSL>
+     <ARBGB>ZSDSMM02</ARBGB>
+     <MSGNR>002</MSGNR>
+     <TEXT>&amp; &amp; &amp; &amp;</TEXT>
+    </T100>
+    <T100>
+     <SPRSL>E</SPRSL>
+     <ARBGB>ZSDSMM02</ARBGB>
+     <MSGNR>003</MSGNR>
+     <TEXT>No entries found for specified key.</TEXT>
+    </T100>
+    <T100>
+     <SPRSL>E</SPRSL>
+     <ARBGB>ZSDSMM02</ARBGB>
+     <MSGNR>004</MSGNR>
+     <TEXT>Failed to lock table &amp;1(KEY: &amp;2)</TEXT>
+    </T100>
+    <T100>
+     <SPRSL>E</SPRSL>
+     <ARBGB>ZSDSMM02</ARBGB>
+     <MSGNR>005</MSGNR>
+     <TEXT>Failed to update table &amp;1(KEY: &amp;2)</TEXT>
+    </T100>
+    <T100>
+     <SPRSL>E</SPRSL>
+     <ARBGB>ZSDSMM02</ARBGB>
+     <MSGNR>006</MSGNR>
+     <TEXT>Selected records have been processed(&amp;1/&amp;2)</TEXT>
+    </T100>
+    <T100>
+     <SPRSL>E</SPRSL>
+     <ARBGB>ZSDSMM02</ARBGB>
+     <MSGNR>007</MSGNR>
+     <TEXT>ID No. &amp;1 is locked.</TEXT>
+    </T100>
+    <T100>
+     <SPRSL>E</SPRSL>
+     <ARBGB>ZSDSMM02</ARBGB>
+     <MSGNR>008</MSGNR>
+     <TEXT>ID No. &amp;1 is processed.</TEXT>
+    </T100>
+    <T100>
+     <SPRSL>E</SPRSL>
+     <ARBGB>ZSDSMM02</ARBGB>
+     <MSGNR>009</MSGNR>
+     <TEXT>ID No. &amp;1 does not exist.</TEXT>
+    </T100>
+    <T100>
+     <SPRSL>E</SPRSL>
+     <ARBGB>ZSDSMM02</ARBGB>
+     <MSGNR>010</MSGNR>
+     <TEXT>Please select at least one record.</TEXT>
+    </T100>
+    <T100>
+     <SPRSL>E</SPRSL>
+     <ARBGB>ZSDSMM02</ARBGB>
+     <MSGNR>011</MSGNR>
+     <TEXT>No entries found for specified key.</TEXT>
+    </T100>
+    <T100>
+     <SPRSL>E</SPRSL>
+     <ARBGB>ZSDSMM02</ARBGB>
+     <MSGNR>012</MSGNR>
+     <TEXT>Successfully.(Time Stamp &amp;)</TEXT>
+    </T100>
+    <T100>
+     <SPRSL>E</SPRSL>
+     <ARBGB>ZSDSMM02</ARBGB>
+     <MSGNR>013</MSGNR>
+     <TEXT>Screen is locked due to data update in progress by user &amp;</TEXT>
+    </T100>
+    <T100>
+     <SPRSL>E</SPRSL>
+     <ARBGB>ZSDSMM02</ARBGB>
+     <MSGNR>014</MSGNR>
+     <TEXT>Unable to lock the table of &amp;1.</TEXT>
+    </T100>
+    <T100>
+     <SPRSL>E</SPRSL>
+     <ARBGB>ZSDSMM02</ARBGB>
+     <MSGNR>015</MSGNR>
+     <TEXT>Error during updating the table of &amp;1. (Time Stamp &amp;2)</TEXT>
+    </T100>
+    <T100>
+     <SPRSL>E</SPRSL>
+     <ARBGB>ZSDSMM02</ARBGB>
+     <MSGNR>016</MSGNR>
+     <TEXT>Update the table of &amp;1 successfully (Time Stamp &amp;2).</TEXT>
+    </T100>
+    <T100>
+     <SPRSL>E</SPRSL>
+     <ARBGB>ZSDSMM02</ARBGB>
+     <MSGNR>017</MSGNR>
+     <TEXT>Insert data into table of &amp;1 successfully (Time Stamp &amp;2).</TEXT>
+    </T100>
+    <T100>
+     <SPRSL>E</SPRSL>
+     <ARBGB>ZSDSMM02</ARBGB>
+     <MSGNR>018</MSGNR>
+     <TEXT>Error, plant must be &apos;H140&apos; or &apos;H240&apos;.</TEXT>
+    </T100>
+    <T100>
+     <SPRSL>E</SPRSL>
+     <ARBGB>ZSDSMM02</ARBGB>
+     <MSGNR>019</MSGNR>
+     <TEXT>Error, can&apos;t  process ID No. &amp;1</TEXT>
+    </T100>
+    <T100>
+     <SPRSL>E</SPRSL>
+     <ARBGB>ZSDSMM02</ARBGB>
+     <MSGNR>020</MSGNR>
+     <TEXT>ID No. &amp;1 has been posted.</TEXT>
+    </T100>
+    <T100>
+     <SPRSL>E</SPRSL>
+     <ARBGB>ZSDSMM02</ARBGB>
+     <MSGNR>021</MSGNR>
+     <TEXT>ID NO. &amp;1 has not yet been put away!</TEXT>
+    </T100>
+    <T100>
+     <SPRSL>E</SPRSL>
+     <ARBGB>ZSDSMM02</ARBGB>
+     <MSGNR>022</MSGNR>
+     <TEXT>Fail to process Goods Receipt.</TEXT>
+    </T100>
+    <T100>
+     <SPRSL>E</SPRSL>
+     <ARBGB>ZSDSMM02</ARBGB>
+     <MSGNR>023</MSGNR>
+     <TEXT>Fail to detect ID No.</TEXT>
+    </T100>
+    <T100>
+     <SPRSL>E</SPRSL>
+     <ARBGB>ZSDSMM02</ARBGB>
+     <MSGNR>024</MSGNR>
+     <TEXT>Error happened  in creating delivery document</TEXT>
+    </T100>
+    <T100>
+     <SPRSL>E</SPRSL>
+     <ARBGB>ZSDSMM02</ARBGB>
+     <MSGNR>025</MSGNR>
+     <TEXT>ID No. &amp;1 is created.</TEXT>
+    </T100>
+    <T100>
+     <SPRSL>E</SPRSL>
+     <ARBGB>ZSDSMM02</ARBGB>
+     <MSGNR>026</MSGNR>
+     <TEXT>Fail to process Inbound delivery.</TEXT>
+    </T100>
+    <T100>
+     <SPRSL>E</SPRSL>
+     <ARBGB>ZSDSMM02</ARBGB>
+     <MSGNR>027</MSGNR>
+     <TEXT>ID No. &amp;1 has been deleted.</TEXT>
+    </T100>
+    <T100>
+     <SPRSL>E</SPRSL>
+     <ARBGB>ZSDSMM02</ARBGB>
+     <MSGNR>028</MSGNR>
+     <TEXT>Failed to open file (file name : &amp;1)</TEXT>
+    </T100>
+    <T100>
+     <SPRSL>E</SPRSL>
+     <ARBGB>ZSDSMM02</ARBGB>
+     <MSGNR>029</MSGNR>
+     <TEXT>Failed to read data from server(file name : &amp;1)</TEXT>
+    </T100>
+    <T100>
+     <SPRSL>E</SPRSL>
+     <ARBGB>ZSDSMM02</ARBGB>
+     <MSGNR>030</MSGNR>
+     <TEXT>Failed to close file( file name: &amp;1 )</TEXT>
+    </T100>
+    <T100>
+     <SPRSL>E</SPRSL>
+     <ARBGB>ZSDSMM02</ARBGB>
+     <MSGNR>031</MSGNR>
+     <TEXT>&amp;1 records updated to the database successfully(Table: &amp;2)</TEXT>
+    </T100>
+    <T100>
+     <SPRSL>E</SPRSL>
+     <ARBGB>ZSDSMM02</ARBGB>
+     <MSGNR>032</MSGNR>
+     <TEXT>&amp;1 records read from the server successfully</TEXT>
+    </T100>
+    <T100>
+     <SPRSL>E</SPRSL>
+     <ARBGB>ZSDSMM02</ARBGB>
+     <MSGNR>033</MSGNR>
+     <TEXT>No outstanding order exist.</TEXT>
+    </T100>
+    <T100>
+     <SPRSL>E</SPRSL>
+     <ARBGB>ZSDSMM02</ARBGB>
+     <MSGNR>034</MSGNR>
+     <TEXT>Program error : BAPI_INCOMINGINVOICE_GETDETAIL.</TEXT>
+    </T100>
+    <T100>
+     <SPRSL>E</SPRSL>
+     <ARBGB>ZSDSMM02</ARBGB>
+     <MSGNR>035</MSGNR>
+     <TEXT>Program error : BAPI_INCOMINGINVOICE_CANCEL.</TEXT>
+    </T100>
+    <T100>
+     <SPRSL>E</SPRSL>
+     <ARBGB>ZSDSMM02</ARBGB>
+     <MSGNR>036</MSGNR>
+     <TEXT>Program error : BAPI_INCOMINGINVOICE_PARK.</TEXT>
+    </T100>
+    <T100>
+     <SPRSL>E</SPRSL>
+     <ARBGB>ZSDSMM02</ARBGB>
+     <MSGNR>037</MSGNR>
+     <TEXT>Failed to read invoice document : &amp;1</TEXT>
+    </T100>
+    <T100>
+     <SPRSL>E</SPRSL>
+     <ARBGB>ZSDSMM02</ARBGB>
+     <MSGNR>038</MSGNR>
+     <TEXT>Failed to cancel invoice document : &amp;1</TEXT>
+    </T100>
+    <T100>
+     <SPRSL>E</SPRSL>
+     <ARBGB>ZSDSMM02</ARBGB>
+     <MSGNR>039</MSGNR>
+     <TEXT>Failed to create invoice document (park) : copy doc no is &amp;1</TEXT>
+    </T100>
+    <T100>
+     <SPRSL>E</SPRSL>
+     <ARBGB>ZSDSMM02</ARBGB>
+     <MSGNR>040</MSGNR>
+     <TEXT>Process is compleate ( orignal : &amp;1 cancel : &amp;2 new park : &amp;3 )</TEXT>
+    </T100>
+   </T100>
+  </asx:values>
+ </asx:abap>
+</abapGit>

@@ -1,0 +1,282 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<abapGit version="v1.0.0" serializer="LCL_OBJECT_FUGR" serializer_version="v1.0.0">
+ <asx:abap xmlns:asx="http://www.sap.com/abapxml" version="1.0">
+  <asx:values>
+   <AREAT>KEDR function pool</AREAT>
+   <INCLUDES>
+    <SOBJ_NAME>LZSDSCO02F01</SOBJ_NAME>
+    <SOBJ_NAME>LZSDSCO02TOP</SOBJ_NAME>
+    <SOBJ_NAME>SAPLZSDSCO02</SOBJ_NAME>
+   </INCLUDES>
+   <FUNCTIONS>
+    <item>
+     <FUNCNAME>Z_SDSCO_KEDR_ENH</FUNCNAME>
+     <SHORT_TEXT>Project Sales</SHORT_TEXT>
+     <IMPORT>
+      <RSIMP>
+       <PARAMETER>I_OPERATING_CONCERN</PARAMETER>
+       <DBFIELD>TKEB-ERKRS</DBFIELD>
+      </RSIMP>
+      <RSIMP>
+       <PARAMETER>I_DERIVATION_DATE</PARAMETER>
+       <DBFIELD>SY-DATUM</DBFIELD>
+      </RSIMP>
+      <RSIMP>
+       <PARAMETER>I_STEP_ID</PARAMETER>
+       <DBFIELD>TKEDRS-STEPID</DBFIELD>
+      </RSIMP>
+      <RSIMP>
+       <PARAMETER>I_COPA_ITEM</PARAMETER>
+      </RSIMP>
+      <RSIMP>
+       <PARAMETER>I_GLOBAL</PARAMETER>
+       <DBFIELD>KEDRCOPA</DBFIELD>
+      </RSIMP>
+     </IMPORT>
+     <EXPORT>
+      <RSEXP>
+       <PARAMETER>E_COPA_ITEM</PARAMETER>
+       <REFERENCE>X</REFERENCE>
+      </RSEXP>
+      <RSEXP>
+       <PARAMETER>E_GLOBAL</PARAMETER>
+       <REFERENCE>X</REFERENCE>
+      </RSEXP>
+      <RSEXP>
+       <PARAMETER>E_EXIT_IS_ACTIVE</PARAMETER>
+       <REFERENCE>X</REFERENCE>
+      </RSEXP>
+      <RSEXP>
+       <PARAMETER>E_FAILED</PARAMETER>
+       <REFERENCE>X</REFERENCE>
+      </RSEXP>
+     </EXPORT>
+     <DOCUMENTATION>
+      <RSFDO>
+       <PARAMETER>I_OPERATING_CONCERN</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>Operating Concern</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>I_DERIVATION_DATE</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>Derivation Date</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>I_STEP_ID</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>User-Defined Identifier</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>I_COPA_ITEM</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>CO-PA Characteristic Values in CE0xxxx-Structure</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>I_GLOBAL</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>CO-PA Global Values in KEDRCOPA-Structure</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>E_COPA_ITEM</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>Return: CO-PA Characteristic Values</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>E_GLOBAL</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>Return: Global Values</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>E_EXIT_IS_ACTIVE</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>Flag must be returned with &quot;X&quot;</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>E_FAILED</PARAMETER>
+       <KIND>P</KIND>
+      </RSFDO>
+     </DOCUMENTATION>
+    </item>
+    <item>
+     <FUNCNAME>Z_SDSCO_KEDR_Z001</FUNCNAME>
+     <SHORT_TEXT>Project Sales</SHORT_TEXT>
+     <IMPORT>
+      <RSIMP>
+       <PARAMETER>I_OPERATING_CONCERN</PARAMETER>
+       <DBFIELD>TKEB-ERKRS</DBFIELD>
+      </RSIMP>
+      <RSIMP>
+       <PARAMETER>I_DERIVATION_DATE</PARAMETER>
+       <DBFIELD>SY-DATUM</DBFIELD>
+      </RSIMP>
+      <RSIMP>
+       <PARAMETER>I_STEP_ID</PARAMETER>
+       <DBFIELD>TKEDRS-STEPID</DBFIELD>
+      </RSIMP>
+      <RSIMP>
+       <PARAMETER>I_COPA_ITEM</PARAMETER>
+      </RSIMP>
+      <RSIMP>
+       <PARAMETER>I_GLOBAL</PARAMETER>
+       <DBFIELD>KEDRCOPA</DBFIELD>
+      </RSIMP>
+     </IMPORT>
+     <EXPORT>
+      <RSEXP>
+       <PARAMETER>E_COPA_ITEM</PARAMETER>
+       <REFERENCE>X</REFERENCE>
+      </RSEXP>
+      <RSEXP>
+       <PARAMETER>E_GLOBAL</PARAMETER>
+       <REFERENCE>X</REFERENCE>
+      </RSEXP>
+      <RSEXP>
+       <PARAMETER>E_EXIT_IS_ACTIVE</PARAMETER>
+       <REFERENCE>X</REFERENCE>
+      </RSEXP>
+      <RSEXP>
+       <PARAMETER>E_FAILED</PARAMETER>
+       <REFERENCE>X</REFERENCE>
+      </RSEXP>
+     </EXPORT>
+     <DOCUMENTATION>
+      <RSFDO>
+       <PARAMETER>I_OPERATING_CONCERN</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>Operating Concern</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>I_DERIVATION_DATE</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>Derivation Date</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>I_STEP_ID</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>User-Defined Identifier</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>I_COPA_ITEM</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>CO-PA Characteristic Values in CE0xxxx-Structure</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>I_GLOBAL</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>CO-PA Global Values in KEDRCOPA-Structure</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>E_COPA_ITEM</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>Return: CO-PA Characteristic Values</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>E_GLOBAL</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>Return: Global Values</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>E_EXIT_IS_ACTIVE</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>Flag must be returned with &quot;X&quot;</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>E_FAILED</PARAMETER>
+       <KIND>P</KIND>
+      </RSFDO>
+     </DOCUMENTATION>
+    </item>
+    <item>
+     <FUNCNAME>Z_SDSCO_KEDR_Z002</FUNCNAME>
+     <SHORT_TEXT>Normal Service</SHORT_TEXT>
+     <IMPORT>
+      <RSIMP>
+       <PARAMETER>I_OPERATING_CONCERN</PARAMETER>
+       <DBFIELD>TKEB-ERKRS</DBFIELD>
+      </RSIMP>
+      <RSIMP>
+       <PARAMETER>I_DERIVATION_DATE</PARAMETER>
+       <DBFIELD>SY-DATUM</DBFIELD>
+      </RSIMP>
+      <RSIMP>
+       <PARAMETER>I_STEP_ID</PARAMETER>
+       <DBFIELD>TKEDRS-STEPID</DBFIELD>
+      </RSIMP>
+      <RSIMP>
+       <PARAMETER>I_COPA_ITEM</PARAMETER>
+      </RSIMP>
+      <RSIMP>
+       <PARAMETER>I_GLOBAL</PARAMETER>
+       <DBFIELD>KEDRCOPA</DBFIELD>
+      </RSIMP>
+     </IMPORT>
+     <EXPORT>
+      <RSEXP>
+       <PARAMETER>E_COPA_ITEM</PARAMETER>
+       <REFERENCE>X</REFERENCE>
+      </RSEXP>
+      <RSEXP>
+       <PARAMETER>E_GLOBAL</PARAMETER>
+       <REFERENCE>X</REFERENCE>
+      </RSEXP>
+      <RSEXP>
+       <PARAMETER>E_EXIT_IS_ACTIVE</PARAMETER>
+       <REFERENCE>X</REFERENCE>
+      </RSEXP>
+      <RSEXP>
+       <PARAMETER>E_FAILED</PARAMETER>
+       <REFERENCE>X</REFERENCE>
+      </RSEXP>
+     </EXPORT>
+     <DOCUMENTATION>
+      <RSFDO>
+       <PARAMETER>I_OPERATING_CONCERN</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>Operating Concern</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>I_DERIVATION_DATE</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>Derivation Date</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>I_STEP_ID</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>User-Defined Identifier</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>I_COPA_ITEM</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>CO-PA Characteristic Values in CE0xxxx-Structure</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>I_GLOBAL</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>CO-PA Global Values in KEDRCOPA-Structure</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>E_COPA_ITEM</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>Return: CO-PA Characteristic Values</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>E_GLOBAL</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>Return: Global Values</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>E_EXIT_IS_ACTIVE</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>Flag must be returned with &quot;X&quot;</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>E_FAILED</PARAMETER>
+       <KIND>P</KIND>
+      </RSFDO>
+     </DOCUMENTATION>
+    </item>
+   </FUNCTIONS>
+  </asx:values>
+ </asx:abap>
+</abapGit>

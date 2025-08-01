@@ -1,0 +1,8 @@
+@AbapCatalog.internal.setChange: 'FLDADD_NO_ASS_INFLUENCE'
+@AbapCatalog.sqlViewAppendName: 'ZZ1_0CB9DC53EE3D'
+
+extend view C_EXPIRINGSRVCCONTRITMDETAILS with ZZ1_DFNPTW2NOLBWD5F3UNH5NAWRGM
+  
+{ 
+  _ServiceDocumentExt.ZZ1_BILL_METHOD as ZZ1_BILL_METHOD
+}

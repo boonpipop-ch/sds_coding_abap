@@ -1,0 +1,376 @@
+*&---------------------------------------------------------------------*
+*& Include          ZSDSCMR0120_CLASS
+*&---------------------------------------------------------------------*
+CLASS LCL_UTIL DEFINITION.
+  PUBLIC SECTION.
+    METHODS :
+      CONSTRUCTOR.
+    CLASS-METHODS :
+      CONVERT_ALPHA_IN  IMPORTING I_DATA TYPE ANY
+                        EXPORTING E_DATA TYPE ANY,
+      CONVERT_ALPHA_OUT IMPORTING I_DATA TYPE ANY
+                        EXPORTING E_DATA TYPE ANY.
+
+ENDCLASS.
+CLASS LCL_UTIL IMPLEMENTATION.
+  METHOD CONSTRUCTOR.
+
+  ENDMETHOD.
+  METHOD CONVERT_ALPHA_IN.
+
+    CALL FUNCTION 'CONVERSION_EXIT_ALPHA_INPUT'
+      EXPORTING
+        INPUT  = I_DATA
+      IMPORTING
+        OUTPUT = E_DATA.
+
+  ENDMETHOD.
+  METHOD CONVERT_ALPHA_OUT.
+    CALL FUNCTION 'CONVERSION_EXIT_ALPHA_outPUT'
+      EXPORTING
+        INPUT  = I_DATA
+      IMPORTING
+        OUTPUT = E_DATA.
+
+  ENDMETHOD.
+ENDCLASS.
+CLASS LCL_DATA DEFINITION.
+  PUBLIC SECTION.
+    METHODS :
+      CONSTRUCTOR,
+      START_PROCESS.
+    CLASS-METHODS :
+      GET_DATA,
+      GET_ADDTIONAL_DATA,
+      SHOW_REPORT,
+      SET_LAYOUT_OUTPUT,
+      BUILD_FCAT,
+      SET_SORT,
+      SET_ALV_GRID,
+      HTML_TOP_OF_PAGE,
+      SAVE,
+      CREATE_EQUI IMPORTING I_DATA   TYPE GY_RESULT
+                  RETURNING VALUE(R) TYPE EQUI-EQUNR.
+    CLASS-DATA :
+      LO TYPE REF TO LCL_DATA.
+ENDCLASS.
+CLASS LCL_DATA IMPLEMENTATION.
+  METHOD CONSTRUCTOR.
+
+  ENDMETHOD.
+  METHOD GET_DATA.
+    IF LO IS INITIAL.
+      CREATE OBJECT LO.
+    ENDIF.
+
+    LO->START_PROCESS( ).
+  ENDMETHOD.
+  METHOD START_PROCESS.
+    DATA : LT_TMP TYPE TABLE OF GY_RESULT WITH EMPTY KEY.
+
+    OPEN CURSOR WITH HOLD @DATA(LV_CURSOR) FOR
+    SELECT A~SERNR,
+           A~MATNR,
+           A~GWLDT,
+           A~GWLEN,
+           A~TXT04
+      FROM ZSDSCMT010 AS A
+      WHERE A~MATNR IN @S_MATNR
+        AND A~SERNR IN @S_SERNR
+        AND A~GWLEN IN @S_GWLEN
+        AND A~GWLDT IN @S_GWLDT AND
+      NOT EXISTS ( SELECT MATNR,
+                          SERNR
+                     FROM EQUI AS B
+                    WHERE B~MATNR EQ A~MATNR
+                      AND B~SERNR EQ A~SERNR ).
+    DO.
+      FETCH NEXT CURSOR @LV_CURSOR INTO TABLE @LT_TMP
+      PACKAGE SIZE @GC_MAX_FETCH.
+      IF SY-SUBRC <> 0.
+*        CLOSE CURSOR LV_CURSOR.
+        EXIT.
+      ENDIF.
+      APPEND LINES OF LT_TMP TO GT_RESULT.
+    ENDDO.
+
+
+  ENDMETHOD.
+  METHOD GET_ADDTIONAL_DATA.
+*    FIELD-SYMBOLS <LFS_RESULT> LIKE LINE OF GT_RESULT.
+*    LOOP AT GT_RESULT ASSIGNING <LFS_RESULT>.
+*
+*    ENDLOOP.
+  ENDMETHOD.
+  METHOD SHOW_REPORT.
+    SET_LAYOUT_OUTPUT( ).
+    BUILD_FCAT( ).
+    SET_SORT( ).
+    SET_ALV_GRID( ).
+  ENDMETHOD.
+  METHOD SET_LAYOUT_OUTPUT.
+*    CONSTANTS : BEGIN OF LC_CON,
+*                  CHK_FILED TYPE C LENGTH 5 VALUE 'CHECK',
+*                END OF LC_CON.
+    GS_LAYOUT-ZEBRA             = GC_X.
+    GS_LAYOUT-COLWIDTH_OPTIMIZE = GC_X.
+*    GS_LAYOUT-BOX_FIELDNAME     = LC_CON-CHK_FILED.
+  ENDMETHOD.
+  METHOD BUILD_FCAT.
+    DATA:
+       LS_FCAT TYPE SLIS_FIELDCAT_ALV.
+
+*    CONSTANTS : BEGIN OF LC_CON,
+*                  CHK_FILED TYPE C LENGTH 5 VALUE 'CHECK',
+*                  CHK_NAME  TYPE C LENGTH 3 VALUE 'CHK',
+*                END OF LC_CON.
+*
+*    CLEAR LS_FCAT.
+*    LS_FCAT-FIELDNAME   = LC_CON-CHK_FILED.
+*    LS_FCAT-SELTEXT_S   = LC_CON-CHK_NAME.
+*    LS_FCAT-SELTEXT_M   = LC_CON-CHK_NAME.
+*    LS_FCAT-SELTEXT_L   = LC_CON-CHK_FILED.
+*    LS_FCAT-CHECKBOX    = ABAP_TRUE.
+*    LS_FCAT-INPUT       = ABAP_TRUE.
+*    LS_FCAT-EDIT        = ABAP_TRUE.
+*    APPEND LS_FCAT TO GT_FCAT.
+
+    DATA : LV_RUNNING  TYPE I,
+           LV_DATA     TYPE C LENGTH 6 VALUE 'TEXT-',
+           LV_RUN_TEXT TYPE C LENGTH 2.
+
+    CONSTANTS : LC_F TYPE C VALUE 'F',
+                LC_T TYPE C VALUE 'T',
+                LC_d TYPE C VALUE 'D'.
+
+    FIELD-SYMBOLS <LFS> TYPE ANY.
+
+    DATA : LV_TEXT TYPE C LENGTH 8.
+*Field
+    CLEAR : LS_FCAT.
+    DO 99 TIMES.
+      ADD 1 TO LV_RUNNING.
+      LV_RUN_TEXT = LV_RUNNING.
+
+      LCL_UTIL=>CONVERT_ALPHA_IN( EXPORTING I_DATA = LV_RUN_TEXT
+                                  IMPORTING E_Data = LV_RUN_TEXT ).
+
+      IF <LFS> IS ASSIGNED.
+        UNASSIGN <LFS>.
+      ENDIF.
+      CONCATENATE LV_DATA LC_F LV_RUN_TEXT INTO LV_TEXT.
+      ASSIGN (LV_TEXT) TO <LFS>.
+      IF <LFS> IS NOT ASSIGNED.
+        EXIT.
+      ENDIF.
+      LS_FCAT-FIELDNAME = <LFS>.
+*Teble Ref
+      IF <LFS> IS ASSIGNED.
+        UNASSIGN <LFS>.
+      ENDIF.
+      CONCATENATE LV_DATA LC_T LV_RUN_TEXT INTO LV_TEXT.
+      ASSIGN (LV_TEXT) TO <LFS>.
+      IF <LFS> IS ASSIGNED.
+        LS_FCAT-REF_TABNAME = <LFS>.
+      ENDIF.
+*Description
+      IF <LFS> IS ASSIGNED.
+        UNASSIGN <LFS>.
+      ENDIF.
+      CONCATENATE LV_DATA LC_D LV_RUN_TEXT INTO LV_TEXT.
+      ASSIGN (LV_TEXT) TO <LFS>.
+      IF <LFS> IS ASSIGNED.
+        LS_FCAT-SELTEXT_S = <LFS>.
+        LS_FCAT-SELTEXT_M = <LFS>.
+        LS_FCAT-SELTEXT_L = <LFS>.
+      ENDIF.
+      APPEND LS_FCAT TO GT_FCAT.
+      CLEAR LS_FCAT.
+    ENDDO.
+
+  ENDMETHOD.
+  METHOD SET_SORT.
+**  CLEAR gs_sort.
+**  gs_sort-fieldname = 'LIFNR'.
+**  gs_sort-spos = '1'.
+**  gs_sort-up = 'X'.
+***  gs_sort-subtot = 'X'.
+**  APPEND gs_sort TO gt_sort.
+  ENDMETHOD.
+  METHOD SET_ALV_GRID.
+*SAPLKKBL
+    CALL FUNCTION 'REUSE_ALV_GRID_DISPLAY'
+      EXPORTING
+        I_CALLBACK_PROGRAM = SY-REPID
+        "I_CALLBACK_PF_STATUS_SET = 'PF_STATUS_1'
+        "I_callback_user_command  = 'USER_COMMAND'
+*       I_CALLBACK_TOP_OF_PAGE            = ' '
+*       i_html_height_top  = 12
+*       I_CALLBACK_HTML_TOP_OF_PAGE       = 'HTML_TOP_OF_PAGE'
+*       I_CALLBACK_HTML_END_OF_LIST       = ' '
+*       I_STRUCTURE_NAME   =
+*       I_BACKGROUND_ID    = ' '
+*       I_GRID_TITLE       =
+*       I_GRID_SETTINGS    =
+        IS_LAYOUT          = GS_LAYOUT
+        IT_FIELDCAT        = GT_FCAT
+*       IT_EXCLUDING       =
+*       IT_SPECIAL_GROUPS  =
+        IT_SORT            = GT_SORT
+*       IT_FILTER          =
+*       IS_SEL_HIDE        =
+        I_DEFAULT          = GC_X
+        I_SAVE             = GC_A
+*       IS_VARIANT         =
+*       IT_EVENTS          =
+*       IT_EVENT_EXIT      =
+*       IS_PRINT           =
+*       IS_REPREP_ID       =
+*       I_SCREEN_START_COLUMN             = 0
+*       I_SCREEN_START_LINE               = 0
+*       I_SCREEN_END_COLUMN               = 0
+*       I_SCREEN_END_LINE  = 0
+*       I_HTML_HEIGHT_TOP  = 0
+*       I_HTML_HEIGHT_END  = 0
+*       IT_ALV_GRAPHICS    =
+*       IT_HYPERLINK       =
+*       IT_ADD_FIELDCAT    =
+*       IT_EXCEPT_QINFO    =
+*       IR_SALV_FULLSCREEN_ADAPTER        =
+* IMPORTING
+*       E_EXIT_CAUSED_BY_CALLER           =
+*       ES_EXIT_CAUSED_BY_USER            =
+      TABLES
+        T_OUTTAB           = GT_RESULT
+      EXCEPTIONS
+        PROGRAM_ERROR      = 1
+        OTHERS             = 2.
+    IF SY-SUBRC <> 0.
+* MESSAGE ID SY-MSGID TYPE SY-MSGTY NUMBER SY-MSGNO
+*         WITH SY-MSGV1 SY-MSGV2 SY-MSGV3 SY-MSGV4.
+    ENDIF.
+
+  ENDMETHOD.
+  METHOD HTML_TOP_OF_PAGE.
+*  DATA: text TYPE sdydo_text_element.
+*
+*  CALL METHOD document->add_gap
+*    EXPORTING
+*      width = 100.
+*  text =  'Company Code Data'.
+*  CALL METHOD document->add_text
+*    EXPORTING
+*      text      = text
+*      sap_style = 'HEADING'.
+*
+*  CALL METHOD document->new_line.
+*  CALL METHOD document->new_line.
+*  CALL METHOD document->new_line.
+*
+*  text = 'User Name : '.
+*  CALL METHOD document->add_text
+*    EXPORTING
+*      text         = text
+*      sap_emphasis = 'Strong'.
+*
+*  CALL METHOD document->add_gap
+*    EXPORTING
+*      width = 6.
+*
+*  text = sy-uname.
+*  CALL METHOD document->add_text
+*    EXPORTING
+*      text      = text
+*      sap_style = 'Key'.
+*
+*  CALL METHOD document->add_gap
+*    EXPORTING
+*      width = 50.
+*
+*
+*  text = 'Date : '.
+*  CALL METHOD document->add_text
+*    EXPORTING
+*      text         = text
+*      sap_emphasis = 'Strong'.
+*
+*  CALL METHOD document->add_gap
+*    EXPORTING
+*      width = 6.
+*
+*  text = sy-datum.
+*  CALL METHOD document->add_text
+*    EXPORTING
+*      text      = text
+*      sap_style = 'Key'.
+*
+*  CALL METHOD document->add_gap
+*    EXPORTING
+*      width = 50.
+*
+*  text = 'Time : '.
+*  CALL METHOD document->add_text
+*    EXPORTING
+*      text         = text
+*      sap_emphasis = 'Strong'.
+*
+*  CALL METHOD document->add_gap
+*    EXPORTING
+*      width = 6.
+*
+*  text = sy-uzeit.
+*  CALL METHOD document->add_text
+*    EXPORTING
+*      text      = text
+*      sap_style = 'Key'.
+*
+*  CALL METHOD document->new_line.
+*  CALL METHOD document->new_line.
+  ENDMETHOD.
+  METHOD SAVE.
+    LOOP AT GT_RESULT ASSIGNING FIELD-SYMBOL(<LFS_DATA>).
+      <LFS_DATA>-EQUNR = CREATE_EQUI( <LFS_DATA> ).
+      IF <LFS_DATA>-EQUNR IS INITIAL.
+        <LFS_DATA>-STATUS  = GC_ERRO.
+        <LFS_DATA>-MESSAGE = TEXT-E01.
+      ELSE.
+        <LFS_DATA>-STATUS  = GC_SUCS.
+        <LFS_DATA>-MESSAGE = TEXT-S01.
+      ENDIF.
+    ENDLOOP.
+  ENDMETHOD.
+  METHOD CREATE_EQUI.
+    PERFORM F_BDC_DATA USING I_DATA.
+
+    DATA : LV_MATNR TYPE EQUI-MATNR,
+           lv_Sernr TYPE EQUI-SERNR.
+
+    LV_MATNR = I_DATA-MATNR.
+    LV_SERNR = I_DATA-SERNR.
+
+    SELECT SINGLE EQUNR
+      FROM EQUI
+      WHERE MATNR EQ @LV_MATNR
+        AND SERNR EQ @lv_Sernr
+      INTO @R.
+  ENDMETHOD.
+ENDCLASS.
+*----------------------------------------------------------------------*
+* CLASS lcl_event_receiver DEFINITION
+*----------------------------------------------------------------------*
+CLASS EVENT_CLASS DEFINITION.
+*Handling double click
+  PUBLIC SECTION.
+    METHODS:
+    HANDLE_DOUBLE_CLICK
+    FOR EVENT DOUBLE_CLICK OF CL_GUI_ALV_GRID IMPORTING E_ROW E_COLUMN ES_ROW_NO.
+ENDCLASS. "lcl_event_receiver DEFINITION
+*----------------------------------------------------------------------*
+*----------------------------------------------------------------------*
+* CLASS lcl_event_receiver IMPLEMENTATION
+*----------------------------------------------------------------------*
+CLASS EVENT_CLASS IMPLEMENTATION.
+  METHOD HANDLE_DOUBLE_CLICK.
+
+  ENDMETHOD. "handle_double_click
+ENDCLASS. "lcl_event_receiver IMPLEMENTATION

@@ -1,0 +1,161 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<abapGit version="v1.0.0" serializer="LCL_OBJECT_FUGR" serializer_version="v1.0.0">
+ <asx:abap xmlns:asx="http://www.sap.com/abapxml" version="1.0">
+  <asx:values>
+   <AREAT>Process PR</AREAT>
+   <INCLUDES>
+    <SOBJ_NAME>LZSDSMM04F01</SOBJ_NAME>
+    <SOBJ_NAME>LZSDSMM04TOP</SOBJ_NAME>
+    <SOBJ_NAME>SAPLZSDSMM04</SOBJ_NAME>
+   </INCLUDES>
+   <FUNCTIONS>
+    <item>
+     <FUNCNAME>Z_SDSMM_CREATE_PR</FUNCNAME>
+     <REMOTE_CALL>R</REMOTE_CALL>
+     <SHORT_TEXT>Create PR</SHORT_TEXT>
+     <IMPORT>
+      <RSIMP>
+       <PARAMETER>I_HEADER</PARAMETER>
+       <OPTIONAL>X</OPTIONAL>
+       <TYP>ZSDSMMS002</TYP>
+      </RSIMP>
+      <RSIMP>
+       <PARAMETER>IT_ITEM</PARAMETER>
+       <OPTIONAL>X</OPTIONAL>
+       <TYP>ZSDSMMS003_TT</TYP>
+      </RSIMP>
+      <RSIMP>
+       <PARAMETER>IT_ASSET_NUM</PARAMETER>
+       <OPTIONAL>X</OPTIONAL>
+       <TYP>ZSDSFIS012_TT</TYP>
+      </RSIMP>
+      <RSIMP>
+       <PARAMETER>I_GET_DATA_FROM_K2</PARAMETER>
+       <OPTIONAL>X</OPTIONAL>
+       <TYP>FLAG</TYP>
+      </RSIMP>
+      <RSIMP>
+       <PARAMETER>I_WEBNO</PARAMETER>
+       <OPTIONAL>X</OPTIONAL>
+       <TYP>CHAR20</TYP>
+      </RSIMP>
+      <RSIMP>
+       <PARAMETER>I_SEND_MAIL</PARAMETER>
+       <OPTIONAL>X</OPTIONAL>
+       <TYP>FLAG</TYP>
+      </RSIMP>
+      <RSIMP>
+       <PARAMETER>I_TEST_RUN</PARAMETER>
+       <OPTIONAL>X</OPTIONAL>
+       <TYP>FLAG</TYP>
+      </RSIMP>
+     </IMPORT>
+     <EXPORT>
+      <RSEXP>
+       <PARAMETER>E_OUTPUT</PARAMETER>
+       <TYP>BANFN</TYP>
+      </RSEXP>
+      <RSEXP>
+       <PARAMETER>E_MESSAGE</PARAMETER>
+       <TYP>CHAR255</TYP>
+      </RSEXP>
+     </EXPORT>
+     <DOCUMENTATION>
+      <RSFDO>
+       <PARAMETER>I_HEADER</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>PR Header</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>IT_ITEM</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>PR Item</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>IT_ASSET_NUM</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>Return Asset Number</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>I_GET_DATA_FROM_K2</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>General Flag</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>I_WEBNO</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>Web No</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>I_SEND_MAIL</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>Send email after created PR</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>I_TEST_RUN</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>General Flag</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>E_OUTPUT</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>Purchase Requisition Number</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>E_MESSAGE</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>Char255</STEXT>
+      </RSFDO>
+     </DOCUMENTATION>
+    </item>
+    <item>
+     <FUNCNAME>Z_SDSMM_REJECT_PR</FUNCNAME>
+     <SHORT_TEXT>Reject PR</SHORT_TEXT>
+     <IMPORT>
+      <RSIMP>
+       <PARAMETER>I_WEBNO</PARAMETER>
+       <OPTIONAL>X</OPTIONAL>
+       <TYP>CHAR20</TYP>
+      </RSIMP>
+     </IMPORT>
+     <EXPORT>
+      <RSEXP>
+       <PARAMETER>E_OUTPUT</PARAMETER>
+       <TYP>CHAR1</TYP>
+      </RSEXP>
+      <RSEXP>
+       <PARAMETER>E_MESSAGE</PARAMETER>
+       <TYP>CHAR255</TYP>
+      </RSEXP>
+      <RSEXP>
+       <PARAMETER>E_MESSTYP</PARAMETER>
+       <TYP>BAPIRET2-TYPE</TYP>
+      </RSEXP>
+     </EXPORT>
+     <DOCUMENTATION>
+      <RSFDO>
+       <PARAMETER>I_WEBNO</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>Char 20</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>E_OUTPUT</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>Status Reject</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>E_MESSAGE</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>Char255</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>E_MESSTYP</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>Message type: S Success, E Error, W Warning, I Info, A Abort</STEXT>
+      </RSFDO>
+     </DOCUMENTATION>
+    </item>
+   </FUNCTIONS>
+  </asx:values>
+ </asx:abap>
+</abapGit>

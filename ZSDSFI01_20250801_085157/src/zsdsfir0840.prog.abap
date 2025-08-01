@@ -1,0 +1,1992 @@
+*-----------------------------------------------------------------------
+*  Program ID         : ZSDSFIR0840
+*  Creation Date      : 23.06.2025
+*  Author             : B.CHIEWSARIKIJ (SDS)
+*  Add-on ID          : N/A
+*  Description        : Mass Status change in Project System
+*  Purpose            : N/A
+*  Copied from        : CNMASSSTATUS - Mass Status change in Project System
+*  Restriction        : N/A
+*-----------------------------------------------------------------------
+*  CHANGE HISTORY
+*-----------------------------------------------------------------------
+*  Date        Task #      Programmer  Description
+*-----------------------------------------------------------------------
+*  DD.MM.YYYY  TR no.      ABAP Name   Detail
+*-----------------------------------------------------------------------
+*&---------------------------------------------------------------------*
+*& Report RCNMASSSTATUS
+*&---------------------------------------------------------------------*
+*&
+*&---------------------------------------------------------------------*
+REPORT ZSDSFIR0840 MESSAGE-ID ZSDSFI01.
+INCLUDE ZSDSFIR0840_F01.
+*INCLUDE psdbcmem.
+TYPE-POOLS: VRM, SLIS.
+TABLES:
+  PROJ,
+  PRPS_R,
+  AUFK,
+  ACT01,
+  ELM_PS,
+  JEST,
+  TCNDB,
+  TCNDS,
+  SSCRFIELDS.                                       "Begin of Note - 2912252
+
+TYPES: TTYP_PS_TAB TYPE STANDARD TABLE OF ELM_PS.
+
+DATA: GV_VARIANT_NAME2 TYPE SYST-SLSET,
+      GV_VARIANT_TEMP  TYPE SYST-SLSET,
+      GV_VAR_FLAG      TYPE XFELD,
+      UUSR_CPY         TYPE PS_STATUS_TEXT,
+      LV_PROCESSED     TYPE XFELD,
+      LV_VARIANT       TYPE XFELD.                  "End of Note - 2912252
+
+CONSTANTS: CON_YES VALUE 'X',
+           CON_NO  VALUE ' '.
+DATA:   BEGIN OF JEST_BUF OCCURS 0.
+          INCLUDE STRUCTURE JEST_UPD.
+DATA:     MOD,
+          INACT_OLD LIKE JEST-INACT.
+DATA:   END OF JEST_BUF.
+DATA : LT_JEST LIKE STANDARD TABLE OF JEST_BUF.
+TYPES: BEGIN OF RESULT_TYP,
+         STAT         TYPE ICON_D,
+         OBTYP        TYPE SEU_TYPE,
+         OBJECTKEY    TYPE OBJIDEXT,
+         SSTATN(40)   TYPE C,
+         USTATN(40)   TYPE C,
+         SSTATO(40)   TYPE C,
+         USTATO(40)   TYPE C,
+         MESSAGE_TYPE TYPE MSGTY,
+         MESSAGE_TEXT TYPE SO_TEXT255,                      "N_2901313
+       END OF RESULT_TYP.
+DATA : LV_AUFPL_OLD         TYPE AFVC-AUFPL,
+       TABIX                TYPE SY-TABIX,
+       LINCT                LIKE SY-TFILL,
+       LT_FIELDCAT          TYPE SLIS_T_FIELDCAT_ALV,
+       LS_FIELDCAT          TYPE SLIS_FIELDCAT_ALV,
+       LS_LAYOUT            TYPE SLIS_LAYOUT_ALV,
+       POS                  TYPE I VALUE 1,
+       GT_RESULT            TYPE TABLE OF RESULT_TYP,
+       GS_RESULT            TYPE RESULT_TYP,
+       S_USR_STAT(4)        TYPE C,
+       S_SYS_STAT(4)        TYPE C,
+       U_USR_STAT(4)        TYPE C,
+       U_SYS_STAT(4)        TYPE C,
+       LV_STATUS(4)         TYPE C,
+       LT_ACT_SYSTEM_STATUS TYPE TABLE OF  BAPI_ACT_MNT_SYSTEM_STATUS WITH HEADER LINE,
+       LT_ACT_USER_STATUS   TYPE TABLE OF BAPI_ACT_MNT_USER_STATUS WITH HEADER LINE,
+       LT_WBS_SYSTEM_STATUS TYPE TABLE OF  BAPI_WBS_MNT_SYSTEM_STATUS WITH HEADER LINE,
+       LT_WBS_USER_STATUS   TYPE TABLE OF BAPI_WBS_MNT_USER_STATUS WITH HEADER LINE,
+       NAME                 TYPE VRM_ID,
+       LIST                 TYPE VRM_VALUES,
+       VALUE                LIKE LINE OF LIST,
+       LT_TJ30T             TYPE TABLE OF TJ30T,
+       T_RSPARAMS           LIKE RSPARAMS       OCCURS 0 WITH HEADER LINE,
+       T_RSTHIE_M           LIKE RSTHIE_M       OCCURS 0 WITH HEADER LINE,
+       V_HANDLE             TYPE I,
+       LS_TJ30T             TYPE TJ30T,
+       PROF_CPY             TYPE JOSTD-STSMA,
+       PROJ_TAB             TYPE TABLE OF PROJ_CJDB_REP,
+       LS_PROJ_TAB          TYPE PROJ_CJDB_REP,
+       PRPS_TAB             TYPE TABLE OF PRPS_CJDB_REP,
+       LS_PRPS_TAB          TYPE  PRPS_CJDB_REP,
+       ELM_PS_TAB           TYPE TABLE OF ELM_PS,
+       LS_ELM_PS_TAB        TYPE ELM_PS,
+       AUFK_TAB             TYPE TABLE OF AUFK_CJDB_REP,
+       LS_AUFK_TAB          TYPE  AUFK_CJDB_REP,
+       LT_RESULT            TYPE TABLE OF  BAPI_STATUS_RESULT WITH HEADER LINE,
+       LT_RESULT_NET        TYPE TABLE OF  BAPIRETURN1 WITH HEADER LINE,
+       LT_RETURN            TYPE TABLE OF  BAPIRET2 WITH HEADER LINE,
+       ACT_TAB              TYPE TABLE OF ACT01_CJDB_REP,
+       LS_ACT_TAB           TYPE ACT01_CJDB_REP,
+       LS_ACT_TAB_DEL       TYPE ACT01_CJDB_REP,            "N_2901313
+       LS_RESULT            TYPE BAPI_STATUS_RESULT.        "N_2901313
+DATA: LT_RESULT_TMP     TYPE TABLE OF  BAPI_STATUS_RESULT WITH HEADER LINE,  "Note 3048648
+      LT_RESULT_NET_TMP TYPE TABLE OF  BAPIRETURN1 WITH HEADER LINE,
+      LT_RETURN_TMP     TYPE TABLE OF  BAPIRET2 WITH HEADER LINE.
+DATA: GV_VARIANT_NAME TYPE SYST-SLSET.
+TYPES: BEGIN OF S_STATUS,
+         ISTAT TYPE J_ISTAT,
+       END OF S_STATUS.
+DATA :LT_STATUS TYPE TABLE OF S_STATUS,
+      LS_STATUS TYPE S_STATUS.
+DATA :LT_TJ02T     TYPE TABLE OF TJ02T,
+      LT_TJ02T_EN  TYPE TABLE OF TJ02T,
+      LS_TJ02T     TYPE TJ02T,
+      LT_TJ20T_NEW TYPE TABLE OF TJ20T.             "Note - 2912252
+*** New data declaration
+TYPES: BEGIN OF OUTPUT_TYP,
+         SEL,
+         OBJNR      TYPE J_OBJNR,
+         OBTYP      TYPE SEU_TYPE,
+         OBJECT(30) TYPE C,
+         PROJ       TYPE PS_PSPID,
+         WBS        TYPE PS_POSID,
+         NETW       TYPE AUFNR,
+         ACT        TYPE VORNR,
+         ACT_ELE    TYPE UVORN,                             "N_2901313
+         DESC(40)   TYPE C,
+         SSTAT(40)  TYPE C,
+         USTAT(40)  TYPE C,
+         STSMA      TYPE JSTO-STSMA,
+         KOKRS      TYPE KOKRS,
+         BUKRS      TYPE BUKRS,
+         GSBER      TYPE GSBER,
+         WERKS      TYPE WERKS_D,
+         PRCTR      TYPE PRCTR,
+         KOSTL      TYPE KOSTL,
+       END OF OUTPUT_TYP.
+DATA:   BEGIN OF JSTO_BUF OCCURS 1000.
+          INCLUDE STRUCTURE JSTO_UPD.
+DATA:     MOD,
+          WF_COLLECTED.
+DATA:   END OF JSTO_BUF.
+TYPES: BEGIN OF F4_HELP,
+         STSMA TYPE J_STSMA,
+         TXT   TYPE TEXT30,
+       END OF F4_HELP.
+DATA: LT_JSTO    LIKE STANDARD TABLE OF JSTO_BUF,
+      LS_JSTO    LIKE JSTO_BUF,
+      LS_JEST    LIKE JEST_BUF,
+      GT_SELECT  TYPE TABLE OF OUTPUT_TYP,
+      GS_SELECT  TYPE OUTPUT_TYP,
+      LS_SELECT  TYPE OUTPUT_TYP,
+      LT_TJ20T   TYPE TABLE OF TJ20T,
+      LT_TJ21    TYPE TABLE OF TJ21,
+      LS_TJ20T   TYPE  TJ20T,
+      LS_TJ21    TYPE TJ21,
+      LT_F4      TYPE TABLE OF F4_HELP,
+      LS_F4      TYPE F4_HELP,
+      RETURN_TAB TYPE TABLE OF DDSHRETVAL,
+      LS_RETURN  TYPE DDSHRETVAL.
+
+DATA: LT_PARAMS LIKE VANZ OCCURS 0.                 "Begin of Note - 2912252
+DATA: LS_VALUTAB LIKE RSPARAMS,
+      LT_VALUTAB LIKE RSPARAMS OCCURS 0.            "End of Note - 2912252
+
+
+DATA: LT_ACT_TAB     TYPE TABLE OF ACT01_CJDB_REP,
+      LT_ACT_TAB_DEL TYPE TABLE OF ACT01_CJDB_REP,
+      LV_NUM         TYPE SY-TABIX.
+FIELD-SYMBOLS: <FT_JEST> LIKE LT_JEST.
+FIELD-SYMBOLS: <FT_JSTO> LIKE LT_JSTO.
+FIELD-SYMBOLS: <FS_ACT>  LIKE LS_ACT_TAB.
+FIELD-SYMBOLS: <FS_ACT_D> LIKE LS_ACT_TAB.
+FIELD-SYMBOLS: <FS_SYST_STATUS> LIKE BAPI_ACT_MNT_SYSTEM_STATUS.
+FIELD-SYMBOLS: <FS_USR_STATUS> LIKE BAPI_ACT_MNT_USER_STATUS.
+CONSTANTS: GC_TECO TYPE JCDS-STAT VALUE 'I0045'.
+
+
+SELECTION-SCREEN BEGIN OF BLOCK S02 WITH FRAME TITLE TEXT-006.
+  PARAMETERS: P_TECO2M AS CHECKBOX DEFAULT 'X'. "USER-COMMAND sel.
+SELECTION-SCREEN END OF BLOCK S02.
+
+SELECTION-SCREEN BEGIN OF BLOCK BLK2
+  WITH FRAME TITLE TEXT-002.
+  PARAMETERS: SYS  AS CHECKBOX DEFAULT CON_YES,
+              SSYS AS LISTBOX TYPE BAPI_SYSTEM_STATUS_TEXT VISIBLE LENGTH 20.
+  PARAMETERS:  USR AS CHECKBOX.
+  PARAMETERS : PROF(8) TYPE C.
+  PARAMETERS : UUSR AS LISTBOX TYPE PS_STATUS_TEXT VISIBLE LENGTH 20.                "Note 2705444
+SELECTION-SCREEN END OF BLOCK BLK2.
+SELECTION-SCREEN BEGIN OF BLOCK BLK3
+  WITH FRAME TITLE TEXT-003.
+  PARAMETERS: SET  RADIOBUTTON GROUP RAD2,
+              RSET RADIOBUTTON GROUP RAD2.
+SELECTION-SCREEN END OF BLOCK BLK3.
+SELECTION-SCREEN BEGIN OF BLOCK BLK1
+  WITH FRAME TITLE TEXT-005.
+  PARAMETERS: SEL AS CHECKBOX DEFAULT CON_YES.
+SELECTION-SCREEN END OF BLOCK BLK1.
+SELECTION-SCREEN BEGIN OF BLOCK BLK4
+  WITH FRAME TITLE TEXT-004.
+  PARAMETERS: TEST AS CHECKBOX DEFAULT CON_YES,
+              ERR  AS CHECKBOX.
+SELECTION-SCREEN END OF BLOCK BLK4.
+
+INITIALIZATION.
+  PERFORM PROFILE_SELECTION.
+  PERFORM BUILD_LAYOUT.
+  IF SYS EQ CON_YES.
+    PERFORM GET_STATUS_LIST USING 'S'.
+  ENDIF.
+
+AT SELECTION-SCREEN OUTPUT.
+  IF SY-SLSET IS NOT INITIAL.                       "Begin of Note - 2912252
+
+    CALL FUNCTION 'RS_VARIANT_CONTENTS'
+      EXPORTING
+        REPORT               = SY-REPID
+        VARIANT              = SY-SLSET
+      TABLES
+        L_PARAMS             = LT_PARAMS
+        VALUTAB              = LT_VALUTAB
+      EXCEPTIONS
+        VARIANT_NON_EXISTENT = 1
+        VARIANT_OBSOLETE     = 2
+        OTHERS               = 3.
+    IF SY-SUBRC EQ 0.
+
+    ENDIF.
+    IF GV_VAR_FLAG IS INITIAL OR GV_VARIANT_TEMP <> SY-SLSET.
+      GV_VARIANT_NAME2 = SY-SLSET.
+    ENDIF.
+  ENDIF.
+
+  IF  GV_VARIANT_NAME2 IS INITIAL AND ( PROF <> PROF_CPY AND PROF IS NOT INITIAL ).
+    IMPORT LV_PROCESSED FROM MEMORY ID 'PROCESSED'.
+    IF LV_PROCESSED IS INITIAL.
+      CLEAR: LIST, UUSR.
+      REFRESH LIST[].
+    ENDIF.
+    PROF_CPY = PROF.
+  ENDIF.                                                            "End of Note - 2912252
+
+  IF NOT SY-BATCH IS INITIAL.                                          "Note 2705444
+    PERFORM IMPORT_TCNDB_TCNDS.
+  ENDIF.
+
+  IMPORT LV_VARIANT FROM MEMORY ID 'VARIANT'.
+  IF LV_VARIANT IS NOT INITIAL.
+    IMPORT LV_PROCESSED FROM MEMORY ID 'PROCESSED'.
+    CLEAR LV_VARIANT.
+    FREE MEMORY ID 'PROCESSED'.
+  ENDIF.
+  IF USR EQ CON_YES.
+    IF LV_PROCESSED IS INITIAL.                                     "Begin of Note - 2912252
+      IF SY-UCOMM IS INITIAL OR ( PROF <> PROF_CPY AND PROF IS NOT INITIAL ) . "Note - 3038273
+        PERFORM GET_STATUS_LIST USING 'U'.
+        GV_VARIANT_NAME = GV_VARIANT_TEMP = SY-SLSET.
+        CLEAR GV_VARIANT_NAME2.
+        IMPORT LV_PROCESSED FROM MEMORY ID 'PROCESSED'.
+        GV_VAR_FLAG = 'X'.
+        IF GV_VARIANT_NAME IS NOT INITIAL.
+          PERFORM GET_STATUS_VALUE USING GV_VARIANT_NAME.
+        ENDIF.
+        PERFORM GET_STATUS_LIST USING 'U'.
+      ENDIF.
+      IF UUSR IS INITIAL AND UUSR_CPY IS NOT INITIAL.
+        UUSR = UUSR_CPY.
+      ENDIF.
+    ENDIF.
+  ENDIF.
+
+  IMPORT LV_PROCESSED FROM MEMORY ID 'PROCESSED'.
+  IF USR IS NOT INITIAL AND LV_PROCESSED = 'X'.
+    PERFORM GET_STATUS_LIST USING 'U'.
+    FREE MEMORY ID 'PROCESSED'.
+  ENDIF.                                                            "End of Note - 2912252
+
+AT SELECTION-SCREEN ON VALUE-REQUEST FOR PROF.
+  PERFORM USER_PROFILE_F4.
+
+GET PROJ.
+  MOVE-CORRESPONDING PROJ TO LS_PROJ_TAB.
+  APPEND LS_PROJ_TAB TO PROJ_TAB.
+
+GET PRPS_R.
+  MOVE-CORRESPONDING PRPS_R TO LS_PRPS_TAB.
+  APPEND LS_PRPS_TAB TO PRPS_TAB.
+
+GET AUFK.
+  MOVE-CORRESPONDING AUFK TO LS_AUFK_TAB.
+  APPEND LS_AUFK_TAB TO AUFK_TAB.
+
+GET ACT01.
+  MOVE-CORRESPONDING ACT01 TO LS_ACT_TAB.
+  APPEND LS_ACT_TAB TO ACT_TAB.
+
+GET ELM_PS.
+  MOVE-CORRESPONDING ELM_PS TO LS_ELM_PS_TAB.
+  APPEND ELM_PS TO ELM_PS_TAB.
+
+START-OF-SELECTION.
+  LV_PROCESSED = 'X'.                                               "Begin of Note - 2912252
+  EXPORT LV_PROCESSED FROM LV_PROCESSED TO MEMORY ID 'PROCESSED'.
+  IF GV_VARIANT_NAME IS NOT INITIAL.
+    LV_VARIANT = 'X'.
+    EXPORT LV_VARIANT TO MEMORY ID 'VARIANT'.
+  ENDIF.
+  CALL FUNCTION 'RS_VARIANT_CONTENTS'
+    EXPORTING
+      REPORT               = SY-REPID
+      VARIANT              = SY-SLSET
+    TABLES
+      L_PARAMS             = LT_PARAMS
+      VALUTAB              = LT_VALUTAB
+    EXCEPTIONS
+      VARIANT_NON_EXISTENT = 1
+      VARIANT_OBSOLETE     = 2
+      OTHERS               = 3.
+  IF SY-SUBRC EQ 0.
+    READ TABLE LT_VALUTAB INTO LS_VALUTAB WITH KEY SELNAME = 'PROF'.
+    IF SY-SUBRC = 0.
+      IF PROF NE LS_VALUTAB-LOW.
+        CLEAR SY-SLSET.
+      ENDIF.
+    ENDIF.
+  ENDIF.                                            "End of Note - 2912252
+
+  IF ( USR EQ CON_YES AND UUSR IS INITIAL ) OR
+     ( SYS EQ CON_YES AND SSYS IS INITIAL ) OR
+     ( UUSR IS NOT INITIAL AND USR IS INITIAL ) OR
+     ( SYS IS INITIAL AND SSYS IS NOT INITIAL ) OR
+     ( UUSR IS INITIAL AND SSYS IS INITIAL ).
+    MESSAGE TEXT-T12 TYPE 'S' DISPLAY LIKE 'E'.
+    EXIT.
+  ENDIF.
+  IF UUSR IS NOT INITIAL AND UUSR_CPY IS INITIAL.   "Begin of Note - 2912252
+    UUSR_CPY = UUSR.
+  ENDIF.                                            "End of Note - 2912252
+  IF SYS IS NOT INITIAL .
+    READ TABLE LT_TJ02T INTO LS_TJ02T WITH KEY TXT04 = SSYS.
+    READ TABLE LT_TJ02T_EN INTO LS_TJ02T WITH KEY ISTAT = LS_TJ02T-ISTAT.
+    S_SYS_STAT = LS_TJ02T-TXT04.
+    IF S_SYS_STAT = 'REL'.
+      IF ( TCNDB-PRPS = CON_YES OR TCNDB-PROJ = CON_YES ).
+        TCNDB-PRPS = CON_YES.
+        TCNDB-PROJ = CON_YES.
+      ENDIF.
+      IF ( TCNDB-NETZ = CON_YES OR TCNDB-ACT = CON_YES ).
+        TCNDB-NETZ = CON_YES.
+        TCNDB-ACT  = CON_YES.
+      ENDIF.
+    ENDIF.
+  ENDIF.
+
+AT SELECTION-SCREEN.                                                 "Note 2705444
+  IF SY-UCOMM = 'SJOB'.                                                "Note 2837224
+    PERFORM EXPORT_TCNDB_TCNDS.
+  ENDIF.
+  PERFORM GET_STATUS_LIST USING 'U'.                  "Note - 2912252
+
+END-OF-SELECTION.
+  IF P_TECO2M = ABAP_TRUE.
+    "Keep only TECCO > 2 month
+    PERFORM FILTER_TECO_STAT CHANGING ELM_PS_TAB[].
+
+    IF ELM_PS_TAB[] IS INITIAL.
+      MESSAGE I004 DISPLAY LIKE 'I'.
+      LEAVE LIST-PROCESSING.
+    ENDIF.
+  ENDIF.
+
+  PERFORM SET_MASS_STATUS.
+  CLEAR LT_FIELDCAT[].
+
+  PERFORM GET_FIELDCATALOG CHANGING LT_FIELDCAT.
+  IF ERR IS NOT INITIAL.
+    DELETE GT_RESULT WHERE MESSAGE_TYPE <> 'E'.
+  ENDIF.
+  IF GT_RESULT[] IS NOT INITIAL.
+*    SORT gt_result BY stat objectkey.
+    CLEAR LS_LAYOUT-BOX_FIELDNAME.
+    CALL FUNCTION 'REUSE_ALV_GRID_DISPLAY'
+      EXPORTING
+        IS_LAYOUT     = LS_LAYOUT
+        IT_FIELDCAT   = LT_FIELDCAT
+        I_SAVE        = 'A'
+      TABLES
+        T_OUTTAB      = GT_RESULT
+      EXCEPTIONS
+        PROGRAM_ERROR = 1
+        OTHERS        = 2.
+  ENDIF.
+*&---------------------------------------------------------------------*
+*&      Form  get_status_list
+*&---------------------------------------------------------------------*
+*       text
+*----------------------------------------------------------------------*
+FORM GET_STATUS_LIST USING P_TYPE .
+  DATA: UUSR_SET TYPE C.                                                "Note 3038273
+  IF P_TYPE = 'S'.
+*add the system status allowed in this transaction
+    CLEAR LIST[].
+    CLEAR LT_STATUS[].
+    CLEAR LT_TJ02T[].
+    LS_STATUS-ISTAT ='I0064'.
+    APPEND LS_STATUS TO LT_STATUS.
+    LS_STATUS-ISTAT ='I0046'.
+    APPEND LS_STATUS TO LT_STATUS.
+    LS_STATUS-ISTAT ='I0029'.
+    APPEND LS_STATUS TO LT_STATUS.
+    LS_STATUS-ISTAT ='I0043'.
+    APPEND LS_STATUS TO LT_STATUS.
+    LS_STATUS-ISTAT ='I0065'.
+    APPEND LS_STATUS TO LT_STATUS.
+    LS_STATUS-ISTAT ='I0002'.
+    APPEND LS_STATUS TO LT_STATUS.
+    LS_STATUS-ISTAT ='I0045'.
+    APPEND LS_STATUS TO LT_STATUS.
+    LS_STATUS-ISTAT ='I0076'.
+    APPEND LS_STATUS TO LT_STATUS.
+    SELECT * FROM TJ02T INTO TABLE LT_TJ02T FOR ALL ENTRIES IN LT_STATUS WHERE ISTAT = LT_STATUS-ISTAT AND SPRAS = SY-LANGU.
+    LOOP AT LT_TJ02T INTO LS_TJ02T.
+      CLEAR VALUE.
+      VALUE-KEY = LS_TJ02T-TXT04.
+      VALUE-TEXT = LS_TJ02T-TXT30.
+      APPEND VALUE TO LIST.
+    ENDLOOP.
+    SELECT * FROM TJ02T INTO TABLE LT_TJ02T_EN FOR ALL ENTRIES IN LT_STATUS WHERE ISTAT = LT_STATUS-ISTAT AND SPRAS = 'E'.
+    NAME = 'SSYS'.
+    CALL FUNCTION 'VRM_SET_VALUES'
+      EXPORTING
+        ID     = NAME
+        VALUES = LIST.
+  ELSEIF P_TYPE = 'U'.
+    SELECT  * FROM  TJ30T INTO TABLE LT_TJ30T WHERE STSMA = PROF AND SPRAS = SY-LANGU.
+*    CLEAR list[].
+    CLEAR LIST.                                                     "Note - 2912252
+    REFRESH LIST.
+    LOOP AT LT_TJ30T INTO LS_TJ30T.
+      CLEAR VALUE.
+      VALUE-KEY = LS_TJ30T-TXT04.
+      VALUE-TEXT = LS_TJ30T-TXT30.
+      APPEND VALUE TO LIST.
+      IF UUSR IS NOT INITIAL AND GV_VARIANT_NAME2 IS NOT INITIAL.     "Begin of Note 3038273
+        IF UUSR EQ LS_TJ30T-TXT04.
+          UUSR_SET = 'X'.
+        ENDIF.
+      ENDIF.                                                          "End of Note 3038273
+    ENDLOOP.
+    IF UUSR IS NOT INITIAL AND UUSR_SET IS INITIAL AND GV_VARIANT_NAME2 IS NOT INITIAL. "Begin of Note 3038273
+      CLEAR LS_TJ30T.
+      SELECT SINGLE ESTAT FROM TJ30T INTO CORRESPONDING FIELDS OF LS_TJ30T
+          WHERE STSMA = PROF AND TXT04 = UUSR.
+      IF  SY-SUBRC EQ 0.
+        SELECT SINGLE TXT04 FROM TJ30T INTO CORRESPONDING FIELDS OF LS_TJ30T
+          WHERE STSMA = PROF AND ESTAT = LS_TJ30T-ESTAT AND SPRAS = SY-LANGU.
+        IF  SY-SUBRC EQ 0.
+          UUSR = LS_TJ30T-TXT04.
+        ENDIF.
+      ENDIF.
+    ENDIF.                                                             "End of Note 3038273
+    IF SY-BATCH IS INITIAL.                          "Note 2705444 not required in case of background job
+      IF PROF <> PROF_CPY  AND
+         PROF IS NOT INITIAL AND PROF_CPY IS NOT INITIAL.           "Note - 2912252
+        IF GV_VARIANT_NAME IS INITIAL.
+          CLEAR UUSR.
+        ENDIF.
+      ENDIF.
+    ENDIF.
+    NAME = 'UUSR'.
+    CALL FUNCTION 'VRM_REFRESH_VALUES'.
+    CALL FUNCTION 'VRM_SET_VALUES'
+      EXPORTING
+        ID     = NAME
+        VALUES = LIST.
+*    prof_cpy = prof.                                               "Note - 2912252
+  ENDIF.
+  CALL FUNCTION 'VRM_QUEUE_FLUSH'.
+  REFRESH LIST.                                                     "Note - 2912252
+
+ENDFORM.                    "get_sys_status_list
+
+*&---------------------------------------------------------------------*
+*&      Form  set_mass_status
+*&---------------------------------------------------------------------*
+*       text
+*----------------------------------------------------------------------*
+FORM SET_MASS_STATUS.
+  DATA: LT_ACT_SYS_STS TYPE TABLE OF  BAPI_ACT_MNT_SYSTEM_STATUS,
+        LT_ACT_USR_STS TYPE TABLE OF BAPI_ACT_MNT_USER_STATUS.
+* set status selection
+  IF SY-BATCH IS NOT INITIAL. " selection screen not needed in case of background job.
+    CLEAR SEL.
+  ENDIF.
+  IF SYS IS NOT INITIAL .
+    CLEAR: S_SYS_STAT, U_SYS_STAT.                                        "Note 2705444
+    LV_STATUS = SSYS.
+    IF SET IS NOT INITIAL.
+      READ TABLE LT_TJ02T INTO LS_TJ02T WITH KEY TXT04 = SSYS.
+*now get the english text of the status for BAPI use
+      READ TABLE LT_TJ02T_EN INTO LS_TJ02T WITH KEY ISTAT = LS_TJ02T-ISTAT.
+      S_SYS_STAT = LS_TJ02T-TXT04.
+*      gs_result-SSTATN = s_sys_stat.
+    ELSE.
+      READ TABLE LT_TJ02T INTO LS_TJ02T WITH KEY TXT04 = SSYS.
+*now get the english text of the status for BAPI use
+      READ TABLE LT_TJ02T_EN INTO LS_TJ02T WITH KEY ISTAT = LS_TJ02T-ISTAT.
+      U_SYS_STAT = LS_TJ02T-TXT04.
+*      gs_result-SSTATN = u_sys_stat.
+    ENDIF.
+  ENDIF.
+  PERFORM SELECT_OBJECTS.
+  IF GT_SELECT[] IS INITIAL AND SEL IS NOT INITIAL.
+    EXIT.
+  ENDIF.
+  SORT GT_SELECT BY OBJNR SEL.
+*status change for project
+  LOOP AT PROJ_TAB INTO LS_PROJ_TAB.
+    IF SET IS NOT INITIAL.
+      S_USR_STAT = UUSR.
+    ELSE.
+      U_USR_STAT = UUSR.
+    ENDIF.
+    READ TABLE GT_SELECT INTO GS_SELECT WITH KEY OBJNR = LS_PROJ_TAB-OBJNR BINARY SEARCH.
+    IF S_SYS_STAT = 'REL' AND SEL IS NOT INITIAL.
+      IF GS_SELECT-SEL = CON_YES.
+        MODIFY GT_SELECT FROM GS_SELECT TRANSPORTING SEL WHERE PROJ = GS_SELECT-PROJ AND OBTYP = 'PR'.
+      ELSE.
+        READ TABLE GT_SELECT INTO LS_SELECT WITH KEY SEL = CON_YES PROJ = GS_SELECT-PROJ OBTYP = 'PR'.
+        IF SY-SUBRC IS INITIAL.
+          GS_SELECT-SEL = CON_YES.
+          MODIFY GT_SELECT FROM GS_SELECT TRANSPORTING SEL WHERE PROJ = GS_SELECT-PROJ AND OBTYP = 'PR'.
+        ENDIF.
+      ENDIF.
+    ENDIF.
+    IF SEL IS NOT INITIAL AND GS_SELECT-SEL IS INITIAL.
+      CONTINUE.
+    ENDIF.
+    IF PROF <> GS_SELECT-STSMA.
+      CLEAR S_USR_STAT.
+      CLEAR U_USR_STAT.
+    ENDIF.
+    CALL FUNCTION 'BAPI_PS_INITIALIZATION'.
+    CALL FUNCTION 'BAPI_BUS2001_SET_STATUS'
+      EXPORTING
+        PROJECT_DEFINITION = LS_PROJ_TAB-PSPID
+        UNDO_SYSTEM_STATUS = U_SYS_STAT
+        UNDO_USER_STATUS   = U_USR_STAT
+        SET_SYSTEM_STATUS  = S_SYS_STAT
+        SET_USER_STATUS    = S_USR_STAT
+      TABLES
+        E_RESULT           = LT_RESULT.
+    ASSIGN  ('(SAPLBSVA)JEST_BUF[]')  TO <FT_JEST>.
+    IF <FT_JEST> IS ASSIGNED.
+      MODIFY <FT_JEST> FROM LS_JEST TRANSPORTING MOD WHERE OBJNR <> LS_PROJ_TAB-OBJNR.
+      CLEAR GS_SELECT.
+      CALL FUNCTION 'STATUS_TEXT_EDIT'
+        EXPORTING
+          FLG_USER_STAT    = CON_YES
+          OBJNR            = LS_PROJ_TAB-OBJNR
+          ONLY_ACTIVE      = CON_YES
+          SPRAS            = SY-LANGU
+        IMPORTING
+          LINE             = GS_SELECT-SSTAT
+          USER_LINE        = GS_SELECT-USTAT
+        EXCEPTIONS
+          OBJECT_NOT_FOUND = 01.
+    ENDIF.
+    CALL FUNCTION 'BAPI_PS_PRECOMMIT'
+      TABLES
+        ET_RETURN = LT_RETURN.
+    PERFORM ADD_LOG_OUTPUT USING LS_PROJ_TAB-OBJNR GS_SELECT.
+    READ TABLE LT_RETURN WITH KEY TYPE = 'E'.
+    IF TEST IS INITIAL AND SY-SUBRC IS  NOT INITIAL .
+      CALL FUNCTION 'BAPI_TRANSACTION_COMMIT'
+        EXPORTING
+          WAIT = CON_YES.
+    ENDIF.
+    REFRESH LT_RETURN.
+    CLEAR   LT_RETURN.
+    REFRESH LT_RESULT.
+    CLEAR   LT_RETURN.
+  ENDLOOP.
+* status change for WBS
+  LOOP AT PRPS_TAB INTO LS_PRPS_TAB .
+    IF SET IS NOT INITIAL.
+      S_USR_STAT = UUSR.
+    ELSE.
+      U_USR_STAT = UUSR.
+    ENDIF.
+    READ TABLE GT_SELECT INTO GS_SELECT WITH KEY OBJNR = LS_PRPS_TAB-OBJNR BINARY SEARCH.
+    IF SEL IS NOT INITIAL AND GS_SELECT-SEL IS INITIAL.
+      CONTINUE.
+    ENDIF.
+    IF PROF <> GS_SELECT-STSMA.
+      CLEAR S_USR_STAT.
+      CLEAR U_USR_STAT.
+    ENDIF.
+    REFRESH LT_WBS_SYSTEM_STATUS.
+    REFRESH LT_WBS_USER_STATUS.
+    CLEAR LT_WBS_SYSTEM_STATUS.
+    CLEAR LT_WBS_USER_STATUS.
+    CALL FUNCTION 'CONVERSION_EXIT_ABPSN_OUTPUT'
+      EXPORTING
+        INPUT  = LS_PRPS_TAB-POSID
+      IMPORTING
+        OUTPUT = LS_PRPS_TAB-POSID.
+    IF SYS IS NOT INITIAL .
+      LT_WBS_SYSTEM_STATUS-WBS_ELEMENT = LS_PRPS_TAB-POSID.
+      LT_WBS_SYSTEM_STATUS-UNDO_SYSTEM_STATUS = U_SYS_STAT.
+      LT_WBS_SYSTEM_STATUS-SET_SYSTEM_STATUS = S_SYS_STAT.
+      APPEND LT_WBS_SYSTEM_STATUS.
+    ENDIF.
+    IF USR IS NOT INITIAL.
+      LT_WBS_USER_STATUS-WBS_ELEMENT = LS_PRPS_TAB-POSID.
+      LT_WBS_USER_STATUS-UNDO_USER_STATUS = U_USR_STAT.
+      LT_WBS_USER_STATUS-SET_USER_STATUS = S_USR_STAT.
+      APPEND LT_WBS_USER_STATUS.
+    ENDIF.
+
+    CALL FUNCTION 'BAPI_PS_INITIALIZATION'.
+    CALL FUNCTION 'BAPI_BUS2054_SET_STATUS'
+      TABLES
+        I_WBS_SYSTEM_STATUS = LT_WBS_SYSTEM_STATUS
+        I_WBS_USER_STATUS   = LT_WBS_USER_STATUS
+        E_RESULT            = LT_RESULT.
+    CLEAR GS_SELECT.
+    CALL FUNCTION 'STATUS_TEXT_EDIT'
+      EXPORTING
+        FLG_USER_STAT    = CON_YES
+        OBJNR            = LS_PRPS_TAB-OBJNR
+        ONLY_ACTIVE      = CON_YES
+        SPRAS            = SY-LANGU
+      IMPORTING
+        LINE             = GS_SELECT-SSTAT
+        USER_LINE        = GS_SELECT-USTAT
+      EXCEPTIONS
+        OBJECT_NOT_FOUND = 01.
+    CALL FUNCTION 'BAPI_PS_PRECOMMIT'
+      TABLES
+        ET_RETURN = LT_RETURN.
+    PERFORM ADD_LOG_OUTPUT USING LS_PRPS_TAB-OBJNR GS_SELECT.
+    READ TABLE LT_RETURN WITH KEY TYPE = 'E'.
+    IF TEST IS INITIAL AND SY-SUBRC IS NOT INITIAL .
+      CALL FUNCTION 'BAPI_TRANSACTION_COMMIT'
+        EXPORTING
+          WAIT = CON_YES.
+    ENDIF.
+    REFRESH LT_RETURN.
+    CLEAR   LT_RETURN.
+    REFRESH LT_RESULT.
+    CLEAR   LT_RETURN.
+  ENDLOOP.
+
+*status change for network
+  LOOP AT AUFK_TAB INTO LS_AUFK_TAB.
+    IF LS_AUFK_TAB-AUTYP <> '20'.               "Note 2705444
+      CONTINUE.
+    ENDIF.
+    IF SET IS NOT INITIAL.
+      S_USR_STAT = UUSR.
+    ELSE.
+      U_USR_STAT = UUSR.
+    ENDIF.
+    READ TABLE GT_SELECT INTO GS_SELECT WITH KEY OBJNR = LS_AUFK_TAB-OBJNR BINARY SEARCH.    "Note 2705444
+    IF S_SYS_STAT = 'REL' AND SEL IS NOT INITIAL.
+      IF GS_SELECT-SEL = CON_YES.
+        MODIFY GT_SELECT FROM GS_SELECT TRANSPORTING SEL WHERE NETW = GS_SELECT-NETW AND OBTYP = 'NV'.
+      ELSE.
+*Start of sap note 2934831
+*       READ TABLE gt_select INTO ls_select WITH KEY sel = con_yes netw = gs_select-netw obtyp = 'NV'.
+*       IF sy-subrc IS INITIAL.
+*       gs_select-sel = con_yes.
+*       MODIFY gt_select FROM gs_select TRANSPORTING sel WHERE netw = gs_select-netw AND obtyp = 'NV'.
+*       ENDIF.
+*End of sap note 2934831
+      ENDIF.
+    ENDIF.
+    IF SEL IS NOT INITIAL AND GS_SELECT-SEL IS INITIAL.
+      CONTINUE.
+    ENDIF.
+    IF PROF <> GS_SELECT-STSMA.
+      CLEAR S_USR_STAT.
+      CLEAR U_USR_STAT.
+    ENDIF.
+
+
+    CALL FUNCTION 'BAPI_PS_INITIALIZATION'.
+    CALL FUNCTION 'BAPI_BUS2002_SET_STATUS'
+      EXPORTING
+        NUMBER             = LS_AUFK_TAB-AUFNR
+        UNDO_SYSTEM_STATUS = U_SYS_STAT
+        UNDO_USER_STATUS   = U_USR_STAT
+        SET_SYSTEM_STATUS  = S_SYS_STAT
+        SET_USER_STATUS    = S_USR_STAT
+      IMPORTING
+        RETURN             = LT_RESULT_NET
+      TABLES
+        E_RESULT           = LT_RESULT.  "N_2901313
+    ASSIGN  ('(SAPLBSVA)JEST_BUF[]')  TO <FT_JEST>.
+    IF <FT_JEST> IS ASSIGNED.
+      IF S_SYS_STAT <> 'LKD' AND U_SYS_STAT <> 'LKD'.                                    "Note 3061988
+        MODIFY <FT_JEST> FROM LS_JEST TRANSPORTING MOD WHERE OBJNR <> LS_AUFK_TAB-OBJNR.
+      ENDIF.                                                                             "Note 3061988
+      CLEAR GS_SELECT.
+      CALL FUNCTION 'STATUS_TEXT_EDIT'
+        EXPORTING
+          FLG_USER_STAT    = CON_YES
+          OBJNR            = LS_AUFK_TAB-OBJNR
+          ONLY_ACTIVE      = CON_YES
+          SPRAS            = SY-LANGU
+        IMPORTING
+          LINE             = GS_SELECT-SSTAT
+          USER_LINE        = GS_SELECT-USTAT
+        EXCEPTIONS
+          OBJECT_NOT_FOUND = 01.
+    ENDIF.
+    CALL FUNCTION 'BAPI_PS_PRECOMMIT'
+      TABLES
+        ET_RETURN = LT_RETURN.
+
+    IF LT_RESULT IS INITIAL AND LT_RESULT_NET[] IS NOT INITIAL. "N_2901313
+      LT_RESULT-MESSAGE_TYPE   = LT_RESULT_NET-TYPE.
+      LT_RESULT-MESSAGE_ID     = LT_RESULT_NET-ID .
+      LT_RESULT-MESSAGE_NUMBER = LT_RESULT_NET-NUMBER.
+      LT_RESULT-MESSAGE_TEXT   = LT_RESULT_NET-MESSAGE .
+      APPEND LT_RESULT.
+    ENDIF.
+    PERFORM ADD_LOG_OUTPUT USING LS_AUFK_TAB-OBJNR GS_SELECT.
+    READ TABLE LT_RETURN WITH KEY TYPE = 'E'.
+    IF TEST IS INITIAL AND SY-SUBRC IS NOT INITIAL .
+      CALL FUNCTION 'BAPI_TRANSACTION_COMMIT'
+        EXPORTING
+          WAIT = CON_YES.
+    ENDIF.
+    REFRESH LT_RETURN.
+    REFRESH LT_RESULT_NET.
+    CLEAR   LT_RETURN.
+    CLEAR   LT_RESULT_NET.
+    CLEAR LT_RESULT.                                        "N_2901313
+  ENDLOOP.
+
+*status change for activity
+  SORT ACT_TAB BY AUFPL APLZL.
+  LT_ACT_TAB[] = ACT_TAB[].
+  DELETE ADJACENT DUPLICATES FROM LT_ACT_TAB COMPARING AUFPL.
+  DESCRIBE TABLE LT_ACT_TAB LINES LV_NUM.
+  IF LV_NUM EQ '1'.
+*    if not s_sys_stat is initial.                  " handling status change for activity element
+*      delete act_tab where uvorn is not initial.  " N_2901313
+*    endif.
+    LOOP AT ACT_TAB INTO LS_ACT_TAB.
+      IF LS_ACT_TAB-UVORN IS NOT INITIAL.                   " N_2901313
+        LS_ACT_TAB-VORNR = LS_ACT_TAB-UVORN. "update Activity element as vornr
+      ENDIF.
+      "Begin of SAP Note: 2901313
+*      if not u_sys_stat is initial and not ls_act_tab-uvorn is initial.       " handling undo status change for activity element
+*        ls_act_tab-vornr = ls_act_tab-uvorn.
+*      endif.
+*    IF set IS NOT INITIAL.
+*      s_usr_stat = uusr.
+*    ELSE.
+*      u_usr_stat = uusr.
+*    ENDIF.
+
+      IF USR IS NOT INITIAL AND SET IS NOT INITIAL  . "Set User status
+        S_USR_STAT = UUSR.
+      ELSEIF USR IS NOT INITIAL AND RSET IS NOT INITIAL. "Reset User status
+        U_USR_STAT = UUSR.
+      ENDIF.
+      IF SYS IS NOT INITIAL AND SET IS NOT INITIAL  . "Set system status
+        READ TABLE LT_TJ02T INTO LS_TJ02T WITH KEY TXT04 = SSYS.              " Begin of Note - 2964639
+*now get the english text of the status for BAPI use
+        READ TABLE LT_TJ02T_EN INTO LS_TJ02T WITH KEY ISTAT = LS_TJ02T-ISTAT.
+        S_SYS_STAT = LS_TJ02T-TXT04.
+        "s_sys_stat = ssys.                                                   " End of Note - 2964639
+      ELSEIF SYS IS NOT INITIAL AND RSET IS NOT INITIAL. "Reset User status
+        READ TABLE LT_TJ02T INTO LS_TJ02T WITH KEY TXT04 = SSYS.             " Begin of Note - 2964639
+*now get the english text of the status for BAPI use
+        READ TABLE LT_TJ02T_EN INTO LS_TJ02T WITH KEY ISTAT = LS_TJ02T-ISTAT.
+        U_SYS_STAT = LS_TJ02T-TXT04.                                          " End of Note - 2964639
+        "u_sys_stat = ssys.
+      ENDIF.
+      "End of SAP Note: 2901313
+      READ TABLE GT_SELECT INTO GS_SELECT WITH KEY OBJNR = LS_ACT_TAB-OBJNR BINARY SEARCH.
+      IF SEL IS NOT INITIAL AND GS_SELECT-SEL IS INITIAL.
+        CONTINUE.
+      ENDIF.
+      IF PROF <> GS_SELECT-STSMA.
+        CLEAR S_USR_STAT.
+        CLEAR U_USR_STAT.
+      ENDIF.
+      READ TABLE ELM_PS_TAB INTO LS_ELM_PS_TAB WITH KEY AUFPL = LS_ACT_TAB-AUFPL.
+      IF SYS IS NOT INITIAL .
+        LT_ACT_SYSTEM_STATUS-ACTIVITY = LS_ACT_TAB-VORNR.
+        LT_ACT_SYSTEM_STATUS-UNDO_SYSTEM_STATUS = U_SYS_STAT.
+        LT_ACT_SYSTEM_STATUS-SET_SYSTEM_STATUS = S_SYS_STAT.
+        APPEND LT_ACT_SYSTEM_STATUS.
+        CLEAR: LT_ACT_SYSTEM_STATUS.
+        LT_ACT_SYS_STS[] = LT_ACT_SYSTEM_STATUS[].
+      ENDIF.
+      IF USR IS NOT INITIAL.
+        LT_ACT_USER_STATUS-ACTIVITY = LS_ACT_TAB-VORNR.
+        LT_ACT_USER_STATUS-UNDO_USER_STATUS = U_USR_STAT.
+        LT_ACT_USER_STATUS-SET_USER_STATUS = S_USR_STAT.
+        APPEND LT_ACT_USER_STATUS.
+        CLEAR: LT_ACT_USER_STATUS.
+        LT_ACT_USR_STS[] = LT_ACT_USER_STATUS[].
+      ENDIF.
+    ENDLOOP.
+    IF NOT LT_ACT_SYSTEM_STATUS[] IS INITIAL OR NOT LT_ACT_USER_STATUS[] IS INITIAL..
+      CALL FUNCTION 'BAPI_PS_INITIALIZATION'.
+
+      CALL FUNCTION 'BAPI_BUS2002_SET_STATUS'
+        EXPORTING
+          NUMBER                   = LS_ELM_PS_TAB-AUFNR
+        IMPORTING
+          RETURN                   = LT_RESULT_NET
+        TABLES
+          I_ACTIVITY_SYSTEM_STATUS = LT_ACT_SYSTEM_STATUS
+          I_ACTIVITY_USER_STATUS   = LT_ACT_USER_STATUS
+          E_RESULT                 = LT_RESULT.
+
+      CALL FUNCTION 'BAPI_PS_PRECOMMIT'
+        TABLES
+          ET_RETURN = LT_RETURN.
+
+      IF LT_RESULT IS NOT INITIAL AND ( LT_ACT_SYSTEM_STATUS[] IS NOT INITIAL OR LT_ACT_USER_STATUS[] IS NOT INITIAL ). "Note 3048648
+        LOOP AT LT_ACT_SYS_STS ASSIGNING <FS_SYST_STATUS>.
+          READ TABLE LT_ACT_SYSTEM_STATUS WITH KEY ACTIVITY = <FS_SYST_STATUS>-ACTIVITY.
+          IF  SY-SUBRC EQ 0.
+            DELETE LT_ACT_SYS_STS WHERE ACTIVITY = <FS_SYST_STATUS>-ACTIVITY.
+          ENDIF.
+        ENDLOOP.
+
+        LOOP AT LT_ACT_USR_STS ASSIGNING <FS_USR_STATUS>.
+          READ TABLE LT_ACT_USER_STATUS WITH KEY ACTIVITY = <FS_USR_STATUS>-ACTIVITY.
+          IF  SY-SUBRC EQ 0.
+            DELETE LT_ACT_USR_STS WHERE ACTIVITY = <FS_USR_STATUS>-ACTIVITY.
+          ENDIF.
+        ENDLOOP.
+
+        LT_RESULT_TMP[] = LT_RESULT[].
+        LT_RESULT_NET_TMP = LT_RESULT_NET.
+        LT_RETURN_TMP[] = LT_RETURN[].
+
+        PERFORM SET_STATUS_ACTIVITY USING LS_ELM_PS_TAB-AUFNR LS_ACT_TAB-AUFPL LT_ACT_SYSTEM_STATUS[] LT_ACT_USER_STATUS[].
+
+        LT_RESULT[]   = LT_RESULT_TMP[].
+        LT_RESULT_NET = LT_RESULT_NET_TMP.
+        LT_RETURN[]   = LT_RETURN_TMP[].
+
+      ENDIF.                                                                                                        "Note 3048648
+
+      IF LT_RESULT[] IS INITIAL AND LT_RESULT_NET IS NOT INITIAL. "N_2901313
+        LT_RESULT-MESSAGE_TYPE   = LT_RESULT_NET-TYPE.
+        LT_RESULT-MESSAGE_ID     = LT_RESULT_NET-ID .
+        LT_RESULT-MESSAGE_NUMBER = LT_RESULT_NET-NUMBER.
+        LT_RESULT-MESSAGE_TEXT   = LT_RESULT_NET-MESSAGE .
+        APPEND LT_RESULT.
+
+      ENDIF.
+*      if lt_act_system_status[] is INITIAL.                                              "Note 2987655 d
+      LT_ACT_SYSTEM_STATUS[] = LT_ACT_SYS_STS[].
+*      endif.                                                                             "Note 2987655 d
+      LOOP AT LT_ACT_SYSTEM_STATUS ASSIGNING <FS_SYST_STATUS>.
+        "Begin of Note:2901313
+*        read table act_tab assigning <fs_act_d> with key vornr = <fs_syst_status>-activity.  "Note 2821678
+*        if sy-subrc = 0.
+
+        READ TABLE ACT_TAB ASSIGNING <FS_ACT_D> WITH KEY UVORN = <FS_SYST_STATUS>-ACTIVITY. "Check for activity element
+        IF SY-SUBRC EQ 0 .  "activity element
+          GS_SELECT-ACT_ELE = <FS_ACT_D>-UVORN.
+
+          READ TABLE ACT_TAB TRANSPORTING VORNR INTO LS_ACT_TAB  WITH KEY VORNR = <FS_ACT_D>-VORNR. "Read activtiy number
+          IF SY-SUBRC EQ 0.
+            GS_SELECT-ACT = LS_ACT_TAB-VORNR.
+          ENDIF.
+
+          MODIFY GT_SELECT FROM GS_SELECT TRANSPORTING ACT ACT_ELE WHERE OBJNR = <FS_ACT_D>-OBJNR.
+        ELSE.  " Activity
+          READ TABLE ACT_TAB ASSIGNING <FS_ACT_D> WITH KEY VORNR = <FS_SYST_STATUS>-ACTIVITY.  "Note 2821678
+        ENDIF.
+        "End of Note:2901313
+        CLEAR GS_SELECT.
+        CALL FUNCTION 'STATUS_TEXT_EDIT'
+          EXPORTING
+            FLG_USER_STAT    = CON_YES
+            OBJNR            = <FS_ACT_D>-OBJNR
+            ONLY_ACTIVE      = CON_YES
+            SPRAS            = SY-LANGU
+          IMPORTING
+            LINE             = GS_SELECT-SSTAT
+            USER_LINE        = GS_SELECT-USTAT
+          EXCEPTIONS
+            OBJECT_NOT_FOUND = 01.
+        PERFORM ADD_LOG_OUTPUT USING <FS_ACT_D>-OBJNR GS_SELECT.
+
+      ENDLOOP.
+*      if lt_act_user_status[] is INITIAL.                                       "Note 2987655 d
+      LT_ACT_USER_STATUS[] = LT_ACT_USR_STS[].
+*      endif.                                                                    "Note 2987655 d
+
+      IF LT_ACT_SYSTEM_STATUS  IS INITIAL. "if only user status is updated in CNMASSSTATUS, then process the output display
+        LOOP AT LT_ACT_USER_STATUS ASSIGNING <FS_USR_STATUS>.
+          "Begin of Note:2901313
+*        read table act_tab assigning <fs_act_d> with key vornr = <fs_usr_status>-activity.   "Note 2821678
+*        if sy-subrc = 0.
+          READ TABLE ACT_TAB ASSIGNING <FS_ACT_D> WITH KEY UVORN = <FS_USR_STATUS>-ACTIVITY. "Check for activity element
+          IF SY-SUBRC EQ 0 .  "activity element
+            GS_SELECT-ACT_ELE = <FS_ACT_D>-UVORN.
+
+
+            READ TABLE ACT_TAB TRANSPORTING VORNR INTO LS_ACT_TAB  WITH KEY VORNR = <FS_ACT_D>-VORNR. "Read activtiy number
+            IF SY-SUBRC EQ 0.
+              GS_SELECT-ACT = LS_ACT_TAB-VORNR.
+            ENDIF.
+            MODIFY GT_SELECT FROM GS_SELECT TRANSPORTING ACT ACT_ELE WHERE OBJNR = <FS_ACT_D>-OBJNR.
+          ELSE.  " Activity
+            READ TABLE ACT_TAB ASSIGNING <FS_ACT_D> WITH KEY VORNR = <FS_USR_STATUS>-ACTIVITY.  "Note 2821678
+          ENDIF.
+          "End of Note:2901313
+          CLEAR GS_SELECT.
+          CALL FUNCTION 'STATUS_TEXT_EDIT'
+            EXPORTING
+              FLG_USER_STAT    = CON_YES
+              OBJNR            = <FS_ACT_D>-OBJNR
+              ONLY_ACTIVE      = CON_YES
+              SPRAS            = SY-LANGU
+            IMPORTING
+              LINE             = GS_SELECT-SSTAT
+              USER_LINE        = GS_SELECT-USTAT
+            EXCEPTIONS
+              OBJECT_NOT_FOUND = 01.
+          PERFORM ADD_LOG_OUTPUT USING <FS_ACT_D>-OBJNR GS_SELECT.
+
+        ENDLOOP.
+      ENDIF.
+      READ TABLE LT_RETURN WITH KEY TYPE = 'E'.
+      IF TEST IS INITIAL AND SY-SUBRC IS NOT INITIAL .
+        CALL FUNCTION 'BAPI_TRANSACTION_COMMIT'
+          EXPORTING
+            WAIT = CON_YES.
+      ENDIF.
+    ENDIF.
+    REFRESH: LT_ACT_SYSTEM_STATUS, LT_ACT_SYS_STS[] .
+    CLEAR LT_ACT_SYSTEM_STATUS.
+    REFRESH: LT_ACT_USER_STATUS, LT_ACT_USR_STS[].
+    CLEAR LT_ACT_USER_STATUS.
+    REFRESH LT_RETURN.
+    REFRESH LT_RESULT_NET.
+    CLEAR   LT_RETURN.
+    CLEAR   LT_RESULT_NET.
+    REFRESH LT_RESULT.
+    CLEAR: LT_RESULT.
+*    endloop.
+  ELSE.
+    LOOP AT LT_ACT_TAB INTO LS_ACT_TAB.
+      LT_ACT_TAB_DEL[] = ACT_TAB[].
+      DELETE LT_ACT_TAB_DEL WHERE AUFPL <> LS_ACT_TAB-AUFPL.
+      LOOP AT LT_ACT_TAB_DEL INTO LS_ACT_TAB_DEL .
+        "Begin of SAP Note: 2901313
+*        if set is not initial.
+*          s_usr_stat = uusr.
+*        else.
+*          u_usr_stat = uusr.
+*        endif.
+
+        IF ( LS_ACT_TAB_DEL-UVORN IS NOT INITIAL ). "Activity element
+          LS_ACT_TAB_DEL-VORNR = LS_ACT_TAB_DEL-UVORN.
+        ENDIF.
+
+        IF USR IS NOT INITIAL AND SET IS NOT INITIAL  . "Set User status
+          S_USR_STAT = UUSR.
+        ELSEIF USR IS NOT INITIAL AND RSET IS NOT INITIAL. "Reset User status
+          U_USR_STAT = UUSR.
+        ENDIF.
+        IF SYS IS NOT INITIAL AND SET IS NOT INITIAL  . "Set system status
+          READ TABLE LT_TJ02T INTO LS_TJ02T WITH KEY TXT04 = SSYS.              " Begin of Note - 2964639
+*now get the english text of the status for BAPI use
+          READ TABLE LT_TJ02T_EN INTO LS_TJ02T WITH KEY ISTAT = LS_TJ02T-ISTAT.
+          S_SYS_STAT = LS_TJ02T-TXT04.
+          "s_sys_stat = ssys.                                                   " End of Note - 2964639
+        ELSEIF SYS IS NOT INITIAL AND RSET IS NOT INITIAL. "Reset User status
+          READ TABLE LT_TJ02T INTO LS_TJ02T WITH KEY TXT04 = SSYS.             " Begin of Note - 2964639
+*now get the english text of the status for BAPI use
+          READ TABLE LT_TJ02T_EN INTO LS_TJ02T WITH KEY ISTAT = LS_TJ02T-ISTAT.
+          U_SYS_STAT = LS_TJ02T-TXT04.                                          " End of Note - 2964639
+          "u_sys_stat = ssys.
+        ENDIF.
+        "End of SAP Note: 2901313
+        READ TABLE GT_SELECT INTO GS_SELECT WITH KEY OBJNR = LS_ACT_TAB_DEL-OBJNR BINARY SEARCH.
+        IF SEL IS NOT INITIAL AND GS_SELECT-SEL IS INITIAL.
+          CONTINUE.
+        ENDIF.
+        IF PROF <> GS_SELECT-STSMA.
+          CLEAR S_USR_STAT.
+          CLEAR U_USR_STAT.
+        ENDIF.
+
+        READ TABLE ELM_PS_TAB INTO LS_ELM_PS_TAB WITH KEY AUFPL = LS_ACT_TAB_DEL-AUFPL.
+        IF SYS IS NOT INITIAL .
+          LT_ACT_SYSTEM_STATUS-ACTIVITY = LS_ACT_TAB_DEL-VORNR.
+          LT_ACT_SYSTEM_STATUS-UNDO_SYSTEM_STATUS = U_SYS_STAT.
+          LT_ACT_SYSTEM_STATUS-SET_SYSTEM_STATUS = S_SYS_STAT.
+          APPEND LT_ACT_SYSTEM_STATUS.
+          CLEAR: LT_ACT_SYSTEM_STATUS.
+          LT_ACT_SYS_STS[] = LT_ACT_SYSTEM_STATUS[].
+        ENDIF.
+        IF USR IS NOT INITIAL.
+          LT_ACT_USER_STATUS-ACTIVITY = LS_ACT_TAB_DEL-VORNR.
+          LT_ACT_USER_STATUS-UNDO_USER_STATUS = U_USR_STAT.
+          LT_ACT_USER_STATUS-SET_USER_STATUS = S_USR_STAT.
+          APPEND LT_ACT_USER_STATUS.
+          CLEAR: LT_ACT_USER_STATUS.
+          LT_ACT_USR_STS[] = LT_ACT_USER_STATUS[].
+        ENDIF.
+      ENDLOOP.
+      IF LT_ACT_SYSTEM_STATUS[] IS INITIAL AND LT_ACT_USER_STATUS[] IS INITIAL.
+        CONTINUE.
+      ENDIF.
+      CALL FUNCTION 'BAPI_PS_INITIALIZATION'.
+      CALL FUNCTION 'BAPI_BUS2002_SET_STATUS'
+        EXPORTING
+          NUMBER                   = LS_ELM_PS_TAB-AUFNR
+        IMPORTING
+          RETURN                   = LT_RESULT_NET
+        TABLES
+          I_ACTIVITY_SYSTEM_STATUS = LT_ACT_SYSTEM_STATUS
+          I_ACTIVITY_USER_STATUS   = LT_ACT_USER_STATUS
+          E_RESULT                 = LT_RESULT.
+
+      CALL FUNCTION 'BAPI_PS_PRECOMMIT'
+        TABLES
+          ET_RETURN = LT_RETURN.
+
+      IF LT_RESULT IS NOT INITIAL AND ( LT_ACT_SYSTEM_STATUS[] IS NOT INITIAL OR LT_ACT_USER_STATUS[] IS NOT INITIAL ). "Note 3048648
+        LOOP AT LT_ACT_SYS_STS ASSIGNING <FS_SYST_STATUS>.
+          READ TABLE LT_ACT_SYSTEM_STATUS WITH KEY ACTIVITY = <FS_SYST_STATUS>-ACTIVITY.
+          IF  SY-SUBRC EQ 0.
+            DELETE LT_ACT_SYS_STS WHERE ACTIVITY = <FS_SYST_STATUS>-ACTIVITY.
+          ENDIF.
+        ENDLOOP.
+
+        LOOP AT LT_ACT_USR_STS ASSIGNING <FS_USR_STATUS>.
+          READ TABLE LT_ACT_USER_STATUS WITH KEY ACTIVITY = <FS_USR_STATUS>-ACTIVITY.
+          IF  SY-SUBRC EQ 0.
+            DELETE LT_ACT_USR_STS WHERE ACTIVITY = <FS_USR_STATUS>-ACTIVITY.
+          ENDIF.
+        ENDLOOP.
+
+        LT_RESULT_TMP[] = LT_RESULT[].
+        LT_RESULT_NET_TMP = LT_RESULT_NET.
+        LT_RETURN_TMP[] = LT_RETURN[].
+
+        PERFORM SET_STATUS_ACTIVITY USING LS_ELM_PS_TAB-AUFNR LS_ACT_TAB-AUFPL LT_ACT_SYSTEM_STATUS[] LT_ACT_USER_STATUS[].
+
+        LT_RESULT[]   = LT_RESULT_TMP[].
+        LT_RESULT_NET = LT_RESULT_NET_TMP.
+        LT_RETURN[]   = LT_RETURN_TMP[].
+
+      ENDIF.                                                                                                            "Note 3048648
+
+      IF LT_RESULT[] IS INITIAL AND LT_RESULT_NET IS NOT INITIAL. "N_2901313
+        LT_RESULT-MESSAGE_TYPE   = LT_RESULT_NET-TYPE.
+        LT_RESULT-MESSAGE_ID     = LT_RESULT_NET-ID .
+        LT_RESULT-MESSAGE_NUMBER = LT_RESULT_NET-NUMBER.
+        LT_RESULT-MESSAGE_TEXT   = LT_RESULT_NET-MESSAGE .
+        APPEND LT_RESULT.
+      ENDIF.
+*      if lt_act_system_status[] is INITIAL.                                       "Note 2987655 d
+      LT_ACT_SYSTEM_STATUS[] = LT_ACT_SYS_STS[].
+*      endif.                                                                      "Note 2987655 d
+      LOOP AT LT_ACT_SYSTEM_STATUS ASSIGNING <FS_SYST_STATUS>.
+        "Begin of SAP Note:2901313
+*        read table lt_act_tab_del assigning <fs_act_d> with key vornr = <fs_syst_status>-activity.
+*        if sy-subrc = 0.
+        READ TABLE LT_ACT_TAB_DEL ASSIGNING <FS_ACT_D> WITH KEY UVORN = <FS_SYST_STATUS>-ACTIVITY. "Check for activity element
+        IF SY-SUBRC EQ 0 .  "activity element
+          "update gs_select with activity and activity element numbers for result display
+          GS_SELECT-ACT_ELE = <FS_ACT_D>-UVORN.
+
+          READ TABLE LT_ACT_TAB_DEL TRANSPORTING VORNR INTO LS_ACT_TAB  WITH KEY VORNR = <FS_ACT_D>-VORNR. "Read activtiy number
+          IF SY-SUBRC EQ 0.
+            GS_SELECT-ACT = LS_ACT_TAB-VORNR.
+          ENDIF.
+          MODIFY GT_SELECT FROM GS_SELECT TRANSPORTING ACT ACT_ELE WHERE OBJNR = <FS_ACT_D>-OBJNR. "udpate gt_select for result display
+        ELSE.  " Activity
+          READ TABLE LT_ACT_TAB_DEL ASSIGNING <FS_ACT_D> WITH KEY VORNR = <FS_SYST_STATUS>-ACTIVITY.  "Note 2821678
+        ENDIF.
+        "End of Note:2901313
+        CLEAR GS_SELECT.
+        CALL FUNCTION 'STATUS_TEXT_EDIT'
+          EXPORTING
+            FLG_USER_STAT    = CON_YES
+            OBJNR            = <FS_ACT_D>-OBJNR
+            ONLY_ACTIVE      = CON_YES
+            SPRAS            = SY-LANGU
+          IMPORTING
+            LINE             = GS_SELECT-SSTAT
+            USER_LINE        = GS_SELECT-USTAT
+          EXCEPTIONS
+            OBJECT_NOT_FOUND = 01.
+        PERFORM ADD_LOG_OUTPUT USING <FS_ACT_D>-OBJNR GS_SELECT.
+
+      ENDLOOP.
+*      if lt_act_user_status[] is INITIAL.                                            "Note 2987655 d
+      LT_ACT_USER_STATUS[] = LT_ACT_USR_STS[].
+*      endif.                                                                         "Note 2987655 d
+      IF LT_ACT_SYSTEM_STATUS  IS INITIAL. "No System status
+        LOOP AT LT_ACT_USER_STATUS ASSIGNING <FS_USR_STATUS>.
+          "Begin of SAP Note:2901313
+*        read table lt_act_tab_del assigning <fs_act_d> with key vornr = <fs_usr_status>-activity.
+*        if sy-subrc = 0.
+          READ TABLE LT_ACT_TAB_DEL ASSIGNING <FS_ACT_D> WITH KEY UVORN = <FS_USR_STATUS>-ACTIVITY. "Check for activity element
+          IF SY-SUBRC EQ 0 .  "activity element
+            GS_SELECT-ACT_ELE = <FS_ACT_D>-UVORN.
+            READ TABLE LT_ACT_TAB_DEL TRANSPORTING VORNR INTO LS_ACT_TAB  WITH KEY VORNR = <FS_ACT_D>-VORNR. "Read activtiy number
+            IF SY-SUBRC EQ 0.
+              GS_SELECT-ACT = LS_ACT_TAB-VORNR.
+            ENDIF.
+            MODIFY GT_SELECT FROM GS_SELECT TRANSPORTING ACT_ELE WHERE OBJNR = <FS_ACT_D>-OBJNR.
+          ELSE.  " Activity
+            READ TABLE LT_ACT_TAB_DEL ASSIGNING <FS_ACT_D> WITH KEY VORNR = <FS_USR_STATUS>-ACTIVITY.  "Note 2821678
+          ENDIF.
+          "End of Note:2901313
+          CLEAR GS_SELECT.
+          CALL FUNCTION 'STATUS_TEXT_EDIT'
+            EXPORTING
+              FLG_USER_STAT    = CON_YES
+              OBJNR            = <FS_ACT_D>-OBJNR
+              ONLY_ACTIVE      = CON_YES
+              SPRAS            = SY-LANGU
+            IMPORTING
+              LINE             = GS_SELECT-SSTAT
+              USER_LINE        = GS_SELECT-USTAT
+            EXCEPTIONS
+              OBJECT_NOT_FOUND = 01.
+          PERFORM ADD_LOG_OUTPUT USING <FS_ACT_D>-OBJNR GS_SELECT.
+
+        ENDLOOP.
+      ENDIF.
+      READ TABLE LT_RETURN WITH KEY TYPE = 'E'.
+      IF TEST IS INITIAL AND SY-SUBRC IS NOT INITIAL .
+        CALL FUNCTION 'BAPI_TRANSACTION_COMMIT'
+          EXPORTING
+            WAIT = 'X'.
+      ENDIF.
+      REFRESH: LT_ACT_SYSTEM_STATUS,LT_ACT_SYS_STS[].
+      CLEAR LT_ACT_SYSTEM_STATUS.
+      REFRESH: LT_ACT_USER_STATUS, LT_ACT_USR_STS[].
+      CLEAR LT_ACT_USER_STATUS.
+      REFRESH LT_RETURN.
+      REFRESH LT_RESULT_NET.
+      REFRESH LT_ACT_TAB_DEL.
+      CLEAR   LT_RETURN.
+      CLEAR   LT_RESULT_NET.
+      REFRESH LT_RESULT.
+      CLEAR: LT_RESULT.
+    ENDLOOP.
+  ENDIF.
+
+* SDS Interface Project/WBS Status
+  DATA: LT_OBJECT TYPE ZSDSPSS013_TT.
+
+* Keep only success status
+  DATA(LT_RESULT_SUCCESS) = GT_RESULT[].
+  DELETE LT_RESULT_SUCCESS WHERE MESSAGE_TYPE NE 'S'.
+  LT_OBJECT = CORRESPONDING #( LT_RESULT_SUCCESS ).
+
+  IF TEST EQ SPACE AND     "Not a test run
+     SYS EQ 'X' AND        "Checkbox system status
+     SET EQ 'X'.           "Checkbox set status
+
+*   Prepare to interface Project/WBS status
+    ZCL_SDSPS_PROJ_WBS_STATUS_INTF=>PROCESS_DATA(
+          EXPORTING IT_OBJECT = LT_OBJECT
+                    IF_SYSTEM_STATUS = S_SYS_STAT ).
+  ENDIF.
+
+ENDFORM.                    "set_mass_status
+*&---------------------------------------------------------------------*
+*&      Form  SET_STATUS_ACTIVITY
+*&---------------------------------------------------------------------*
+*       text
+*----------------------------------------------------------------------*
+*      -->P_LS_ELM_PS_TAB_AUFNR  text
+*      -->P_LT_ACT_SYSTEM_STATUS[]  text
+*      -->P_LT_ACT_USER_STATUS[]  text
+*----------------------------------------------------------------------*
+FORM SET_STATUS_ACTIVITY  USING    P_LS_ELM_PS_TAB_AUFNR
+                                   P_LS_ACT_TAB-AUFPL
+                                   P_LT_ACT_SYSTEM_STATUS
+                                   P_LT_ACT_USER_STATUS.
+
+  DATA: LT_SYS_STAT TYPE TABLE OF BAPI_ACT_MNT_SYSTEM_STATUS,
+        LT_USR_STAT TYPE TABLE OF BAPI_ACT_MNT_USER_STATUS.
+  CLEAR : LT_RESULT, LT_RETURN, LT_RESULT_NET.
+  REFRESH : LT_RESULT[], LT_RETURN[], LT_RESULT_NET[].
+
+  LT_SYS_STAT = P_LT_ACT_SYSTEM_STATUS.
+  LT_USR_STAT = P_LT_ACT_USER_STATUS.
+
+  CALL FUNCTION 'BAPI_PS_INITIALIZATION'.
+
+  CALL FUNCTION 'BAPI_BUS2002_SET_STATUS'
+    EXPORTING
+      NUMBER                   = P_LS_ELM_PS_TAB_AUFNR
+    IMPORTING
+      RETURN                   = LT_RESULT_NET
+    TABLES
+      I_ACTIVITY_SYSTEM_STATUS = LT_SYS_STAT
+      I_ACTIVITY_USER_STATUS   = LT_USR_STAT
+      E_RESULT                 = LT_RESULT.
+
+  CALL FUNCTION 'BAPI_PS_PRECOMMIT'
+    TABLES
+      ET_RETURN = LT_RETURN.
+
+  IF  LT_RESULT[] IS INITIAL AND LT_RESULT_NET IS NOT INITIAL.
+    LT_RESULT-MESSAGE_TYPE   = LT_RESULT_NET-TYPE.
+    LT_RESULT-MESSAGE_ID     = LT_RESULT_NET-ID .
+    LT_RESULT-MESSAGE_NUMBER = LT_RESULT_NET-NUMBER.
+    LT_RESULT-MESSAGE_TEXT   = LT_RESULT_NET-MESSAGE .
+    APPEND LT_RESULT.
+  ENDIF.
+
+  LOOP AT LT_SYS_STAT ASSIGNING <FS_SYST_STATUS>.
+
+    READ TABLE ACT_TAB ASSIGNING <FS_ACT_D> WITH KEY UVORN = <FS_SYST_STATUS>-ACTIVITY.
+    IF SY-SUBRC EQ 0 .  "activity element
+
+      GS_SELECT-ACT_ELE = <FS_ACT_D>-UVORN.
+      READ TABLE ACT_TAB TRANSPORTING VORNR INTO LS_ACT_TAB  WITH KEY VORNR = <FS_ACT_D>-VORNR.
+      IF SY-SUBRC EQ 0.
+        GS_SELECT-ACT = LS_ACT_TAB-VORNR.
+      ENDIF.
+      MODIFY GT_SELECT FROM GS_SELECT TRANSPORTING ACT ACT_ELE WHERE OBJNR = <FS_ACT_D>-OBJNR.
+
+    ELSE.  " Activity
+      READ TABLE ACT_TAB ASSIGNING <FS_ACT_D> WITH KEY AUFPL = P_LS_ACT_TAB-AUFPL VORNR = <FS_SYST_STATUS>-ACTIVITY.
+    ENDIF.
+
+    CLEAR GS_SELECT.
+    CALL FUNCTION 'STATUS_TEXT_EDIT'
+      EXPORTING
+        FLG_USER_STAT    = CON_YES
+        OBJNR            = <FS_ACT_D>-OBJNR
+        ONLY_ACTIVE      = CON_YES
+        SPRAS            = SY-LANGU
+      IMPORTING
+        LINE             = GS_SELECT-SSTAT
+        USER_LINE        = GS_SELECT-USTAT
+      EXCEPTIONS
+        OBJECT_NOT_FOUND = 01.
+    PERFORM ADD_LOG_OUTPUT USING <FS_ACT_D>-OBJNR GS_SELECT.
+  ENDLOOP.
+
+  LOOP AT LT_USR_STAT ASSIGNING <FS_USR_STATUS>.
+
+    READ TABLE ACT_TAB ASSIGNING <FS_ACT_D> WITH KEY UVORN = <FS_USR_STATUS>-ACTIVITY.
+    IF SY-SUBRC EQ 0 .
+      "activity element
+      GS_SELECT-ACT_ELE = <FS_ACT_D>-UVORN.
+      READ TABLE ACT_TAB TRANSPORTING VORNR INTO LS_ACT_TAB  WITH KEY VORNR = <FS_ACT_D>-VORNR.
+      IF SY-SUBRC EQ 0.
+        GS_SELECT-ACT = LS_ACT_TAB-VORNR.
+      ENDIF.
+      MODIFY GT_SELECT FROM GS_SELECT TRANSPORTING ACT ACT_ELE WHERE OBJNR = <FS_ACT_D>-OBJNR.
+
+    ELSE.  " Activity
+      READ TABLE ACT_TAB ASSIGNING <FS_ACT_D> WITH KEY AUFPL = P_LS_ACT_TAB-AUFPL VORNR = <FS_USR_STATUS>-ACTIVITY.
+    ENDIF.
+
+    CLEAR GS_SELECT.
+    CALL FUNCTION 'STATUS_TEXT_EDIT'
+      EXPORTING
+        FLG_USER_STAT    = CON_YES
+        OBJNR            = <FS_ACT_D>-OBJNR
+        ONLY_ACTIVE      = CON_YES
+        SPRAS            = SY-LANGU
+      IMPORTING
+        LINE             = GS_SELECT-SSTAT
+        USER_LINE        = GS_SELECT-USTAT
+      EXCEPTIONS
+        OBJECT_NOT_FOUND = 01.
+    PERFORM ADD_LOG_OUTPUT USING <FS_ACT_D>-OBJNR GS_SELECT.
+
+  ENDLOOP.
+
+  READ TABLE LT_RETURN WITH KEY TYPE = 'E'.
+  IF TEST IS INITIAL AND SY-SUBRC IS NOT INITIAL .
+    CALL FUNCTION 'BAPI_TRANSACTION_COMMIT'
+      EXPORTING
+        WAIT = CON_YES.
+  ENDIF.
+
+ENDFORM.
+*&---------------------------------------------------------------------*
+*&      Form  IMPORT_TCNDB_TCNDS
+*&---------------------------------------------------------------------*
+*       text
+*----------------------------------------------------------------------*
+*  -->  p1        text
+*  <--  p2        text
+*----------------------------------------------------------------------*
+FORM IMPORT_TCNDB_TCNDS .                                                         "Note 2705444
+  IMPORT  TCNDB TO TCNDB
+          TCNDS TO TCNDS
+  FROM DATABASE INDX(ZA) ID 'RCNMASSSTATUS_TCNDB'.
+
+  EXPORT CN_TCNDB FROM TCNDB
+       CN_TCNDS FROM TCNDS
+TO MEMORY ID 'SAPDBPSJ_CN_TCNDB'.
+
+  PERFORM DELETE_MASSSTATUS_INDX.
+ENDFORM.
+*&---------------------------------------------------------------------*
+*&      Form  EXPORT_TCNDB_TCNDS
+*&---------------------------------------------------------------------*
+*       text
+*----------------------------------------------------------------------*
+*  -->  p1        text
+*  <--  p2        text
+*----------------------------------------------------------------------*
+FORM EXPORT_TCNDB_TCNDS .
+
+  EXPORT  TCNDB FROM TCNDB
+          TCNDS FROM TCNDS
+  TO DATABASE INDX(ZA) ID 'RCNMASSSTATUS_TCNDB'.
+ENDFORM.
+*&---------------------------------------------------------------------*
+*&      Form  DELETE_MASSSTATUS_INDX
+*&---------------------------------------------------------------------*
+*       text
+*----------------------------------------------------------------------*
+*  -->  p1        text
+*  <--  p2        text
+*----------------------------------------------------------------------*
+FORM DELETE_MASSSTATUS_INDX .
+  DELETE FROM DATABASE INDX(ZA) ID 'RCNMASSSTATUS_TCNDB'.
+ENDFORM.
+*&---------------------------------------------------------------------*
+*&      Form  GET_FIELDCATALOG
+*&---------------------------------------------------------------------*
+*       text
+*----------------------------------------------------------------------*
+*      <--P_LT_FIELDCAT  text
+*----------------------------------------------------------------------*
+FORM GET_FIELDCATALOG CHANGING P_LT_FIELDCAT TYPE SLIS_T_FIELDCAT_ALV .
+  CLEAR LS_FIELDCAT.
+  LS_FIELDCAT-COL_POS       =  POS.
+  LS_FIELDCAT-FIELDNAME     =  'STAT'.
+  LS_FIELDCAT-SELTEXT_M     =  TEXT-C03.
+*  ls_fieldcat-datatype      =  'ICON_D'.
+  LS_FIELDCAT-OUTPUTLEN     =  4.
+  APPEND LS_FIELDCAT TO  P_LT_FIELDCAT.
+  CLEAR LS_FIELDCAT.
+  LS_FIELDCAT-COL_POS       =  POS.
+  LS_FIELDCAT-FIELDNAME     =  'OBTYP'.
+  LS_FIELDCAT-SELTEXT_M     =  TEXT-N09.
+*  ls_fieldcat-datatype      =  'CHAR'.
+  LS_FIELDCAT-OUTPUTLEN     =  5.
+  APPEND LS_FIELDCAT TO  P_LT_FIELDCAT.
+  CLEAR LS_FIELDCAT.
+  POS = POS + 1.
+  LS_FIELDCAT-COL_POS       =  POS.
+  LS_FIELDCAT-FIELDNAME     =  'OBJECTKEY'.
+  LS_FIELDCAT-SELTEXT_M     =  TEXT-C02.
+*  ls_fieldcat-datatype      =  'SWO_OBJID'.
+  LS_FIELDCAT-OUTPUTLEN     =  20.
+  APPEND LS_FIELDCAT TO  P_LT_FIELDCAT.
+  CLEAR LS_FIELDCAT.
+  POS = POS + 1.
+  LS_FIELDCAT-COL_POS       =  POS.
+  LS_FIELDCAT-FIELDNAME     =  'SSTATO'.
+  LS_FIELDCAT-SELTEXT_M     =  TEXT-C05.
+*  ls_fieldcat-datatype      =  'CHAR'.
+  LS_FIELDCAT-OUTPUTLEN     =  20.
+  APPEND LS_FIELDCAT TO  P_LT_FIELDCAT.
+  CLEAR LS_FIELDCAT.
+  POS = POS + 1.
+  LS_FIELDCAT-COL_POS       =  POS.
+  LS_FIELDCAT-FIELDNAME     =  'SSTATN'.
+  LS_FIELDCAT-SELTEXT_M     =  TEXT-C06.
+*  ls_fieldcat-datatype      =  'CHAR'.
+  LS_FIELDCAT-OUTPUTLEN     =  20.
+  APPEND LS_FIELDCAT TO  P_LT_FIELDCAT.
+
+  CLEAR LS_FIELDCAT.
+  POS = POS + 1.
+  LS_FIELDCAT-COL_POS       =  POS.
+  LS_FIELDCAT-FIELDNAME     =  'USTATO'.
+  LS_FIELDCAT-SELTEXT_M     =  TEXT-C07.
+*  ls_fieldcat-datatype      =  'CHAR'.
+  LS_FIELDCAT-OUTPUTLEN     =  20.
+  APPEND LS_FIELDCAT TO  P_LT_FIELDCAT.
+  CLEAR LS_FIELDCAT.
+  POS = POS + 1.
+  LS_FIELDCAT-COL_POS       =  POS.
+  LS_FIELDCAT-FIELDNAME     =  'USTATN'.
+  LS_FIELDCAT-SELTEXT_M     =  TEXT-C08.
+*  ls_fieldcat-datatype      =  'CHAR'.
+  LS_FIELDCAT-OUTPUTLEN     =  20.
+  APPEND LS_FIELDCAT TO  P_LT_FIELDCAT.
+
+  CLEAR LS_FIELDCAT.
+  POS = POS + 1.
+  LS_FIELDCAT-COL_POS       =  POS.
+  LS_FIELDCAT-FIELDNAME     =  'MESSAGE_TEXT'.
+  LS_FIELDCAT-SELTEXT_M     =  TEXT-C04.
+*  ls_fieldcat-datatype      =  'BAPI_TEXT'.
+  LS_FIELDCAT-OUTPUTLEN     =  255.                         "N_2901313
+  APPEND LS_FIELDCAT TO  P_LT_FIELDCAT.
+ENDFORM.                    " GET_FIELDCATALOG
+*&---------------------------------------------------------------------*
+*&      Form  add_log_output
+*&---------------------------------------------------------------------*
+*       text
+*----------------------------------------------------------------------*
+*      -->P_RESULT   text
+*----------------------------------------------------------------------*
+FORM ADD_LOG_OUTPUT USING  P_OBJNAME P_SELECT TYPE OUTPUT_TYP.
+  DATA : LS_SELECT TYPE OUTPUT_TYP.
+  DATA: LV_RESULT_OBJKEY TYPE OBJIDEXT,
+        LV_AUFNR         TYPE AUFNR,
+        LT_RETURN_ER     TYPE TABLE OF  BAPIRET2 WITH HEADER LINE.                         "Note 3014211
+  CLEAR GS_RESULT.
+* add previous status to show in the output log.
+  READ TABLE GT_SELECT INTO LS_SELECT WITH KEY OBJNR = P_OBJNAME.
+*  Old status
+  GS_RESULT-OBTYP = LS_SELECT-OBTYP.
+  GS_RESULT-SSTATO = LS_SELECT-SSTAT.
+  GS_RESULT-USTATO = LS_SELECT-USTAT.
+*new status
+  GS_RESULT-SSTATN = P_SELECT-SSTAT.
+  GS_RESULT-USTATN = P_SELECT-USTAT.
+  CASE LS_SELECT-OBTYP.
+    WHEN 'PD'.
+      GS_RESULT-OBJECTKEY =  LS_SELECT-PROJ.
+      LV_RESULT_OBJKEY = LS_SELECT-PROJ.
+    WHEN 'PR'.
+      GS_RESULT-OBJECTKEY =  LS_SELECT-WBS.
+
+      LV_RESULT_OBJKEY  =  LS_SELECT-WBS.
+    WHEN 'NP'.
+      GS_RESULT-OBJECTKEY =  LS_SELECT-NETW.
+
+      LV_AUFNR = LS_SELECT-NETW.
+      CALL FUNCTION 'CONVERSION_EXIT_ALPHA_INPUT'
+        EXPORTING
+          INPUT  = LV_AUFNR
+        IMPORTING
+          OUTPUT = LV_AUFNR.
+
+      LV_RESULT_OBJKEY = LV_AUFNR.
+    WHEN 'NV'.
+      "Begin of Note:2901313
+*      CONCATENATE ls_select-netw ls_select-act INTO gs_result-objectkey SEPARATED BY space.
+      LV_AUFNR = LS_SELECT-NETW.
+
+      CALL FUNCTION 'CONVERSION_EXIT_ALPHA_INPUT'
+        EXPORTING
+          INPUT  = LV_AUFNR
+        IMPORTING
+          OUTPUT = LV_AUFNR.
+
+      IF LS_SELECT-ACT_ELE IS INITIAL. "Check for activity
+        CONCATENATE LS_SELECT-NETW LS_SELECT-ACT INTO GS_RESULT-OBJECTKEY SEPARATED BY SPACE.
+        CONCATENATE LV_AUFNR LS_SELECT-ACT INTO LV_RESULT_OBJKEY. "Object key for Activity
+      ELSE. "Activity element
+        CONCATENATE LS_SELECT-NETW LS_SELECT-ACT LS_SELECT-ACT_ELE INTO GS_RESULT-OBJECTKEY SEPARATED BY SPACE.
+        CONCATENATE LV_AUFNR LS_SELECT-ACT_ELE INTO LV_RESULT_OBJKEY. "Object key for identifying Activity ele
+      ENDIF.
+      "End of Note:2901313
+  ENDCASE.
+
+  IF  LT_RESULT[] IS INITIAL.
+    READ TABLE LT_RETURN WITH KEY TYPE = 'E'.
+    IF LT_RETURN-TYPE = 'E'.
+      LT_RETURN_ER[] = LT_RETURN[].                                                       "Note 3014211+
+      DELETE LT_RETURN_ER INDEX 1.
+      DELETE LT_RETURN_ER[] WHERE TYPE <> 'E'.
+      READ TABLE LT_RETURN_ER WITH KEY TYPE = 'E'.
+      IF SY-SUBRC = 0.
+        GS_RESULT-MESSAGE_TEXT = LT_RETURN_ER-MESSAGE.
+      ELSE.
+        GS_RESULT-MESSAGE_TEXT = LT_RETURN-MESSAGE.
+      ENDIF.                                                                              "Note 3014211-
+      GS_RESULT-STAT = '@0A@'.
+      GS_RESULT-MESSAGE_TYPE = 'E'.
+*      gs_result-message_text = lt_return-message.
+    ELSE.
+      READ TABLE LT_RETURN WITH KEY TYPE = 'S'.
+      GS_RESULT-STAT = '@08@'.
+      GS_RESULT-MESSAGE_TYPE = 'S'.
+*      gs_result-message_text = lt_return-message.
+    ENDIF.
+    IF GS_RESULT-MESSAGE_TEXT IS INITIAL.
+      IF SET IS NOT INITIAL.
+        IF GS_RESULT-MESSAGE_TYPE = 'S'.
+          CONCATENATE TEXT-T08 GS_RESULT-OBJECTKEY GS_RESULT-MESSAGE_TEXT INTO GS_RESULT-MESSAGE_TEXT RESPECTING BLANKS.
+        ELSE.
+          CONCATENATE TEXT-T10 GS_RESULT-OBJECTKEY GS_RESULT-MESSAGE_TEXT INTO GS_RESULT-MESSAGE_TEXT RESPECTING BLANKS.
+        ENDIF.
+      ELSEIF RSET IS NOT INITIAL.
+        IF GS_RESULT-MESSAGE_TYPE = 'S'.
+          CONCATENATE TEXT-T09 GS_RESULT-OBJECTKEY GS_RESULT-MESSAGE_TEXT INTO GS_RESULT-MESSAGE_TEXT RESPECTING BLANKS.
+        ELSE.
+          CONCATENATE TEXT-T11 GS_RESULT-OBJECTKEY GS_RESULT-MESSAGE_TEXT INTO GS_RESULT-MESSAGE_TEXT RESPECTING BLANKS.
+        ENDIF.
+      ENDIF.
+    ENDIF.
+    APPEND GS_RESULT TO GT_RESULT.
+    CLEAR GS_RESULT.
+  ELSE.
+    "begin of SAP Note: 2901313
+    LOOP AT LT_RESULT INTO LS_RESULT WHERE OBJECTKEY = LV_RESULT_OBJKEY .
+      IF LS_RESULT-MESSAGE_TYPE = 'E'. " Status update Failed
+        GS_RESULT-STAT = '@0A@'.
+*       gs_result-objectkey = gs_result-objectkey.
+
+        IF GS_RESULT-MESSAGE_TEXT IS INITIAL.
+          CONCATENATE GS_RESULT-MESSAGE_TEXT LS_RESULT-MESSAGE_TEXT INTO GS_RESULT-MESSAGE_TEXT SEPARATED BY ' '.
+        ELSE.
+          CONCATENATE GS_RESULT-MESSAGE_TEXT '.' LS_RESULT-MESSAGE_TEXT INTO GS_RESULT-MESSAGE_TEXT SEPARATED BY ' '.
+
+        ENDIF.
+
+        IF LS_RESULT-MESSAGE_TYPE = 'S'. "Status update Successul
+          GS_RESULT-STAT = '@08@'.
+*      gs_result-objectkey = gs_result-objectkey.
+          GS_RESULT-MESSAGE_TYPE = 'S'.
+          GS_RESULT-MESSAGE_TEXT = LS_RESULT-MESSAGE_TEXT.
+        ENDIF.
+      ENDIF.
+    ENDLOOP.
+    "End of SAP Note: 2901313
+    APPEND GS_RESULT TO GT_RESULT.
+    CLEAR: GS_RESULT.
+  ENDIF.
+*  REFRESH lt_result.
+*  CLEAR   lt_result.
+ENDFORM.                    "add_log_output
+*&---------------------------------------------------------------------*
+*&      Form  USER_COMMAND
+*&---------------------------------------------------------------------*
+*       text
+*----------------------------------------------------------------------*
+*      -->R_UCOMM      text
+*      -->RS_SELFIELD  text
+*----------------------------------------------------------------------*
+FORM USER_COMMAND USING R_UCOMM LIKE SY-UCOMM RS_SELFIELD TYPE SLIS_SELFIELD.
+  IF R_UCOMM = '&EXC'.
+    LEAVE TO SCREEN 0.
+  ELSE.
+    CALL SELECTION-SCREEN 1000.
+  ENDIF.
+ENDFORM.                    "USER_COMMAND
+
+*&---------------------------------------------------------------------*
+*&      Form  set_pf_status
+*&---------------------------------------------------------------------*
+*       text
+*----------------------------------------------------------------------*
+*      -->RT_EXTAB   text
+*----------------------------------------------------------------------*
+FORM SET_PF_STATUS USING RT_EXTAB TYPE SLIS_T_EXTAB.
+  SET PF-STATUS 'STANDARD'.
+ENDFORM. "Set_pf_status
+*&---------------------------------------------------------------------*
+*&      Form  build_layout
+*&---------------------------------------------------------------------*
+*       text
+*----------------------------------------------------------------------*
+FORM BUILD_LAYOUT.
+  LS_LAYOUT-BOX_FIELDNAME     = 'SEL'.
+  LS_LAYOUT-COLWIDTH_OPTIMIZE = CON_YES.
+  LS_LAYOUT-ZEBRA             = CON_YES.
+ENDFORM.                    " BUILD_LAYOUT
+
+*&---------------------------------------------------------------------*
+*&      Form  get_fieldcatalog_selection
+*&---------------------------------------------------------------------*
+*       text
+*----------------------------------------------------------------------*
+*      <--P_LT_FIELDCAT  text
+*----------------------------------------------------------------------*
+FORM GET_FIELDCATALOG_SELECTION CHANGING P_LT_FIELDCAT TYPE SLIS_T_FIELDCAT_ALV .
+  CLEAR LS_FIELDCAT.
+  LS_FIELDCAT-COL_POS       =  POS.
+  LS_FIELDCAT-FIELDNAME     =  'OBTYP'.
+  LS_FIELDCAT-SELTEXT_L     =  TEXT-N09.
+  LS_FIELDCAT-DATATYPE      =  'CHAR'.
+  LS_FIELDCAT-OUTPUTLEN      =  5.
+  APPEND LS_FIELDCAT TO  P_LT_FIELDCAT.
+  CLEAR LS_FIELDCAT.
+  POS = POS + 1.
+  LS_FIELDCAT-COL_POS       =  POS.
+  LS_FIELDCAT-FIELDNAME     =  'OBJECT'.
+  LS_FIELDCAT-SELTEXT_L     =  TEXT-N08.
+  LS_FIELDCAT-DATATYPE      =  'CHAR'.
+  LS_FIELDCAT-OUTPUTLEN      =  30.
+  APPEND LS_FIELDCAT TO  P_LT_FIELDCAT.
+  CLEAR LS_FIELDCAT.
+  POS = POS + 1.
+  LS_FIELDCAT-COL_POS       =  POS.
+  LS_FIELDCAT-FIELDNAME     =  'PROJ'.
+  LS_FIELDCAT-SELTEXT_L     =  TEXT-N01.
+  LS_FIELDCAT-DATATYPE      =  'PS_PSPID'.
+  LS_FIELDCAT-OUTPUTLEN      =  24.
+  APPEND LS_FIELDCAT TO  P_LT_FIELDCAT.
+  CLEAR LS_FIELDCAT.
+  POS = POS + 1.
+  LS_FIELDCAT-COL_POS       =  POS.
+  LS_FIELDCAT-FIELDNAME     =  'DESC'.
+  LS_FIELDCAT-SELTEXT_L     =  TEXT-N05.
+  LS_FIELDCAT-DATATYPE      =  'CHAR'.
+  LS_FIELDCAT-OUTPUTLEN      =  40.
+  APPEND LS_FIELDCAT TO  P_LT_FIELDCAT.
+  CLEAR LS_FIELDCAT.
+  POS = POS + 1.
+  LS_FIELDCAT-COL_POS       =  POS.
+  LS_FIELDCAT-FIELDNAME     =  'SSTAT'.
+  LS_FIELDCAT-SELTEXT_L     =  TEXT-N06.
+  LS_FIELDCAT-DATATYPE      =  'CHAR'.
+  LS_FIELDCAT-OUTPUTLEN      =  20.
+  APPEND LS_FIELDCAT TO  P_LT_FIELDCAT.
+  CLEAR LS_FIELDCAT.
+  POS = POS + 1.
+  LS_FIELDCAT-COL_POS       =  POS.
+  LS_FIELDCAT-FIELDNAME     =  'USTAT'.
+  LS_FIELDCAT-SELTEXT_L     =  TEXT-N07.
+  LS_FIELDCAT-DATATYPE      =  'CHAR'.
+  LS_FIELDCAT-OUTPUTLEN      =  20.
+  APPEND LS_FIELDCAT TO  P_LT_FIELDCAT.
+  CLEAR LS_FIELDCAT.
+  POS = POS + 1.
+  LS_FIELDCAT-COL_POS       =  POS.
+  LS_FIELDCAT-FIELDNAME     =  'STSMA'.
+  LS_FIELDCAT-SELTEXT_L     =  'User Status Profile'.
+  APPEND LS_FIELDCAT TO  P_LT_FIELDCAT.
+  CLEAR LS_FIELDCAT.
+  POS = POS + 1.
+  LS_FIELDCAT-COL_POS       =  POS.
+  LS_FIELDCAT-FIELDNAME     =  'WBS'.
+  LS_FIELDCAT-SELTEXT_L     =  TEXT-N02.
+  LS_FIELDCAT-DATATYPE      =  'PS_POSID'.
+  LS_FIELDCAT-OUTPUTLEN      =  24.
+  APPEND LS_FIELDCAT TO  P_LT_FIELDCAT.
+  CLEAR LS_FIELDCAT.
+  LS_FIELDCAT-COL_POS       =  POS.
+  LS_FIELDCAT-FIELDNAME     =  'NETW'.
+  LS_FIELDCAT-SELTEXT_L     =  TEXT-N03.
+  LS_FIELDCAT-DATATYPE      =  'AUFNR'.
+  LS_FIELDCAT-OUTPUTLEN      =  12.
+  APPEND LS_FIELDCAT TO  P_LT_FIELDCAT.
+  CLEAR LS_FIELDCAT.
+  POS = POS + 1.
+  LS_FIELDCAT-COL_POS       =  POS.
+  LS_FIELDCAT-FIELDNAME     =  'ACT'.
+  LS_FIELDCAT-SELTEXT_L     =  TEXT-N04.
+  LS_FIELDCAT-DATATYPE      =  'VORNR'.
+  LS_FIELDCAT-OUTPUTLEN      =  10.
+  APPEND LS_FIELDCAT TO  P_LT_FIELDCAT.
+  CLEAR LS_FIELDCAT.
+  POS = POS + 1.
+  LS_FIELDCAT-COL_POS       =  POS.
+  LS_FIELDCAT-FIELDNAME     =  'KOKRS'.
+  LS_FIELDCAT-SELTEXT_L     =  TEXT-N12.
+  LS_FIELDCAT-DATATYPE      =  'KOKRS'.
+  LS_FIELDCAT-OUTPUTLEN      =  4.
+  APPEND LS_FIELDCAT TO  P_LT_FIELDCAT.
+  CLEAR LS_FIELDCAT.
+  POS = POS + 1.
+  LS_FIELDCAT-COL_POS       =  POS.
+  LS_FIELDCAT-FIELDNAME     =  'BUKRS'.
+  LS_FIELDCAT-SELTEXT_L     =  TEXT-N13.
+  LS_FIELDCAT-DATATYPE      =  'BUKRS'.
+  LS_FIELDCAT-OUTPUTLEN      =  4.
+  APPEND LS_FIELDCAT TO  P_LT_FIELDCAT.
+  CLEAR LS_FIELDCAT.
+  POS = POS + 1.
+  LS_FIELDCAT-COL_POS       =  POS.
+  LS_FIELDCAT-FIELDNAME     =  'GSBER'.
+  LS_FIELDCAT-SELTEXT_L     =  TEXT-N14.
+  LS_FIELDCAT-DATATYPE      =  'GSBER'.
+  LS_FIELDCAT-OUTPUTLEN      =  4.
+  APPEND LS_FIELDCAT TO  P_LT_FIELDCAT.
+  CLEAR LS_FIELDCAT.
+  POS = POS + 1.
+  LS_FIELDCAT-COL_POS       =  POS.
+  LS_FIELDCAT-FIELDNAME     =  'WERKS'.
+  LS_FIELDCAT-SELTEXT_L     =  TEXT-N15.
+  LS_FIELDCAT-DATATYPE      =  'WERKS_D'.
+  LS_FIELDCAT-OUTPUTLEN      =  4.
+  APPEND LS_FIELDCAT TO  P_LT_FIELDCAT.
+  CLEAR LS_FIELDCAT.
+  POS = POS + 1.
+  LS_FIELDCAT-COL_POS       =  POS.
+  LS_FIELDCAT-FIELDNAME     =  'PRCTR'.
+  LS_FIELDCAT-SELTEXT_L     =  TEXT-N16.
+  LS_FIELDCAT-DATATYPE      =  'PRCTR'.
+  LS_FIELDCAT-OUTPUTLEN      =  10.
+  APPEND LS_FIELDCAT TO  P_LT_FIELDCAT.
+  CLEAR LS_FIELDCAT.
+  POS = POS + 1.
+  LS_FIELDCAT-COL_POS       =  POS.
+  LS_FIELDCAT-FIELDNAME     =  'KOSTL'.
+  LS_FIELDCAT-SELTEXT_L     =  TEXT-N17.
+  LS_FIELDCAT-DATATYPE      =  'KOSTL'.
+  LS_FIELDCAT-OUTPUTLEN     =  10.
+  APPEND LS_FIELDCAT TO  P_LT_FIELDCAT.
+ENDFORM.                    " GET_FIELDCATALOG
+*&---------------------------------------------------------------------*
+*&      Form  select_objects
+*&---------------------------------------------------------------------*
+*       text
+*----------------------------------------------------------------------*
+FORM SELECT_OBJECTS.
+  ASSIGN  ('(SAPLBSVA)JSTO_BUF[]')  TO <FT_JSTO>.
+  IF <FT_JSTO> IS ASSIGNED.
+    SORT <FT_JSTO> BY OBJNR.
+  ENDIF.
+  LOOP AT ELM_PS_TAB INTO ELM_PS.
+    IF <FT_JSTO> IS ASSIGNED.
+      READ TABLE <FT_JSTO> INTO LS_JSTO WITH KEY OBJNR = ELM_PS-OBJNR BINARY SEARCH.
+      GS_SELECT-STSMA = LS_JSTO-STSMA.
+    ENDIF.
+    MOVE-CORRESPONDING ELM_PS TO GS_SELECT.
+    GS_SELECT-OBJNR = ELM_PS-OBJNR.
+    GS_SELECT-OBTYP = ELM_PS-OBTYP.
+    CALL FUNCTION 'CONVERSION_EXIT_KONPD_OUTPUT'
+      EXPORTING
+        INPUT  = ELM_PS-PROJ_INT
+      IMPORTING
+        OUTPUT = GS_SELECT-PROJ.
+    CALL FUNCTION 'CONVERSION_EXIT_ABPSP_OUTPUT'
+      EXPORTING
+        INPUT  = ELM_PS-PRPS_INT
+      IMPORTING
+        OUTPUT = GS_SELECT-WBS.
+    GS_SELECT-NETW = ELM_PS-AUFNR_EXT.
+    GS_SELECT-ACT = ELM_PS-VORNR.
+    SHIFT GS_SELECT-NETW LEFT DELETING LEADING '0'.
+    CASE ELM_PS-OBTYP.
+      WHEN 'PD'.
+        GS_SELECT-OBJECT = GS_SELECT-PROJ.
+      WHEN 'PR'.
+        GS_SELECT-OBJECT = GS_SELECT-WBS.
+      WHEN OTHERS.
+        CONCATENATE GS_SELECT-NETW ELM_PS-VORNR INTO GS_SELECT-OBJECT SEPARATED BY SPACE.
+    ENDCASE.
+    GS_SELECT-DESC = ELM_PS-KTEXT.
+    CALL FUNCTION 'STATUS_TEXT_EDIT'
+      EXPORTING
+        FLG_USER_STAT    = CON_YES
+        OBJNR            = ELM_PS-OBJNR
+        ONLY_ACTIVE      = CON_YES
+        SPRAS            = SY-LANGU
+      IMPORTING
+        LINE             = GS_SELECT-SSTAT
+        USER_LINE        = GS_SELECT-USTAT
+      EXCEPTIONS
+        OBJECT_NOT_FOUND = 01.
+    APPEND GS_SELECT TO GT_SELECT.
+  ENDLOOP.
+  SORT GT_SELECT BY PROJ ASCENDING.
+  IF SEL IS NOT INITIAL AND GT_SELECT IS NOT INITIAL.
+    PERFORM GET_FIELDCATALOG_SELECTION CHANGING LT_FIELDCAT.
+    CALL FUNCTION 'REUSE_ALV_GRID_DISPLAY'
+      EXPORTING
+        I_CALLBACK_PROGRAM       = SY-REPID
+        IS_LAYOUT                = LS_LAYOUT
+        I_CALLBACK_PF_STATUS_SET = 'SET_PF_STATUS'
+        IT_FIELDCAT              = LT_FIELDCAT
+        I_CALLBACK_USER_COMMAND  = 'USER_COMMAND'
+        I_SAVE                   = 'A'
+      TABLES
+        T_OUTTAB                 = GT_SELECT
+      EXCEPTIONS
+        PROGRAM_ERROR            = 1
+        OTHERS                   = 2.
+    IF SY-UCOMM <> '&EXC'. "Execute
+      LEAVE LIST-PROCESSING.
+      CALL SELECTION-SCREEN 1000.
+    ENDIF.
+  ENDIF.
+ENDFORM.                    "select_objects
+*&---------------------------------------------------------------------*
+*&      Form  PROFILE_SELECTION
+*&---------------------------------------------------------------------*
+*       text
+*----------------------------------------------------------------------*
+*  -->  p1        text
+*  <--  p2        text
+*----------------------------------------------------------------------*
+FORM PROFILE_SELECTION .
+  TCNDB_MODIF-INCIH        = CON_NO.
+  TCNDB_MODIF-INCIHVG      = CON_NO.
+  TCNDB_MODIF-INCOR        = CON_NO.
+  TCNDB_MODIF-INCORVG      = CON_NO.
+  TCNDB_MODIF-INCIHSUB     = CON_NO.
+  TCNDB_MODIF-INCCO        = CON_NO.
+  TCNDB_MODIF-INCPP        = CON_NO.
+  TCNDB_MODIF-INCPPVG      = CON_NO.
+  TCNDB_MODIF-INCTN        = CON_NO.
+  TCNDB_MODIF-SHOW_VERS    = CON_NO.
+  TCNDB_MODIF-SHOW_ARCH    = CON_NO.
+  TCNDB_MODIF-SHOW_STD     = CON_NO.
+  TCNDB_MODIF-EBL          = CON_NO.
+  FLG_NO_HIERARCHY         = CON_NO.                                "Note 2842725
+ENDFORM.                    " PROFILE_SELECTION
+*&---------------------------------------------------------------------*
+*&      Form  USER_PROFILE_F4
+*&---------------------------------------------------------------------*
+*       text
+*----------------------------------------------------------------------*
+*  -->  p1        text
+*  <--  p2        text
+*----------------------------------------------------------------------*
+FORM USER_PROFILE_F4 .
+  DATA LS_TJ20T_NEW TYPE TJ20T.                                     "Begin of Note - 2912252
+
+  SET PARAMETER ID 'PROF' FIELD ''.
+  SET PARAMETER ID 'UUSR' FIELD ''.
+  IF LT_F4[] IS INITIAL.
+    SELECT * FROM TJ21 INTO TABLE LT_TJ21 WHERE OBTYP ='PRN' OR OBTYP ='PDN'OR OBTYP ='NPH'OR OBTYP ='NVO'.
+    IF LT_TJ21[] IS NOT INITIAL.
+      SELECT STSMA SPRAS FROM TJ30T
+        INTO CORRESPONDING FIELDS OF TABLE LT_TJ20T_NEW
+      FOR ALL ENTRIES IN LT_TJ21
+      WHERE STSMA = LT_TJ21-STSMA AND SPRAS = SY-LANGU.
+
+      IF SY-SUBRC IS INITIAL.                                       " Begin of Note - 2985722
+        SORT LT_TJ20T_NEW BY STSMA SPRAS.
+        DELETE ADJACENT DUPLICATES FROM LT_TJ20T_NEW.
+      ENDIF.
+
+      SELECT * FROM TJ20T
+      INTO TABLE LT_TJ20T FOR ALL ENTRIES IN LT_TJ21
+      WHERE STSMA = LT_TJ21-STSMA AND SPRAS = SY-LANGU.
+
+      IF SY-SUBRC IS INITIAL.
+        SORT LT_TJ20T BY STSMA SPRAS.
+        DELETE ADJACENT DUPLICATES FROM LT_TJ20T.
+      ENDIF.                                                        " End of Note - 2985722
+    ENDIF.
+
+    LOOP AT LT_TJ20T_NEW INTO LS_TJ20T_NEW.
+      READ TABLE LT_TJ20T TRANSPORTING NO FIELDS WITH KEY STSMA = LS_TJ20T_NEW-STSMA.
+      IF  SY-SUBRC IS NOT INITIAL.
+        APPEND LS_TJ20T_NEW TO LT_TJ20T.
+      ENDIF.
+    ENDLOOP.                                                        "End of Note - 2912252
+
+    SORT LT_TJ20T BY STSMA.
+    DELETE ADJACENT DUPLICATES FROM LT_TJ20T COMPARING STSMA.
+    LOOP AT LT_TJ20T INTO LS_TJ20T.
+      MOVE-CORRESPONDING LS_TJ20T TO LS_F4.
+      APPEND LS_F4 TO LT_F4.
+    ENDLOOP.
+  ENDIF.
+  CALL FUNCTION 'F4IF_INT_TABLE_VALUE_REQUEST'
+    EXPORTING
+      RETFIELD    = 'STSMA'
+      DYNPPROG    = SY-CPROG
+      DYNPNR      = SY-DYNNR
+      DYNPROFIELD = 'PROF'
+      VALUE_ORG   = 'S'
+    TABLES
+      VALUE_TAB   = LT_F4
+      RETURN_TAB  = RETURN_TAB.
+  READ TABLE RETURN_TAB INTO LS_RETURN INDEX 1.
+  PROF = LS_RETURN-FIELDVAL.
+  IF PROF <> PROF_CPY AND PROF IS NOT INITIAL .
+    PERFORM GET_STATUS_LIST USING 'U'.
+  ENDIF.
+ENDFORM.                    " USER_PROFILE_F4
+*&---------------------------------------------------------------------*
+*& Form get_status_value
+*&---------------------------------------------------------------------*
+*& text
+*&---------------------------------------------------------------------*
+*&      --> GV_VARIANT_NAME
+*&---------------------------------------------------------------------*
+FORM GET_STATUS_VALUE USING P_VARIANT_NAME.
+  CHECK P_VARIANT_NAME IS NOT INITIAL.
+  DATA : LT_VALUETAB TYPE STANDARD TABLE OF RSPARAMS WITH HEADER LINE,
+         LS_VALUETAB LIKE LINE OF LT_VALUETAB,
+         LS_TJ30T    TYPE TJ30T,
+         LV_UUSR     TYPE TJ30T-TXT04,
+         LV_PROF     TYPE TJ30T-STSMA.
+  CALL FUNCTION 'RS_VARIANT_CONTENTS'
+    EXPORTING
+      REPORT               = SY-CPROG
+      VARIANT              = P_VARIANT_NAME
+    TABLES
+      VALUTAB              = LT_VALUETAB
+    EXCEPTIONS
+      VARIANT_NON_EXISTENT = 1
+      VARIANT_OBSOLETE     = 2
+      OTHERS               = 3.
+  IF SY-SUBRC = 0.
+    READ TABLE LT_VALUETAB WITH KEY SELNAME = 'UUSR'.
+    IF SY-SUBRC EQ 0.
+      LV_UUSR = LT_VALUETAB-LOW.                                    "Note - 2912252
+    ENDIF.
+    READ TABLE LT_VALUETAB WITH KEY SELNAME = 'PROF'.               "Begin of Note - 2912252
+    IF SY-SUBRC = 0.
+      LV_PROF = LT_VALUETAB-LOW.
+    ENDIF.
+    IF LV_UUSR IS NOT INITIAL AND LV_PROF IS NOT INITIAL.
+      SELECT SINGLE ESTAT FROM TJ30T INTO CORRESPONDING FIELDS OF LS_TJ30T
+        WHERE STSMA = LV_PROF AND TXT04 = LV_UUSR.
+      IF SY-SUBRC EQ 0.
+        SELECT SINGLE TXT04 FROM TJ30T INTO CORRESPONDING FIELDS OF LS_TJ30T
+          WHERE STSMA = LV_PROF
+          AND ESTAT = LS_TJ30T-ESTAT
+          AND SPRAS = SY-LANGU.
+        IF SY-SUBRC EQ 0.
+          UUSR = LS_TJ30T-TXT04.
+        ELSE.
+          CLEAR UUSR.
+        ENDIF.
+      ENDIF.
+    ENDIF.                                                          "End of Note - 2912252
+  ENDIF.
+ENDFORM.
+*&---------------------------------------------------------------------*
+*& Form FILTER_TECO_STAT
+*&---------------------------------------------------------------------*
+*& text
+*&---------------------------------------------------------------------*
+*&      <-- PROJ_TAB
+*&      <-- PRPS_TAB
+*&---------------------------------------------------------------------*
+FORM FILTER_TECO_STAT  CHANGING CT_PS_TAB TYPE TTYP_PS_TAB.
+
+  CONSTANTS: LC_TECO TYPE JCDS-STAT VALUE 'I0045'.
+
+  DATA: LV_BK_DAT TYPE DATUM.
+  DATA(LT_PS_TAB) = CT_PS_TAB[].
+  SORT LT_PS_TAB BY OBJNR.
+
+  REFRESH: CT_PS_TAB.
+
+  "- 2month
+  CALL FUNCTION 'CCM_GO_BACK_MONTHS'
+    EXPORTING
+      CURRDATE   = SY-DATUM
+      BACKMONTHS = 2
+    IMPORTING
+      NEWDATE    = LV_BK_DAT.
+
+  IF LT_PS_TAB[] IS NOT INITIAL.
+    SELECT
+      OBJNR,
+      STAT,
+      CHGNR,
+      INACT,
+      UDATE
+      FROM JCDS
+      INTO TABLE @DATA(LT_TMP_PROJ)
+      FOR ALL ENTRIES IN @LT_PS_TAB[]
+      WHERE STAT = @LC_TECO
+        AND OBJNR = @LT_PS_TAB-OBJNR.
+    IF SY-SUBRC = 0.
+      SORT LT_TMP_PROJ BY OBJNR ASCENDING
+                          CHGNR DESCENDING.
+
+      DELETE ADJACENT DUPLICATES FROM LT_TMP_PROJ COMPARING OBJNR.
+      DELETE LT_TMP_PROJ WHERE INACT <> SPACE
+                            OR UDATE <= LV_BK_DAT.
+    ENDIF.
+
+    LOOP AT LT_TMP_PROJ INTO DATA(LS_TMP_PROJ).
+      READ TABLE LT_PS_TAB   INTO DATA(LS_PS)
+                             WITH KEY OBJNR =  LS_TMP_PROJ-OBJNR
+                             BINARY SEARCH.
+      IF SY-SUBRC = 0.
+        APPEND LS_PS TO CT_PS_TAB.
+      ENDIF.
+    ENDLOOP.
+  ENDIF.
+
+ENDFORM.

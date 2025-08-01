@@ -1,0 +1,547 @@
+<?sap.transform simple?>
+<tt:transform xmlns:tt="http://www.sap.com/transformation-templates" xmlns:ddic="http://www.sap.com/abapxml/types/dictionary">
+
+  <tt:root name="DATA" type="ddic:ZSDSSDS023"/>
+  <tt:variable name="MARKED" val="1"/>
+
+  <tt:template>
+
+    <object>
+      <!-- Sales Order Header -->
+      <tt:group>
+        <tt:cond frq="?">
+          <!-- ? = Optional, 1 = Required-->
+          <str name="SFQuotationNo">
+            <tt:value ref="DATA.SFQUOTATIONNO"/>
+          </str>
+        </tt:cond>
+        <tt:cond frq="1">
+          <str name="CreateDate">
+            <tt:value ref="DATA.CREATEDATE"/>
+          </str>
+        </tt:cond>
+        <tt:cond frq="?">
+          <str name="SAPQuotationNo">
+            <tt:value ref="DATA.SAPQUOTATIONNO"/>
+          </str>
+        </tt:cond>
+        <tt:cond frq="1">
+          <str name="Flag">
+            <tt:value ref="DATA.FLAG"/>
+          </str>
+        </tt:cond>
+        <tt:cond frq="?">
+          <str name="DocumentType">
+            <tt:value ref="DATA.DOCUMENTTYPE"/>
+          </str>
+        </tt:cond>
+        <tt:cond frq="?">
+          <str name="DistributionChannel">
+            <tt:value ref="DATA.DISTRIBUTIONCHANNEL"/>
+          </str>
+        </tt:cond>
+        <tt:cond frq="?">
+          <str name="SalesOffice">
+            <tt:value ref="DATA.SALESOFFICE"/>
+          </str>
+        </tt:cond>
+        <tt:cond frq="?">
+          <str name="SalesGroup">
+            <tt:value ref="DATA.SALESGROUP"/>
+          </str>
+        </tt:cond>
+        <!--        <tt:cond frq="?">
+          <str name="PONumber">
+            <tt:value ref="DATA.PONUMBER"/>
+          </str>
+        </tt:cond>-->
+        <tt:cond frq="?">
+          <str name="ValidFrom">
+            <tt:value ref="DATA.VALIDFROM"/>
+          </str>
+        </tt:cond>
+        <tt:cond frq="?">
+          <str name="ValidTo">
+            <tt:value ref="DATA.VALIDTO"/>
+          </str>
+        </tt:cond>
+        <tt:cond frq="?">
+          <str name="BPSoldToNumber">
+            <tt:value ref="DATA.BPSOLDTONUMBER"/>
+          </str>
+        </tt:cond>
+        <tt:cond frq="?">
+          <str name="BPShipToNumber">
+            <tt:value ref="DATA.BPSHIPTONUMBER"/>
+          </str>
+        </tt:cond>
+        <tt:cond frq="?">
+          <str name="BPBillToNumber">
+            <tt:value ref="DATA.BPBILLTONUMBER"/>
+          </str>
+        </tt:cond>
+        <tt:cond frq="?">
+          <str name="BPPayerNumber">
+            <tt:value ref="DATA.BPPAYERNUMBER"/>
+          </str>
+        </tt:cond>
+        <tt:cond frq="?">
+          <str name="BPSalesEmployee">
+            <tt:value ref="DATA.BPSALESEMPLOYEE"/>
+          </str>
+        </tt:cond>
+        <tt:cond frq="?">
+          <str name="OnetimeName1">
+            <tt:value ref="DATA.ONETIMENAME1"/>
+          </str>
+        </tt:cond>
+        <tt:cond frq="?">
+          <str name="OnetimeName2">
+            <tt:value ref="DATA.ONETIMENAME2"/>
+          </str>
+        </tt:cond>
+        <tt:cond frq="?">
+          <str name="OnetimeName3">
+            <tt:value ref="DATA.ONETIMENAME3"/>
+          </str>
+        </tt:cond>
+        <tt:cond frq="?">
+          <str name="OnetimeName4">
+            <tt:value ref="DATA.ONETIMENAME4"/>
+          </str>
+        </tt:cond>
+        <tt:cond frq="?">
+          <str name="Street">
+            <tt:value ref="DATA.STREET"/>
+          </str>
+        </tt:cond>
+        <tt:cond frq="?">
+          <str name="Street4">
+            <tt:value ref="DATA.STREET4"/>
+          </str>
+        </tt:cond>
+        <tt:cond frq="?">
+          <str name="Street5">
+            <tt:value ref="DATA.STREET5"/>
+          </str>
+        </tt:cond>
+        <tt:cond frq="?">
+          <str name="Street2">
+            <tt:value ref="DATA.STREET2"/>
+          </str>
+        </tt:cond>
+        <tt:cond frq="?">
+          <str name="Street3">
+            <tt:value ref="DATA.STREET3"/>
+          </str>
+        </tt:cond>
+        <tt:cond frq="?">
+          <str name="District">
+            <tt:value ref="DATA.DISTRICT"/>
+          </str>
+        </tt:cond>
+        <tt:cond frq="?">
+          <str name="City">
+            <tt:value ref="DATA.CITY"/>
+          </str>
+        </tt:cond>
+        <tt:cond frq="?">
+          <str name="PostalCode">
+            <tt:value ref="DATA.POSTALCODE"/>
+          </str>
+        </tt:cond>
+        <tt:cond frq="?">
+          <str name="TaxNo">
+            <tt:value ref="DATA.TAXNO"/>
+          </str>
+        </tt:cond>
+        <tt:cond frq="?">
+          <str name="PaymentTerms">
+            <tt:value ref="DATA.PAYMENTTERMS"/>
+          </str>
+        </tt:cond>
+        <tt:cond frq="?">
+          <str name="HDTextReason">
+            <tt:value ref="DATA.HDTEXTREASON"/>
+          </str>
+        </tt:cond>
+        <tt:cond frq="?">
+          <str name="HDTextLocation">
+            <tt:value ref="DATA.HDTEXTLOCATION"/>
+          </str>
+        </tt:cond>
+        <tt:cond frq="?">
+          <str name="HDTextProjectText">
+            <tt:value ref="DATA.HDTEXTPROJECTTEXT"/>
+          </str>
+        </tt:cond>
+        <tt:cond frq="?">
+          <str name="HDTextRequestRemark">
+            <tt:value ref="DATA.HDTEXTREQUESTREMARK"/>
+          </str>
+        </tt:cond>
+        <tt:cond frq="?">
+          <str name="HDTextComment">
+            <tt:value ref="DATA.HDTEXTCOMMENT"/>
+          </str>
+        </tt:cond>
+        <tt:cond frq="?">
+          <str name="HDTextPersonInChargeName">
+            <tt:value ref="DATA.HDTEXTPERSONINCHARGENAME"/>
+          </str>
+        </tt:cond>
+        <tt:cond frq="?">
+          <str name="HDTextContactPerson">
+            <tt:value ref="DATA.HDTEXTCONTACTPERSON"/>
+          </str>
+        </tt:cond>
+        <tt:cond frq="?">
+          <str name="BillingPlanStartDate">
+            <tt:value ref="DATA.BILLINGPLANSTARTDATE"/>
+          </str>
+        </tt:cond>
+        <tt:cond frq="?">
+          <str name="POB">
+            <tt:value ref="DATA.POB"/>
+          </str>
+        </tt:cond>
+        <tt:cond frq="?">
+          <str name="Usage">
+            <tt:value ref="DATA.USAGE"/>
+          </str>
+        </tt:cond>
+        <tt:cond frq="?">
+          <str name="WarrantyLetter">
+            <tt:value ref="DATA.WARRANTYLETTER"/>
+          </str>
+        </tt:cond>
+        <tt:cond frq="?">
+          <str name="Running">
+            <tt:value ref="DATA.RUNNING"/>
+          </str>
+        </tt:cond>
+        <tt:cond frq="?">
+          <str name="ResponseStatus">
+            <tt:value ref="DATA.RESPONSESTATUS"/>
+          </str>
+        </tt:cond>
+        <tt:cond frq="?">
+          <str name="ResponseMessage">
+            <tt:value ref="DATA.RESPONSEMESSAGE"/>
+          </str>
+        </tt:cond>
+      </tt:group>
+
+
+      <!--      <tt:cond check="not-initial(DATA.BILLINGPLAN)">-->
+      <array name="BillingPlan">
+
+        <tt:loop ref="DATA.BILLINGPLAN">
+
+          <tt:cond d-check="not-initial($ref)">
+            <object>
+              <tt:group>
+
+                <tt:cond frq="?">
+                  <str name="SAPBillingID">
+                    <tt:value ref="$ref.SAPBILLINGID"/>
+                  </str>
+                </tt:cond>
+                <tt:cond frq="?">
+                  <str name="BillingDate">
+                    <tt:value ref="$ref.BILLINGDATE"/>
+                  </str>
+                </tt:cond>
+                <tt:cond frq="?">
+                  <num name="Amount">
+                    <tt:value ref="$ref.AMOUNT"/>
+                  </num>
+                </tt:cond>
+
+              </tt:group>
+            </object>
+          </tt:cond>
+        </tt:loop>
+
+      </array>
+      <!--      </tt:cond>-->
+
+
+      <array name="QuotationItem">
+        <tt:cond check="exist(DATA.QUOTATIONITEM)">
+          <tt:loop ref="DATA.QUOTATIONITEM">
+            <object>
+              <tt:group>
+                <!--             Quotation Item -->
+                <tt:cond frq="?">
+                  <str name="SFItemNumber">
+                    <tt:value ref="$ref.SFITEMNUMBER"/>
+                  </str>
+                </tt:cond>
+                <tt:cond frq="?">
+                  <str name="SAPItemNumber">
+                    <tt:value ref="$ref.SAPITEMNUMBER"/>
+                  </str>
+                </tt:cond>
+                <tt:cond frq="?">
+                  <str name="HigherLevel">
+                    <tt:value ref="$ref.HIGHERLEVEL"/>
+                  </str>
+                </tt:cond>
+                <tt:cond frq="?">
+                  <str name="FlagItem">
+                    <tt:value ref="$ref.FLAGITEM"/>
+                  </str>
+                </tt:cond>
+                <tt:cond frq="?">
+                  <str name="MaterialNumber">
+                    <tt:value ref="$ref.MATERIALNUMBER"/>
+                  </str>
+                </tt:cond>
+                <tt:cond frq="?">
+                  <num name="Quantity">
+                    <tt:value ref="$ref.QUANTITY"/>
+                  </num>
+                </tt:cond>
+                <tt:cond frq="?">
+                  <str name="SalesUnit">
+                    <tt:value ref="$ref.SALESUNIT"/>
+                  </str>
+                </tt:cond>
+                <tt:cond frq="?">
+                  <str name="Plant">
+                    <tt:value ref="$ref.PLANT"/>
+                  </str>
+                </tt:cond>
+                <tt:cond frq="?">
+                  <str name="StorageLocation">
+                    <tt:value ref="$ref.STORAGELOCATION"/>
+                  </str>
+                </tt:cond>
+                <tt:cond frq="?">
+                  <str name="ItemCategory">
+                    <tt:value ref="$ref.ITEMCATEGORY"/>
+                  </str>
+                </tt:cond>
+                <tt:cond frq="?">
+                  <str name="OrderID">
+                    <tt:value ref="$ref.ORDERID"/>
+                  </str>
+                </tt:cond>
+                <tt:cond frq="?">
+                  <str name="WBS">
+                    <tt:value ref="$ref.WBS"/>
+                  </str>
+                </tt:cond>
+                <tt:cond frq="?">
+                  <str name="LOB">
+                    <tt:value ref="$ref.LOB"/>
+                  </str>
+                </tt:cond>
+                <tt:cond frq="?">
+                  <str name="ReasonForReject">
+                    <tt:value ref="$ref.REASONFORREJECT"/>
+                  </str>
+                </tt:cond>
+                <tt:cond frq="?">
+                  <num name="NetDiscountAmount">
+                    <tt:value ref="$ref.NETDISCOUNTAMOUNT"/>
+                  </num>
+                </tt:cond>
+                <tt:cond frq="?">
+                  <num name="OnTopDiscountAmount">
+                    <tt:value ref="$ref.ONTOPDISCOUNTAMOUNT"/>
+                  </num>
+                </tt:cond>
+                <tt:cond frq="?">
+                  <num name="ListPrice">
+                    <tt:value ref="$ref.LISTPRICE"/>
+                  </num>
+                </tt:cond>
+                <tt:cond frq="?">
+                  <num name="ItemDiscountPer">
+                    <tt:value ref="$ref.ITEMDISCOUNTPER"/>
+                  </num>
+                </tt:cond>
+                <tt:cond frq="?">
+                  <num name="ItemDiscountVal">
+                    <tt:value ref="$ref.ITEMDISCOUNTVAL"/>
+                  </num>
+                </tt:cond>
+                <tt:cond frq="?">
+                  <num name="ItemDiscountLV1Per">
+                    <tt:value ref="$ref.ITEMDISCOUNTLV1PER"/>
+                  </num>
+                </tt:cond>
+                <tt:cond frq="?">
+                  <num name="ItemDiscountLV1Val">
+                    <tt:value ref="$ref.ITEMDISCOUNTLV1VAL"/>
+                  </num>
+                </tt:cond>
+                <tt:cond frq="?">
+                  <num name="ItemDiscountLV2Per">
+                    <tt:value ref="$ref.ITEMDISCOUNTLV2PER"/>
+                  </num>
+                </tt:cond>
+                <tt:cond frq="?">
+                  <num name="ItemDiscountLV2Val">
+                    <tt:value ref="$ref.ITEMDISCOUNTLV2VAL"/>
+                  </num>
+                </tt:cond>
+                <tt:cond frq="?">
+                  <num name="ItemDiscountLV3Per">
+                    <tt:value ref="$ref.ITEMDISCOUNTLV3PER"/>
+                  </num>
+                </tt:cond>
+                <tt:cond frq="?">
+                  <num name="ItemDiscountLV3Val">
+                    <tt:value ref="$ref.ITEMDISCOUNTLV3VAL"/>
+                  </num>
+                </tt:cond>
+                <tt:cond frq="?">
+                  <num name="ItemDiscountLV4Per">
+                    <tt:value ref="$ref.ITEMDISCOUNTLV4PER"/>
+                  </num>
+                </tt:cond>
+                <tt:cond frq="?">
+                  <num name="ItemDiscountLV4Val">
+                    <tt:value ref="$ref.ITEMDISCOUNTLV4VAL"/>
+                  </num>
+                </tt:cond>
+                <tt:cond frq="?">
+                  <num name="ItemDiscountLV5Per">
+                    <tt:value ref="$ref.ITEMDISCOUNTLV5PER"/>
+                  </num>
+                </tt:cond>
+                <tt:cond frq="?">
+                  <num name="ItemDiscountLV5Val">
+                    <tt:value ref="$ref.ITEMDISCOUNTLV5VAL"/>
+                  </num>
+                </tt:cond>
+                <!--                <tt:cond frq="?">
+                  <num name="Freight">
+                    <tt:value ref="$ref.FREIGHT"/>
+                  </num>
+                </tt:cond>-->
+                <tt:cond frq="?">
+                  <num name="SVItemDiscountPer">
+                    <tt:value ref="$ref.SVITEMDISCOUNTPER"/>
+                  </num>
+                </tt:cond>
+                <tt:cond frq="?">
+                  <num name="SVItemDiscountVal">
+                    <tt:value ref="$ref.SVITEMDISCOUNTVAL"/>
+                  </num>
+                </tt:cond>
+                <tt:cond frq="?">
+                  <num name="Installation">
+                    <tt:value ref="$ref.INSTALLATION"/>
+                  </num>
+                </tt:cond>
+                <tt:cond frq="?">
+                  <num name="Maintenance">
+                    <tt:value ref="$ref.MAINTENANCE"/>
+                  </num>
+                </tt:cond>
+                <tt:cond frq="?">
+                  <num name="SLA">
+                    <tt:value ref="$ref.SLA"/>
+                  </num>
+                </tt:cond>
+                <tt:cond frq="?">
+                  <num name="STDWarranty">
+                    <tt:value ref="$ref.STDWARRANTY"/>
+                  </num>
+                </tt:cond>
+                <tt:cond frq="?">
+                  <num name="ExtendWarranty">
+                    <tt:value ref="$ref.EXTENDWARRANTY"/>
+                  </num>
+                </tt:cond>
+                <tt:cond frq="?">
+                  <num name="ModifyService">
+                    <tt:value ref="$ref.MODIFYSERVICE"/>
+                  </num>
+                </tt:cond>
+
+              </tt:group>
+
+
+              <array name="ScheduleLine">
+                <tt:cond check="exist($ref.SCHEDULELINE)">
+                  <tt:loop ref="$ref.SCHEDULELINE">
+                    <object>
+                      <tt:group>
+
+                        <tt:cond frq="?">
+                          <str name="SAPItemNumber">
+                            <tt:value ref="$ref.SAPITEMNUMBER"/>
+                          </str>
+                        </tt:cond>
+                        <tt:cond frq="?">
+                          <str name="SAPScheduleLineNumber">
+                            <tt:value ref="$ref.SAPSCHEDULELINENUMBER"/>
+                          </str>
+                        </tt:cond>
+                        <tt:cond frq="?">
+                          <str name="SFScheduleLineNumber">
+                            <tt:value ref="$ref.SFSCHEDULELINENUMBER"/>
+                          </str>
+                        </tt:cond>
+                        <tt:cond frq="?">
+                          <str name="Flag">
+                            <tt:value ref="$ref.FLAG"/>
+                          </str>
+                        </tt:cond>
+                        <tt:cond frq="?">
+                          <str name="RequestDate">
+                            <tt:value ref="$ref.REQUESTDATE"/>
+                          </str>
+                        </tt:cond>
+                        <tt:cond frq="?">
+                          <num name="RequestQuantity">
+                            <tt:value ref="$ref.REQUESTQUANTITY"/>
+                          </num>
+                        </tt:cond>
+
+
+                      </tt:group>
+                    </object>
+                  </tt:loop>
+                </tt:cond>
+              </array>
+
+            </object>
+          </tt:loop>
+        </tt:cond>
+      </array>
+
+
+      <tt:cond check="not-initial(DATA.RESPONSE)">
+        <array name="Response">
+          <tt:loop ref="DATA.RESPONSE">
+
+            <object>
+              <tt:group>
+                <tt:cond frq="?">
+                  <str name="Status">
+                    <tt:value ref="$ref.RESP_STATUS"/>
+                  </str>
+                </tt:cond>
+                <tt:cond frq="?">
+                  <str name="Message">
+                    <tt:value ref="$ref.RESP_MESSAGE"/>
+                  </str>
+                </tt:cond>
+              </tt:group>
+            </object>
+          </tt:loop>
+        </array>
+      </tt:cond>
+
+
+    </object>
+
+  </tt:template>
+
+</tt:transform>

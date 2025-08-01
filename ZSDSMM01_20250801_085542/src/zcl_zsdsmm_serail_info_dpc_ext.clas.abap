@@ -1,0 +1,79 @@
+class ZCL_ZSDSMM_SERAIL_INFO_DPC_EXT definition
+  public
+  inheriting from ZCL_ZSDSMM_SERAIL_INFO_DPC
+  create public .
+
+public section.
+protected section.
+
+  methods ZSDSVC_CHECK_S01_GET_ENTITY
+    redefinition .
+  methods ZSDSVC_CHECK_SER_GET_ENTITY
+    redefinition .
+private section.
+ENDCLASS.
+
+
+
+CLASS ZCL_ZSDSMM_SERAIL_INFO_DPC_EXT IMPLEMENTATION.
+
+
+  METHOD ZSDSVC_CHECK_S01_GET_ENTITY.
+
+    DATA : LV_MATNR TYPE OBJK-MATNR,
+           LV_SERNR TYPE OBJK-SERNR.
+
+    LOOP AT IT_KEY_TAB INTO DATA(LS_TAB).
+      IF     LS_TAB-NAME = 'p_matnr'.
+        LV_MATNR = LS_TAB-VALUE.
+      ELSEIF LS_TAB-NAME = 'p_sernr'.
+        LV_SERNR = LS_TAB-VALUE.
+      ENDIF.
+    ENDLOOP.
+
+    SELECT SINGLE *
+      FROM ZSDSVC_CHECK_SERIAL( P_MATNR = @LV_MATNR,P_SERNR = @LV_SERNR )
+      INTO CORRESPONDING FIELDS OF @ER_ENTITY.
+
+    ER_ENTITY-P_MATNR = LV_MATNR.
+    ER_ENTITY-P_SERNR = LV_SERNR.
+
+  ENDMETHOD.
+
+
+  METHOD ZSDSVC_CHECK_SER_GET_ENTITY.
+    DATA : LV_MATNR TYPE OBJK-MATNR,
+           LV_SERNR TYPE OBJK-SERNR.
+
+    LOOP AT IT_KEY_TAB INTO DATA(LS_TAB).
+      IF     LS_TAB-NAME = 'p_matnr'.
+        LV_MATNR = LS_TAB-VALUE.
+      ELSEIF LS_TAB-NAME = 'p_sernr'.
+        LV_SERNR = LS_TAB-VALUE.
+      ENDIF.
+    ENDLOOP.
+
+    SELECT SINGLE *
+      FROM ZSDSVC_CHECK_SERIAL( P_MATNR = @LV_MATNR,P_SERNR = @LV_SERNR )
+      INTO CORRESPONDING FIELDS OF @ER_ENTITY.
+    IF SY-SUBRC EQ 0.
+      ER_ENTITY-P_MATNR = LV_MATNR.
+      ER_ENTITY-P_SERNR = LV_SERNR.
+*      ER_ENTITY-KUNNR   = |{ ER_ENTITY-KUNNR ALPHA = IN }|.
+    ELSE.
+      MO_CONTEXT->GET_MESSAGE_CONTAINER( )->ADD_MESSAGE(
+        EXPORTING
+          IV_MSG_TYPE               =  /IWBEP/CL_COS_LOGGER=>ERROR   " Message Type
+          IV_MSG_ID                 =  'ZSDSMM01'   " Message Class
+          IV_MSG_NUMBER             =  '003'   " Message Number
+          IV_ADD_TO_RESPONSE_HEADER = ABAP_TRUE     "Response to the Header
+        ).
+
+      RAISE EXCEPTION TYPE /IWBEP/CX_MGW_BUSI_EXCEPTION
+        EXPORTING
+          MESSAGE_CONTAINER = MO_CONTEXT->GET_MESSAGE_CONTAINER( ).
+
+    ENDIF.
+
+  ENDMETHOD.
+ENDCLASS.

@@ -1,0 +1,234 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<abapGit version="v1.0.0" serializer="LCL_OBJECT_FUGR" serializer_version="v1.0.0">
+ <asx:abap xmlns:asx="http://www.sap.com/abapxml" version="1.0">
+  <asx:values>
+   <AREAT>FI Posting Interface</AREAT>
+   <INCLUDES>
+    <SOBJ_NAME>LZSDSFI16F01</SOBJ_NAME>
+    <SOBJ_NAME>LZSDSFI16TOP</SOBJ_NAME>
+    <SOBJ_NAME>SAPLZSDSFI16</SOBJ_NAME>
+   </INCLUDES>
+   <FUNCTIONS>
+    <item>
+     <FUNCNAME>Z_SDSFI_INTERFACE_00001040</FUNCNAME>
+     <SHORT_TEXT>Schnittstellenbeschreibung zum Event 00001040</SHORT_TEXT>
+     <IMPORT>
+      <RSIMP>
+       <PARAMETER>I_XVBUP</PARAMETER>
+       <DBFIELD>OFIWA-XVBUP</DBFIELD>
+       <DEFAULT>&apos;X&apos;</DEFAULT>
+       <OPTIONAL>X</OPTIONAL>
+      </RSIMP>
+      <RSIMP>
+       <PARAMETER>I_RF05R</PARAMETER>
+       <DBFIELD>RF05R</DBFIELD>
+       <REFERENCE>X</REFERENCE>
+      </RSIMP>
+     </IMPORT>
+     <TABLES>
+      <RSTBL>
+       <PARAMETER>T_XRAGL</PARAMETER>
+       <DBSTRUCT>RAGL1</DBSTRUCT>
+      </RSTBL>
+     </TABLES>
+     <DOCUMENTATION>
+      <RSFDO>
+       <PARAMETER>I_XVBUP</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>Kennzeichen: Verbuchung in update task</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>I_RF05R</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>Arbeitsfelder für SAPMF05R</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>T_XRAGL</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>Schlüssel der zurückzunehmenden Zeilen</STEXT>
+      </RSFDO>
+     </DOCUMENTATION>
+    </item>
+   </FUNCTIONS>
+   <LONGTEXTS_Z_SDSFI_INTERFACE_00001040>
+    <item>
+     <DOKIL>
+      <ID>FU</ID>
+      <OBJECT>Z_SDSFI_INTERFACE_00001040</OBJECT>
+      <LANGU>D</LANGU>
+      <TYP>T</TYP>
+      <VERSION>0011</VERSION>
+      <MASTERLANG>X</MASTERLANG>
+      <TXTLINES>00018</TXTLINES>
+      <DOKSTATE>A</DOKSTATE>
+     </DOKIL>
+     <HEAD>
+      <TDOBJECT>DOKU</TDOBJECT>
+      <TDNAME>Z_SDSFI_INTERFACE_00001040</TDNAME>
+      <TDID>FU</TDID>
+      <TDSPRAS>D</TDSPRAS>
+      <TDFORM>S_DOCU_SHOW</TDFORM>
+      <TDSTYLE>S_DOCUS1</TDSTYLE>
+      <TDVERSION>00011</TDVERSION>
+      <TDLINESIZE>072</TDLINESIZE>
+     </HEAD>
+     <LINES>
+      <TLINE>
+       <TDFORMAT>/:</TDFORMAT>
+       <TDLINE>DEFINE &amp;TEXT&amp;  = &apos;Rücknahme Ausgleich, Verbuchung&apos;</TDLINE>
+      </TLINE>
+      <TLINE>
+       <TDFORMAT>/:</TDFORMAT>
+       <TDLINE>DEFINE &amp;EVENT&amp; = &apos;00001040&apos;</TDLINE>
+      </TLINE>
+      <TLINE>
+       <TDFORMAT>/:</TDFORMAT>
+       <TDLINE>DEFINE &amp;TYPE&amp;  = &apos;INTERFACE&apos;</TDLINE>
+      </TLINE>
+      <TLINE>
+       <TDFORMAT>/:</TDFORMAT>
+       <TDLINE>INCLUDE FI_OPEN_FI_DOCUMENTATION_1 OBJECT DOKU ID TX</TDLINE>
+      </TLINE>
+      <TLINE>
+       <TDFORMAT>U1</TDFORMAT>
+       <TDLINE>EVENT</TDLINE>
+      </TLINE>
+      <TLINE>
+       <TDFORMAT>AS</TDFORMAT>
+       <TDLINE>Der Zeitpunkt liegt hinter dem Aufruf des Verbuchers fürs FI</TDLINE>
+      </TLINE>
+      <TLINE>
+       <TDLINE>(REVERSE_CLEARING).</TDLINE>
+      </TLINE>
+      <TLINE>
+       <TDFORMAT>U1</TDFORMAT>
+       <TDLINE>SCHNITTSTELLE</TDLINE>
+      </TLINE>
+      <TLINE>
+       <TDFORMAT>AS</TDFORMAT>
+       <TDLINE>An die Zusatzkomponente werden alle Belegzeilen übergeben, bei denen</TDLINE>
+      </TLINE>
+      <TLINE>
+       <TDLINE>der Ausgleich zurückzunehmen ist. Das Kennzeichen I_XVBUP dient als</TDLINE>
+      </TLINE>
+      <TLINE>
+       <TDLINE>reine Information, daß der SAP-Standard asynchron verbucht.</TDLINE>
+      </TLINE>
+      <TLINE>
+       <TDFORMAT>HU</TDFORMAT>
+       <TDLINE>Damit darf in der Zusatzkomponente keine schreibende Datenbankaktion</TDLINE>
+      </TLINE>
+      <TLINE>
+       <TDLINE>ausgeführt werden !!</TDLINE>
+      </TLINE>
+      <TLINE>
+       <TDFORMAT>AS</TDFORMAT>
+       <TDLINE>Die Verbuchung (auch der Add-On-spezifischen Tabellen) wird durch den</TDLINE>
+      </TLINE>
+      <TLINE>
+       <TDLINE>COMMIT WORK des Standardablaufes ausgeführt. Falls Ihr</TDLINE>
+      </TLINE>
+      <TLINE>
+       <TDLINE>Funktionsbaustein nicht über RFC gerufen wird, veranlassen Sie stets</TDLINE>
+      </TLINE>
+      <TLINE>
+       <TDLINE>asynchrone Verbuchung mit dem Zusatz</TDLINE>
+      </TLINE>
+      <TLINE>
+       <TDFORMAT>PE</TDFORMAT>
+       <TDLINE>IN UPDATE TASK.</TDLINE>
+      </TLINE>
+     </LINES>
+    </item>
+    <item>
+     <DOKIL>
+      <ID>FU</ID>
+      <OBJECT>Z_SDSFI_INTERFACE_00001040</OBJECT>
+      <LANGU>E</LANGU>
+      <TYP>T</TYP>
+      <VERSION>0011</VERSION>
+      <TXTLINES>00018</TXTLINES>
+      <DOKSTATE>A</DOKSTATE>
+     </DOKIL>
+     <HEAD>
+      <TDOBJECT>DOKU</TDOBJECT>
+      <TDNAME>Z_SDSFI_INTERFACE_00001040</TDNAME>
+      <TDID>FU</TDID>
+      <TDSPRAS>E</TDSPRAS>
+      <TDFORM>S_DOCU_SHOW</TDFORM>
+      <TDSTYLE>S_DOCUS1</TDSTYLE>
+      <TDVERSION>00011</TDVERSION>
+      <TDLINESIZE>072</TDLINESIZE>
+     </HEAD>
+     <LINES>
+      <TLINE>
+       <TDFORMAT>/:</TDFORMAT>
+       <TDLINE>DEFINE &amp;TEXT&amp;  = &apos;Resetting cleared items, update posting&apos;</TDLINE>
+      </TLINE>
+      <TLINE>
+       <TDFORMAT>/:</TDFORMAT>
+       <TDLINE>DEFINE &amp;EVENT&amp; = &apos;00001040&apos;</TDLINE>
+      </TLINE>
+      <TLINE>
+       <TDFORMAT>/:</TDFORMAT>
+       <TDLINE>DEFINE &amp;TYPE&amp;  = &apos;INTERFACE&apos;</TDLINE>
+      </TLINE>
+      <TLINE>
+       <TDFORMAT>/:</TDFORMAT>
+       <TDLINE>INCLUDE FI_OPEN_FI_DOCUMENTATION_1 OBJECT DOKU ID TX LANGUAGE EN</TDLINE>
+      </TLINE>
+      <TLINE>
+       <TDFORMAT>U1</TDFORMAT>
+       <TDLINE>EVENT</TDLINE>
+      </TLINE>
+      <TLINE>
+       <TDFORMAT>AS</TDFORMAT>
+       <TDLINE>This Event is reached following callup of the update function module</TDLINE>
+      </TLINE>
+      <TLINE>
+       <TDLINE>for FI (REVERSE_CLEARING).</TDLINE>
+      </TLINE>
+      <TLINE>
+       <TDFORMAT>U1</TDFORMAT>
+       <TDLINE>INTERFACE</TDLINE>
+      </TLINE>
+      <TLINE>
+       <TDFORMAT>AS</TDFORMAT>
+       <TDLINE>All those line items for which cleared items are to be reset are</TDLINE>
+      </TLINE>
+      <TLINE>
+       <TDLINE>transferred to the additional component. The indicator I_XVBUP serves</TDLINE>
+      </TLINE>
+      <TLINE>
+       <TDLINE>only to inform you that the SAP system posts asynchronously.</TDLINE>
+      </TLINE>
+      <TLINE>
+       <TDFORMAT>HU</TDFORMAT>
+       <TDLINE>It follows that no database activities involving the writing of data</TDLINE>
+      </TLINE>
+      <TLINE>
+       <TDLINE>may be carried out in the additional component.</TDLINE>
+      </TLINE>
+      <TLINE>
+       <TDFORMAT>AS</TDFORMAT>
+       <TDLINE>The update (including that for the tables specific to Add-ons) is</TDLINE>
+      </TLINE>
+      <TLINE>
+       <TDLINE>carried out by the COMMIT WORK of the standard process. If your</TDLINE>
+      </TLINE>
+      <TLINE>
+       <TDLINE>function module is not called up via RFC, you should always start</TDLINE>
+      </TLINE>
+      <TLINE>
+       <TDLINE>asynchronous update posting using</TDLINE>
+      </TLINE>
+      <TLINE>
+       <TDFORMAT>PE</TDFORMAT>
+       <TDLINE>IN UPDATE TASK.</TDLINE>
+      </TLINE>
+     </LINES>
+    </item>
+   </LONGTEXTS_Z_SDSFI_INTERFACE_00001040>
+  </asx:values>
+ </asx:abap>
+</abapGit>

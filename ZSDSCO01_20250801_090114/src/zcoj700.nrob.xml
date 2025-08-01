@@ -1,0 +1,21 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<abapGit version="v1.0.0" serializer="LCL_OBJECT_NROB" serializer_version="v1.0.0">
+ <asx:abap xmlns:asx="http://www.sap.com/abapxml" version="1.0">
+  <asx:values>
+   <ATTRIBUTES>
+    <OBJECT>ZCOJ700</OBJECT>
+    <YEARIND>X</YEARIND>
+    <DOMLEN>NUMC10</DOMLEN>
+    <PERCENTAGE>90.0</PERCENTAGE>
+    <BUFFER>X</BUFFER>
+    <NOIVBUFFER>00000001</NOIVBUFFER>
+   </ATTRIBUTES>
+   <TEXT>
+    <LANGU>E</LANGU>
+    <OBJECT>ZCOJ700</OBJECT>
+    <TXT>J700_Rental &amp; Lease_5233002410_Lease Expense_Funiture &amp; Fixt</TXT>
+    <TXTSHORT>SDS_J700</TXTSHORT>
+   </TEXT>
+  </asx:values>
+ </asx:abap>
+</abapGit>

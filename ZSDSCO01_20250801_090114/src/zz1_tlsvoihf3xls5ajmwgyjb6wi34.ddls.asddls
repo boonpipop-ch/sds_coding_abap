@@ -1,0 +1,8 @@
+@AbapCatalog.internal.setChange: 'FLDADD_NO_ASS_INFLUENCE'
+@AbapCatalog.sqlViewAppendName: 'ZZ1_DD311ED3546D'
+
+extend view E_FINANCIALPLANNINGENTRYITEM with ZZ1_TLSVOIHF3XLS5AJMWGYJB6WI34
+  
+{ 
+  Persistence.ZZ1_ZZCAV_MSE as ZZ1_ZZCAV_MSE
+}

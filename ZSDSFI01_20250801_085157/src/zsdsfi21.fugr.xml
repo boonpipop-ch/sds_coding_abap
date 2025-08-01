@@ -1,0 +1,75 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<abapGit version="v1.0.0" serializer="LCL_OBJECT_FUGR" serializer_version="v1.0.0">
+ <asx:abap xmlns:asx="http://www.sap.com/abapxml" version="1.0">
+  <asx:values>
+   <AREAT>Upload Excel Long Text</AREAT>
+   <INCLUDES>
+    <SOBJ_NAME>LZSDSFI21F01</SOBJ_NAME>
+    <SOBJ_NAME>LZSDSFI21TOP</SOBJ_NAME>
+    <SOBJ_NAME>SAPLZSDSFI21</SOBJ_NAME>
+   </INCLUDES>
+   <FUNCTIONS>
+    <item>
+     <FUNCNAME>Z_SDSFI_UPLOAD_EXCEL</FUNCNAME>
+     <SHORT_TEXT>Upload Excel</SHORT_TEXT>
+     <IMPORT>
+      <RSIMP>
+       <PARAMETER>FILENAME</PARAMETER>
+       <DBFIELD>RLGRAP-FILENAME</DBFIELD>
+      </RSIMP>
+      <RSIMP>
+       <PARAMETER>I_BEGIN_COL</PARAMETER>
+       <TYP>I</TYP>
+      </RSIMP>
+      <RSIMP>
+       <PARAMETER>I_BEGIN_ROW</PARAMETER>
+       <TYP>I</TYP>
+      </RSIMP>
+      <RSIMP>
+       <PARAMETER>I_END_COL</PARAMETER>
+       <TYP>I</TYP>
+      </RSIMP>
+      <RSIMP>
+       <PARAMETER>I_END_ROW</PARAMETER>
+       <TYP>I</TYP>
+      </RSIMP>
+     </IMPORT>
+     <TABLES>
+      <RSTBL>
+       <PARAMETER>INTERN</PARAMETER>
+       <DBSTRUCT>ZSDSFIS190</DBSTRUCT>
+      </RSTBL>
+     </TABLES>
+     <DOCUMENTATION>
+      <RSFDO>
+       <PARAMETER>FILENAME</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>Local file for upload/download</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>I_BEGIN_COL</PARAMETER>
+       <KIND>P</KIND>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>I_BEGIN_ROW</PARAMETER>
+       <KIND>P</KIND>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>I_END_COL</PARAMETER>
+       <KIND>P</KIND>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>I_END_ROW</PARAMETER>
+       <KIND>P</KIND>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>INTERN</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>Rows for Table with Excel Data</STEXT>
+      </RSFDO>
+     </DOCUMENTATION>
+    </item>
+   </FUNCTIONS>
+  </asx:values>
+ </asx:abap>
+</abapGit>

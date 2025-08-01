@@ -1,0 +1,42 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<abapGit version="v1.0.0" serializer="LCL_OBJECT_CLAS" serializer_version="v1.0.0">
+ <asx:abap xmlns:asx="http://www.sap.com/abapxml" version="1.0">
+  <asx:values>
+   <VSEOCLASS>
+    <CLSNAME>ZCL_SDSPS_BUDGET</CLSNAME>
+    <LANGU>E</LANGU>
+    <DESCRIPT>Budget Util</DESCRIPT>
+    <STATE>1</STATE>
+    <CLSCCINCL>X</CLSCCINCL>
+    <FIXPT>X</FIXPT>
+    <UNICODE>X</UNICODE>
+   </VSEOCLASS>
+   <DESCRIPTIONS_SUB>
+    <SEOSUBCOTX>
+     <CMPNAME>GET_ASSET_CLASS</CMPNAME>
+     <SCONAME>R_RETURN</SCONAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Default: Asset Class for Creation of Asset</DESCRIPT>
+    </SEOSUBCOTX>
+    <SEOSUBCOTX>
+     <CMPNAME>GET_WBS_LV</CMPNAME>
+     <SCONAME>I_DATA</SCONAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Work Breakdown Structure Element (WBS Element)</DESCRIPT>
+    </SEOSUBCOTX>
+    <SEOSUBCOTX>
+     <CMPNAME>GET_WBS_LV</CMPNAME>
+     <SCONAME>I_LV</SCONAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Level in Project Hierarchy</DESCRIPT>
+    </SEOSUBCOTX>
+    <SEOSUBCOTX>
+     <CMPNAME>GET_WBS_LV</CMPNAME>
+     <SCONAME>R_RETURN</SCONAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Work Breakdown Structure Element (WBS Element)</DESCRIPT>
+    </SEOSUBCOTX>
+   </DESCRIPTIONS_SUB>
+  </asx:values>
+ </asx:abap>
+</abapGit>

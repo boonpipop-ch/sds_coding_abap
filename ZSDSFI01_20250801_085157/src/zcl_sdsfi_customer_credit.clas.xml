@@ -1,0 +1,425 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<abapGit version="v1.0.0" serializer="LCL_OBJECT_CLAS" serializer_version="v1.0.0">
+ <asx:abap xmlns:asx="http://www.sap.com/abapxml" version="1.0">
+  <asx:values>
+   <VSEOCLASS>
+    <CLSNAME>ZCL_SDSFI_CUSTOMER_CREDIT</CLSNAME>
+    <LANGU>E</LANGU>
+    <DESCRIPT>SDS: Customer Credit</DESCRIPT>
+    <STATE>1</STATE>
+    <CLSCCINCL>X</CLSCCINCL>
+    <FIXPT>X</FIXPT>
+    <UNICODE>X</UNICODE>
+   </VSEOCLASS>
+   <TPOOL>
+    <item>
+     <ID>I</ID>
+     <KEY>001</KEY>
+     <ENTRY>Customer Permanent Credit</ENTRY>
+     <LENGTH>50</LENGTH>
+    </item>
+    <item>
+     <ID>I</ID>
+     <KEY>002</KEY>
+     <ENTRY>Project (WBS) Credit</ENTRY>
+     <LENGTH>50</LENGTH>
+    </item>
+    <item>
+     <ID>I</ID>
+     <KEY>003</KEY>
+     <ENTRY>SO</ENTRY>
+     <LENGTH>50</LENGTH>
+    </item>
+    <item>
+     <ID>I</ID>
+     <KEY>004</KEY>
+     <ENTRY>Billing</ENTRY>
+     <LENGTH>50</LENGTH>
+    </item>
+    <item>
+     <ID>I</ID>
+     <KEY>005</KEY>
+     <ENTRY>AR Invoice</ENTRY>
+     <LENGTH>50</LENGTH>
+    </item>
+    <item>
+     <ID>I</ID>
+     <KEY>006</KEY>
+     <ENTRY>Down Payment</ENTRY>
+     <LENGTH>50</LENGTH>
+    </item>
+    <item>
+     <ID>I</ID>
+     <KEY>007</KEY>
+     <ENTRY>Advance Received</ENTRY>
+     <LENGTH>50</LENGTH>
+    </item>
+    <item>
+     <ID>I</ID>
+     <KEY>008</KEY>
+     <ENTRY>Posted Date Cheque</ENTRY>
+     <LENGTH>50</LENGTH>
+    </item>
+    <item>
+     <ID>I</ID>
+     <KEY>009</KEY>
+     <ENTRY>AVAL</ENTRY>
+     <LENGTH>50</LENGTH>
+    </item>
+    <item>
+     <ID>I</ID>
+     <KEY>010</KEY>
+     <ENTRY>DLC</ENTRY>
+     <LENGTH>50</LENGTH>
+    </item>
+    <item>
+     <ID>I</ID>
+     <KEY>011</KEY>
+     <ENTRY>Bank Guarantee</ENTRY>
+     <LENGTH>50</LENGTH>
+    </item>
+    <item>
+     <ID>I</ID>
+     <KEY>012</KEY>
+     <ENTRY>Credit Insurance</ENTRY>
+     <LENGTH>50</LENGTH>
+    </item>
+    <item>
+     <ID>I</ID>
+     <KEY>013</KEY>
+     <ENTRY>CHQ Return</ENTRY>
+     <LENGTH>28</LENGTH>
+    </item>
+    <item>
+     <ID>I</ID>
+     <KEY>014</KEY>
+     <ENTRY>Permanent</ENTRY>
+     <LENGTH>19</LENGTH>
+    </item>
+    <item>
+     <ID>I</ID>
+     <KEY>015</KEY>
+     <ENTRY>Summary</ENTRY>
+     <LENGTH>17</LENGTH>
+    </item>
+    <item>
+     <ID>I</ID>
+     <KEY>016</KEY>
+     <ENTRY>Retention</ENTRY>
+     <LENGTH>19</LENGTH>
+    </item>
+    <item>
+     <ID>I</ID>
+     <KEY>A01</KEY>
+     <ENTRY>Open</ENTRY>
+     <LENGTH>50</LENGTH>
+    </item>
+    <item>
+     <ID>I</ID>
+     <KEY>A02</KEY>
+     <ENTRY>Close</ENTRY>
+     <LENGTH>50</LENGTH>
+    </item>
+    <item>
+     <ID>I</ID>
+     <KEY>E01</KEY>
+     <ENTRY>Project &amp;1 does not exist in SAP Credit Management.</ENTRY>
+     <LENGTH>100</LENGTH>
+    </item>
+    <item>
+     <ID>I</ID>
+     <KEY>E02</KEY>
+     <ENTRY>Customer &amp;1 dose not exist in SAP Credit Management.</ENTRY>
+     <LENGTH>100</LENGTH>
+    </item>
+    <item>
+     <ID>I</ID>
+     <KEY>E03</KEY>
+     <ENTRY>Customer is required.</ENTRY>
+     <LENGTH>100</LENGTH>
+    </item>
+   </TPOOL>
+   <DESCRIPTIONS>
+    <SEOCOMPOTX>
+     <CMPNAME>CALC_PERCENT</CMPNAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Calculate percent</DESCRIPT>
+    </SEOCOMPOTX>
+    <SEOCOMPOTX>
+     <CMPNAME>COLLECT_RESULT</CMPNAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Collect result</DESCRIPT>
+    </SEOCOMPOTX>
+    <SEOCOMPOTX>
+     <CMPNAME>GC_REPID</CMPNAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>ABAP Program Name</DESCRIPT>
+    </SEOCOMPOTX>
+    <SEOCOMPOTX>
+     <CMPNAME>GC_RUNNING</CMPNAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Running</DESCRIPT>
+    </SEOCOMPOTX>
+    <SEOCOMPOTX>
+     <CMPNAME>GC_STATUS_CLOSE</CMPNAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>SDS: WBS Credit Status</DESCRIPT>
+    </SEOCOMPOTX>
+    <SEOCOMPOTX>
+     <CMPNAME>GC_STATUS_OPEN</CMPNAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>SDS: WBS Credit Status</DESCRIPT>
+    </SEOCOMPOTX>
+    <SEOCOMPOTX>
+     <CMPNAME>GET_CREDIT_MANAGEMENT</CMPNAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Get Credit Management: Master Data for Credit Account</DESCRIPT>
+    </SEOCOMPOTX>
+    <SEOCOMPOTX>
+     <CMPNAME>GET_DATA</CMPNAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Get data</DESCRIPT>
+    </SEOCOMPOTX>
+    <SEOCOMPOTX>
+     <CMPNAME>GET_FI_DOCUMENT</CMPNAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Get FI document</DESCRIPT>
+    </SEOCOMPOTX>
+    <SEOCOMPOTX>
+     <CMPNAME>GET_GENC</CMPNAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Get GenC Setting</DESCRIPT>
+    </SEOCOMPOTX>
+    <SEOCOMPOTX>
+     <CMPNAME>GET_SALE_DETAIL</CMPNAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Get Sale Detail</DESCRIPT>
+    </SEOCOMPOTX>
+    <SEOCOMPOTX>
+     <CMPNAME>GET_SO_BUSSINESS_DATA</CMPNAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Get Sales Document: Business Data</DESCRIPT>
+    </SEOCOMPOTX>
+    <SEOCOMPOTX>
+     <CMPNAME>GET_SO_DOCUMENT</CMPNAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Get Sale Order document</DESCRIPT>
+    </SEOCOMPOTX>
+    <SEOCOMPOTX>
+     <CMPNAME>REPLACE_MESSAGE</CMPNAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Replace Message</DESCRIPT>
+    </SEOCOMPOTX>
+    <SEOCOMPOTX>
+     <CMPNAME>SET_DOC_TYPE_TEXT</CMPNAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Set Document Type text</DESCRIPT>
+    </SEOCOMPOTX>
+    <SEOCOMPOTX>
+     <CMPNAME>VALIDATE_PARTNER</CMPNAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Validate Partner for Credit Management</DESCRIPT>
+    </SEOCOMPOTX>
+    <SEOCOMPOTX>
+     <CMPNAME>VALIDATE_PROJECT</CMPNAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Validate WBS (Project) for Credit Management</DESCRIPT>
+    </SEOCOMPOTX>
+   </DESCRIPTIONS>
+   <DESCRIPTIONS_SUB>
+    <SEOSUBCOTX>
+     <CMPNAME>CALC_PERCENT</CMPNAME>
+     <SCONAME>IF_CRDT_EXPOSURE</SCONAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Value field 12(23) characters with 2 decimal places</DESCRIPT>
+    </SEOSUBCOTX>
+    <SEOSUBCOTX>
+     <CMPNAME>CALC_PERCENT</CMPNAME>
+     <SCONAME>IF_CRDT_LIMIT</SCONAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Credit Limit</DESCRIPT>
+    </SEOSUBCOTX>
+    <SEOSUBCOTX>
+     <CMPNAME>COLLECT_RESULT</CMPNAME>
+     <SCONAME>ET_RESULT</SCONAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Table Type for Customer Credit Report - Result</DESCRIPT>
+    </SEOSUBCOTX>
+    <SEOSUBCOTX>
+     <CMPNAME>COLLECT_RESULT</CMPNAME>
+     <SCONAME>IT_SO_DOC</SCONAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Type Type for Customer Credit Report - Detail</DESCRIPT>
+    </SEOSUBCOTX>
+    <SEOSUBCOTX>
+     <CMPNAME>GET_CREDIT_MANAGEMENT</CMPNAME>
+     <SCONAME>IF_ALL_CUSTOMER</SCONAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>All Customer</DESCRIPT>
+    </SEOSUBCOTX>
+    <SEOSUBCOTX>
+     <CMPNAME>GET_CREDIT_MANAGEMENT</CMPNAME>
+     <SCONAME>IF_KEYDATE</SCONAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>ABAP system field: Current date of application server</DESCRIPT>
+    </SEOSUBCOTX>
+    <SEOSUBCOTX>
+     <CMPNAME>GET_CREDIT_MANAGEMENT</CMPNAME>
+     <SCONAME>IF_LANGU</SCONAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>ABAP System Field: Language Key of Text Environment</DESCRIPT>
+    </SEOSUBCOTX>
+    <SEOSUBCOTX>
+     <CMPNAME>GET_CREDIT_MANAGEMENT</CMPNAME>
+     <SCONAME>IT_CREDIT_GROUP</SCONAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Customer Credit Group Table Type Range</DESCRIPT>
+    </SEOSUBCOTX>
+    <SEOSUBCOTX>
+     <CMPNAME>GET_CREDIT_MANAGEMENT</CMPNAME>
+     <SCONAME>IT_CREDIT_SGMNT</SCONAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>SAP Credit Management: Ranges Table for Credit Segments</DESCRIPT>
+    </SEOSUBCOTX>
+    <SEOSUBCOTX>
+     <CMPNAME>GET_CREDIT_MANAGEMENT</CMPNAME>
+     <SCONAME>IT_PARTNER</SCONAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Table Type EDM_PARTN_RANGE</DESCRIPT>
+    </SEOSUBCOTX>
+    <SEOSUBCOTX>
+     <CMPNAME>GET_CREDIT_MANAGEMENT</CMPNAME>
+     <SCONAME>IT_RISK_CLASS</SCONAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Range type for UKM_RISK_CLASS</DESCRIPT>
+    </SEOSUBCOTX>
+    <SEOSUBCOTX>
+     <CMPNAME>GET_CREDIT_MANAGEMENT</CMPNAME>
+     <SCONAME>IT_WBS</SCONAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Range Table Type For PSPNR</DESCRIPT>
+    </SEOSUBCOTX>
+    <SEOSUBCOTX>
+     <CMPNAME>GET_DATA</CMPNAME>
+     <SCONAME>IF_ALL_CUSTOMER</SCONAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>All Customer</DESCRIPT>
+    </SEOSUBCOTX>
+    <SEOSUBCOTX>
+     <CMPNAME>GET_DATA</CMPNAME>
+     <SCONAME>IF_CREDIT_SGMNT</SCONAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Credit Segment</DESCRIPT>
+    </SEOSUBCOTX>
+    <SEOSUBCOTX>
+     <CMPNAME>GET_DATA</CMPNAME>
+     <SCONAME>IF_LANGU</SCONAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>ABAP System Field: Language Key of Text Environment</DESCRIPT>
+    </SEOSUBCOTX>
+    <SEOSUBCOTX>
+     <CMPNAME>GET_DATA</CMPNAME>
+     <SCONAME>IF_SEL_CREDIT</SCONAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Selection (C: Customer Credit, P: Project Credit, *: All )</DESCRIPT>
+    </SEOSUBCOTX>
+    <SEOSUBCOTX>
+     <CMPNAME>GET_DATA</CMPNAME>
+     <SCONAME>IT_CREDIT_GROUP</SCONAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Customer Credit Group Table Type Range</DESCRIPT>
+    </SEOSUBCOTX>
+    <SEOSUBCOTX>
+     <CMPNAME>GET_DATA</CMPNAME>
+     <SCONAME>IT_PARTNER</SCONAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Table Type EDM_PARTN_RANGE</DESCRIPT>
+    </SEOSUBCOTX>
+    <SEOSUBCOTX>
+     <CMPNAME>GET_DATA</CMPNAME>
+     <SCONAME>IT_RISK_CLASS</SCONAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Range type for UKM_RISK_CLASS</DESCRIPT>
+    </SEOSUBCOTX>
+    <SEOSUBCOTX>
+     <CMPNAME>GET_DATA</CMPNAME>
+     <SCONAME>IT_WBS</SCONAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Selection Options for POSID (WBS Element)</DESCRIPT>
+    </SEOSUBCOTX>
+    <SEOSUBCOTX>
+     <CMPNAME>GET_FI_DOCUMENT</CMPNAME>
+     <SCONAME>IF_SEL_CREDIT</SCONAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Selection (C: Customer Credit, P: Project Credit, *: All )</DESCRIPT>
+    </SEOSUBCOTX>
+    <SEOSUBCOTX>
+     <CMPNAME>GET_FI_DOCUMENT</CMPNAME>
+     <SCONAME>IT_WBS</SCONAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Selection Options for POSID (WBS Element)</DESCRIPT>
+    </SEOSUBCOTX>
+    <SEOSUBCOTX>
+     <CMPNAME>GET_SO_DOCUMENT</CMPNAME>
+     <SCONAME>ET_SO_DOC</SCONAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Type Type for Customer Credit Report - Detail</DESCRIPT>
+    </SEOSUBCOTX>
+    <SEOSUBCOTX>
+     <CMPNAME>GET_SO_DOCUMENT</CMPNAME>
+     <SCONAME>IF_SEL_CREDIT</SCONAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Selection (C: Customer Credit, P: Project Credit, *: All )</DESCRIPT>
+    </SEOSUBCOTX>
+    <SEOSUBCOTX>
+     <CMPNAME>GET_SO_DOCUMENT</CMPNAME>
+     <SCONAME>IT_WBS</SCONAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>SAP Credit Management: Ranges Table for Credit Segments</DESCRIPT>
+    </SEOSUBCOTX>
+    <SEOSUBCOTX>
+     <CMPNAME>REPLACE_MESSAGE</CMPNAME>
+     <SCONAME>IF_MSGTX</SCONAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Response Message</DESCRIPT>
+    </SEOSUBCOTX>
+    <SEOSUBCOTX>
+     <CMPNAME>REPLACE_MESSAGE</CMPNAME>
+     <SCONAME>RF_MSGTX</SCONAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Response Message</DESCRIPT>
+    </SEOSUBCOTX>
+    <SEOSUBCOTX>
+     <CMPNAME>SET_DOC_TYPE_TEXT</CMPNAME>
+     <SCONAME>IF_DOC_TYPE</SCONAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Char 20</DESCRIPT>
+    </SEOSUBCOTX>
+    <SEOSUBCOTX>
+     <CMPNAME>VALIDATE_PARTNER</CMPNAME>
+     <SCONAME>EF_INVALID</SCONAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>General Flag</DESCRIPT>
+    </SEOSUBCOTX>
+    <SEOSUBCOTX>
+     <CMPNAME>VALIDATE_PARTNER</CMPNAME>
+     <SCONAME>IF_PARTNER</SCONAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Business Partner Number</DESCRIPT>
+    </SEOSUBCOTX>
+    <SEOSUBCOTX>
+     <CMPNAME>VALIDATE_PROJECT</CMPNAME>
+     <SCONAME>EF_INVALID</SCONAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>General Flag</DESCRIPT>
+    </SEOSUBCOTX>
+    <SEOSUBCOTX>
+     <CMPNAME>VALIDATE_PROJECT</CMPNAME>
+     <SCONAME>IF_PSPNR</SCONAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Project (internal)</DESCRIPT>
+    </SEOSUBCOTX>
+   </DESCRIPTIONS_SUB>
+  </asx:values>
+ </asx:abap>
+</abapGit>

@@ -1,0 +1,200 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<abapGit version="v1.0.0" serializer="LCL_OBJECT_MSAG" serializer_version="v1.0.0">
+ <asx:abap xmlns:asx="http://www.sap.com/abapxml" version="1.0">
+  <asx:values>
+   <T100A>
+    <ARBGB>ZSDSPS01</ARBGB>
+    <MASTERLANG>E</MASTERLANG>
+    <STEXT>SDS Message Class for Project System</STEXT>
+   </T100A>
+   <T100>
+    <T100>
+     <SPRSL>E</SPRSL>
+     <ARBGB>ZSDSPS01</ARBGB>
+     <MSGNR>000</MSGNR>
+     <TEXT>&amp; &amp; &amp; &amp;</TEXT>
+    </T100>
+    <T100>
+     <SPRSL>E</SPRSL>
+     <ARBGB>ZSDSPS01</ARBGB>
+     <MSGNR>001</MSGNR>
+     <TEXT>Invalid date value &amp;1.</TEXT>
+    </T100>
+    <T100>
+     <SPRSL>E</SPRSL>
+     <ARBGB>ZSDSPS01</ARBGB>
+     <MSGNR>002</MSGNR>
+     <TEXT>Cannot determine project profile.</TEXT>
+    </T100>
+    <T100>
+     <SPRSL>E</SPRSL>
+     <ARBGB>ZSDSPS01</ARBGB>
+     <MSGNR>003</MSGNR>
+     <TEXT>Specify ProjectDefinition or SFProjectCode to process</TEXT>
+    </T100>
+    <T100>
+     <SPRSL>E</SPRSL>
+     <ARBGB>ZSDSPS01</ARBGB>
+     <MSGNR>004</MSGNR>
+     <TEXT>ProjectDefinition &amp;1 is not matched with SFProjectCode &amp;2.</TEXT>
+    </T100>
+    <T100>
+     <SPRSL>E</SPRSL>
+     <ARBGB>ZSDSPS01</ARBGB>
+     <MSGNR>005</MSGNR>
+     <TEXT>Reference ID &amp;1 is already used for project &amp;2.</TEXT>
+    </T100>
+    <T100>
+     <SPRSL>E</SPRSL>
+     <ARBGB>ZSDSPS01</ARBGB>
+     <MSGNR>006</MSGNR>
+     <TEXT>Invalid ProjectType &amp;1.</TEXT>
+    </T100>
+    <T100>
+     <SPRSL>E</SPRSL>
+     <ARBGB>ZSDSPS01</ARBGB>
+     <MSGNR>007</MSGNR>
+     <TEXT>Cannot generate new Project definition number.</TEXT>
+    </T100>
+    <T100>
+     <SPRSL>E</SPRSL>
+     <ARBGB>ZSDSPS01</ARBGB>
+     <MSGNR>008</MSGNR>
+     <TEXT>Project definition &amp;1 is not valid.</TEXT>
+    </T100>
+    <T100>
+     <SPRSL>E</SPRSL>
+     <ARBGB>ZSDSPS01</ARBGB>
+     <MSGNR>009</MSGNR>
+     <TEXT>Specify REFID to process</TEXT>
+    </T100>
+    <T100>
+     <SPRSL>E</SPRSL>
+     <ARBGB>ZSDSPS01</ARBGB>
+     <MSGNR>010</MSGNR>
+     <TEXT>WBS Element &amp;1 is not matched with REFID &amp;2.</TEXT>
+    </T100>
+    <T100>
+     <SPRSL>E</SPRSL>
+     <ARBGB>ZSDSPS01</ARBGB>
+     <MSGNR>011</MSGNR>
+     <TEXT>Reference ID &amp;1 is already used for wbs element &amp;2.</TEXT>
+    </T100>
+    <T100>
+     <SPRSL>E</SPRSL>
+     <ARBGB>ZSDSPS01</ARBGB>
+     <MSGNR>012</MSGNR>
+     <TEXT>Cannot generate new WBS Element number.</TEXT>
+    </T100>
+    <T100>
+     <SPRSL>E</SPRSL>
+     <ARBGB>ZSDSPS01</ARBGB>
+     <MSGNR>013</MSGNR>
+     <TEXT>WBS Element &amp;1 already exists.</TEXT>
+    </T100>
+    <T100>
+     <SPRSL>E</SPRSL>
+     <ARBGB>ZSDSPS01</ARBGB>
+     <MSGNR>014</MSGNR>
+     <TEXT>Cannot find WBS Level 2 from REFID &amp;1.</TEXT>
+    </T100>
+    <T100>
+     <SPRSL>E</SPRSL>
+     <ARBGB>ZSDSPS01</ARBGB>
+     <MSGNR>015</MSGNR>
+     <TEXT>WBS Element already exists for REFID &amp;1 eMemo &amp;2.</TEXT>
+    </T100>
+    <T100>
+     <SPRSL>E</SPRSL>
+     <ARBGB>ZSDSPS01</ARBGB>
+     <MSGNR>016</MSGNR>
+     <TEXT>WBS Element &amp;1 is not matched with REFID &amp;2 eMemo &amp;3.</TEXT>
+    </T100>
+    <T100>
+     <SPRSL>E</SPRSL>
+     <ARBGB>ZSDSPS01</ARBGB>
+     <MSGNR>017</MSGNR>
+     <TEXT>Cannot determine WBS Level for &amp;1.</TEXT>
+    </T100>
+    <T100>
+     <SPRSL>E</SPRSL>
+     <ARBGB>ZSDSPS01</ARBGB>
+     <MSGNR>018</MSGNR>
+     <TEXT>WBSlevel &amp;1 mismatches with WBS &amp;2.</TEXT>
+    </T100>
+    <T100>
+     <SPRSL>E</SPRSL>
+     <ARBGB>ZSDSPS01</ARBGB>
+     <MSGNR>019</MSGNR>
+     <TEXT>ItemType is required.</TEXT>
+    </T100>
+    <T100>
+     <SPRSL>E</SPRSL>
+     <ARBGB>ZSDSPS01</ARBGB>
+     <MSGNR>020</MSGNR>
+     <TEXT>Activity is required.</TEXT>
+    </T100>
+    <T100>
+     <SPRSL>E</SPRSL>
+     <ARBGB>ZSDSPS01</ARBGB>
+     <MSGNR>021</MSGNR>
+     <TEXT>APUP is required.</TEXT>
+    </T100>
+    <T100>
+     <SPRSL>E</SPRSL>
+     <ARBGB>ZSDSPS01</ARBGB>
+     <MSGNR>022</MSGNR>
+     <TEXT>WBS Element has been created.</TEXT>
+    </T100>
+    <T100>
+     <SPRSL>E</SPRSL>
+     <ARBGB>ZSDSPS01</ARBGB>
+     <MSGNR>023</MSGNR>
+     <TEXT>WBS Element has been changed.</TEXT>
+    </T100>
+    <T100>
+     <SPRSL>E</SPRSL>
+     <ARBGB>ZSDSPS01</ARBGB>
+     <MSGNR>024</MSGNR>
+     <TEXT>Create Original Plan/Budget successfully.</TEXT>
+    </T100>
+    <T100>
+     <SPRSL>E</SPRSL>
+     <ARBGB>ZSDSPS01</ARBGB>
+     <MSGNR>025</MSGNR>
+     <TEXT>Revise Plan/Budget successfully.</TEXT>
+    </T100>
+    <T100>
+     <SPRSL>E</SPRSL>
+     <ARBGB>ZSDSPS01</ARBGB>
+     <MSGNR>026</MSGNR>
+     <TEXT>WBS Element &amp;1 does not exist.</TEXT>
+    </T100>
+    <T100>
+     <SPRSL>E</SPRSL>
+     <ARBGB>ZSDSPS01</ARBGB>
+     <MSGNR>027</MSGNR>
+     <TEXT>Cost Element &amp;1 does not exist.</TEXT>
+    </T100>
+    <T100>
+     <SPRSL>E</SPRSL>
+     <ARBGB>ZSDSPS01</ARBGB>
+     <MSGNR>028</MSGNR>
+     <TEXT>Cannot determine cost element for WBS &amp;1.</TEXT>
+    </T100>
+    <T100>
+     <SPRSL>E</SPRSL>
+     <ARBGB>ZSDSPS01</ARBGB>
+     <MSGNR>029</MSGNR>
+     <TEXT>Version &amp;1 is invalid.</TEXT>
+    </T100>
+    <T100>
+     <SPRSL>E</SPRSL>
+     <ARBGB>ZSDSPS01</ARBGB>
+     <MSGNR>030</MSGNR>
+     <TEXT>eMemo is missing for REFID &amp;1.</TEXT>
+    </T100>
+   </T100>
+  </asx:values>
+ </asx:abap>
+</abapGit>

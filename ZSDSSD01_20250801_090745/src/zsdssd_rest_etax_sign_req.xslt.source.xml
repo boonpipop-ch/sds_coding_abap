@@ -1,0 +1,2654 @@
+<?sap.transform simple?>
+<tt:transform xmlns:tt="http://www.sap.com/transformation-templates" xmlns:ddic="http://www.sap.com/abapxml/types/dictionary">
+
+  <tt:root name="DATA" type="ddic:ZSDSSDS061"/>
+  <tt:template>
+    <!-- Header Data-->
+    <object>
+      <tt:group>
+        <tt:cond frq="?">
+          <tt:cond check="not-initial(DATA.REQ_SEND_MAIL)">
+            <str name="RequestSendMail">
+              <tt:value ref="DATA.REQ_SEND_MAIL"/>
+            </str>
+          </tt:cond>
+        </tt:cond>
+        <tt:cond frq="?">
+          <tt:cond check="not-initial(DATA.EMAIL)">
+            <str name="Email">
+              <tt:value ref="DATA.EMAIL"/>
+            </str>
+          </tt:cond>
+        </tt:cond>
+        <tt:cond frq="1">
+          <str name="ReplaceFlag">
+            <tt:value ref="DATA.REPLACE_FLAG"/>
+          </str>
+        </tt:cond>
+        <tt:cond frq="1">
+          <str name="Branch">
+            <tt:value ref="DATA.BRANCH"/>
+          </str>
+        </tt:cond>
+        <tt:cond frq="?">
+          <tt:cond check="not-initial(DATA.REQ_SEND_SMS)">
+            <str name="RequestSendSMS">
+              <tt:value ref="DATA.REQ_SEND_SMS"/>
+            </str>
+          </tt:cond>
+        </tt:cond>
+        <tt:cond frq="?">
+          <tt:cond check="not-initial(DATA.MOBILE_NUMBER)">
+            <str name="MobileNumber">
+              <tt:value ref="DATA.MOBILE_NUMBER"/>
+            </str>
+          </tt:cond>
+        </tt:cond>
+        <tt:cond frq="?">
+          <tt:cond check="not-initial(DATA.PDF_PASSWORD)">
+            <str name="PDFPassword">
+              <tt:value ref="DATA.PDF_PASSWORD"/>
+            </str>
+          </tt:cond>
+        </tt:cond>
+        <tt:cond frq="?">
+          <tt:cond check="not-initial(DATA.INTERNALDOCNO)">
+            <str name="InternalDocNo">
+              <tt:value ref="DATA.INTERNALDOCNO"/>
+            </str>
+          </tt:cond>
+        </tt:cond>
+        <tt:cond frq="?">
+          <tt:cond check="not-initial(DATA.TRANSCODE)">
+            <str name="transCode">
+              <tt:value ref="DATA.TRANSCODE"/>
+            </str>
+          </tt:cond>
+        </tt:cond>
+        <tt:cond frq="?">
+          <tt:cond check="not-initial(DATA.FLAG_DOCU_PRINT)">
+            <str name="FlagDocumentPrint">
+              <tt:value ref="DATA.FLAG_DOCU_PRINT"/>
+            </str>
+          </tt:cond>
+        </tt:cond>
+        <tt:cond frq="?">
+          <tt:cond check="not-initial(DATA.PRINT_USER)">
+            <str name="PrintUser">
+              <tt:value ref="DATA.PRINT_USER"/>
+            </str>
+          </tt:cond>
+        </tt:cond>
+        <tt:cond frq="?">
+          <tt:cond check="not-initial(DATA.RDFLAG)">
+            <str name="RDFlag">
+              <tt:value ref="DATA.RDFLAG"/>
+            </str>
+          </tt:cond>
+        </tt:cond>
+        <tt:cond frq="?">
+          <tt:cond check="not-initial(DATA.FORMNAME)">
+            <str name="formName">
+              <tt:value ref="DATA.FORMNAME"/>
+            </str>
+          </tt:cond>
+        </tt:cond>
+        <tt:cond frq="?">
+          <tt:cond check="not-initial(DATA.DOCUMENT)">
+            <str name="Document">
+              <tt:value ref="DATA.DOCUMENT"/>
+            </str>
+          </tt:cond>
+        </tt:cond>
+
+        <!-- Exchange Document Context-->
+        <tt:cond frq="1">
+          <object name="ExchangedDocumentContext">
+            <array name="GuidelineSpecifiedDocumentContextParameter">
+              <tt:cond check="exist(DATA.EXCH_DOCU_CONTEXT.CONTEXT_PARAMS)">
+                <tt:loop name="context_param" ref="DATA.EXCH_DOCU_CONTEXT.CONTEXT_PARAMS">
+                  <!-- Context Parameter Data -->
+                  <object>
+                    <object name="ID">
+                      <tt:group>
+                        <tt:cond frq="1">
+                          <str name="schemeAgencyID">
+                            <tt:value ref="$context_param.ID.SCHEME_AGENCY_ID"/>
+                          </str>
+                        </tt:cond>
+                        <tt:cond frq="1">
+                          <str name="schemeVersionID">
+                            <tt:value ref="$context_param.ID.SCHEME_VERSION_ID"/>
+                          </str>
+                        </tt:cond>
+                        <tt:cond frq="1">
+                          <str name="value">
+                            <tt:value ref="$context_param.ID.VALUE"/>
+                          </str>
+                        </tt:cond>
+                      </tt:group>
+                    </object>
+                  </object>
+                </tt:loop>
+              </tt:cond>
+            </array>
+
+          </object>
+        </tt:cond>
+
+        <!-- Exchanged Document-->
+        <tt:cond frq="1">
+          <object name="ExchangedDocument">
+            <tt:group>
+              <tt:cond frq="1">
+                <str name="ID">
+                  <tt:value ref="DATA.EXCH_DOCUMENT.ID"/>
+                </str>
+              </tt:cond>
+              <tt:cond frq="?">
+                <tt:cond check="exist(DATA.EXCH_DOCUMENT.NAME)">
+                  <array name="Name">
+                    <tt:loop name="name" ref="DATA.EXCH_DOCUMENT.NAME">
+                      <str>
+                        <tt:value ref="$name"/>
+                      </str>
+                    </tt:loop>
+                  </array>
+                </tt:cond>
+              </tt:cond>
+              <tt:cond frq="?">
+                <tt:cond check="not-initial(DATA.EXCH_DOCUMENT.TYPE_CODE)">
+                  <str name="TypeCode">
+                    <tt:value ref="DATA.EXCH_DOCUMENT.TYPE_CODE"/>
+                  </str>
+                </tt:cond>
+              </tt:cond>
+              <tt:cond frq="1">
+                <str name="IssueDateTime">
+                  <tt:value ref="DATA.EXCH_DOCUMENT.ISSUE_DATETIME"/>
+                </str>
+              </tt:cond>
+              <tt:cond frq="?">
+                <tt:cond check="not-initial(DATA.EXCH_DOCUMENT.PURPOSE)">
+                  <str name="Purpose">
+                    <tt:value ref="DATA.EXCH_DOCUMENT.PURPOSE"/>
+                  </str>
+                </tt:cond>
+              </tt:cond>
+              <tt:cond frq="?">
+                <tt:cond check="not-initial(DATA.EXCH_DOCUMENT.PURPOSE_CODE)">
+                  <str name="PurposeCode">
+                    <tt:value ref="DATA.EXCH_DOCUMENT.PURPOSE_CODE"/>
+                  </str>
+                </tt:cond>
+              </tt:cond>
+              <tt:cond frq="?">
+                <tt:cond check="not-initial(DATA.EXCH_DOCUMENT.GLOBAL_ID)">
+                  <str name="GlobalID">
+                    <tt:value ref="DATA.EXCH_DOCUMENT.GLOBAL_ID"/>
+                  </str>
+                </tt:cond>
+              </tt:cond>
+              <tt:cond frq="?">
+                <tt:cond check="exist(DATA.EXCH_DOCUMENT.CREATION_DATETIME)">
+                  <array name="CreationDateTime">
+                    <tt:loop name="createdate" ref="DATA.EXCH_DOCUMENT.CREATION_DATETIME">
+                      <str>
+                        <tt:value ref="$createdate"/>
+                      </str>
+                    </tt:loop>
+                  </array>
+                </tt:cond>
+              </tt:cond>
+              <tt:cond frq="?">
+                <tt:cond check="not-initial(DATA.EXCH_DOCUMENT.INCLUDED_NOTE)">
+                  <array name="IncludedNote">
+                    <object>
+                      <tt:loop name="note" ref="DATA.EXCH_DOCUMENT.INCLUDED_NOTE">
+                        <tt:group>
+                          <tt:cond frq="?">
+                            <tt:cond check="not-initial($note.SUBJECT)">
+                              <str name="Subject">
+                                <tt:value ref="$note.SUBJECT"/>
+                              </str>
+                            </tt:cond>
+                          </tt:cond>
+                          <tt:cond frq="?">
+                            <tt:cond check="not-initial($note.CONTENT)">
+                              <array name="Content">
+                                <tt:loop name="content" ref="$note.CONTENT">
+                                  <str>
+                                    <tt:value ref="$content"/>
+                                  </str>
+                                </tt:loop>
+                              </array>
+                            </tt:cond>
+                          </tt:cond>
+
+                        </tt:group>
+                      </tt:loop>
+                    </object>
+                  </array>
+                </tt:cond>
+              </tt:cond>
+
+            </tt:group>
+          </object>
+        </tt:cond>
+
+        <!-- Trade Transaction-->
+        <tt:cond frq="1">
+          <object name="SupplyChainTradeTransaction">
+            <tt:group>
+              <tt:cond frq="1">
+                <tt:group>
+
+                  <!-- Trade Agreement-->
+                  <tt:cond frq="1">
+                    <object name="ApplicableHeaderTradeAgreement">
+                      <tt:group>
+
+                        <!-- Seller Partner-->
+                        <tt:cond frq="?">
+                          <tt:cond check="not-initial(DATA.TRADE_TRANSACTION.TRADE_AGREEMENT.SELLER_TRADEPARTY)">
+                            <object name="SellerTradeParty" tt:ref="DATA.TRADE_TRANSACTION.TRADE_AGREEMENT.SELLER_TRADEPARTY">
+                              <tt:group>
+
+                                <tt:cond frq="?">
+                                  <tt:cond check="not-initial($ref.ID)">
+                                    <array name="ID">
+                                      <tt:loop name="id" ref="$ref.ID">
+                                        <str>
+                                          <tt:value ref="$id"/>
+                                        </str>
+                                      </tt:loop>
+                                    </array>
+                                  </tt:cond>
+                                </tt:cond>
+                                <tt:cond frq="?">
+                                  <tt:cond check="not-initial($ref.GLOBALID)">
+                                    <array name="GlobalID">
+                                      <tt:loop name="globalid" ref="$ref.GLOBALID">
+                                        <str>
+                                          <tt:value ref="$globalid"/>
+                                        </str>
+                                      </tt:loop>
+                                    </array>
+                                  </tt:cond>
+                                </tt:cond>
+                                <tt:cond frq="?">
+                                  <tt:cond check="not-initial($ref.NAME)">
+                                    <str name="Name">
+                                      <tt:value ref="$ref.NAME"/>
+                                    </str>
+                                  </tt:cond>
+                                </tt:cond>
+                                <tt:cond frq="?">
+                                  <tt:cond check="not-initial($ref.TAX_REGISTRATION)">
+                                    <object name="SpecifiedTaxRegistration">
+                                      <object name="ID">
+                                        <tt:group>
+
+                                          <tt:cond frq="?">
+                                            <tt:cond check="not-initial($ref.TAX_REGISTRATION.ID.VALUE)">
+                                              <str name="value">
+                                                <tt:value ref="$ref.TAX_REGISTRATION.ID.VALUE"/>
+                                              </str>
+                                            </tt:cond>
+                                          </tt:cond>
+
+                                          <tt:cond frq="?">
+                                            <tt:cond check="not-initial($ref.TAX_REGISTRATION.ID.SCHEMEID)">
+                                              <str name="schemeID">
+                                                <tt:value ref="$ref.TAX_REGISTRATION.ID.SCHEMEID"/>
+                                              </str>
+                                            </tt:cond>
+                                          </tt:cond>
+
+                                        </tt:group>
+
+                                      </object>
+                                    </object>
+                                  </tt:cond>
+                                </tt:cond>
+
+                                <tt:cond frq="?">
+                                  <tt:cond check="not-initial($ref.POSTALTRADEADDRESS)">
+                                    <object name="PostalTradeAddress">
+                                      <tt:group>
+
+                                        <tt:cond frq="?">
+                                          <tt:cond check="not-initial($ref.POSTALTRADEADDRESS.POSTCODECODE)">
+                                            <str name="PostcodeCode">
+                                              <tt:value ref="$ref.POSTALTRADEADDRESS.POSTCODECODE"/>
+                                            </str>
+                                          </tt:cond>
+                                        </tt:cond>
+                                        <tt:cond frq="?">
+                                          <tt:cond check="not-initial($ref.POSTALTRADEADDRESS.BUILDINGNAME)">
+                                            <str name="BuildingName">
+                                              <tt:value ref="$ref.POSTALTRADEADDRESS.BUILDINGNAME"/>
+                                            </str>
+                                          </tt:cond>
+                                        </tt:cond>
+                                        <tt:cond frq="?">
+                                          <tt:cond check="not-initial($ref.POSTALTRADEADDRESS.LINEONE)">
+                                            <str name="LineOne">
+                                              <tt:value ref="$ref.POSTALTRADEADDRESS.LINEONE"/>
+                                            </str>
+                                          </tt:cond>
+                                        </tt:cond>
+                                        <tt:cond frq="?">
+                                          <tt:cond check="not-initial($ref.POSTALTRADEADDRESS.LINETWO)">
+                                            <str name="LineTwo">
+                                              <tt:value ref="$ref.POSTALTRADEADDRESS.LINETWO"/>
+                                            </str>
+                                          </tt:cond>
+                                        </tt:cond>
+                                        <tt:cond frq="?">
+                                          <tt:cond check="not-initial($ref.POSTALTRADEADDRESS.LINETHREE)">
+                                            <str name="LineThree">
+                                              <tt:value ref="$ref.POSTALTRADEADDRESS.LINETHREE"/>
+                                            </str>
+                                          </tt:cond>
+                                        </tt:cond>
+                                        <tt:cond frq="?">
+                                          <tt:cond check="not-initial($ref.POSTALTRADEADDRESS.LINEFOUR)">
+                                            <str name="LineFour">
+                                              <tt:value ref="$ref.POSTALTRADEADDRESS.LINEFOUR"/>
+                                            </str>
+                                          </tt:cond>
+                                        </tt:cond>
+                                        <tt:cond frq="?">
+                                          <tt:cond check="not-initial($ref.POSTALTRADEADDRESS.LINEFIVE)">
+                                            <str name="LineFive">
+                                              <tt:value ref="$ref.POSTALTRADEADDRESS.LINEFIVE"/>
+                                            </str>
+                                          </tt:cond>
+                                        </tt:cond>
+                                        <tt:cond frq="?">
+                                          <tt:cond check="not-initial($ref.POSTALTRADEADDRESS.STREETNAME)">
+                                            <str name="StreetName">
+                                              <tt:value ref="$ref.POSTALTRADEADDRESS.STREETNAME"/>
+                                            </str>
+                                          </tt:cond>
+                                        </tt:cond>
+                                        <tt:cond frq="?">
+                                          <tt:cond check="not-initial($ref.POSTALTRADEADDRESS.CITYNAME)">
+                                            <str name="CityName">
+                                              <tt:value ref="$ref.POSTALTRADEADDRESS.CITYNAME"/>
+                                            </str>
+                                          </tt:cond>
+                                        </tt:cond>
+                                        <tt:cond frq="?">
+                                          <tt:cond check="not-initial($ref.POSTALTRADEADDRESS.CITYSUBDIVISIONNAME)">
+                                            <str name="CitySubDivisionName">
+                                              <tt:value ref="$ref.POSTALTRADEADDRESS.CITYSUBDIVISIONNAME"/>
+                                            </str>
+                                          </tt:cond>
+                                        </tt:cond>
+                                        <tt:cond frq="?">
+                                          <tt:cond check="not-initial($ref.POSTALTRADEADDRESS.COUNTRYID)">
+                                            <object name="CountryID">
+                                              <tt:group>
+
+                                                <tt:cond frq="?">
+                                                  <tt:cond check="not-initial($ref.POSTALTRADEADDRESS.COUNTRYID.SCHEMEID)">
+                                                    <str name="schemeID">
+                                                      <tt:value ref="$ref.POSTALTRADEADDRESS.COUNTRYID.SCHEMEID"/>
+                                                    </str>
+                                                  </tt:cond>
+                                                </tt:cond>
+                                                <tt:cond frq="?">
+                                                  <tt:cond check="not-initial($ref.POSTALTRADEADDRESS.COUNTRYID.VALUE)">
+                                                    <str name="value">
+                                                      <tt:value ref="$ref.POSTALTRADEADDRESS.COUNTRYID.VALUE"/>
+                                                    </str>
+                                                  </tt:cond>
+                                                </tt:cond>
+
+                                              </tt:group>
+                                            </object>
+                                          </tt:cond>
+                                        </tt:cond>
+                                        <tt:cond frq="?">
+                                          <tt:cond check="not-initial($ref.POSTALTRADEADDRESS.COUNTRYSUBDIVISIONID)">
+                                            <str name="CountrySubDivisionID">
+                                              <tt:value ref="$ref.POSTALTRADEADDRESS.COUNTRYSUBDIVISIONID"/>
+                                            </str>
+                                          </tt:cond>
+                                        </tt:cond>
+                                        <tt:cond frq="?">
+                                          <tt:cond check="not-initial($ref.POSTALTRADEADDRESS.BUILDINGNUMBER)">
+                                            <str name="BuildingNumber">
+                                              <tt:value ref="$ref.POSTALTRADEADDRESS.BUILDINGNUMBER"/>
+                                            </str>
+                                          </tt:cond>
+                                        </tt:cond>
+
+                                      </tt:group>
+                                    </object>
+                                  </tt:cond>
+                                </tt:cond>
+
+                              </tt:group>
+                            </object>
+                          </tt:cond>
+                        </tt:cond>
+
+                        <!-- Buyer Partner-->
+                        <tt:cond frq="?">
+                          <tt:cond check="not-initial(DATA.TRADE_TRANSACTION.TRADE_AGREEMENT.BUYER_TRADEPARTY)">
+                            <object name="BuyerTradeParty" tt:ref="DATA.TRADE_TRANSACTION.TRADE_AGREEMENT.BUYER_TRADEPARTY">
+                              <tt:group>
+
+                                <tt:cond frq="?">
+                                  <tt:cond check="not-initial($ref.ID)">
+                                    <array name="ID">
+                                      <tt:loop name="id" ref="$ref.ID">
+                                        <str>
+                                          <tt:value ref="$id"/>
+                                        </str>
+                                      </tt:loop>
+                                    </array>
+                                  </tt:cond>
+                                </tt:cond>
+                                <tt:cond frq="?">
+                                  <tt:cond check="not-initial($ref.GLOBALID)">
+                                    <array name="GlobalID">
+                                      <tt:loop name="globalid" ref="$ref.GLOBALID">
+                                        <str>
+                                          <tt:value ref="$globalid"/>
+                                        </str>
+                                      </tt:loop>
+                                    </array>
+                                  </tt:cond>
+                                </tt:cond>
+                                <tt:cond frq="?">
+                                  <tt:cond check="not-initial($ref.NAME)">
+                                    <str name="Name">
+                                      <tt:value ref="$ref.NAME"/>
+                                    </str>
+                                  </tt:cond>
+                                </tt:cond>
+                                <tt:cond frq="?">
+                                  <tt:cond check="not-initial($ref.TAX_REGISTRATION)">
+                                    <object name="SpecifiedTaxRegistration">
+                                      <object name="ID">
+                                        <tt:group>
+
+                                          <tt:cond frq="?">
+                                            <tt:cond check="not-initial($ref.TAX_REGISTRATION.ID.VALUE)">
+                                              <str name="value">
+                                                <tt:value ref="$ref.TAX_REGISTRATION.ID.VALUE"/>
+                                              </str>
+                                            </tt:cond>
+                                          </tt:cond>
+
+                                          <tt:cond frq="?">
+                                            <tt:cond check="not-initial($ref.TAX_REGISTRATION.ID.SCHEMEID)">
+                                              <str name="schemeID">
+                                                <tt:value ref="$ref.TAX_REGISTRATION.ID.SCHEMEID"/>
+                                              </str>
+                                            </tt:cond>
+                                          </tt:cond>
+
+                                        </tt:group>
+
+                                      </object>
+                                    </object>
+                                  </tt:cond>
+                                </tt:cond>
+
+                                <tt:cond frq="?">
+                                  <tt:cond check="not-initial($ref.POSTALTRADEADDRESS)">
+                                    <object name="PostalTradeAddress">
+                                      <tt:group>
+
+                                        <tt:cond frq="?">
+                                          <tt:cond check="not-initial($ref.POSTALTRADEADDRESS.POSTCODECODE)">
+                                            <str name="PostcodeCode">
+                                              <tt:value ref="$ref.POSTALTRADEADDRESS.POSTCODECODE"/>
+                                            </str>
+                                          </tt:cond>
+                                        </tt:cond>
+                                        <tt:cond frq="?">
+                                          <tt:cond check="not-initial($ref.POSTALTRADEADDRESS.BUILDINGNAME)">
+                                            <str name="BuildingName">
+                                              <tt:value ref="$ref.POSTALTRADEADDRESS.BUILDINGNAME"/>
+                                            </str>
+                                          </tt:cond>
+                                        </tt:cond>
+                                        <tt:cond frq="?">
+                                          <tt:cond check="not-initial($ref.POSTALTRADEADDRESS.LINEONE)">
+                                            <str name="LineOne">
+                                              <tt:value ref="$ref.POSTALTRADEADDRESS.LINEONE"/>
+                                            </str>
+                                          </tt:cond>
+                                        </tt:cond>
+                                        <tt:cond frq="?">
+                                          <tt:cond check="not-initial($ref.POSTALTRADEADDRESS.LINETWO)">
+                                            <str name="LineTwo">
+                                              <tt:value ref="$ref.POSTALTRADEADDRESS.LINETWO"/>
+                                            </str>
+                                          </tt:cond>
+                                        </tt:cond>
+                                        <tt:cond frq="?">
+                                          <tt:cond check="not-initial($ref.POSTALTRADEADDRESS.LINETHREE)">
+                                            <str name="LineThree">
+                                              <tt:value ref="$ref.POSTALTRADEADDRESS.LINETHREE"/>
+                                            </str>
+                                          </tt:cond>
+                                        </tt:cond>
+                                        <tt:cond frq="?">
+                                          <tt:cond check="not-initial($ref.POSTALTRADEADDRESS.LINEFOUR)">
+                                            <str name="LineFour">
+                                              <tt:value ref="$ref.POSTALTRADEADDRESS.LINEFOUR"/>
+                                            </str>
+                                          </tt:cond>
+                                        </tt:cond>
+                                        <tt:cond frq="?">
+                                          <tt:cond check="not-initial($ref.POSTALTRADEADDRESS.LINEFIVE)">
+                                            <str name="LineFive">
+                                              <tt:value ref="$ref.POSTALTRADEADDRESS.LINEFIVE"/>
+                                            </str>
+                                          </tt:cond>
+                                        </tt:cond>
+                                        <tt:cond frq="?">
+                                          <tt:cond check="not-initial($ref.POSTALTRADEADDRESS.STREETNAME)">
+                                            <str name="StreetName">
+                                              <tt:value ref="$ref.POSTALTRADEADDRESS.STREETNAME"/>
+                                            </str>
+                                          </tt:cond>
+                                        </tt:cond>
+                                        <tt:cond frq="?">
+                                          <tt:cond check="not-initial($ref.POSTALTRADEADDRESS.CITYNAME)">
+                                            <str name="CityName">
+                                              <tt:value ref="$ref.POSTALTRADEADDRESS.CITYNAME"/>
+                                            </str>
+                                          </tt:cond>
+                                        </tt:cond>
+                                        <tt:cond frq="?">
+                                          <tt:cond check="not-initial($ref.POSTALTRADEADDRESS.CITYSUBDIVISIONNAME)">
+                                            <str name="CitySubDivisionName">
+                                              <tt:value ref="$ref.POSTALTRADEADDRESS.CITYSUBDIVISIONNAME"/>
+                                            </str>
+                                          </tt:cond>
+                                        </tt:cond>
+                                        <tt:cond frq="?">
+                                          <tt:cond check="not-initial($ref.POSTALTRADEADDRESS.COUNTRYID)">
+                                            <object name="CountryID">
+                                              <tt:group>
+
+                                                <tt:cond frq="?">
+                                                  <tt:cond check="not-initial($ref.POSTALTRADEADDRESS.COUNTRYID.SCHEMEID)">
+                                                    <str name="schemeID">
+                                                      <tt:value ref="$ref.POSTALTRADEADDRESS.COUNTRYID.SCHEMEID"/>
+                                                    </str>
+                                                  </tt:cond>
+                                                </tt:cond>
+                                                <tt:cond frq="?">
+                                                  <tt:cond check="not-initial($ref.POSTALTRADEADDRESS.COUNTRYID.VALUE)">
+                                                    <str name="value">
+                                                      <tt:value ref="$ref.POSTALTRADEADDRESS.COUNTRYID.VALUE"/>
+                                                    </str>
+                                                  </tt:cond>
+                                                </tt:cond>
+
+                                              </tt:group>
+                                            </object>
+                                          </tt:cond>
+                                        </tt:cond>
+                                        <tt:cond frq="?">
+                                          <tt:cond check="not-initial($ref.POSTALTRADEADDRESS.COUNTRYSUBDIVISIONID)">
+                                            <str name="CountrySubDivisionID">
+                                              <tt:value ref="$ref.POSTALTRADEADDRESS.COUNTRYSUBDIVISIONID"/>
+                                            </str>
+                                          </tt:cond>
+                                        </tt:cond>
+                                        <tt:cond frq="?">
+                                          <tt:cond check="not-initial($ref.POSTALTRADEADDRESS.BUILDINGNUMBER)">
+                                            <str name="BuildingNumber">
+                                              <tt:value ref="$ref.POSTALTRADEADDRESS.BUILDINGNUMBER"/>
+                                            </str>
+                                          </tt:cond>
+                                        </tt:cond>
+
+                                      </tt:group>
+                                    </object>
+                                  </tt:cond>
+                                </tt:cond>
+
+                              </tt:group>
+                            </object>
+                          </tt:cond>
+                        </tt:cond>
+
+                        <!-- Delivery Term-->
+                        <tt:cond frq="?">
+                          <tt:cond check="not-initial(DATA.TRADE_TRANSACTION.TRADE_AGREEMENT.TRADE_DELIVERY_TERMS)">
+                            <object name="ApplicableTradeDeliveryTerms">
+                              <tt:group>
+
+                                <tt:cond frq="?">
+                                  <tt:cond check="not-initial(DATA.TRADE_TRANSACTION.TRADE_AGREEMENT.TRADE_DELIVERY_TERMS.DELIVERYTYPECODE)">
+                                    <str name="DeliveryTypeCode">
+                                      <tt:value ref="DATA.TRADE_TRANSACTION.TRADE_AGREEMENT.TRADE_DELIVERY_TERMS.DELIVERYTYPECODE"/>
+                                    </str>
+                                  </tt:cond>
+                                </tt:cond>
+
+                              </tt:group>
+                            </object>
+                          </tt:cond>
+                        </tt:cond>
+
+                        <!-- Buyer Order Reference-->
+                        <tt:cond frq="?">
+                          <tt:cond check="not-initial(DATA.TRADE_TRANSACTION.TRADE_AGREEMENT.BUYER_ORDERREF_DOCUMENT)">
+                            <object name="BuyerOrderReferencedDocument" tt:ref="DATA.TRADE_TRANSACTION.TRADE_AGREEMENT.BUYER_ORDERREF_DOCUMENT">
+                              <tt:group>
+
+                                <tt:cond frq="?">
+                                  <tt:cond check="not-initial($ref.ISSUERASSIGNEDID)">
+                                    <str name="IssuerAssignedID">
+                                      <tt:value ref="$ref.ISSUERASSIGNEDID"/>
+                                    </str>
+                                  </tt:cond>
+                                </tt:cond>
+                                <tt:cond frq="?">
+                                  <tt:cond check="not-initial($ref.ISSUEDATETIME)">
+                                    <str name="IssueDateTime">
+                                      <tt:value ref="$ref.ISSUEDATETIME"/>
+                                    </str>
+                                  </tt:cond>
+                                </tt:cond>
+                                <tt:cond frq="?">
+                                  <tt:cond check="not-initial($ref.REFERENCETYPECODE)">
+                                    <str name="ReferenceTypeCode">
+                                      <tt:value ref="$ref.REFERENCETYPECODE"/>
+                                    </str>
+                                  </tt:cond>
+                                </tt:cond>
+
+                              </tt:group>
+                            </object>
+                          </tt:cond>
+                        </tt:cond>
+
+                        <!-- Additional Order Reference-->
+                        <tt:cond frq="?">
+                          <tt:cond check="not-initial(DATA.TRADE_TRANSACTION.TRADE_AGREEMENT.ADDITIONAL_REF_DOCUMENT)">
+                            <array name="AdditionalReferencedDocument" tt:ref="DATA.TRADE_TRANSACTION.TRADE_AGREEMENT.ADDITIONAL_REF_DOCUMENT">
+                              <object>
+                                <tt:group>
+
+                                  <tt:cond frq="?">
+                                    <tt:cond check="not-initial($ref.ISSUERASSIGNEDID)">
+                                      <str name="IssuerAssignedID">
+                                        <tt:value ref="$ref.ISSUERASSIGNEDID"/>
+                                      </str>
+                                    </tt:cond>
+                                  </tt:cond>
+                                  <tt:cond frq="?">
+                                    <tt:cond check="not-initial($ref.ISSUEDATETIME)">
+                                      <str name="IssueDateTime">
+                                        <tt:value ref="$ref.ISSUEDATETIME"/>
+                                      </str>
+                                    </tt:cond>
+                                  </tt:cond>
+                                  <tt:cond frq="?">
+                                    <tt:cond check="not-initial($ref.REFERENCETYPECODE)">
+                                      <str name="ReferenceTypeCode">
+                                        <tt:value ref="$ref.REFERENCETYPECODE"/>
+                                      </str>
+                                    </tt:cond>
+                                  </tt:cond>
+
+                                </tt:group>
+                              </object>
+                            </array>
+                          </tt:cond>
+                        </tt:cond>
+
+                      </tt:group>
+                    </object>
+                  </tt:cond>
+                  <!--End of Trade Agreement-->
+
+                  <!-- Trade Delivery-->
+                  <tt:cond frq="1">
+                    <tt:cond check="initial(DATA.TRADE_TRANSACTION.TRADE_DELIVERY)">
+                      <null name="ApplicableHeaderTradeDelivery"/>
+                    </tt:cond>
+                    <tt:cond check="not-initial(DATA.TRADE_TRANSACTION.TRADE_DELIVERY)">
+                      <object name="ApplicableHeaderTradeDelivery">
+                        <tt:group>
+
+                          <!-- Shipto Partner-->
+                          <tt:cond frq="?">
+                            <tt:cond check="not-initial(DATA.TRADE_TRANSACTION.TRADE_DELIVERY.SHIPTO_TRADEPARTY)">
+                              <object name="ShipToTradeParty" tt:ref="DATA.TRADE_TRANSACTION.TRADE_DELIVERY.SHIPTO_TRADEPARTY">
+                                <tt:group>
+
+                                  <tt:cond frq="?">
+                                    <tt:cond check="not-initial($ref.ID)">
+                                      <array name="ID">
+                                        <tt:loop name="id" ref="$ref.ID">
+                                          <str>
+                                            <tt:value ref="$id"/>
+                                          </str>
+                                        </tt:loop>
+                                      </array>
+                                    </tt:cond>
+                                  </tt:cond>
+                                  <tt:cond frq="?">
+                                    <tt:cond check="not-initial($ref.GLOBALID)">
+                                      <array name="GlobalID">
+                                        <tt:loop name="globalid" ref="$ref.GLOBALID">
+                                          <str>
+                                            <tt:value ref="$globalid"/>
+                                          </str>
+                                        </tt:loop>
+                                      </array>
+                                    </tt:cond>
+                                  </tt:cond>
+                                  <tt:cond frq="?">
+                                    <tt:cond check="not-initial($ref.NAME)">
+                                      <str name="Name">
+                                        <tt:value ref="$ref.NAME"/>
+                                      </str>
+                                    </tt:cond>
+                                  </tt:cond>
+                                  <tt:cond frq="?">
+                                    <tt:cond check="not-initial($ref.TAX_REGISTRATION)">
+                                      <object name="SpecifiedTaxRegistration">
+                                        <object name="ID">
+                                          <tt:group>
+
+                                            <tt:cond frq="?">
+                                              <tt:cond check="not-initial($ref.TAX_REGISTRATION.ID.VALUE)">
+                                                <str name="value">
+                                                  <tt:value ref="$ref.TAX_REGISTRATION.ID.VALUE"/>
+                                                </str>
+                                              </tt:cond>
+                                            </tt:cond>
+
+                                            <tt:cond frq="?">
+                                              <tt:cond check="not-initial($ref.TAX_REGISTRATION.ID.SCHEMEID)">
+                                                <str name="schemeID">
+                                                  <tt:value ref="$ref.TAX_REGISTRATION.ID.SCHEMEID"/>
+                                                </str>
+                                              </tt:cond>
+                                            </tt:cond>
+
+                                          </tt:group>
+
+                                        </object>
+                                      </object>
+                                    </tt:cond>
+                                  </tt:cond>
+
+                                  <tt:cond frq="?">
+                                    <tt:cond check="not-initial($ref.POSTALTRADEADDRESS)">
+                                      <object name="PostalTradeAddress">
+                                        <tt:group>
+
+                                          <tt:cond frq="?">
+                                            <tt:cond check="not-initial($ref.POSTALTRADEADDRESS.POSTCODECODE)">
+                                              <str name="PostcodeCode">
+                                                <tt:value ref="$ref.POSTALTRADEADDRESS.POSTCODECODE"/>
+                                              </str>
+                                            </tt:cond>
+                                          </tt:cond>
+                                          <tt:cond frq="?">
+                                            <tt:cond check="not-initial($ref.POSTALTRADEADDRESS.BUILDINGNAME)">
+                                              <str name="BuildingName">
+                                                <tt:value ref="$ref.POSTALTRADEADDRESS.BUILDINGNAME"/>
+                                              </str>
+                                            </tt:cond>
+                                          </tt:cond>
+                                          <tt:cond frq="?">
+                                            <tt:cond check="not-initial($ref.POSTALTRADEADDRESS.LINEONE)">
+                                              <str name="LineOne">
+                                                <tt:value ref="$ref.POSTALTRADEADDRESS.LINEONE"/>
+                                              </str>
+                                            </tt:cond>
+                                          </tt:cond>
+                                          <tt:cond frq="?">
+                                            <tt:cond check="not-initial($ref.POSTALTRADEADDRESS.LINETWO)">
+                                              <str name="LineTwo">
+                                                <tt:value ref="$ref.POSTALTRADEADDRESS.LINETWO"/>
+                                              </str>
+                                            </tt:cond>
+                                          </tt:cond>
+                                          <tt:cond frq="?">
+                                            <tt:cond check="not-initial($ref.POSTALTRADEADDRESS.LINETHREE)">
+                                              <str name="LineThree">
+                                                <tt:value ref="$ref.POSTALTRADEADDRESS.LINETHREE"/>
+                                              </str>
+                                            </tt:cond>
+                                          </tt:cond>
+                                          <tt:cond frq="?">
+                                            <tt:cond check="not-initial($ref.POSTALTRADEADDRESS.LINEFOUR)">
+                                              <str name="LineFour">
+                                                <tt:value ref="$ref.POSTALTRADEADDRESS.LINEFOUR"/>
+                                              </str>
+                                            </tt:cond>
+                                          </tt:cond>
+                                          <tt:cond frq="?">
+                                            <tt:cond check="not-initial($ref.POSTALTRADEADDRESS.LINEFIVE)">
+                                              <str name="LineFive">
+                                                <tt:value ref="$ref.POSTALTRADEADDRESS.LINEFIVE"/>
+                                              </str>
+                                            </tt:cond>
+                                          </tt:cond>
+                                          <tt:cond frq="?">
+                                            <tt:cond check="not-initial($ref.POSTALTRADEADDRESS.STREETNAME)">
+                                              <str name="StreetName">
+                                                <tt:value ref="$ref.POSTALTRADEADDRESS.STREETNAME"/>
+                                              </str>
+                                            </tt:cond>
+                                          </tt:cond>
+                                          <tt:cond frq="?">
+                                            <tt:cond check="not-initial($ref.POSTALTRADEADDRESS.CITYNAME)">
+                                              <str name="CityName">
+                                                <tt:value ref="$ref.POSTALTRADEADDRESS.CITYNAME"/>
+                                              </str>
+                                            </tt:cond>
+                                          </tt:cond>
+                                          <tt:cond frq="?">
+                                            <tt:cond check="not-initial($ref.POSTALTRADEADDRESS.CITYSUBDIVISIONNAME)">
+                                              <str name="CitySubDivisionName">
+                                                <tt:value ref="$ref.POSTALTRADEADDRESS.CITYSUBDIVISIONNAME"/>
+                                              </str>
+                                            </tt:cond>
+                                          </tt:cond>
+                                          <tt:cond frq="?">
+                                            <tt:cond check="not-initial($ref.POSTALTRADEADDRESS.COUNTRYID)">
+                                              <object name="CountryID">
+                                                <tt:group>
+
+                                                  <tt:cond frq="?">
+                                                    <tt:cond check="not-initial($ref.POSTALTRADEADDRESS.COUNTRYID.SCHEMEID)">
+                                                      <str name="schemeID">
+                                                        <tt:value ref="$ref.POSTALTRADEADDRESS.COUNTRYID.SCHEMEID"/>
+                                                      </str>
+                                                    </tt:cond>
+                                                  </tt:cond>
+                                                  <tt:cond frq="?">
+                                                    <tt:cond check="not-initial($ref.POSTALTRADEADDRESS.COUNTRYID.VALUE)">
+                                                      <str name="value">
+                                                        <tt:value ref="$ref.POSTALTRADEADDRESS.COUNTRYID.VALUE"/>
+                                                      </str>
+                                                    </tt:cond>
+                                                  </tt:cond>
+
+                                                </tt:group>
+                                              </object>
+                                            </tt:cond>
+                                          </tt:cond>
+                                          <tt:cond frq="?">
+                                            <tt:cond check="not-initial($ref.POSTALTRADEADDRESS.COUNTRYSUBDIVISIONID)">
+                                              <str name="CountrySubDivisionID">
+                                                <tt:value ref="$ref.POSTALTRADEADDRESS.COUNTRYSUBDIVISIONID"/>
+                                              </str>
+                                            </tt:cond>
+                                          </tt:cond>
+                                          <tt:cond frq="?">
+                                            <tt:cond check="not-initial($ref.POSTALTRADEADDRESS.BUILDINGNUMBER)">
+                                              <str name="BuildingNumber">
+                                                <tt:value ref="$ref.POSTALTRADEADDRESS.BUILDINGNUMBER"/>
+                                              </str>
+                                            </tt:cond>
+                                          </tt:cond>
+
+                                        </tt:group>
+                                      </object>
+                                    </tt:cond>
+                                  </tt:cond>
+
+                                </tt:group>
+                              </object>
+                            </tt:cond>
+                          </tt:cond>
+
+                          <!-- Shipfrom Partner-->
+                          <tt:cond frq="?">
+                            <tt:cond check="not-initial(DATA.TRADE_TRANSACTION.TRADE_DELIVERY.SHIPFROM_TRADEPARTY)">
+                              <object name="ShipFromTradeParty" tt:ref="DATA.TRADE_TRANSACTION.TRADE_DELIVERY.SHIPFROM_TRADEPARTY">
+                                <tt:group>
+
+                                  <tt:cond frq="?">
+                                    <tt:cond check="not-initial($ref.ID)">
+                                      <array name="ID">
+                                        <tt:loop name="id" ref="$ref.ID">
+                                          <str>
+                                            <tt:value ref="$id"/>
+                                          </str>
+                                        </tt:loop>
+                                      </array>
+                                    </tt:cond>
+                                  </tt:cond>
+                                  <tt:cond frq="?">
+                                    <tt:cond check="not-initial($ref.GLOBALID)">
+                                      <array name="GlobalID">
+                                        <tt:loop name="globalid" ref="$ref.GLOBALID">
+                                          <str>
+                                            <tt:value ref="$globalid"/>
+                                          </str>
+                                        </tt:loop>
+                                      </array>
+                                    </tt:cond>
+                                  </tt:cond>
+                                  <tt:cond frq="?">
+                                    <tt:cond check="not-initial($ref.NAME)">
+                                      <str name="Name">
+                                        <tt:value ref="$ref.NAME"/>
+                                      </str>
+                                    </tt:cond>
+                                  </tt:cond>
+                                  <tt:cond frq="?">
+                                    <tt:cond check="not-initial($ref.TAX_REGISTRATION)">
+                                      <object name="SpecifiedTaxRegistration">
+                                        <object name="ID">
+                                          <tt:group>
+
+                                            <tt:cond frq="?">
+                                              <tt:cond check="not-initial($ref.TAX_REGISTRATION.ID.VALUE)">
+                                                <str name="value">
+                                                  <tt:value ref="$ref.TAX_REGISTRATION.ID.VALUE"/>
+                                                </str>
+                                              </tt:cond>
+                                            </tt:cond>
+
+                                            <tt:cond frq="?">
+                                              <tt:cond check="not-initial($ref.TAX_REGISTRATION.ID.SCHEMEID)">
+                                                <str name="schemeID">
+                                                  <tt:value ref="$ref.TAX_REGISTRATION.ID.SCHEMEID"/>
+                                                </str>
+                                              </tt:cond>
+                                            </tt:cond>
+
+                                          </tt:group>
+
+                                        </object>
+                                      </object>
+                                    </tt:cond>
+                                  </tt:cond>
+
+                                  <tt:cond frq="?">
+                                    <tt:cond check="not-initial($ref.POSTALTRADEADDRESS)">
+                                      <object name="PostalTradeAddress">
+                                        <tt:group>
+
+                                          <tt:cond frq="?">
+                                            <tt:cond check="not-initial($ref.POSTALTRADEADDRESS.POSTCODECODE)">
+                                              <str name="PostcodeCode">
+                                                <tt:value ref="$ref.POSTALTRADEADDRESS.POSTCODECODE"/>
+                                              </str>
+                                            </tt:cond>
+                                          </tt:cond>
+                                          <tt:cond frq="?">
+                                            <tt:cond check="not-initial($ref.POSTALTRADEADDRESS.BUILDINGNAME)">
+                                              <str name="BuildingName">
+                                                <tt:value ref="$ref.POSTALTRADEADDRESS.BUILDINGNAME"/>
+                                              </str>
+                                            </tt:cond>
+                                          </tt:cond>
+                                          <tt:cond frq="?">
+                                            <tt:cond check="not-initial($ref.POSTALTRADEADDRESS.LINEONE)">
+                                              <str name="LineOne">
+                                                <tt:value ref="$ref.POSTALTRADEADDRESS.LINEONE"/>
+                                              </str>
+                                            </tt:cond>
+                                          </tt:cond>
+                                          <tt:cond frq="?">
+                                            <tt:cond check="not-initial($ref.POSTALTRADEADDRESS.LINETWO)">
+                                              <str name="LineTwo">
+                                                <tt:value ref="$ref.POSTALTRADEADDRESS.LINETWO"/>
+                                              </str>
+                                            </tt:cond>
+                                          </tt:cond>
+                                          <tt:cond frq="?">
+                                            <tt:cond check="not-initial($ref.POSTALTRADEADDRESS.LINETHREE)">
+                                              <str name="LineThree">
+                                                <tt:value ref="$ref.POSTALTRADEADDRESS.LINETHREE"/>
+                                              </str>
+                                            </tt:cond>
+                                          </tt:cond>
+                                          <tt:cond frq="?">
+                                            <tt:cond check="not-initial($ref.POSTALTRADEADDRESS.LINEFOUR)">
+                                              <str name="LineFour">
+                                                <tt:value ref="$ref.POSTALTRADEADDRESS.LINEFOUR"/>
+                                              </str>
+                                            </tt:cond>
+                                          </tt:cond>
+                                          <tt:cond frq="?">
+                                            <tt:cond check="not-initial($ref.POSTALTRADEADDRESS.LINEFIVE)">
+                                              <str name="LineFive">
+                                                <tt:value ref="$ref.POSTALTRADEADDRESS.LINEFIVE"/>
+                                              </str>
+                                            </tt:cond>
+                                          </tt:cond>
+                                          <tt:cond frq="?">
+                                            <tt:cond check="not-initial($ref.POSTALTRADEADDRESS.STREETNAME)">
+                                              <str name="StreetName">
+                                                <tt:value ref="$ref.POSTALTRADEADDRESS.STREETNAME"/>
+                                              </str>
+                                            </tt:cond>
+                                          </tt:cond>
+                                          <tt:cond frq="?">
+                                            <tt:cond check="not-initial($ref.POSTALTRADEADDRESS.CITYNAME)">
+                                              <str name="CityName">
+                                                <tt:value ref="$ref.POSTALTRADEADDRESS.CITYNAME"/>
+                                              </str>
+                                            </tt:cond>
+                                          </tt:cond>
+                                          <tt:cond frq="?">
+                                            <tt:cond check="not-initial($ref.POSTALTRADEADDRESS.CITYSUBDIVISIONNAME)">
+                                              <str name="CitySubDivisionName">
+                                                <tt:value ref="$ref.POSTALTRADEADDRESS.CITYSUBDIVISIONNAME"/>
+                                              </str>
+                                            </tt:cond>
+                                          </tt:cond>
+                                          <tt:cond frq="?">
+                                            <tt:cond check="not-initial($ref.POSTALTRADEADDRESS.COUNTRYID)">
+                                              <object name="CountryID">
+                                                <tt:group>
+
+                                                  <tt:cond frq="?">
+                                                    <tt:cond check="not-initial($ref.POSTALTRADEADDRESS.COUNTRYID.SCHEMEID)">
+                                                      <str name="schemeID">
+                                                        <tt:value ref="$ref.POSTALTRADEADDRESS.COUNTRYID.SCHEMEID"/>
+                                                      </str>
+                                                    </tt:cond>
+                                                  </tt:cond>
+                                                  <tt:cond frq="?">
+                                                    <tt:cond check="not-initial($ref.POSTALTRADEADDRESS.COUNTRYID.VALUE)">
+                                                      <str name="value">
+                                                        <tt:value ref="$ref.POSTALTRADEADDRESS.COUNTRYID.VALUE"/>
+                                                      </str>
+                                                    </tt:cond>
+                                                  </tt:cond>
+
+                                                </tt:group>
+                                              </object>
+                                            </tt:cond>
+                                          </tt:cond>
+                                          <tt:cond frq="?">
+                                            <tt:cond check="not-initial($ref.POSTALTRADEADDRESS.COUNTRYSUBDIVISIONID)">
+                                              <str name="CountrySubDivisionID">
+                                                <tt:value ref="$ref.POSTALTRADEADDRESS.COUNTRYSUBDIVISIONID"/>
+                                              </str>
+                                            </tt:cond>
+                                          </tt:cond>
+                                          <tt:cond frq="?">
+                                            <tt:cond check="not-initial($ref.POSTALTRADEADDRESS.BUILDINGNUMBER)">
+                                              <str name="BuildingNumber">
+                                                <tt:value ref="$ref.POSTALTRADEADDRESS.BUILDINGNUMBER"/>
+                                              </str>
+                                            </tt:cond>
+                                          </tt:cond>
+
+                                        </tt:group>
+                                      </object>
+                                    </tt:cond>
+                                  </tt:cond>
+
+                                </tt:group>
+                              </object>
+                            </tt:cond>
+                          </tt:cond>
+
+                        </tt:group>
+                      </object>
+                    </tt:cond>
+                  </tt:cond>
+                  <!--End of Trade Delivery-->
+
+                  <!-- Trade Settlement-->
+                  <tt:cond frq="1">
+                    <object name="ApplicableHeaderTradeSettlement">
+                      <tt:group>
+
+                        <tt:cond frq="?">
+                          <tt:cond check="not-initial(DATA.TRADE_TRANSACTION.TRADE_SETTLEMENT.INVOICE_CURRENCYCODE)">
+                            <object name="InvoiceCurrencyCode" tt:ref="DATA.TRADE_TRANSACTION.TRADE_SETTLEMENT.INVOICE_CURRENCYCODE">
+                              <tt:group>
+
+                                <tt:cond frq="?">
+                                  <tt:cond check="not-initial($ref.LISTID)">
+                                    <str name="listID">
+                                      <tt:value ref="$ref.LISTID"/>
+                                    </str>
+                                  </tt:cond>
+                                </tt:cond>
+                                <tt:cond frq="?">
+                                  <tt:cond check="not-initial($ref.LISTAGENCYID)">
+                                    <str name="listAgencyID">
+                                      <tt:value ref="$ref.LISTAGENCYID"/>
+                                    </str>
+                                  </tt:cond>
+                                </tt:cond>
+                                <tt:cond frq="?">
+                                  <tt:cond check="not-initial($ref.LISTVERSIONID)">
+                                    <str name="listVersionID">
+                                      <tt:value ref="$ref.LISTVERSIONID"/>
+                                    </str>
+                                  </tt:cond>
+                                </tt:cond>
+                                <tt:cond frq="?">
+                                  <tt:cond check="not-initial($ref.LISTURI)">
+                                    <str name="listURI">
+                                      <tt:value ref="$ref.LISTURI"/>
+                                    </str>
+                                  </tt:cond>
+                                </tt:cond>
+                                <tt:cond frq="?">
+                                  <tt:cond check="not-initial($ref.VALUE)">
+                                    <str name="value">
+                                      <tt:value ref="$ref.VALUE"/>
+                                    </str>
+                                  </tt:cond>
+                                </tt:cond>
+
+                              </tt:group>
+                            </object>
+                          </tt:cond>
+                        </tt:cond>
+
+                        <tt:cond frq="?">
+                          <tt:cond check="not-initial(DATA.TRADE_TRANSACTION.TRADE_SETTLEMENT.TRADE_TAX)">
+                            <array name="ApplicableTradeTax">
+                              <tt:loop name="tradetax" ref="DATA.TRADE_TRANSACTION.TRADE_SETTLEMENT.TRADE_TAX">
+                                <object>
+                                  <tt:group>
+                                    <tt:cond frq="?">
+                                      <tt:cond check="not-initial($ref.TYPECODE)">
+                                        <str name="TypeCode">
+                                          <tt:value ref="$ref.TYPECODE"/>
+                                        </str>
+                                      </tt:cond>
+                                    </tt:cond>
+                                    <tt:cond frq="?">
+                                      <tt:cond check="not-initial($ref.CALCULATEDRATE)">
+                                        <str name="CalculatedRate">
+                                          <tt:value ref="$ref.CALCULATEDRATE"/>
+                                        </str>
+                                      </tt:cond>
+                                    </tt:cond>
+                                    <tt:cond frq="?">
+                                      <tt:cond check="not-initial($ref.BASISAMOUNT)">
+                                        <array name="BasisAmount">
+                                          <tt:loop name="amount" ref="$ref.BASISAMOUNT">
+                                            <str>
+                                              <tt:value ref="$amount"/>
+                                            </str>
+                                          </tt:loop>
+                                        </array>
+                                      </tt:cond>
+                                    </tt:cond>
+                                    <tt:cond frq="?">
+                                      <tt:cond check="not-initial($ref.CALCULATEDAMOUNT)">
+                                        <array name="CalculatedAmount">
+                                          <tt:loop name="amount" ref="$ref.CALCULATEDAMOUNT">
+                                            <str>
+                                              <tt:value ref="$amount"/>
+                                            </str>
+                                          </tt:loop>
+                                        </array>
+                                      </tt:cond>
+                                    </tt:cond>
+
+                                  </tt:group>
+                                </object>
+                              </tt:loop>
+
+
+                            </array>
+                          </tt:cond>
+                        </tt:cond>
+
+                        <!-- Trade Allowance Charge -->
+                        <tt:cond frq="?">
+                          <tt:cond check="not-initial(DATA.TRADE_TRANSACTION.TRADE_SETTLEMENT.TRADE_ALLOWANCE_CHARGE)">
+                            <array name="SpecifiedTradeAllowanceCharge">
+                              <tt:loop name="allowance" ref="DATA.TRADE_TRANSACTION.TRADE_SETTLEMENT.TRADE_ALLOWANCE_CHARGE">
+                                <object>
+                                  <tt:group>
+
+                                    <tt:cond frq="?">
+                                      <bool name="ChargeIndicator">
+                                        <tt:value ref="$allowance.CHARGEINDICATOR"/>
+                                      </bool>
+                                    </tt:cond>
+                                    <tt:cond frq="?">
+                                      <tt:cond check="not-initial($allowance.ACTUALAMOUNT)">
+                                        <array name="ActualAmount">
+                                          <tt:loop name="amount" ref="$allowance.ACTUALAMOUNT">
+                                            <str>
+                                              <tt:value ref="$amount"/>
+                                            </str>
+                                          </tt:loop>
+                                        </array>
+                                      </tt:cond>
+                                    </tt:cond>
+
+                                  </tt:group>
+                                </object>
+                              </tt:loop>
+                            </array>
+                          </tt:cond>
+                        </tt:cond>
+                        <!--End of Trade Allowance Charge-->
+
+                        <!-- Trade Payment Term -->
+                        <tt:cond frq="?">
+                          <tt:cond check="not-initial(DATA.TRADE_TRANSACTION.TRADE_SETTLEMENT.TRADE_PAYMENT_TERMS)">
+                            <array name="SpecifiedTradePaymentTerms">
+                              <tt:loop name="paymentterm" ref="DATA.TRADE_TRANSACTION.TRADE_SETTLEMENT.TRADE_PAYMENT_TERMS">
+                                <object>
+                                  <tt:group>
+
+                                    <tt:cond frq="?">
+                                      <str name="TypeCode">
+                                        <tt:value ref="$paymentterm.TYPECODE"/>
+                                      </str>
+                                    </tt:cond>
+                                    <tt:cond frq="?">
+                                      <tt:cond check="not-initial($paymentterm.DESCRIPTION)">
+                                        <array name="Description">
+                                          <tt:loop name="description" ref="$paymentterm.DESCRIPTION">
+                                            <str>
+                                              <tt:value ref="$description"/>
+                                            </str>
+                                          </tt:loop>
+                                        </array>
+                                      </tt:cond>
+                                    </tt:cond>
+                                    <tt:cond frq="?">
+                                      <tt:cond check="not-initial($paymentterm.DUEDATETIME)">
+                                        <str name="DueDateTime">
+                                          <tt:value ref="$paymentterm.DUEDATETIME"/>
+                                        </str>
+                                      </tt:cond>
+                                    </tt:cond>
+
+                                  </tt:group>
+                                </object>
+                              </tt:loop>
+                            </array>
+                          </tt:cond>
+                        </tt:cond>
+                        <!--End of Trade Payment Term-->
+
+                        <!-- Trade Settlement Header -->
+                        <tt:cond frq="?">
+                          <tt:cond check="not-initial(DATA.TRADE_TRANSACTION.TRADE_SETTLEMENT.TRADE_SETTLEMENT_HEADER)">
+                            <object name="specifiedTradeSettlementHeaderMonetarySummation">
+                              <tt:group>
+
+                                <tt:cond frq="?">
+                                  <tt:cond check="not-initial(DATA.TRADE_TRANSACTION.TRADE_SETTLEMENT.TRADE_SETTLEMENT_HEADER.ORIGINAL_AMOUNT)">
+                                    <array name="OriginalInformationAmount">
+                                      <tt:loop name="amount" ref="DATA.TRADE_TRANSACTION.TRADE_SETTLEMENT.TRADE_SETTLEMENT_HEADER.ORIGINAL_AMOUNT">
+                                        <object>
+                                          <tt:group>
+
+                                            <tt:cond frq="?">
+                                              <tt:cond check="not-initial($amount.CURRENCYID)">
+                                                <str name="currencyID">
+                                                  <tt:value ref="$amount.CURRENCYID"/>
+                                                </str>
+                                              </tt:cond>
+                                            </tt:cond>
+                                            <tt:cond frq="?">
+                                              <tt:cond check="not-initial($amount.VALUE)">
+                                                <str name="value">
+                                                  <tt:value ref="$amount.VALUE"/>
+                                                </str>
+                                              </tt:cond>
+                                            </tt:cond>
+
+                                          </tt:group>
+                                        </object>
+                                      </tt:loop>
+                                    </array>
+                                  </tt:cond>
+                                </tt:cond>
+
+                                <tt:cond frq="?">
+                                  <tt:cond check="not-initial(DATA.TRADE_TRANSACTION.TRADE_SETTLEMENT.TRADE_SETTLEMENT_HEADER.LINETOTAL_AMOUNT)">
+                                    <array name="LineTotalAmount">
+                                      <tt:loop name="amount" ref="DATA.TRADE_TRANSACTION.TRADE_SETTLEMENT.TRADE_SETTLEMENT_HEADER.LINETOTAL_AMOUNT">
+                                        <object>
+                                          <tt:group>
+
+                                            <tt:cond frq="?">
+                                              <tt:cond check="not-initial($amount.CURRENCYID)">
+                                                <str name="currencyID">
+                                                  <tt:value ref="$amount.CURRENCYID"/>
+                                                </str>
+                                              </tt:cond>
+                                            </tt:cond>
+                                            <tt:cond frq="?">
+                                              <tt:cond check="not-initial($amount.VALUE)">
+                                                <str name="value">
+                                                  <tt:value ref="$amount.VALUE"/>
+                                                </str>
+                                              </tt:cond>
+                                            </tt:cond>
+
+                                          </tt:group>
+                                        </object>
+                                      </tt:loop>
+                                    </array>
+                                  </tt:cond>
+                                </tt:cond>
+
+                                <tt:cond frq="?">
+                                  <tt:cond check="not-initial(DATA.TRADE_TRANSACTION.TRADE_SETTLEMENT.TRADE_SETTLEMENT_HEADER.DIFFERENCE_AMOUNT)">
+                                    <array name="DifferenceInformationAmount">
+                                      <tt:loop name="amount" ref="DATA.TRADE_TRANSACTION.TRADE_SETTLEMENT.TRADE_SETTLEMENT_HEADER.DIFFERENCE_AMOUNT">
+                                        <object>
+                                          <tt:group>
+
+                                            <tt:cond frq="?">
+                                              <tt:cond check="not-initial($amount.CURRENCYID)">
+                                                <str name="currencyID">
+                                                  <tt:value ref="$amount.CURRENCYID"/>
+                                                </str>
+                                              </tt:cond>
+                                            </tt:cond>
+                                            <tt:cond frq="?">
+                                              <tt:cond check="not-initial($amount.VALUE)">
+                                                <str name="value">
+                                                  <tt:value ref="$amount.VALUE"/>
+                                                </str>
+                                              </tt:cond>
+                                            </tt:cond>
+
+                                          </tt:group>
+                                        </object>
+                                      </tt:loop>
+                                    </array>
+                                  </tt:cond>
+                                </tt:cond>
+
+                                <tt:cond frq="?">
+                                  <tt:cond check="not-initial(DATA.TRADE_TRANSACTION.TRADE_SETTLEMENT.TRADE_SETTLEMENT_HEADER.ALLOWANCETOTAL_AMOUNT)">
+                                    <array name="AllowanceTotalAmount">
+                                      <tt:loop name="amount" ref="DATA.TRADE_TRANSACTION.TRADE_SETTLEMENT.TRADE_SETTLEMENT_HEADER.ALLOWANCETOTAL_AMOUNT">
+                                        <object>
+                                          <tt:group>
+
+                                            <tt:cond frq="?">
+                                              <tt:cond check="not-initial($amount.CURRENCYID)">
+                                                <str name="currencyID">
+                                                  <tt:value ref="$amount.CURRENCYID"/>
+                                                </str>
+                                              </tt:cond>
+                                            </tt:cond>
+                                            <tt:cond frq="?">
+                                              <tt:cond check="not-initial($amount.VALUE)">
+                                                <str name="value">
+                                                  <tt:value ref="$amount.VALUE"/>
+                                                </str>
+                                              </tt:cond>
+                                            </tt:cond>
+
+                                          </tt:group>
+                                        </object>
+                                      </tt:loop>
+                                    </array>
+                                  </tt:cond>
+                                </tt:cond>
+
+                                <tt:cond frq="?">
+                                  <tt:cond check="not-initial(DATA.TRADE_TRANSACTION.TRADE_SETTLEMENT.TRADE_SETTLEMENT_HEADER.CHARGETOTAL_AMOUNT)">
+                                    <array name="ChargeTotalAmount">
+                                      <tt:loop name="amount" ref="DATA.TRADE_TRANSACTION.TRADE_SETTLEMENT.TRADE_SETTLEMENT_HEADER.CHARGETOTAL_AMOUNT">
+                                        <object>
+                                          <tt:group>
+
+                                            <tt:cond frq="?">
+                                              <tt:cond check="not-initial($amount.CURRENCYID)">
+                                                <str name="currencyID">
+                                                  <tt:value ref="$amount.CURRENCYID"/>
+                                                </str>
+                                              </tt:cond>
+                                            </tt:cond>
+                                            <tt:cond frq="?">
+                                              <tt:cond check="not-initial($amount.VALUE)">
+                                                <str name="value">
+                                                  <tt:value ref="$amount.VALUE"/>
+                                                </str>
+                                              </tt:cond>
+                                            </tt:cond>
+
+                                          </tt:group>
+                                        </object>
+                                      </tt:loop>
+                                    </array>
+                                  </tt:cond>
+                                </tt:cond>
+
+                                <tt:cond frq="?">
+                                  <tt:cond check="not-initial(DATA.TRADE_TRANSACTION.TRADE_SETTLEMENT.TRADE_SETTLEMENT_HEADER.TAXBASISTOTAL_AMOUNT)">
+                                    <array name="TaxBasisTotalAmount">
+                                      <tt:loop name="amount" ref="DATA.TRADE_TRANSACTION.TRADE_SETTLEMENT.TRADE_SETTLEMENT_HEADER.TAXBASISTOTAL_AMOUNT">
+                                        <object>
+                                          <tt:group>
+
+                                            <tt:cond frq="?">
+                                              <tt:cond check="not-initial($amount.CURRENCYID)">
+                                                <str name="currencyID">
+                                                  <tt:value ref="$amount.CURRENCYID"/>
+                                                </str>
+                                              </tt:cond>
+                                            </tt:cond>
+                                            <tt:cond frq="?">
+                                              <tt:cond check="not-initial($amount.VALUE)">
+                                                <str name="value">
+                                                  <tt:value ref="$amount.VALUE"/>
+                                                </str>
+                                              </tt:cond>
+                                            </tt:cond>
+
+                                          </tt:group>
+                                        </object>
+                                      </tt:loop>
+                                    </array>
+                                  </tt:cond>
+                                </tt:cond>
+
+                                <tt:cond frq="?">
+                                  <tt:cond check="not-initial(DATA.TRADE_TRANSACTION.TRADE_SETTLEMENT.TRADE_SETTLEMENT_HEADER.TAXTOTAL_AMOUNT)">
+                                    <array name="TaxTotalAmount">
+                                      <tt:loop name="amount" ref="DATA.TRADE_TRANSACTION.TRADE_SETTLEMENT.TRADE_SETTLEMENT_HEADER.TAXTOTAL_AMOUNT">
+                                        <object>
+                                          <tt:group>
+
+                                            <tt:cond frq="?">
+                                              <tt:cond check="not-initial($amount.CURRENCYID)">
+                                                <str name="currencyID">
+                                                  <tt:value ref="$amount.CURRENCYID"/>
+                                                </str>
+                                              </tt:cond>
+                                            </tt:cond>
+                                            <tt:cond frq="?">
+                                              <tt:cond check="not-initial($amount.VALUE)">
+                                                <str name="value">
+                                                  <tt:value ref="$amount.VALUE"/>
+                                                </str>
+                                              </tt:cond>
+                                            </tt:cond>
+
+                                          </tt:group>
+                                        </object>
+                                      </tt:loop>
+                                    </array>
+                                  </tt:cond>
+                                </tt:cond>
+
+                                <tt:cond frq="?">
+                                  <tt:cond check="not-initial(DATA.TRADE_TRANSACTION.TRADE_SETTLEMENT.TRADE_SETTLEMENT_HEADER.GRANDTOTAL_AMOUNT)">
+                                    <array name="GrandTotalAmount">
+                                      <tt:loop name="amount" ref="DATA.TRADE_TRANSACTION.TRADE_SETTLEMENT.TRADE_SETTLEMENT_HEADER.GRANDTOTAL_AMOUNT">
+                                        <object>
+                                          <tt:group>
+
+                                            <tt:cond frq="?">
+                                              <tt:cond check="not-initial($amount.CURRENCYID)">
+                                                <str name="currencyID">
+                                                  <tt:value ref="$amount.CURRENCYID"/>
+                                                </str>
+                                              </tt:cond>
+                                            </tt:cond>
+                                            <tt:cond frq="?">
+                                              <tt:cond check="not-initial($amount.VALUE)">
+                                                <str name="value">
+                                                  <tt:value ref="$amount.VALUE"/>
+                                                </str>
+                                              </tt:cond>
+                                            </tt:cond>
+
+                                          </tt:group>
+                                        </object>
+                                      </tt:loop>
+                                    </array>
+                                  </tt:cond>
+                                </tt:cond>
+
+                              </tt:group>
+                            </object>
+                          </tt:cond>
+                        </tt:cond>
+                        <!--End of Settlement Header-->
+
+                        <!-- Invoicer Partner-->
+                        <tt:cond frq="?">
+                          <tt:cond check="not-initial(DATA.TRADE_TRANSACTION.TRADE_SETTLEMENT.INVOICER_TRADEPARTY)">
+                            <object name="InvoicerTradeParty" tt:ref="DATA.TRADE_TRANSACTION.TRADE_SETTLEMENT.INVOICER_TRADEPARTY">
+                              <tt:group>
+
+                                <tt:cond frq="?">
+                                  <tt:cond check="not-initial($ref.ID)">
+                                    <array name="ID">
+                                      <tt:loop name="id" ref="$ref.ID">
+                                        <str>
+                                          <tt:value ref="$id"/>
+                                        </str>
+                                      </tt:loop>
+                                    </array>
+                                  </tt:cond>
+                                </tt:cond>
+                                <tt:cond frq="?">
+                                  <tt:cond check="not-initial($ref.GLOBALID)">
+                                    <array name="GlobalID">
+                                      <tt:loop name="globalid" ref="$ref.GLOBALID">
+                                        <str>
+                                          <tt:value ref="$globalid"/>
+                                        </str>
+                                      </tt:loop>
+                                    </array>
+                                  </tt:cond>
+                                </tt:cond>
+                                <tt:cond frq="?">
+                                  <tt:cond check="not-initial($ref.NAME)">
+                                    <str name="Name">
+                                      <tt:value ref="$ref.NAME"/>
+                                    </str>
+                                  </tt:cond>
+                                </tt:cond>
+                                <tt:cond frq="?">
+                                  <tt:cond check="not-initial($ref.TAX_REGISTRATION)">
+                                    <object name="SpecifiedTaxRegistration">
+                                      <object name="ID">
+                                        <tt:group>
+
+                                          <tt:cond frq="?">
+                                            <tt:cond check="not-initial($ref.TAX_REGISTRATION.ID.VALUE)">
+                                              <str name="value">
+                                                <tt:value ref="$ref.TAX_REGISTRATION.ID.VALUE"/>
+                                              </str>
+                                            </tt:cond>
+                                          </tt:cond>
+
+                                          <tt:cond frq="?">
+                                            <tt:cond check="not-initial($ref.TAX_REGISTRATION.ID.SCHEMEID)">
+                                              <str name="schemeID">
+                                                <tt:value ref="$ref.TAX_REGISTRATION.ID.SCHEMEID"/>
+                                              </str>
+                                            </tt:cond>
+                                          </tt:cond>
+
+                                        </tt:group>
+
+                                      </object>
+                                    </object>
+                                  </tt:cond>
+                                </tt:cond>
+
+                                <tt:cond frq="?">
+                                  <tt:cond check="not-initial($ref.POSTALTRADEADDRESS)">
+                                    <object name="PostalTradeAddress">
+                                      <tt:group>
+
+                                        <tt:cond frq="?">
+                                          <tt:cond check="not-initial($ref.POSTALTRADEADDRESS.POSTCODECODE)">
+                                            <str name="PostcodeCode">
+                                              <tt:value ref="$ref.POSTALTRADEADDRESS.POSTCODECODE"/>
+                                            </str>
+                                          </tt:cond>
+                                        </tt:cond>
+                                        <tt:cond frq="?">
+                                          <tt:cond check="not-initial($ref.POSTALTRADEADDRESS.BUILDINGNAME)">
+                                            <str name="BuildingName">
+                                              <tt:value ref="$ref.POSTALTRADEADDRESS.BUILDINGNAME"/>
+                                            </str>
+                                          </tt:cond>
+                                        </tt:cond>
+                                        <tt:cond frq="?">
+                                          <tt:cond check="not-initial($ref.POSTALTRADEADDRESS.LINEONE)">
+                                            <str name="LineOne">
+                                              <tt:value ref="$ref.POSTALTRADEADDRESS.LINEONE"/>
+                                            </str>
+                                          </tt:cond>
+                                        </tt:cond>
+                                        <tt:cond frq="?">
+                                          <tt:cond check="not-initial($ref.POSTALTRADEADDRESS.LINETWO)">
+                                            <str name="LineTwo">
+                                              <tt:value ref="$ref.POSTALTRADEADDRESS.LINETWO"/>
+                                            </str>
+                                          </tt:cond>
+                                        </tt:cond>
+                                        <tt:cond frq="?">
+                                          <tt:cond check="not-initial($ref.POSTALTRADEADDRESS.LINETHREE)">
+                                            <str name="LineThree">
+                                              <tt:value ref="$ref.POSTALTRADEADDRESS.LINETHREE"/>
+                                            </str>
+                                          </tt:cond>
+                                        </tt:cond>
+                                        <tt:cond frq="?">
+                                          <tt:cond check="not-initial($ref.POSTALTRADEADDRESS.LINEFOUR)">
+                                            <str name="LineFour">
+                                              <tt:value ref="$ref.POSTALTRADEADDRESS.LINEFOUR"/>
+                                            </str>
+                                          </tt:cond>
+                                        </tt:cond>
+                                        <tt:cond frq="?">
+                                          <tt:cond check="not-initial($ref.POSTALTRADEADDRESS.LINEFIVE)">
+                                            <str name="LineFive">
+                                              <tt:value ref="$ref.POSTALTRADEADDRESS.LINEFIVE"/>
+                                            </str>
+                                          </tt:cond>
+                                        </tt:cond>
+                                        <tt:cond frq="?">
+                                          <tt:cond check="not-initial($ref.POSTALTRADEADDRESS.STREETNAME)">
+                                            <str name="StreetName">
+                                              <tt:value ref="$ref.POSTALTRADEADDRESS.STREETNAME"/>
+                                            </str>
+                                          </tt:cond>
+                                        </tt:cond>
+                                        <tt:cond frq="?">
+                                          <tt:cond check="not-initial($ref.POSTALTRADEADDRESS.CITYNAME)">
+                                            <str name="CityName">
+                                              <tt:value ref="$ref.POSTALTRADEADDRESS.CITYNAME"/>
+                                            </str>
+                                          </tt:cond>
+                                        </tt:cond>
+                                        <tt:cond frq="?">
+                                          <tt:cond check="not-initial($ref.POSTALTRADEADDRESS.CITYSUBDIVISIONNAME)">
+                                            <str name="CitySubDivisionName">
+                                              <tt:value ref="$ref.POSTALTRADEADDRESS.CITYSUBDIVISIONNAME"/>
+                                            </str>
+                                          </tt:cond>
+                                        </tt:cond>
+                                        <tt:cond frq="?">
+                                          <tt:cond check="not-initial($ref.POSTALTRADEADDRESS.COUNTRYID)">
+                                            <object name="CountryID">
+                                              <tt:group>
+
+                                                <tt:cond frq="?">
+                                                  <tt:cond check="not-initial($ref.POSTALTRADEADDRESS.COUNTRYID.SCHEMEID)">
+                                                    <str name="schemeID">
+                                                      <tt:value ref="$ref.POSTALTRADEADDRESS.COUNTRYID.SCHEMEID"/>
+                                                    </str>
+                                                  </tt:cond>
+                                                </tt:cond>
+                                                <tt:cond frq="?">
+                                                  <tt:cond check="not-initial($ref.POSTALTRADEADDRESS.COUNTRYID.VALUE)">
+                                                    <str name="value">
+                                                      <tt:value ref="$ref.POSTALTRADEADDRESS.COUNTRYID.VALUE"/>
+                                                    </str>
+                                                  </tt:cond>
+                                                </tt:cond>
+
+                                              </tt:group>
+                                            </object>
+                                          </tt:cond>
+                                        </tt:cond>
+                                        <tt:cond frq="?">
+                                          <tt:cond check="not-initial($ref.POSTALTRADEADDRESS.COUNTRYSUBDIVISIONID)">
+                                            <str name="CountrySubDivisionID">
+                                              <tt:value ref="$ref.POSTALTRADEADDRESS.COUNTRYSUBDIVISIONID"/>
+                                            </str>
+                                          </tt:cond>
+                                        </tt:cond>
+                                        <tt:cond frq="?">
+                                          <tt:cond check="not-initial($ref.POSTALTRADEADDRESS.BUILDINGNUMBER)">
+                                            <str name="BuildingNumber">
+                                              <tt:value ref="$ref.POSTALTRADEADDRESS.BUILDINGNUMBER"/>
+                                            </str>
+                                          </tt:cond>
+                                        </tt:cond>
+
+                                      </tt:group>
+                                    </object>
+                                  </tt:cond>
+                                </tt:cond>
+
+                              </tt:group>
+                            </object>
+                          </tt:cond>
+                        </tt:cond>
+                        <!--End of Invoicer Partner-->
+
+                        <!-- Invoicee Partner-->
+                        <tt:cond frq="?">
+                          <tt:cond check="not-initial(DATA.TRADE_TRANSACTION.TRADE_SETTLEMENT.INVOICEE_TRADEPARTY)">
+                            <object name="InvoiceeTradeParty" tt:ref="DATA.TRADE_TRANSACTION.TRADE_SETTLEMENT.INVOICEE_TRADEPARTY">
+                              <tt:group>
+
+                                <tt:cond frq="?">
+                                  <tt:cond check="not-initial($ref.ID)">
+                                    <array name="ID">
+                                      <tt:loop name="id" ref="$ref.ID">
+                                        <str>
+                                          <tt:value ref="$id"/>
+                                        </str>
+                                      </tt:loop>
+                                    </array>
+                                  </tt:cond>
+                                </tt:cond>
+                                <tt:cond frq="?">
+                                  <tt:cond check="not-initial($ref.GLOBALID)">
+                                    <array name="GlobalID">
+                                      <tt:loop name="globalid" ref="$ref.GLOBALID">
+                                        <str>
+                                          <tt:value ref="$globalid"/>
+                                        </str>
+                                      </tt:loop>
+                                    </array>
+                                  </tt:cond>
+                                </tt:cond>
+                                <tt:cond frq="?">
+                                  <tt:cond check="not-initial($ref.NAME)">
+                                    <str name="Name">
+                                      <tt:value ref="$ref.NAME"/>
+                                    </str>
+                                  </tt:cond>
+                                </tt:cond>
+                                <tt:cond frq="?">
+                                  <tt:cond check="not-initial($ref.TAX_REGISTRATION)">
+                                    <object name="SpecifiedTaxRegistration">
+                                      <object name="ID">
+                                        <tt:group>
+
+                                          <tt:cond frq="?">
+                                            <tt:cond check="not-initial($ref.TAX_REGISTRATION.ID.VALUE)">
+                                              <str name="value">
+                                                <tt:value ref="$ref.TAX_REGISTRATION.ID.VALUE"/>
+                                              </str>
+                                            </tt:cond>
+                                          </tt:cond>
+
+                                          <tt:cond frq="?">
+                                            <tt:cond check="not-initial($ref.TAX_REGISTRATION.ID.SCHEMEID)">
+                                              <str name="schemeID">
+                                                <tt:value ref="$ref.TAX_REGISTRATION.ID.SCHEMEID"/>
+                                              </str>
+                                            </tt:cond>
+                                          </tt:cond>
+
+                                        </tt:group>
+
+                                      </object>
+                                    </object>
+                                  </tt:cond>
+                                </tt:cond>
+
+                                <tt:cond frq="?">
+                                  <tt:cond check="not-initial($ref.POSTALTRADEADDRESS)">
+                                    <object name="PostalTradeAddress">
+                                      <tt:group>
+
+                                        <tt:cond frq="?">
+                                          <tt:cond check="not-initial($ref.POSTALTRADEADDRESS.POSTCODECODE)">
+                                            <str name="PostcodeCode">
+                                              <tt:value ref="$ref.POSTALTRADEADDRESS.POSTCODECODE"/>
+                                            </str>
+                                          </tt:cond>
+                                        </tt:cond>
+                                        <tt:cond frq="?">
+                                          <tt:cond check="not-initial($ref.POSTALTRADEADDRESS.BUILDINGNAME)">
+                                            <str name="BuildingName">
+                                              <tt:value ref="$ref.POSTALTRADEADDRESS.BUILDINGNAME"/>
+                                            </str>
+                                          </tt:cond>
+                                        </tt:cond>
+                                        <tt:cond frq="?">
+                                          <tt:cond check="not-initial($ref.POSTALTRADEADDRESS.LINEONE)">
+                                            <str name="LineOne">
+                                              <tt:value ref="$ref.POSTALTRADEADDRESS.LINEONE"/>
+                                            </str>
+                                          </tt:cond>
+                                        </tt:cond>
+                                        <tt:cond frq="?">
+                                          <tt:cond check="not-initial($ref.POSTALTRADEADDRESS.LINETWO)">
+                                            <str name="LineTwo">
+                                              <tt:value ref="$ref.POSTALTRADEADDRESS.LINETWO"/>
+                                            </str>
+                                          </tt:cond>
+                                        </tt:cond>
+                                        <tt:cond frq="?">
+                                          <tt:cond check="not-initial($ref.POSTALTRADEADDRESS.LINETHREE)">
+                                            <str name="LineThree">
+                                              <tt:value ref="$ref.POSTALTRADEADDRESS.LINETHREE"/>
+                                            </str>
+                                          </tt:cond>
+                                        </tt:cond>
+                                        <tt:cond frq="?">
+                                          <tt:cond check="not-initial($ref.POSTALTRADEADDRESS.LINEFOUR)">
+                                            <str name="LineFour">
+                                              <tt:value ref="$ref.POSTALTRADEADDRESS.LINEFOUR"/>
+                                            </str>
+                                          </tt:cond>
+                                        </tt:cond>
+                                        <tt:cond frq="?">
+                                          <tt:cond check="not-initial($ref.POSTALTRADEADDRESS.LINEFIVE)">
+                                            <str name="LineFive">
+                                              <tt:value ref="$ref.POSTALTRADEADDRESS.LINEFIVE"/>
+                                            </str>
+                                          </tt:cond>
+                                        </tt:cond>
+                                        <tt:cond frq="?">
+                                          <tt:cond check="not-initial($ref.POSTALTRADEADDRESS.STREETNAME)">
+                                            <str name="StreetName">
+                                              <tt:value ref="$ref.POSTALTRADEADDRESS.STREETNAME"/>
+                                            </str>
+                                          </tt:cond>
+                                        </tt:cond>
+                                        <tt:cond frq="?">
+                                          <tt:cond check="not-initial($ref.POSTALTRADEADDRESS.CITYNAME)">
+                                            <str name="CityName">
+                                              <tt:value ref="$ref.POSTALTRADEADDRESS.CITYNAME"/>
+                                            </str>
+                                          </tt:cond>
+                                        </tt:cond>
+                                        <tt:cond frq="?">
+                                          <tt:cond check="not-initial($ref.POSTALTRADEADDRESS.CITYSUBDIVISIONNAME)">
+                                            <str name="CitySubDivisionName">
+                                              <tt:value ref="$ref.POSTALTRADEADDRESS.CITYSUBDIVISIONNAME"/>
+                                            </str>
+                                          </tt:cond>
+                                        </tt:cond>
+                                        <tt:cond frq="?">
+                                          <tt:cond check="not-initial($ref.POSTALTRADEADDRESS.COUNTRYID)">
+                                            <object name="CountryID">
+                                              <tt:group>
+
+                                                <tt:cond frq="?">
+                                                  <tt:cond check="not-initial($ref.POSTALTRADEADDRESS.COUNTRYID.SCHEMEID)">
+                                                    <str name="schemeID">
+                                                      <tt:value ref="$ref.POSTALTRADEADDRESS.COUNTRYID.SCHEMEID"/>
+                                                    </str>
+                                                  </tt:cond>
+                                                </tt:cond>
+                                                <tt:cond frq="?">
+                                                  <tt:cond check="not-initial($ref.POSTALTRADEADDRESS.COUNTRYID.VALUE)">
+                                                    <str name="value">
+                                                      <tt:value ref="$ref.POSTALTRADEADDRESS.COUNTRYID.VALUE"/>
+                                                    </str>
+                                                  </tt:cond>
+                                                </tt:cond>
+
+                                              </tt:group>
+                                            </object>
+                                          </tt:cond>
+                                        </tt:cond>
+                                        <tt:cond frq="?">
+                                          <tt:cond check="not-initial($ref.POSTALTRADEADDRESS.COUNTRYSUBDIVISIONID)">
+                                            <str name="CountrySubDivisionID">
+                                              <tt:value ref="$ref.POSTALTRADEADDRESS.COUNTRYSUBDIVISIONID"/>
+                                            </str>
+                                          </tt:cond>
+                                        </tt:cond>
+                                        <tt:cond frq="?">
+                                          <tt:cond check="not-initial($ref.POSTALTRADEADDRESS.BUILDINGNUMBER)">
+                                            <str name="BuildingNumber">
+                                              <tt:value ref="$ref.POSTALTRADEADDRESS.BUILDINGNUMBER"/>
+                                            </str>
+                                          </tt:cond>
+                                        </tt:cond>
+
+                                      </tt:group>
+                                    </object>
+                                  </tt:cond>
+                                </tt:cond>
+
+                              </tt:group>
+                            </object>
+                          </tt:cond>
+                        </tt:cond>
+                        <!--End of Invoicee Partner-->
+
+                        <!-- Payer Partner-->
+                        <tt:cond frq="?">
+                          <tt:cond check="not-initial(DATA.TRADE_TRANSACTION.TRADE_SETTLEMENT.PAYER_TRADEPARTY)">
+                            <object name="PayerTradeParty" tt:ref="DATA.TRADE_TRANSACTION.TRADE_SETTLEMENT.PAYER_TRADEPARTY">
+                              <tt:group>
+
+                                <tt:cond frq="?">
+                                  <tt:cond check="not-initial($ref.ID)">
+                                    <array name="ID">
+                                      <tt:loop name="id" ref="$ref.ID">
+                                        <str>
+                                          <tt:value ref="$id"/>
+                                        </str>
+                                      </tt:loop>
+                                    </array>
+                                  </tt:cond>
+                                </tt:cond>
+                                <tt:cond frq="?">
+                                  <tt:cond check="not-initial($ref.GLOBALID)">
+                                    <array name="GlobalID">
+                                      <tt:loop name="globalid" ref="$ref.GLOBALID">
+                                        <str>
+                                          <tt:value ref="$globalid"/>
+                                        </str>
+                                      </tt:loop>
+                                    </array>
+                                  </tt:cond>
+                                </tt:cond>
+                                <tt:cond frq="?">
+                                  <tt:cond check="not-initial($ref.NAME)">
+                                    <str name="Name">
+                                      <tt:value ref="$ref.NAME"/>
+                                    </str>
+                                  </tt:cond>
+                                </tt:cond>
+                                <tt:cond frq="?">
+                                  <tt:cond check="not-initial($ref.TAX_REGISTRATION)">
+                                    <object name="SpecifiedTaxRegistration">
+                                      <object name="ID">
+                                        <tt:group>
+
+                                          <tt:cond frq="?">
+                                            <tt:cond check="not-initial($ref.TAX_REGISTRATION.ID.VALUE)">
+                                              <str name="value">
+                                                <tt:value ref="$ref.TAX_REGISTRATION.ID.VALUE"/>
+                                              </str>
+                                            </tt:cond>
+                                          </tt:cond>
+
+                                          <tt:cond frq="?">
+                                            <tt:cond check="not-initial($ref.TAX_REGISTRATION.ID.SCHEMEID)">
+                                              <str name="schemeID">
+                                                <tt:value ref="$ref.TAX_REGISTRATION.ID.SCHEMEID"/>
+                                              </str>
+                                            </tt:cond>
+                                          </tt:cond>
+
+                                        </tt:group>
+
+                                      </object>
+                                    </object>
+                                  </tt:cond>
+                                </tt:cond>
+
+                                <tt:cond frq="?">
+                                  <tt:cond check="not-initial($ref.POSTALTRADEADDRESS)">
+                                    <object name="PostalTradeAddress">
+                                      <tt:group>
+
+                                        <tt:cond frq="?">
+                                          <tt:cond check="not-initial($ref.POSTALTRADEADDRESS.POSTCODECODE)">
+                                            <str name="PostcodeCode">
+                                              <tt:value ref="$ref.POSTALTRADEADDRESS.POSTCODECODE"/>
+                                            </str>
+                                          </tt:cond>
+                                        </tt:cond>
+                                        <tt:cond frq="?">
+                                          <tt:cond check="not-initial($ref.POSTALTRADEADDRESS.BUILDINGNAME)">
+                                            <str name="BuildingName">
+                                              <tt:value ref="$ref.POSTALTRADEADDRESS.BUILDINGNAME"/>
+                                            </str>
+                                          </tt:cond>
+                                        </tt:cond>
+                                        <tt:cond frq="?">
+                                          <tt:cond check="not-initial($ref.POSTALTRADEADDRESS.LINEONE)">
+                                            <str name="LineOne">
+                                              <tt:value ref="$ref.POSTALTRADEADDRESS.LINEONE"/>
+                                            </str>
+                                          </tt:cond>
+                                        </tt:cond>
+                                        <tt:cond frq="?">
+                                          <tt:cond check="not-initial($ref.POSTALTRADEADDRESS.LINETWO)">
+                                            <str name="LineTwo">
+                                              <tt:value ref="$ref.POSTALTRADEADDRESS.LINETWO"/>
+                                            </str>
+                                          </tt:cond>
+                                        </tt:cond>
+                                        <tt:cond frq="?">
+                                          <tt:cond check="not-initial($ref.POSTALTRADEADDRESS.LINETHREE)">
+                                            <str name="LineThree">
+                                              <tt:value ref="$ref.POSTALTRADEADDRESS.LINETHREE"/>
+                                            </str>
+                                          </tt:cond>
+                                        </tt:cond>
+                                        <tt:cond frq="?">
+                                          <tt:cond check="not-initial($ref.POSTALTRADEADDRESS.LINEFOUR)">
+                                            <str name="LineFour">
+                                              <tt:value ref="$ref.POSTALTRADEADDRESS.LINEFOUR"/>
+                                            </str>
+                                          </tt:cond>
+                                        </tt:cond>
+                                        <tt:cond frq="?">
+                                          <tt:cond check="not-initial($ref.POSTALTRADEADDRESS.LINEFIVE)">
+                                            <str name="LineFive">
+                                              <tt:value ref="$ref.POSTALTRADEADDRESS.LINEFIVE"/>
+                                            </str>
+                                          </tt:cond>
+                                        </tt:cond>
+                                        <tt:cond frq="?">
+                                          <tt:cond check="not-initial($ref.POSTALTRADEADDRESS.STREETNAME)">
+                                            <str name="StreetName">
+                                              <tt:value ref="$ref.POSTALTRADEADDRESS.STREETNAME"/>
+                                            </str>
+                                          </tt:cond>
+                                        </tt:cond>
+                                        <tt:cond frq="?">
+                                          <tt:cond check="not-initial($ref.POSTALTRADEADDRESS.CITYNAME)">
+                                            <str name="CityName">
+                                              <tt:value ref="$ref.POSTALTRADEADDRESS.CITYNAME"/>
+                                            </str>
+                                          </tt:cond>
+                                        </tt:cond>
+                                        <tt:cond frq="?">
+                                          <tt:cond check="not-initial($ref.POSTALTRADEADDRESS.CITYSUBDIVISIONNAME)">
+                                            <str name="CitySubDivisionName">
+                                              <tt:value ref="$ref.POSTALTRADEADDRESS.CITYSUBDIVISIONNAME"/>
+                                            </str>
+                                          </tt:cond>
+                                        </tt:cond>
+                                        <tt:cond frq="?">
+                                          <tt:cond check="not-initial($ref.POSTALTRADEADDRESS.COUNTRYID)">
+                                            <object name="CountryID">
+                                              <tt:group>
+
+                                                <tt:cond frq="?">
+                                                  <tt:cond check="not-initial($ref.POSTALTRADEADDRESS.COUNTRYID.SCHEMEID)">
+                                                    <str name="schemeID">
+                                                      <tt:value ref="$ref.POSTALTRADEADDRESS.COUNTRYID.SCHEMEID"/>
+                                                    </str>
+                                                  </tt:cond>
+                                                </tt:cond>
+                                                <tt:cond frq="?">
+                                                  <tt:cond check="not-initial($ref.POSTALTRADEADDRESS.COUNTRYID.VALUE)">
+                                                    <str name="value">
+                                                      <tt:value ref="$ref.POSTALTRADEADDRESS.COUNTRYID.VALUE"/>
+                                                    </str>
+                                                  </tt:cond>
+                                                </tt:cond>
+
+                                              </tt:group>
+                                            </object>
+                                          </tt:cond>
+                                        </tt:cond>
+                                        <tt:cond frq="?">
+                                          <tt:cond check="not-initial($ref.POSTALTRADEADDRESS.COUNTRYSUBDIVISIONID)">
+                                            <str name="CountrySubDivisionID">
+                                              <tt:value ref="$ref.POSTALTRADEADDRESS.COUNTRYSUBDIVISIONID"/>
+                                            </str>
+                                          </tt:cond>
+                                        </tt:cond>
+                                        <tt:cond frq="?">
+                                          <tt:cond check="not-initial($ref.POSTALTRADEADDRESS.BUILDINGNUMBER)">
+                                            <str name="BuildingNumber">
+                                              <tt:value ref="$ref.POSTALTRADEADDRESS.BUILDINGNUMBER"/>
+                                            </str>
+                                          </tt:cond>
+                                        </tt:cond>
+
+                                      </tt:group>
+                                    </object>
+                                  </tt:cond>
+                                </tt:cond>
+
+                              </tt:group>
+                            </object>
+                          </tt:cond>
+                        </tt:cond>
+                        <!--End of Payer Partner-->
+
+                        <!-- Payee Partner-->
+                        <tt:cond frq="?">
+                          <tt:cond check="not-initial(DATA.TRADE_TRANSACTION.TRADE_SETTLEMENT.PAYEE_TRADEPARTY)">
+                            <object name="PayeeTradeParty" tt:ref="DATA.TRADE_TRANSACTION.TRADE_SETTLEMENT.PAYEE_TRADEPARTY">
+                              <tt:group>
+
+                                <tt:cond frq="?">
+                                  <tt:cond check="not-initial($ref.ID)">
+                                    <array name="ID">
+                                      <tt:loop name="id" ref="$ref.ID">
+                                        <str>
+                                          <tt:value ref="$id"/>
+                                        </str>
+                                      </tt:loop>
+                                    </array>
+                                  </tt:cond>
+                                </tt:cond>
+                                <tt:cond frq="?">
+                                  <tt:cond check="not-initial($ref.GLOBALID)">
+                                    <array name="GlobalID">
+                                      <tt:loop name="globalid" ref="$ref.GLOBALID">
+                                        <str>
+                                          <tt:value ref="$globalid"/>
+                                        </str>
+                                      </tt:loop>
+                                    </array>
+                                  </tt:cond>
+                                </tt:cond>
+                                <tt:cond frq="?">
+                                  <tt:cond check="not-initial($ref.NAME)">
+                                    <str name="Name">
+                                      <tt:value ref="$ref.NAME"/>
+                                    </str>
+                                  </tt:cond>
+                                </tt:cond>
+                                <tt:cond frq="?">
+                                  <tt:cond check="not-initial($ref.TAX_REGISTRATION)">
+                                    <object name="SpecifiedTaxRegistration">
+                                      <object name="ID">
+                                        <tt:group>
+
+                                          <tt:cond frq="?">
+                                            <tt:cond check="not-initial($ref.TAX_REGISTRATION.ID.VALUE)">
+                                              <str name="value">
+                                                <tt:value ref="$ref.TAX_REGISTRATION.ID.VALUE"/>
+                                              </str>
+                                            </tt:cond>
+                                          </tt:cond>
+
+                                          <tt:cond frq="?">
+                                            <tt:cond check="not-initial($ref.TAX_REGISTRATION.ID.SCHEMEID)">
+                                              <str name="schemeID">
+                                                <tt:value ref="$ref.TAX_REGISTRATION.ID.SCHEMEID"/>
+                                              </str>
+                                            </tt:cond>
+                                          </tt:cond>
+
+                                        </tt:group>
+
+                                      </object>
+                                    </object>
+                                  </tt:cond>
+                                </tt:cond>
+
+                                <tt:cond frq="?">
+                                  <tt:cond check="not-initial($ref.POSTALTRADEADDRESS)">
+                                    <object name="PostalTradeAddress">
+                                      <tt:group>
+
+                                        <tt:cond frq="?">
+                                          <tt:cond check="not-initial($ref.POSTALTRADEADDRESS.POSTCODECODE)">
+                                            <str name="PostcodeCode">
+                                              <tt:value ref="$ref.POSTALTRADEADDRESS.POSTCODECODE"/>
+                                            </str>
+                                          </tt:cond>
+                                        </tt:cond>
+                                        <tt:cond frq="?">
+                                          <tt:cond check="not-initial($ref.POSTALTRADEADDRESS.BUILDINGNAME)">
+                                            <str name="BuildingName">
+                                              <tt:value ref="$ref.POSTALTRADEADDRESS.BUILDINGNAME"/>
+                                            </str>
+                                          </tt:cond>
+                                        </tt:cond>
+                                        <tt:cond frq="?">
+                                          <tt:cond check="not-initial($ref.POSTALTRADEADDRESS.LINEONE)">
+                                            <str name="LineOne">
+                                              <tt:value ref="$ref.POSTALTRADEADDRESS.LINEONE"/>
+                                            </str>
+                                          </tt:cond>
+                                        </tt:cond>
+                                        <tt:cond frq="?">
+                                          <tt:cond check="not-initial($ref.POSTALTRADEADDRESS.LINETWO)">
+                                            <str name="LineTwo">
+                                              <tt:value ref="$ref.POSTALTRADEADDRESS.LINETWO"/>
+                                            </str>
+                                          </tt:cond>
+                                        </tt:cond>
+                                        <tt:cond frq="?">
+                                          <tt:cond check="not-initial($ref.POSTALTRADEADDRESS.LINETHREE)">
+                                            <str name="LineThree">
+                                              <tt:value ref="$ref.POSTALTRADEADDRESS.LINETHREE"/>
+                                            </str>
+                                          </tt:cond>
+                                        </tt:cond>
+                                        <tt:cond frq="?">
+                                          <tt:cond check="not-initial($ref.POSTALTRADEADDRESS.LINEFOUR)">
+                                            <str name="LineFour">
+                                              <tt:value ref="$ref.POSTALTRADEADDRESS.LINEFOUR"/>
+                                            </str>
+                                          </tt:cond>
+                                        </tt:cond>
+                                        <tt:cond frq="?">
+                                          <tt:cond check="not-initial($ref.POSTALTRADEADDRESS.LINEFIVE)">
+                                            <str name="LineFive">
+                                              <tt:value ref="$ref.POSTALTRADEADDRESS.LINEFIVE"/>
+                                            </str>
+                                          </tt:cond>
+                                        </tt:cond>
+                                        <tt:cond frq="?">
+                                          <tt:cond check="not-initial($ref.POSTALTRADEADDRESS.STREETNAME)">
+                                            <str name="StreetName">
+                                              <tt:value ref="$ref.POSTALTRADEADDRESS.STREETNAME"/>
+                                            </str>
+                                          </tt:cond>
+                                        </tt:cond>
+                                        <tt:cond frq="?">
+                                          <tt:cond check="not-initial($ref.POSTALTRADEADDRESS.CITYNAME)">
+                                            <str name="CityName">
+                                              <tt:value ref="$ref.POSTALTRADEADDRESS.CITYNAME"/>
+                                            </str>
+                                          </tt:cond>
+                                        </tt:cond>
+                                        <tt:cond frq="?">
+                                          <tt:cond check="not-initial($ref.POSTALTRADEADDRESS.CITYSUBDIVISIONNAME)">
+                                            <str name="CitySubDivisionName">
+                                              <tt:value ref="$ref.POSTALTRADEADDRESS.CITYSUBDIVISIONNAME"/>
+                                            </str>
+                                          </tt:cond>
+                                        </tt:cond>
+                                        <tt:cond frq="?">
+                                          <tt:cond check="not-initial($ref.POSTALTRADEADDRESS.COUNTRYID)">
+                                            <object name="CountryID">
+                                              <tt:group>
+
+                                                <tt:cond frq="?">
+                                                  <tt:cond check="not-initial($ref.POSTALTRADEADDRESS.COUNTRYID.SCHEMEID)">
+                                                    <str name="schemeID">
+                                                      <tt:value ref="$ref.POSTALTRADEADDRESS.COUNTRYID.SCHEMEID"/>
+                                                    </str>
+                                                  </tt:cond>
+                                                </tt:cond>
+                                                <tt:cond frq="?">
+                                                  <tt:cond check="not-initial($ref.POSTALTRADEADDRESS.COUNTRYID.VALUE)">
+                                                    <str name="value">
+                                                      <tt:value ref="$ref.POSTALTRADEADDRESS.COUNTRYID.VALUE"/>
+                                                    </str>
+                                                  </tt:cond>
+                                                </tt:cond>
+
+                                              </tt:group>
+                                            </object>
+                                          </tt:cond>
+                                        </tt:cond>
+                                        <tt:cond frq="?">
+                                          <tt:cond check="not-initial($ref.POSTALTRADEADDRESS.COUNTRYSUBDIVISIONID)">
+                                            <str name="CountrySubDivisionID">
+                                              <tt:value ref="$ref.POSTALTRADEADDRESS.COUNTRYSUBDIVISIONID"/>
+                                            </str>
+                                          </tt:cond>
+                                        </tt:cond>
+                                        <tt:cond frq="?">
+                                          <tt:cond check="not-initial($ref.POSTALTRADEADDRESS.BUILDINGNUMBER)">
+                                            <str name="BuildingNumber">
+                                              <tt:value ref="$ref.POSTALTRADEADDRESS.BUILDINGNUMBER"/>
+                                            </str>
+                                          </tt:cond>
+                                        </tt:cond>
+
+                                      </tt:group>
+                                    </object>
+                                  </tt:cond>
+                                </tt:cond>
+
+                              </tt:group>
+                            </object>
+                          </tt:cond>
+                        </tt:cond>
+                        <!--End of Payee Partner-->
+
+                      </tt:group>
+                    </object>
+                  </tt:cond>
+                  <!--End of Trade Settlement-->
+
+                  <!--Trade Transaction-->
+                  <tt:cond frq="?">
+                    <tt:cond check="not-initial(DATA.TRADE_TRANSACTION.TRADE_LINEITEM)">
+                      <array name="IncludedSupplyChainTradeLineItem">
+                        <tt:loop name="lineitem" ref="DATA.TRADE_TRANSACTION.TRADE_LINEITEM">
+                          <object>
+                            <tt:group>
+
+                              <tt:cond frq="1">
+                                <object name="AssociatedDocumentLineDocument">
+                                  <str name="LineID">
+                                    <tt:value ref="$lineitem.DOCUMENT.LINEID"/>
+                                  </str>
+                                </object>
+                              </tt:cond>
+                              <tt:cond frq="?">
+                                <tt:cond check="not-initial($lineitem.TRADE_PRODUCT)">
+                                  <object name="SpecifiedTradeProduct">
+                                    <tt:group>
+
+                                      <tt:cond frq="?">
+                                        <tt:cond check="not-initial($lineitem.TRADE_PRODUCT.ID)">
+                                          <str name="ID">
+                                            <tt:value ref="$lineitem.TRADE_PRODUCT.ID"/>
+                                          </str>
+                                        </tt:cond>
+                                      </tt:cond>
+                                      <tt:cond frq="?">
+                                        <tt:cond check="not-initial($lineitem.TRADE_PRODUCT.GLOBALID)">
+                                          <str name="GlobalID">
+                                            <tt:value ref="$lineitem.TRADE_PRODUCT.GLOBALID"/>
+                                          </str>
+                                        </tt:cond>
+                                      </tt:cond>
+                                      <tt:cond frq="?">
+                                        <tt:cond check="not-initial($lineitem.TRADE_PRODUCT.NAME)">
+                                          <array name="Name">
+                                            <tt:loop name="name" ref="$lineitem.TRADE_PRODUCT.NAME">
+                                              <str>
+                                                <tt:value ref="$name"/>
+                                              </str>
+                                            </tt:loop>
+                                          </array>
+                                        </tt:cond>
+                                      </tt:cond>
+                                      <tt:cond frq="?">
+                                        <tt:cond check="not-initial($lineitem.TRADE_PRODUCT.DESCRIPTION)">
+                                          <array name="Description">
+                                            <tt:loop name="name" ref="$lineitem.TRADE_PRODUCT.DESCRIPTION">
+                                              <str>
+                                                <tt:value ref="$name"/>
+                                              </str>
+                                            </tt:loop>
+                                          </array>
+                                        </tt:cond>
+                                      </tt:cond>
+
+                                      <!--                                      PRODUCT_INSTANCE
+                                      PRODUCT_CLASSIFICATION
+                                      ORIGINTRADECOUNTRY
+                                      INFORMATIONNOTE-->
+
+                                    </tt:group>
+                                  </object>
+                                </tt:cond>
+                              </tt:cond>
+                              <tt:cond frq="?">
+                                <tt:cond check="not-initial($lineitem.TRADE_AGREEMENT)">
+                                  <object name="SpecifiedLineTradeAgreement">
+                                    <object name="GrossPriceProductTradePrice">
+                                      <tt:group>
+                                        <tt:cond frq="?">
+                                          <tt:cond check="not-initial($lineitem.TRADE_AGREEMENT.PRODUCT_TRADEPRICE.CHARGE_AMOUNT)">
+                                            <array name="ChargeAmount">
+                                              <tt:loop name="amount" ref="$lineitem.TRADE_AGREEMENT.PRODUCT_TRADEPRICE.CHARGE_AMOUNT">
+                                                <object>
+                                                  <tt:group>
+
+                                                    <tt:cond frq="1">
+                                                      <str name="currencyID">
+                                                        <tt:value ref="$amount.CURRENCYID"/>
+                                                      </str>
+                                                    </tt:cond>
+                                                    <tt:cond frq="1">
+                                                      <str name="value">
+                                                        <tt:value ref="$amount.VALUE"/>
+                                                      </str>
+                                                    </tt:cond>
+
+                                                  </tt:group>
+                                                </object>
+                                              </tt:loop>
+                                            </array>
+                                          </tt:cond>
+                                        </tt:cond>
+                                        <!--                                        ALLOWANCE_CHARGE-->
+
+                                      </tt:group>
+                                    </object>
+                                  </object>
+                                </tt:cond>
+                              </tt:cond>
+                              <tt:cond frq="?">
+                                <tt:cond check="not-initial($lineitem.TRADE_DELIVERY)">
+                                  <object name="SpecifiedLineTradeDelivery">
+                                    <tt:group>
+
+                                      <tt:cond frq="1">
+                                        <object name="BilledQuantity" tt:ref="$lineitem.TRADE_DELIVERY.BILLED_QUANTITY">
+                                          <tt:group>
+
+                                            <tt:cond frq="?">
+                                              <tt:cond check="not-initial($ref.UNITCODE)">
+                                                <str name="unitCode">
+                                                  <tt:value ref="$ref.UNITCODE"/>
+                                                </str>
+                                              </tt:cond>
+                                            </tt:cond>
+                                            <tt:cond frq="?">
+                                              <tt:cond check="not-initial($ref.VALUE)">
+                                                <str name="value">
+                                                  <tt:value ref="$ref.VALUE"/>
+                                                </str>
+                                              </tt:cond>
+                                            </tt:cond>
+
+                                          </tt:group>
+                                        </object>
+                                      </tt:cond>
+                                      <tt:cond frq="?">
+                                        <tt:cond check="not-initial($lineitem.TRADE_DELIVERY.PER_PACKAGEUNIT_QUANTITY)">
+                                          <object name="PerPackageUnitQuantity" tt:ref="$lineitem.TRADE_DELIVERY.PER_PACKAGEUNIT_QUANTITY">
+                                            <tt:group>
+
+                                              <tt:cond frq="?">
+                                                <tt:cond check="not-initial($ref.UNITCODE)">
+                                                  <str name="unitCode">
+                                                    <tt:value ref="$ref.UNITCODE"/>
+                                                  </str>
+                                                </tt:cond>
+                                              </tt:cond>
+                                              <tt:cond frq="?">
+                                                <tt:cond check="not-initial($ref.VALUE)">
+                                                  <str name="value">
+                                                    <tt:value ref="$ref.VALUE"/>
+                                                  </str>
+                                                </tt:cond>
+                                              </tt:cond>
+
+                                            </tt:group>
+                                          </object>
+                                        </tt:cond>
+                                      </tt:cond>
+
+                                    </tt:group>
+                                  </object>
+                                </tt:cond>
+                              </tt:cond>
+                              <tt:cond frq="?">
+                                <tt:cond check="not-initial($lineitem.TRADE_SETTLEMENT)">
+                                  <object name="SpecifiedLineTradeSettlement">
+                                    <tt:group>
+
+                                      <tt:cond frq="?">
+                                        <tt:cond check="not-initial($lineitem.TRADE_SETTLEMENT.TRADE_TAX)">
+                                          <array name="ApplicableTradeTax">
+                                            <tt:loop name="tradetax" ref="$lineitem.TRADE_SETTLEMENT.TRADE_TAX">
+                                              <object>
+                                                <tt:group>
+                                                  <tt:cond frq="?">
+                                                    <tt:cond check="not-initial($ref.TYPECODE)">
+                                                      <str name="TypeCode">
+                                                        <tt:value ref="$ref.TYPECODE"/>
+                                                      </str>
+                                                    </tt:cond>
+                                                  </tt:cond>
+                                                  <tt:cond frq="?">
+                                                    <tt:cond check="not-initial($ref.CALCULATEDRATE)">
+                                                      <str name="CalculatedRate">
+                                                        <tt:value ref="$ref.CALCULATEDRATE"/>
+                                                      </str>
+                                                    </tt:cond>
+                                                  </tt:cond>
+                                                  <tt:cond frq="?">
+                                                    <tt:cond check="not-initial($ref.BASISAMOUNT)">
+                                                      <array name="BasisAmount">
+                                                        <tt:loop name="amount" ref="$ref.BASISAMOUNT">
+                                                          <str>
+                                                            <tt:value ref="$amount"/>
+                                                          </str>
+                                                        </tt:loop>
+                                                      </array>
+                                                    </tt:cond>
+                                                  </tt:cond>
+                                                  <tt:cond frq="?">
+                                                    <tt:cond check="not-initial($ref.CALCULATEDAMOUNT)">
+                                                      <array name="CalculatedAmount">
+                                                        <tt:loop name="amount" ref="$ref.CALCULATEDAMOUNT">
+                                                          <str>
+                                                            <tt:value ref="$amount"/>
+                                                          </str>
+                                                        </tt:loop>
+                                                      </array>
+                                                    </tt:cond>
+                                                  </tt:cond>
+
+                                                </tt:group>
+                                              </object>
+                                            </tt:loop>
+                                          </array>
+                                        </tt:cond>
+                                      </tt:cond>
+                                      <tt:cond frq="?">
+                                        <tt:cond check="not-initial($lineitem.TRADE_SETTLEMENT.TRADE_ALLOWANCE_CHARGE)">
+                                          <array name="SpecifiedTradeAllowanceCharge">
+                                            <tt:loop name="allowance" ref="$lineitem.TRADE_SETTLEMENT.TRADE_ALLOWANCE_CHARGE">
+                                              <object>
+                                                <tt:group>
+
+                                                  <tt:cond frq="?">
+                                                    <bool name="ChargeIndicator">
+                                                      <tt:value ref="$allowance.CHARGEINDICATOR"/>
+                                                    </bool>
+                                                  </tt:cond>
+                                                  <tt:cond frq="?">
+                                                    <tt:cond check="not-initial($allowance.ACTUALAMOUNT)">
+                                                      <array name="ActualAmount">
+                                                        <tt:loop name="amount" ref="$allowance.ACTUALAMOUNT">
+                                                          <str>
+                                                            <tt:value ref="$amount"/>
+                                                          </str>
+                                                        </tt:loop>
+                                                      </array>
+                                                    </tt:cond>
+                                                  </tt:cond>
+
+                                                </tt:group>
+                                              </object>
+                                            </tt:loop>
+                                          </array>
+                                        </tt:cond>
+                                      </tt:cond>
+                                      <tt:cond frq="?">
+                                        <tt:cond check="not-initial($lineitem.TRADE_SETTLEMENT.TRADE_SETTLEMENT_LINE)">
+                                          <object name="SpecifiedTradeSettlementLineMonetarySummation">
+                                            <tt:group>
+
+                                              <tt:cond frq="?">
+                                                <tt:cond check="not-initial($lineitem.TRADE_SETTLEMENT.TRADE_SETTLEMENT_LINE.TAXTOTAL_AMOUNT)">
+                                                  <array name="TaxTotalAmount">
+                                                    <tt:loop name="amount" ref="$lineitem.TRADE_SETTLEMENT.TRADE_SETTLEMENT_LINE.TAXTOTAL_AMOUNT">
+                                                      <object>
+                                                        <tt:group>
+
+                                                          <tt:cond frq="?">
+                                                            <tt:cond check="not-initial($amount.CURRENCYID)">
+                                                              <str name="currencyID">
+                                                                <tt:value ref="$amount.CURRENCYID"/>
+                                                              </str>
+                                                            </tt:cond>
+                                                          </tt:cond>
+                                                          <tt:cond frq="?">
+                                                            <tt:cond check="not-initial($amount.VALUE)">
+                                                              <str name="value">
+                                                                <tt:value ref="$amount.VALUE"/>
+                                                              </str>
+                                                            </tt:cond>
+                                                          </tt:cond>
+
+                                                        </tt:group>
+                                                      </object>
+                                                    </tt:loop>
+                                                  </array>
+                                                </tt:cond>
+                                              </tt:cond>
+                                              <tt:cond frq="?">
+                                                <tt:cond check="not-initial($lineitem.TRADE_SETTLEMENT.TRADE_SETTLEMENT_LINE.TOTAL_AMOUNT)">
+                                                  <array name="NetLineTotalAmount">
+                                                    <tt:loop name="amount" ref="$lineitem.TRADE_SETTLEMENT.TRADE_SETTLEMENT_LINE.TOTAL_AMOUNT">
+                                                      <object>
+                                                        <tt:group>
+
+                                                          <tt:cond frq="?">
+                                                            <tt:cond check="not-initial($amount.CURRENCYID)">
+                                                              <str name="currencyID">
+                                                                <tt:value ref="$amount.CURRENCYID"/>
+                                                              </str>
+                                                            </tt:cond>
+                                                          </tt:cond>
+                                                          <tt:cond frq="?">
+                                                            <tt:cond check="not-initial($amount.VALUE)">
+                                                              <str name="value">
+                                                                <tt:value ref="$amount.VALUE"/>
+                                                              </str>
+                                                            </tt:cond>
+                                                          </tt:cond>
+
+                                                        </tt:group>
+                                                      </object>
+                                                    </tt:loop>
+                                                  </array>
+                                                </tt:cond>
+                                              </tt:cond>
+                                              <tt:cond frq="?">
+                                                <tt:cond check="not-initial($lineitem.TRADE_SETTLEMENT.TRADE_SETTLEMENT_LINE.GRANDTOTAL_AMOUNT)">
+                                                  <array name="NetIncludingTaxesLineTotalAmount">
+                                                    <tt:loop name="amount" ref="$lineitem.TRADE_SETTLEMENT.TRADE_SETTLEMENT_LINE.GRANDTOTAL_AMOUNT">
+                                                      <object>
+                                                        <tt:group>
+
+                                                          <tt:cond frq="?">
+                                                            <tt:cond check="not-initial($amount.CURRENCYID)">
+                                                              <str name="currencyID">
+                                                                <tt:value ref="$amount.CURRENCYID"/>
+                                                              </str>
+                                                            </tt:cond>
+                                                          </tt:cond>
+                                                          <tt:cond frq="?">
+                                                            <tt:cond check="not-initial($amount.VALUE)">
+                                                              <str name="value">
+                                                                <tt:value ref="$amount.VALUE"/>
+                                                              </str>
+                                                            </tt:cond>
+                                                          </tt:cond>
+
+                                                        </tt:group>
+                                                      </object>
+                                                    </tt:loop>
+                                                  </array>
+                                                </tt:cond>
+                                              </tt:cond>
+
+                                            </tt:group>
+                                          </object>
+                                        </tt:cond>
+                                      </tt:cond>
+
+                                    </tt:group>
+                                  </object>
+                                </tt:cond>
+                              </tt:cond>
+
+                            </tt:group>
+                          </object>
+                        </tt:loop>
+                      </array>
+                    </tt:cond>
+                  </tt:cond>
+                  <!--End of Trade Transactiont-->
+
+                </tt:group>
+              </tt:cond>
+
+            </tt:group>
+          </object>
+        </tt:cond>
+
+      </tt:group>
+
+    </object>
+
+  </tt:template>
+
+</tt:transform>

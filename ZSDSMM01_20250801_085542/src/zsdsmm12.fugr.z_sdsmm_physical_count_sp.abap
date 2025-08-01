@@ -1,0 +1,26 @@
+FUNCTION Z_SDSMM_PHYSICAL_COUNT_SP.
+*"----------------------------------------------------------------------
+*"*"Local Interface:
+*"  IMPORTING
+*"     VALUE(I_INPUT) TYPE  ZSDSMMT025 OPTIONAL
+*"     VALUE(I_MODE) TYPE  CHAR10 OPTIONAL
+*"  EXPORTING
+*"     VALUE(E_MESTYPE) TYPE  CHAR1
+*"     VALUE(E_MESSAGE) TYPE  CHAR255
+*"  TABLES
+*"      T_SEARCH STRUCTURE  ZSDSFIS142 OPTIONAL
+*"  CHANGING
+*"     VALUE(T_OUTPUT) TYPE  ZSDSMMS059 OPTIONAL
+*"----------------------------------------------------------------------
+  IF     I_MODE EQ GC_CON-SEARCH_MAT.
+    T_SEARCH[] = LCL_DATA=>SEARCH_MAT( I_INPUT ).
+  ELSEIF I_MODE EQ GC_CON-SEARCH_LOCATION.
+    T_SEARCH[] = LCL_DATA=>SEARCH_LOCATION_FG_SP( I_INPUT ).
+  ELSEIF I_MODE EQ GC_CON-GET_DATA.
+    T_OUTPUT = LCL_DATA=>GET_DATA_SP( I_INPUT ).
+  ELSEIF I_MODE EQ GC_CON-INSERT_DATA.
+    LCL_DATA=>UPDATA_PHYSICAL_SP( EXPORTING I_DATA    = I_INPUT
+                                   CHANGING C_MESSTYP = E_MESTYPE
+                                            C_MESSAGE = E_MESSAGE ).
+  ENDIF.
+ENDFUNCTION.

@@ -1,0 +1,35 @@
+FUNCTION Z_SDSMM_CHECK_CHG_PO.
+*"----------------------------------------------------------------------
+*"*"Local Interface:
+*"  IMPORTING
+*"     REFERENCE(IS_PO_HEADER) TYPE  MEPOHEADER
+*"     REFERENCE(LT_PO_ITEM) TYPE  TAB_MEPOITEM
+*"  EXPORTING
+*"     REFERENCE(E_CHANGE) TYPE  FLAG
+*"     REFERENCE(E_MESSAGE) TYPE  CHAR50
+*"----------------------------------------------------------------------
+
+  DATA : LS_PO_ITEM LIKE LINE OF LT_PO_ITEM.
+
+  DATA : LV_SUM_EDIT TYPE EKPO-NETPR,
+         LV_SUM      TYPE EKPO-NETPR.
+
+  LOOP AT LT_PO_ITEM INTO LS_PO_ITEM WHERE LOEKZ EQ SPACE.
+    ADD LS_PO_ITEM-NETWR TO LV_SUM_EDIT.
+    CLEAR : LS_PO_ITEM.
+  ENDLOOP.
+
+  SELECT SUM( NETWR )
+        FROM EKPO
+        INTO LV_SUM
+        WHERE EBELN EQ IS_PO_HEADER-EBELN
+          AND LOEKZ EQ SPACE.
+
+  IF LV_SUM NE LV_SUM_EDIT.
+    CLEAR : E_CHANGE.
+    E_MESSAGE = TEXT-E01.
+  ELSE.
+    E_CHANGE = 'X'.
+  ENDIF.
+
+ENDFUNCTION.

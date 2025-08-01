@@ -1,0 +1,28 @@
+FUNCTION Z_SDSSD_GET_BASE_UNIT.
+*"----------------------------------------------------------------------
+*"*"Local Interface:
+*"  CHANGING
+*"     VALUE(CT_ITEM) TYPE  ZSDSSDS004_TT OPTIONAL
+*"----------------------------------------------------------------------
+
+  FIELD-SYMBOLS <LFS_ITEM> TYPE ZSDSSDS004.
+
+  DATA : LT_DATA TYPE TABLE OF ZSDSSDS004 WITH EMPTY KEY.
+
+  IF CT_ITEM IS NOT INITIAL.
+    LT_DATA = CT_ITEM.
+    SELECT MARA~MATNR,
+           MARA~MEINS
+      FROM @LT_DATA AS A
+      INNER JOIN MARA ON A~MATERIAL EQ MARA~MATNR
+      INTO TABLE @DATA(LT_MARA).
+
+    LOOP AT CT_ITEM ASSIGNING <LFS_ITEM>.
+      READ TABLE LT_mara INTO DATA(LS_MARA)
+      WITH KEY MATNR = <LFS_ITEM>-MATERIAL.
+      IF SY-SUBRC EQ 0.
+        <LFS_ITEM>-TARGET_QU = LS_MARA-MEINS.
+      ENDIF.
+    ENDLOOP.
+  ENDIF.
+ENDFUNCTION.

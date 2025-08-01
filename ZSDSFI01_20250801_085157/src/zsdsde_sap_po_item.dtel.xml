@@ -1,0 +1,23 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<abapGit version="v1.0.0" serializer="LCL_OBJECT_DTEL" serializer_version="v1.0.0">
+ <asx:abap xmlns:asx="http://www.sap.com/abapxml" version="1.0">
+  <asx:values>
+   <DD04V>
+    <ROLLNAME>ZSDSDE_SAP_PO_ITEM</ROLLNAME>
+    <DDLANGUAGE>E</DDLANGUAGE>
+    <DOMNAME>POSEX</DOMNAME>
+    <HEADLEN>34</HEADLEN>
+    <SCRLEN1>07</SCRLEN1>
+    <SCRLEN2>20</SCRLEN2>
+    <SCRLEN3>34</SCRLEN3>
+    <DDTEXT>Item Number of Purchasing Document</DDTEXT>
+    <REPTEXT>Item Number of Purchasing Document</REPTEXT>
+    <SCRTEXT_S>Item No</SCRTEXT_S>
+    <SCRTEXT_M>Item Number of Purch</SCRTEXT_M>
+    <SCRTEXT_L>Item Number of Purchasing Document</SCRTEXT_L>
+    <DTELMASTER>E</DTELMASTER>
+    <REFKIND>D</REFKIND>
+   </DD04V>
+  </asx:values>
+ </asx:abap>
+</abapGit>

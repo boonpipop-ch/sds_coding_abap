@@ -1,0 +1,8 @@
+@AbapCatalog.internal.setChange: 'FLDADD_NO_ASS_INFLUENCE'
+@AbapCatalog.sqlViewAppendName: 'ZZ1_0B7AB39B4D7B'
+
+extend view A_SERVICECONTRACT with ZZ1_AIB3URUO2FDVQFTSYOVE4II7V4
+  
+{ 
+  _Extension.ZZ1_RESULT_PROGRESS as ZZ1_RESULT_PROGRESS
+}

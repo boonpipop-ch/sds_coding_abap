@@ -1,0 +1,8 @@
+FUNCTION-POOL ZSDSFI03.                     "MESSAGE-ID ..
+
+* INCLUDE LZSDSFI03D...                      " Local class definition
+
+
+
+DATA : GS_ZTE_CUST_EMAIL TYPE ZSDSFIC001,
+       GT_ZTE_CUST_EMAIL TYPE TABLE OF ZSDSFIC001.

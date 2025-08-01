@@ -1,0 +1,63 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<abapGit version="v1.0.0" serializer="LCL_OBJECT_CLAS" serializer_version="v1.0.0">
+ <asx:abap xmlns:asx="http://www.sap.com/abapxml" version="1.0">
+  <asx:values>
+   <VSEOCLASS>
+    <CLSNAME>ZCL_IM_SDS_MB_MIGO_ITEM</CLSNAME>
+    <LANGU>E</LANGU>
+    <DESCRIPT>Imp. class for BAdI imp. ZSDS_MB_MIGO_ITEM</DESCRIPT>
+    <STATE>1</STATE>
+    <CLSCCINCL>X</CLSCCINCL>
+    <FIXPT>X</FIXPT>
+    <UNICODE>X</UNICODE>
+   </VSEOCLASS>
+   <DESCRIPTIONS>
+    <SEOCOMPOTX>
+     <CMPNAME>GC_REPID</CMPNAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>ABAP Program Name</DESCRIPT>
+    </SEOCOMPOTX>
+    <SEOCOMPOTX>
+     <CMPNAME>GRT_BWART</CMPNAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Range: Movement type (inventory management)</DESCRIPT>
+    </SEOCOMPOTX>
+    <SEOCOMPOTX>
+     <CMPNAME>GRT_MTART</CMPNAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Range Table for Material Type</DESCRIPT>
+    </SEOCOMPOTX>
+    <SEOCOMPOTX>
+     <CMPNAME>GRT_WERKS</CMPNAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Range Table for Data Element WERKS</DESCRIPT>
+    </SEOCOMPOTX>
+    <SEOCOMPOTX>
+     <CMPNAME>VALIDATE_FREE_STOCK</CMPNAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Change a Row from Certain Fields (GOITEM)</DESCRIPT>
+    </SEOCOMPOTX>
+   </DESCRIPTIONS>
+   <DESCRIPTIONS_SUB>
+    <SEOSUBCOTX>
+     <CMPNAME>VALIDATE_FREE_STOCK</CMPNAME>
+     <SCONAME>ET_RETURN</SCONAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Return Messages</DESCRIPT>
+    </SEOSUBCOTX>
+    <SEOSUBCOTX>
+     <CMPNAME>VALIDATE_FREE_STOCK</CMPNAME>
+     <SCONAME>IS_GOHEAD</SCONAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>MMIM Enjoy: Header Data</DESCRIPT>
+    </SEOSUBCOTX>
+    <SEOSUBCOTX>
+     <CMPNAME>VALIDATE_FREE_STOCK</CMPNAME>
+     <SCONAME>IS_GOITEM</SCONAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>MMIM Enjoy: Item Data</DESCRIPT>
+    </SEOSUBCOTX>
+   </DESCRIPTIONS_SUB>
+  </asx:values>
+ </asx:abap>
+</abapGit>

@@ -1,0 +1,34 @@
+*"* local class implementation for public class
+*"* use this source file for the implementation part of
+*"* local helper classes
+CLASS LCL_DATA DEFINITION.
+  PUBLIC SECTION.
+    METHODS :
+      CONSTRUCTOR.
+    CLASS-METHODS :
+      GET_ADDITIONAL_DATA IMPORTING I_DATA   TYPE ZCL_SDSMM_FMFG_OUTTAB_USKEY=>GTY_DATA
+                          RETURNING VALUE(R) TYPE ZCL_SDSMM_FMFG_OUTTAB_USKEY=>GTY_ADDTIONAL.
+ENDCLASS.
+CLASS LCL_DATA IMPLEMENTATION.
+  METHOD CONSTRUCTOR.
+
+  ENDMETHOD.
+  METHOD GET_ADDITIONAL_DATA.
+
+    CONSTANTS : BEGIN OF LC_CON,
+                  LA TYPE C LENGTH 2 VALUE 'LA',
+                END OF LC_CON.
+
+    SELECT EKES~EBELN,
+           EKES~EBELP,
+           EKES~VBELN,
+           EKES~XBLNR
+      FROM @I_DATA AS A
+      INNER JOIN EKES ON A~EBELN EQ EKES~EBELN AND
+                         A~EBELP EQ EKES~EBELP
+      WHERE EBTYP EQ @LC_CON-LA
+        AND LOEKZ EQ @SPACE
+       INTO TABLE @R.
+
+  ENDMETHOD.
+ENDCLASS.

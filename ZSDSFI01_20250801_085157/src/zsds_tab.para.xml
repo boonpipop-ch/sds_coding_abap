@@ -1,0 +1,15 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<abapGit version="v1.0.0" serializer="LCL_OBJECT_PARA" serializer_version="v1.0.0">
+ <asx:abap xmlns:asx="http://www.sap.com/abapxml" version="1.0">
+  <asx:values>
+   <TPARA>
+    <PARAMID>ZSDS_TAB</PARAMID>
+   </TPARA>
+   <TPARAT>
+    <PARAMID>ZSDS_TAB</PARAMID>
+    <SPRACHE>E</SPRACHE>
+    <PARTEXT>SDS: Last select tab</PARTEXT>
+   </TPARAT>
+  </asx:values>
+ </asx:abap>
+</abapGit>

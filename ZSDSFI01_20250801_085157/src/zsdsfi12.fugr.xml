@@ -1,0 +1,98 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<abapGit version="v1.0.0" serializer="LCL_OBJECT_FUGR" serializer_version="v1.0.0">
+ <asx:abap xmlns:asx="http://www.sap.com/abapxml" version="1.0">
+  <asx:values>
+   <AREAT>WHT Report</AREAT>
+   <INCLUDES>
+    <SOBJ_NAME>LZSDSFI12F02</SOBJ_NAME>
+    <SOBJ_NAME>LZSDSFI12TOP</SOBJ_NAME>
+    <SOBJ_NAME>SAPLZSDSFI12</SOBJ_NAME>
+   </INCLUDES>
+   <FUNCTIONS>
+    <item>
+     <FUNCNAME>Z_SDSCA_IDWT_DISPATCHER</FUNCNAME>
+     <SHORT_TEXT>dispatcher for w/tax reporting tool</SHORT_TEXT>
+     <IMPORT>
+      <RSIMP>
+       <PARAMETER>I_GLOB</PARAMETER>
+       <REFERENCE>X</REFERENCE>
+       <TYP>IDWTGLOB</TYP>
+      </RSIMP>
+      <RSIMP>
+       <PARAMETER>I_FIELDS</PARAMETER>
+       <OPTIONAL>X</OPTIONAL>
+       <REFERENCE>X</REFERENCE>
+       <TYP>TY_SVAL</TYP>
+      </RSIMP>
+      <RSIMP>
+       <PARAMETER>IO_WRAPPER</PARAMETER>
+       <OPTIONAL>X</OPTIONAL>
+       <TYP>REF TO CL_SRF_WRAPPER</TYP>
+       <REF_CLASS>X</REF_CLASS>
+      </RSIMP>
+     </IMPORT>
+     <CHANGING>
+      <RSCHA>
+       <PARAMETER>C_COMPCD</PARAMETER>
+       <REFERENCE>X</REFERENCE>
+       <TYP>TY_IDWTCOMPCD</TYP>
+      </RSCHA>
+      <RSCHA>
+       <PARAMETER>C_PARTNER</PARAMETER>
+       <REFERENCE>X</REFERENCE>
+       <TYP>TY_IDWTPARTNER</TYP>
+      </RSCHA>
+      <RSCHA>
+       <PARAMETER>C_FIDOC</PARAMETER>
+       <REFERENCE>X</REFERENCE>
+       <TYP>TY_IDWTFIDOC</TYP>
+      </RSCHA>
+      <RSCHA>
+       <PARAMETER>C_ERROR</PARAMETER>
+       <OPTIONAL>X</OPTIONAL>
+       <REFERENCE>X</REFERENCE>
+       <TYP>TY_IDWTERROR</TYP>
+      </RSCHA>
+     </CHANGING>
+     <DOCUMENTATION>
+      <RSFDO>
+       <PARAMETER>I_GLOB</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>Global Data for Withholding Tax Report</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>I_FIELDS</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>table type for sval</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>IO_WRAPPER</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>SRF Wrapper for legacy report processing</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>C_COMPCD</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>Table for WH Tax Reporting Data (Company Code)</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>C_PARTNER</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>table type for data of partner, w/tax type and code.</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>C_FIDOC</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>Table for WH Tax Reporting (FI Documents)</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>C_ERROR</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>error information collected during selection</STEXT>
+      </RSFDO>
+     </DOCUMENTATION>
+    </item>
+   </FUNCTIONS>
+  </asx:values>
+ </asx:abap>
+</abapGit>

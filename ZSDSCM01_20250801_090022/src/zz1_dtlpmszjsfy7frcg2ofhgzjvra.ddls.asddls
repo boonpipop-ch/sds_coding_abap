@@ -1,0 +1,8 @@
+@AbapCatalog.internal.setChange: 'FLDADD_NO_ASS_INFLUENCE'
+@AbapCatalog.sqlViewAppendName: 'ZZ1_1E410785FA1B'
+
+extend view A_BUSINESSSOLUTIONQUOTATION with ZZ1_DTLPMSZJSFY7FRCG2OFHGZJVRA
+  
+{ 
+  _Extension.ZZ1_BREAK_POSITION as ZZ1_BREAK_POSITION
+}

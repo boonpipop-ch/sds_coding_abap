@@ -1,0 +1,13 @@
+"Name: \PR:SAPLFIN1\IC:LFIN1Z01\SE:END\EI
+ENHANCEMENT 0 ZSDS_FI_UPDATE_TAX_INV.
+*<-- Start of Insertion FIARE041 02.10.2024 (Update Tax Invoice)
+      IF I_T005-intca EQ 'TH'.
+        CALL METHOD ZCL_SDSFI_UPDATE_TAX_INV=>UPDATE_TAX_INV_NUMBER
+          EXPORTING
+            IT_BSEG  = T_BSEG[]
+          CHANGING
+            CT_BKPF  = T_BKPF[]
+            CF_XBLNR = O_XBLNR.
+      ENDIF.
+*--> End of Insertion FIARE041 02.10.2024
+ENDENHANCEMENT.

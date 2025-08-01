@@ -1,0 +1,23 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<abapGit version="v1.0.0" serializer="LCL_OBJECT_DTEL" serializer_version="v1.0.0">
+ <asx:abap xmlns:asx="http://www.sap.com/abapxml" version="1.0">
+  <asx:values>
+   <DD04V>
+    <ROLLNAME>ZSDSDE_ADV_AMT</ROLLNAME>
+    <DDLANGUAGE>E</DDLANGUAGE>
+    <DOMNAME>AFLE21D2O29S_TO_23D2O31S</DOMNAME>
+    <HEADLEN>14</HEADLEN>
+    <SCRLEN1>07</SCRLEN1>
+    <SCRLEN2>14</SCRLEN2>
+    <SCRLEN3>14</SCRLEN3>
+    <DDTEXT>Advance Amount</DDTEXT>
+    <REPTEXT>Advance Amount</REPTEXT>
+    <SCRTEXT_S>Adv Amt</SCRTEXT_S>
+    <SCRTEXT_M>Advance Amount</SCRTEXT_M>
+    <SCRTEXT_L>Advance Amount</SCRTEXT_L>
+    <DTELMASTER>E</DTELMASTER>
+    <REFKIND>D</REFKIND>
+   </DD04V>
+  </asx:values>
+ </asx:abap>
+</abapGit>

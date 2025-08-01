@@ -1,0 +1,60 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<abapGit version="v1.0.0" serializer="LCL_OBJECT_FUGR" serializer_version="v1.0.0">
+ <asx:abap xmlns:asx="http://www.sap.com/abapxml" version="1.0">
+  <asx:values>
+   <AREAT>SDS: Customer Credit</AREAT>
+   <INCLUDES>
+    <SOBJ_NAME>LZSDSFI15TOP</SOBJ_NAME>
+    <SOBJ_NAME>SAPLZSDSFI15</SOBJ_NAME>
+   </INCLUDES>
+   <FUNCTIONS>
+    <item>
+     <FUNCNAME>Z_SDSFI_GET_CUSTOMER_CREDIT</FUNCNAME>
+     <REMOTE_CALL>R</REMOTE_CALL>
+     <SHORT_TEXT>SDS: Retrieve Customer Credit Function Module (RFC)</SHORT_TEXT>
+     <IMPORT>
+      <RSIMP>
+       <PARAMETER>IF_PARTNER</PARAMETER>
+       <TYP>BU_PARTNER</TYP>
+      </RSIMP>
+     </IMPORT>
+     <EXPORT>
+      <RSEXP>
+       <PARAMETER>ES_CUSTOMER_CREDIT</PARAMETER>
+       <TYP>ZSDSFIS129</TYP>
+      </RSEXP>
+      <RSEXP>
+       <PARAMETER>ES_CREDIT_SUMMARY</PARAMETER>
+       <TYP>ZSDSFIS140</TYP>
+      </RSEXP>
+      <RSEXP>
+       <PARAMETER>ET_PROJECT_CREDIT</PARAMETER>
+       <TYP>ZSDSFIS120_TT</TYP>
+      </RSEXP>
+     </EXPORT>
+     <DOCUMENTATION>
+      <RSFDO>
+       <PARAMETER>IF_PARTNER</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>Business Partner Number</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>ES_CUSTOMER_CREDIT</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>Customer Credit - Summary of Customer Credit (RFC FM)</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>ES_CREDIT_SUMMARY</PARAMETER>
+       <KIND>P</KIND>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>ET_PROJECT_CREDIT</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>Customer Credit - Summary of Project (RFC FM)</STEXT>
+      </RSFDO>
+     </DOCUMENTATION>
+    </item>
+   </FUNCTIONS>
+  </asx:values>
+ </asx:abap>
+</abapGit>

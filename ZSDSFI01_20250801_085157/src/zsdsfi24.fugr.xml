@@ -1,0 +1,118 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<abapGit version="v1.0.0" serializer="LCL_OBJECT_FUGR" serializer_version="v1.0.0">
+ <asx:abap xmlns:asx="http://www.sap.com/abapxml" version="1.0">
+  <asx:values>
+   <AREAT>MIRO Posting</AREAT>
+   <INCLUDES>
+    <SOBJ_NAME>LZSDSFI24F01</SOBJ_NAME>
+    <SOBJ_NAME>LZSDSFI24TOP</SOBJ_NAME>
+    <SOBJ_NAME>SAPLZSDSFI24</SOBJ_NAME>
+   </INCLUDES>
+   <FUNCTIONS>
+    <item>
+     <FUNCNAME>Z_SDSFI_POST_MIRO</FUNCNAME>
+     <SHORT_TEXT>Process Post MIRO</SHORT_TEXT>
+     <IMPORT>
+      <RSIMP>
+       <PARAMETER>GV_POST_DT</PARAMETER>
+       <DBFIELD>BKPF-BUDAT</DBFIELD>
+       <REFERENCE>X</REFERENCE>
+      </RSIMP>
+      <RSIMP>
+       <PARAMETER>GV_DOC_DT</PARAMETER>
+       <DBFIELD>BKPF-BLDAT</DBFIELD>
+       <REFERENCE>X</REFERENCE>
+      </RSIMP>
+      <RSIMP>
+       <PARAMETER>GV_REF_DOC_NO</PARAMETER>
+       <OPTIONAL>X</OPTIONAL>
+       <REFERENCE>X</REFERENCE>
+       <TYP>XBLNR</TYP>
+      </RSIMP>
+      <RSIMP>
+       <PARAMETER>GV_VENDOR</PARAMETER>
+       <REFERENCE>X</REFERENCE>
+       <TYP>LIFNR</TYP>
+      </RSIMP>
+      <RSIMP>
+       <PARAMETER>GV_ITEM_TEXT</PARAMETER>
+       <OPTIONAL>X</OPTIONAL>
+       <REFERENCE>X</REFERENCE>
+       <TYP>BKTXT</TYP>
+      </RSIMP>
+     </IMPORT>
+     <EXPORT>
+      <RSEXP>
+       <PARAMETER>GV_OUTPUT</PARAMETER>
+       <REFERENCE>X</REFERENCE>
+       <TYP>BELNR_D</TYP>
+      </RSEXP>
+      <RSEXP>
+       <PARAMETER>GV_MESSAGE</PARAMETER>
+       <REFERENCE>X</REFERENCE>
+       <TYP>CHAR255</TYP>
+      </RSEXP>
+     </EXPORT>
+     <TABLES>
+      <RSTBL>
+       <PARAMETER>GT_DETAIL</PARAMETER>
+       <DBSTRUCT>ZSDSFIS193</DBSTRUCT>
+      </RSTBL>
+      <RSTBL>
+       <PARAMETER>GT_RETURN</PARAMETER>
+       <DBSTRUCT>BAPIRETURN</DBSTRUCT>
+       <OPTIONAL>X</OPTIONAL>
+      </RSTBL>
+     </TABLES>
+     <DOCUMENTATION>
+      <RSFDO>
+       <PARAMETER>GV_POST_DT</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>Posting Date in the Document</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>GV_DOC_DT</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>Document Date in Document</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>GV_REF_DOC_NO</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>Reference Document Number</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>GV_VENDOR</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>Account Number of Supplier</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>GV_ITEM_TEXT</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>Document Header Text</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>GV_OUTPUT</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>Document Number of an Accounting Document</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>GV_MESSAGE</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>Char255</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>GT_DETAIL</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>For post MIRO</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>GT_RETURN</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>Return Parameter</STEXT>
+      </RSFDO>
+     </DOCUMENTATION>
+    </item>
+   </FUNCTIONS>
+  </asx:values>
+ </asx:abap>
+</abapGit>

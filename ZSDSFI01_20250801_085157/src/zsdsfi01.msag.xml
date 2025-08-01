@@ -1,0 +1,152 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<abapGit version="v1.0.0" serializer="LCL_OBJECT_MSAG" serializer_version="v1.0.0">
+ <asx:abap xmlns:asx="http://www.sap.com/abapxml" version="1.0">
+  <asx:values>
+   <T100A>
+    <ARBGB>ZSDSFI01</ARBGB>
+    <MASTERLANG>E</MASTERLANG>
+    <STEXT>Message for FI Module</STEXT>
+   </T100A>
+   <T100>
+    <T100>
+     <SPRSL>E</SPRSL>
+     <ARBGB>ZSDSFI01</ARBGB>
+     <MSGNR>001</MSGNR>
+     <TEXT>Update Data Completed!!</TEXT>
+    </T100>
+    <T100>
+     <SPRSL>E</SPRSL>
+     <ARBGB>ZSDSFI01</ARBGB>
+     <MSGNR>002</MSGNR>
+     <TEXT>Please input Date Format in Column Date</TEXT>
+    </T100>
+    <T100>
+     <SPRSL>E</SPRSL>
+     <ARBGB>ZSDSFI01</ARBGB>
+     <MSGNR>003</MSGNR>
+     <TEXT>Enter a consistent sorted list</TEXT>
+    </T100>
+    <T100>
+     <SPRSL>E</SPRSL>
+     <ARBGB>ZSDSFI01</ARBGB>
+     <MSGNR>004</MSGNR>
+     <TEXT>No data found!</TEXT>
+    </T100>
+    <T100>
+     <SPRSL>E</SPRSL>
+     <ARBGB>ZSDSFI01</ARBGB>
+     <MSGNR>005</MSGNR>
+     <TEXT>Please input field partner segment</TEXT>
+    </T100>
+    <T100>
+     <SPRSL>E</SPRSL>
+     <ARBGB>ZSDSFI01</ARBGB>
+     <MSGNR>006</MSGNR>
+     <TEXT>Unable to generate Bill placement no.</TEXT>
+    </T100>
+    <T100>
+     <SPRSL>E</SPRSL>
+     <ARBGB>ZSDSFI01</ARBGB>
+     <MSGNR>007</MSGNR>
+     <TEXT>&amp;1 is required, please main in sum line of customer &amp;2</TEXT>
+    </T100>
+    <T100>
+     <SPRSL>E</SPRSL>
+     <ARBGB>ZSDSFI01</ARBGB>
+     <MSGNR>008</MSGNR>
+     <TEXT>Bill Placement has been created sucessfully, please print document.</TEXT>
+    </T100>
+    <T100>
+     <SPRSL>E</SPRSL>
+     <ARBGB>ZSDSFI01</ARBGB>
+     <MSGNR>009</MSGNR>
+     <TEXT>Bill Placement has been cancelled sucessfully</TEXT>
+    </T100>
+    <T100>
+     <SPRSL>E</SPRSL>
+     <ARBGB>ZSDSFI01</ARBGB>
+     <MSGNR>010</MSGNR>
+     <TEXT>Output file &amp; was generated</TEXT>
+    </T100>
+    <T100>
+     <SPRSL>E</SPRSL>
+     <ARBGB>ZSDSFI01</ARBGB>
+     <MSGNR>011</MSGNR>
+     <TEXT>House bank ID in configuration is missing</TEXT>
+    </T100>
+    <T100>
+     <SPRSL>E</SPRSL>
+     <ARBGB>ZSDSFI01</ARBGB>
+     <MSGNR>012</MSGNR>
+     <TEXT>House bank id &amp; not found in configuration</TEXT>
+    </T100>
+    <T100>
+     <SPRSL>E</SPRSL>
+     <ARBGB>ZSDSFI01</ARBGB>
+     <MSGNR>013</MSGNR>
+     <TEXT>Follow-up status has been created sucessfully</TEXT>
+    </T100>
+    <T100>
+     <SPRSL>E</SPRSL>
+     <ARBGB>ZSDSFI01</ARBGB>
+     <MSGNR>014</MSGNR>
+     <TEXT>&quot;From &amp;1&quot; must be less than &quot;To &amp;1&quot;</TEXT>
+    </T100>
+    <T100>
+     <SPRSL>E</SPRSL>
+     <ARBGB>ZSDSFI01</ARBGB>
+     <MSGNR>015</MSGNR>
+     <TEXT>PIC &amp;1, Seqno &amp;2 : Overlap customer with PIC &amp;3 Seqno &amp;4</TEXT>
+    </T100>
+    <T100>
+     <SPRSL>E</SPRSL>
+     <ARBGB>ZSDSFI01</ARBGB>
+     <MSGNR>016</MSGNR>
+     <TEXT>From &amp;1 / To &amp;1 must be inputted</TEXT>
+    </T100>
+    <T100>
+     <SPRSL>E</SPRSL>
+     <ARBGB>ZSDSFI01</ARBGB>
+     <MSGNR>017</MSGNR>
+     <TEXT>&amp;1 must be inputted</TEXT>
+    </T100>
+    <T100>
+     <SPRSL>E</SPRSL>
+     <ARBGB>ZSDSFI01</ARBGB>
+     <MSGNR>018</MSGNR>
+     <TEXT>Duplicate data with Approver &amp;1, Approver type &amp;2, Seqno &amp;3</TEXT>
+    </T100>
+    <T100>
+     <SPRSL>E</SPRSL>
+     <ARBGB>ZSDSFI01</ARBGB>
+     <MSGNR>019</MSGNR>
+     <TEXT>&amp;1 is required</TEXT>
+    </T100>
+    <T100>
+     <SPRSL>E</SPRSL>
+     <ARBGB>ZSDSFI01</ARBGB>
+     <MSGNR>020</MSGNR>
+     <TEXT>Period must not overlap within Partner &amp;1 Project Def &amp;2.</TEXT>
+    </T100>
+    <T100>
+     <SPRSL>E</SPRSL>
+     <ARBGB>ZSDSFI01</ARBGB>
+     <MSGNR>021</MSGNR>
+     <TEXT>Cannot display document &amp;1 due to it is not sales document.</TEXT>
+    </T100>
+    <T100>
+     <SPRSL>E</SPRSL>
+     <ARBGB>ZSDSFI01</ARBGB>
+     <MSGNR>998</MSGNR>
+     <TEXT>&amp;</TEXT>
+    </T100>
+    <T100>
+     <SPRSL>E</SPRSL>
+     <ARBGB>ZSDSFI01</ARBGB>
+     <MSGNR>999</MSGNR>
+     <TEXT>&amp;&amp;&amp;&amp;&amp;</TEXT>
+    </T100>
+   </T100>
+  </asx:values>
+ </asx:abap>
+</abapGit>

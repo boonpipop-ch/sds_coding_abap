@@ -1,0 +1,275 @@
+*----------------------------------------------------------------------*
+***INCLUDE LZSDSFI04F02.
+*----------------------------------------------------------------------*
+
+CLASS LCL_DATA DEFINITION.
+  PUBLIC SECTION.
+    METHODS :
+      CONSTRUCTOR.
+    CLASS-METHODS :
+      GET_ASSET_BY_FIX,
+      GET_EMP,
+      MODIFY_DATA,
+      GET_DATA_HANA,
+      GET_DATA_ECC6.
+ENDCLASS.
+CLASS LCL_DATA IMPLEMENTATION.
+  METHOD CONSTRUCTOR.
+
+  ENDMETHOD.
+  METHOD GET_ASSET_BY_FIX.
+    READ TABLE GS_DISPLAY-SELECTION_ASSET
+    WITH KEY COMPANY_CODE = '1000' TRANSPORTING NO FIELDS.
+    IF SY-SUBRC EQ 0.
+      GET_DATA_HANA( ).
+    ELSE.
+      GET_DATA_ECC6( ).
+    ENDIF.
+  ENDMETHOD.
+  METHOD GET_EMP.
+
+    GS_DISPLAY-SELECTION_EMP = | { GS_DISPLAY-SELECTION_EMP ALPHA = IN } |.
+
+    IF GS_DISPLAY-SELECTION_ASSET IS INITIAL.
+      SELECT ANLA~BUKRS,
+             ANLA~ANLN1,
+             ANLA~ANLN2,
+             ANLA~ANLKL,
+             ANLA~KTOGR,
+             T095T~KTGRTX,
+             ANLZ~KOSTL,
+             CSKT~LTEXT,
+             ANLZ~WERKS,
+             T001W_BIW~TXTMD,
+             ANLZ~STORT,
+             T499S~KTEXT,
+             ANLZ~RAUMN,
+             ANLZ~PERNR,
+             ( PA0002~VORNA && ' ' && PA0002~NACHN ) AS OWNER_TXT,
+             ANLA~POSNR,
+             PRPS~POSID,
+             PRPS~POST1,
+             ANLA~TXT50
+        FROM ANLA
+        INNER JOIN ANLZ ON ANLA~BUKRS  EQ ANLZ~BUKRS AND
+                           ANLA~ANLN1  EQ ANLZ~ANLN1 AND
+                           ANLA~ANLN2  EQ ANLZ~ANLN2 AND
+                           ANLZ~BDATU  GE @SY-DATUM
+        LEFT JOIN PRPS  ON ANLA~POSNR  EQ PRPS~PSPNR
+        LEFT JOIN T095T ON ANLA~KTOGR  EQ T095T~KTOGR AND
+                           T095T~SPRAS EQ @SY-LANGU
+        LEFT JOIN CSKT  ON CSKT~KOKRS  EQ ANLA~BUKRS AND
+                           CSKT~KOSTL  EQ ANLZ~KOSTL AND
+                           CSKT~DATBI  GE @SY-DATUM  AND
+                           CSKT~SPRAS  EQ @SY-LANGU
+        LEFT JOIN T001W_BIW ON ANLZ~WERKS      EQ T001W_BIW~WERKS AND
+                               T001W_BIW~SPRAS EQ @SY-LANGU
+        LEFT JOIN T499S ON ANLZ~WERKS EQ t499S~WERKS AND
+                           ANLZ~STORT EQ t499S~STAND
+        LEFT JOIN PA0002 ON ANLZ~RAUMN EQ PA0002~PERNR AND
+                            PA0002~ENDDA GE @SY-DATUM  AND
+                            PA0002~BEGDA LE @SY-DATUM
+        INTO TABLE @GS_DISPLAY-EXPORT_RETURN
+        WHERE ANLZ~RAUMN EQ @GS_DISPLAY-SELECTION_EMP
+          AND ANLA~DEAKT EQ '00000000'.
+    ELSE.
+      SELECT ANLA~BUKRS,
+             ANLA~ANLN1,
+             ANLA~ANLN2,
+             ANLA~ANLKL,
+             ANLA~KTOGR,
+             T095T~KTGRTX,
+             ANLZ~KOSTL,
+             CSKT~LTEXT,
+             ANLZ~WERKS,
+             T001W_BIW~TXTMD,
+             ANLZ~STORT,
+             T499S~KTEXT,
+             ANLZ~RAUMN,
+             ANLZ~PERNR,
+             ( PA0002~VORNA && ' ' && PA0002~NACHN ) AS OWNER_TXT,
+             ANLA~POSNR,
+             PRPS~POSID,
+             PRPS~POST1,
+             ANLA~TXT50
+      FROM @GS_DISPLAY-SELECTION_ASSET AS A
+      INNER JOIN ANLA ON A~COMPANY_CODE     EQ ANLA~BUKRS AND
+                         A~FIX_ASSET_NO     EQ ANLA~ANLN1 AND
+                         A~FIX_ASSET_SUB_NO EQ ANLA~ANLN2
+      INNER JOIN ANLZ ON ANLA~BUKRS  EQ ANLZ~BUKRS AND
+                         ANLA~ANLN1  EQ ANLZ~ANLN1 AND
+                         ANLA~ANLN2  EQ ANLZ~ANLN2 AND
+                         ANLZ~BDATU  GE @SY-DATUM
+      LEFT JOIN PRPS  ON ANLA~POSNR  EQ PRPS~PSPNR
+      LEFT JOIN T095T ON ANLA~KTOGR  EQ T095T~KTOGR AND
+                         T095T~SPRAS EQ @SY-LANGU
+      LEFT JOIN CSKT  ON CSKT~KOKRS  EQ ANLA~BUKRS AND
+                         CSKT~KOSTL  EQ ANLZ~KOSTL AND
+                         CSKT~DATBI  GE @SY-DATUM  AND
+                         CSKT~SPRAS  EQ @SY-LANGU
+      LEFT JOIN T001W_BIW ON ANLZ~WERKS      EQ T001W_BIW~WERKS AND
+                             T001W_BIW~SPRAS EQ @SY-LANGU
+      LEFT JOIN T499S ON ANLZ~WERKS EQ t499S~WERKS AND
+                         ANLZ~STORT EQ t499S~STAND
+      LEFT JOIN PA0002 ON ANLZ~RAUMN EQ PA0002~PERNR AND
+                          PA0002~ENDDA GE @SY-DATUM  AND
+                          PA0002~BEGDA LE @SY-DATUM
+      WHERE ANLZ~RAUMN EQ @GS_DISPLAY-SELECTION_EMP
+        AND ANLA~DEAKT EQ '00000000'
+      INTO TABLE @GS_DISPLAY-EXPORT_RETURN.
+    ENDIF.
+    IF SY-SUBRC EQ 0.
+      GS_DISPLAY-EXPORT_MESTYPE = GC_CON-S.
+    ELSE.
+      GS_DISPLAY-EXPORT_MESTYPE = GC_CON-E.
+      GS_DISPLAY-EXPORT_MESSAGE = TEXT-E01.
+    ENDIF.
+  ENDMETHOD.
+  METHOD MODIFY_DATA.
+    FIELD-SYMBOLS : <LFS_DATA> LIKE LINE OF GS_DISPLAY-EXPORT_RETURN.
+
+    DATA : LV_OWNER LIKE <LFS_DATA>-RAUMN.
+
+    LOOP AT GS_DISPLAY-EXPORT_RETURN ASSIGNING <LFS_DATA>.
+      LV_OWNER         = <LFS_DATA>-RAUMN.
+      <LFS_DATA>-RAUMN = <LFS_DATA>-OWNER.
+      <LFS_DATA>-OWNER = LV_OWNER.
+    ENDLOOP.
+
+  ENDMETHOD.
+  METHOD GET_DATA_HANA.
+    DATA : LT_ASSET_LIST LIKE GS_DISPLAY-SELECTION_ASSET.
+
+    LT_ASSET_LIST = VALUE #(
+                   FOR LS_TMP IN GS_DISPLAY-SELECTION_ASSET INDEX INTO LV_INDEX
+                     (
+                       COMPANY_CODE      = LS_TMP-COMPANY_CODE
+                       FIX_ASSET_NO      = |{ LS_TMP-FIX_ASSET_NO ALPHA = IN }|
+                       FIX_ASSET_SUB_NO  = |{ LS_TMP-FIX_ASSET_SUB_NO ALPHA = IN }|
+                      )
+                    ).
+
+    SELECT ANLA~BUKRS,
+           ANLA~ANLN1,
+           ANLA~ANLN2,
+           ANLA~ANLKL,
+           ANLA~KTOGR,
+           T095T~KTGRTX,
+           ANLZ~KOSTL,
+           CSKT~LTEXT,
+           ANLZ~WERKS,
+           T001W_BIW~TXTMD,
+           ANLZ~STORT,
+           T499S~KTEXT,
+           ANLZ~RAUMN,
+           ANLZ~PERNR,
+           ( PA0002~VORNA && ' ' && PA0002~NACHN ) AS OWNER_TXT,
+           ANLA~POSNR,
+           PRPS~POSID,
+           PRPS~POST1,
+           ANLA~TXT50
+      FROM @LT_ASSET_LIST AS A
+      INNER JOIN ANLA ON A~COMPANY_CODE     EQ ANLA~BUKRS AND
+                         A~FIX_ASSET_NO     EQ ANLA~ANLN1 AND
+                         A~FIX_ASSET_SUB_NO EQ ANLA~ANLN2
+      INNER JOIN ANLZ ON ANLA~BUKRS  EQ ANLZ~BUKRS AND
+                         ANLA~ANLN1  EQ ANLZ~ANLN1 AND
+                         ANLA~ANLN2  EQ ANLZ~ANLN2 AND
+                         ANLZ~BDATU  GE @SY-DATUM
+      LEFT JOIN PRPS  ON ANLA~POSNR  EQ PRPS~PSPNR
+      LEFT JOIN T095T ON ANLA~KTOGR  EQ T095T~KTOGR AND
+                         T095T~SPRAS EQ @SY-LANGU
+      LEFT JOIN CSKT  ON CSKT~KOKRS  EQ ANLA~BUKRS AND
+                         CSKT~KOSTL  EQ ANLZ~KOSTL AND
+                         CSKT~DATBI  GE @SY-DATUM  AND
+                         CSKT~SPRAS  EQ @SY-LANGU
+      LEFT JOIN T001W_BIW ON ANLZ~WERKS      EQ T001W_BIW~WERKS AND
+                             T001W_BIW~SPRAS EQ @SY-LANGU
+      LEFT JOIN T499S ON ANLZ~WERKS EQ t499S~WERKS AND
+                         ANLZ~STORT EQ t499S~STAND
+      LEFT JOIN PA0002 ON ANLZ~RAUMN EQ PA0002~PERNR AND
+                          PA0002~ENDDA GE @SY-DATUM  AND
+                          PA0002~BEGDA LE @SY-DATUM
+      WHERE ANLA~DEAKT EQ '00000000'
+      INTO TABLE @GS_DISPLAY-EXPORT_RETURN.
+    IF SY-SUBRC EQ 0.
+      GS_DISPLAY-EXPORT_MESTYPE = GC_CON-S.
+    ELSE.
+      GS_DISPLAY-EXPORT_MESTYPE = GC_CON-E.
+      GS_DISPLAY-EXPORT_MESSAGE = TEXT-E01.
+    ENDIF.
+
+  ENDMETHOD.
+  METHOD GET_DATA_ECC6.
+    DATA : BEGIN OF LS_ASSET_LIST,
+             INVZU TYPE ANLA-INVZU,
+           END OF LS_ASSET_LIST.
+    DATA : LT_ASSET_LIST LIKE TABLE OF LS_ASSET_LIST WITH EMPTY KEY.
+
+    DATA : LV_SUB   TYPE C LENGTH 4,
+           LV_ASSET TYPE C LENGTH 12.
+
+    LOOP AT GS_DISPLAY-SELECTION_ASSET INTO DATA(LS_TMP).
+      LV_SUB = LS_TMP-FIX_ASSET_SUB_NO.
+      LV_SUB = |{ LV_SUB ALPHA = OUT }|.
+
+      LV_ASSET = LS_TMP-FIX_ASSET_NO.
+      LV_ASSET = |{ LV_ASSET ALPHA = OUT }|.
+
+      CONCATENATE LV_ASSET LV_SUB INTO LS_ASSET_LIST-INVZU SEPARATED BY SPACE.
+      APPEND LS_ASSET_LIST TO LT_ASSET_LIST.
+      CLEAR LS_ASSET_LIST.
+    ENDLOOP.
+
+    SORT LT_ASSET_LIST BY INVZU.
+    DELETE ADJACENT DUPLICATES FROM LT_ASSET_LIST COMPARING ALL FIELDS.
+
+    SELECT ANLA~BUKRS,
+           ANLA~ANLN1,
+           ANLA~ANLN2,
+           ANLA~ANLKL,
+           ANLA~KTOGR,
+           T095T~KTGRTX,
+           ANLZ~KOSTL,
+           CSKT~LTEXT,
+           ANLZ~WERKS,
+           T001W_BIW~TXTMD,
+           ANLZ~STORT,
+           T499S~KTEXT,
+           ANLZ~RAUMN,
+           ANLZ~PERNR,
+           ( PA0002~VORNA && ' ' && PA0002~NACHN ) AS OWNER_TXT,
+           ANLA~POSNR,
+           PRPS~POSID,
+           PRPS~POST1,
+           ANLA~TXT50
+      FROM @LT_ASSET_LIST AS A
+      INNER JOIN ANLA ON A~INVZU     EQ ANLA~INVZU
+      INNER JOIN ANLZ ON ANLA~BUKRS  EQ ANLZ~BUKRS AND
+                         ANLA~ANLN1  EQ ANLZ~ANLN1 AND
+                         ANLA~ANLN2  EQ ANLZ~ANLN2 AND
+                         ANLZ~BDATU  GE @SY-DATUM
+      LEFT JOIN PRPS  ON ANLA~POSNR  EQ PRPS~PSPNR
+      LEFT JOIN T095T ON ANLA~KTOGR  EQ T095T~KTOGR AND
+                         T095T~SPRAS EQ @SY-LANGU
+      LEFT JOIN CSKT  ON CSKT~KOKRS  EQ ANLA~BUKRS AND
+                         CSKT~KOSTL  EQ ANLZ~KOSTL AND
+                         CSKT~DATBI  GE @SY-DATUM  AND
+                         CSKT~SPRAS  EQ @SY-LANGU
+      LEFT JOIN T001W_BIW ON ANLZ~WERKS      EQ T001W_BIW~WERKS AND
+                             T001W_BIW~SPRAS EQ @SY-LANGU
+      LEFT JOIN T499S ON ANLZ~WERKS EQ t499S~WERKS AND
+                         ANLZ~STORT EQ t499S~STAND
+      LEFT JOIN PA0002 ON ANLZ~RAUMN EQ PA0002~PERNR AND
+                          PA0002~ENDDA GE @SY-DATUM  AND
+                          PA0002~BEGDA LE @SY-DATUM
+     WHERE ANLA~DEAKT EQ '00000000'
+      INTO TABLE @GS_DISPLAY-EXPORT_RETURN.
+    IF SY-SUBRC EQ 0.
+      GS_DISPLAY-EXPORT_MESTYPE = GC_CON-S.
+    ELSE.
+      GS_DISPLAY-EXPORT_MESTYPE = GC_CON-E.
+      GS_DISPLAY-EXPORT_MESSAGE = TEXT-E01.
+    ENDIF.
+  ENDMETHOD.
+ENDCLASS.

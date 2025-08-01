@@ -1,0 +1,80 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<abapGit version="v1.0.0" serializer="LCL_OBJECT_CLAS" serializer_version="v1.0.0">
+ <asx:abap xmlns:asx="http://www.sap.com/abapxml" version="1.0">
+  <asx:values>
+   <VSEOCLASS>
+    <CLSNAME>ZCL_SDSMM_MIGO_MAT_TRNFR</CLSNAME>
+    <LANGU>E</LANGU>
+    <DESCRIPT>Material Transfer in MIGO</DESCRIPT>
+    <STATE>1</STATE>
+    <CLSCCINCL>X</CLSCCINCL>
+    <FIXPT>X</FIXPT>
+    <UNICODE>X</UNICODE>
+   </VSEOCLASS>
+   <DESCRIPTIONS>
+    <SEOCOMPOTX>
+     <CMPNAME>GC_REPID</CMPNAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>ABAP Program Name</DESCRIPT>
+    </SEOCOMPOTX>
+    <SEOCOMPOTX>
+     <CMPNAME>GF_REF_MBLNR</CMPNAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Number of Material Document</DESCRIPT>
+    </SEOCOMPOTX>
+    <SEOCOMPOTX>
+     <CMPNAME>GF_REF_MJAHR</CMPNAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Material Document Year</DESCRIPT>
+    </SEOCOMPOTX>
+    <SEOCOMPOTX>
+     <CMPNAME>GRT_BWART</CMPNAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Range of bwart</DESCRIPT>
+    </SEOCOMPOTX>
+    <SEOCOMPOTX>
+     <CMPNAME>GRT_WERKS</CMPNAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Range of werks</DESCRIPT>
+    </SEOCOMPOTX>
+    <SEOCOMPOTX>
+     <CMPNAME>INIT_VALUE</CMPNAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Reset Value</DESCRIPT>
+    </SEOCOMPOTX>
+   </DESCRIPTIONS>
+   <DESCRIPTIONS_SUB>
+    <SEOSUBCOTX>
+     <CMPNAME>CHANGE_BKTXT_OF_REFDOC</CMPNAME>
+     <SCONAME>IF_CURRENT_MKPF</SCONAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Number of Material Document</DESCRIPT>
+    </SEOSUBCOTX>
+    <SEOSUBCOTX>
+     <CMPNAME>SET_BKTXT</CMPNAME>
+     <SCONAME>EF_BKTXT</SCONAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Document Header Text</DESCRIPT>
+    </SEOSUBCOTX>
+    <SEOSUBCOTX>
+     <CMPNAME>SET_BKTXT</CMPNAME>
+     <SCONAME>IF_CANCEL_FG</SCONAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Cancel flag</DESCRIPT>
+    </SEOSUBCOTX>
+    <SEOSUBCOTX>
+     <CMPNAME>SET_BKTXT</CMPNAME>
+     <SCONAME>IF_REF_MBLNR</SCONAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Number of Material Document</DESCRIPT>
+    </SEOSUBCOTX>
+    <SEOSUBCOTX>
+     <CMPNAME>SET_BKTXT</CMPNAME>
+     <SCONAME>IF_REF_MJAHR</SCONAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Material Document Year</DESCRIPT>
+    </SEOSUBCOTX>
+   </DESCRIPTIONS_SUB>
+  </asx:values>
+ </asx:abap>
+</abapGit>

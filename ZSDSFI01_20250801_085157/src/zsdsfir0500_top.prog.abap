@@ -1,0 +1,242 @@
+*&---------------------------------------------------------------------*
+*& Include          ZSDSFIR0500_TOP
+*&---------------------------------------------------------------------*
+*-----------------------------------------------------------------------
+* T A B L E S
+*-----------------------------------------------------------------------
+TABLES : VBAK,BKPF,VBRK.
+*-----------------------------------------------------------------------
+* T Y P E S
+*-----------------------------------------------------------------------
+TYPES : BEGIN OF GY_RESULT,
+          DOCNO  TYPE VBAK-VBELN,
+          KUNNR  TYPE VBAK-KUNNR,
+          NAMEA  TYPE STRING,
+          AMOUT  TYPE ACDOCA-TSL,
+          CURRN  TYPE ACDOCA-RTCUR,
+          ADRNR  TYPE KNA1-ADRNR,
+          STCD3  TYPE KNA1-STCD3,
+          BUPLA  TYPE BSEG-BUPLA,
+          CREDT  TYPE SY-DATUM,
+          RLDNR  TYPE ACDOCA-RLDNR,
+          RBUKRS TYPE ACDOCA-RBUKRS,
+          GJAHR  TYPE ACDOCA-GJAHR,
+          BUDAT  TYPE ACDOCA-BUDAT,
+          BLDAT  TYPE ACDOCA-BLDAT,
+          MWSKZ  TYPE ACDOCA-MWSKZ,
+          AUGBL  TYPE ACDOCA-AUGBL,
+          AUGGJ  TYPE ACDOCA-AUGGJ,
+          NETDT  TYPE ACDOCA-NETDT,
+          STATU  TYPE ICON-ID,
+          MESSG  TYPE STRING,
+          ERNAM  TYPE ZSDSFIT051-ERNAM,
+          ERDAT  TYPE ZSDSFIT051-ERDAT,
+          ERZET  TYPE ZSDSFIT051-ERZET,
+          SENDF  TYPE ZSDSFIT051-SENDF,
+          CANRE  TYPE ZSDSFIT051-CANRE,
+          DOCFI  TYPE BKPF-BELNR,
+          CHECK  TYPE C,
+        END OF GY_RESULT.
+
+TYPES : BEGIN OF GY_STATUS,
+          DOCNO TYPE ZSDSFIT051-DOCNO,
+          DYEAR TYPE ZSDSFIT051-DYEAR,
+          STATU TYPE ZSDSFIT051-STATU,
+          MESSG TYPE ZSDSFIT051-MESSG,
+          SENDF TYPE ZSDSFIT051-SENDF,
+          CANRE TYPE ZSDSFIT051-CANRE,
+          ERNAM TYPE ZSDSFIT051-ERNAM,
+          ERDAT TYPE ZSDSFIT051-ERDAT,
+          ERZET TYPE ZSDSFIT051-ERZET,
+        END OF GY_STATUS.
+
+TYPES: BEGIN OF GY_DETAIL,
+         BELNR    TYPE ACDOCA-BELNR,
+         GJAHR    TYPE ACDOCA-GJAHR,
+         MWSKZ    TYPE ACDOCA-MWSKZ, "TAX TYPE
+         AUGBL    TYPE ACDOCA-AUGBL,
+         AUGGJ    TYPE ACDOCA-AUGGJ,
+         TSL      TYPE ACDOCA-TSL,
+         RTCUR    TYPE ACDOCA-RTCUR,
+         SGTXT    TYPE ACDOCA-SGTXT,
+         LINETYPE TYPE ACDOCA-LINETYPE, "05100 TAX
+       END OF GY_DETAIL.
+
+TYPES: BEGIN OF GY_BRANCH,
+         KUNNR     TYPE	KUNNR,
+         J_1TPBUPL TYPE BCODE,
+       END OF GY_BRANCH.
+
+TYPES : BEGIN OF GY_ADRC,
+          BRANCH TYPE J_1BBRANCH-BRANCH.
+          INCLUDE TYPE ADRC.
+TYPES END OF GY_ADRC.
+
+TYPES : BEGIN OF GY_ADRC_CUST.
+          INCLUDE TYPE ADRC.
+TYPES :   SMTP_ADDR TYPE ADR6-SMTP_ADDR.
+TYPES END OF GY_ADRC_CUST.
+
+TYPES: BEGIN OF GY_ZSDSFIT052,
+         BUPLA TYPE ZSDSFIT052-BUPLA,
+         DISCD TYPE ZSDSFIT052-DISCD,
+         SUBCD TYPE ZSDSFIT052-SUBCD,
+       END OF GY_ZSDSFIT052.
+
+TYPES : BEGIN OF GY_ZSDSFIC001,
+          KUNNR        TYPE ZSDSFIC001-KUNNR,
+          E_MAIL       TYPE ZSDSFIC001-E_MAIL,
+          MOBILE_PHONE TYPE ZSDSFIC001-MOBILE_PHONE,
+        END OF GY_ZSDSFIC001.
+
+TYPES : BEGIN OF GY_KNBW,
+          KUNNR TYPE KNBW-KUNNR,
+          QSREC TYPE KNBW-QSREC,
+        END OF GY_KNBW.
+
+TYPES : BEGIN OF GY_ZSDSFIC017,
+          DIST_CODE     TYPE ZSDSFIC017-DIST_CODE,
+          DIST_NAME     TYPE ZSDSFIC017-DIST_NAME,
+          PROVINCE_CODE TYPE ZSDSFIC017-PROVINCE_CODE,
+        END OF GY_ZSDSFIC017.
+
+TYPES : BEGIN OF GY_ZSDSFIC020,
+          SUB_DIST_CODE TYPE ZSDSFIC020-SUB_DIST_CODE,
+          SUB_DIST_NAME TYPE ZSDSFIC020-SUB_DIST_NAME,
+          DIST_CODE     TYPE ZSDSFIC020-DIST_CODE,
+          PROVINCE_CODE TYPE ZSDSFIC020-PROVINCE_CODE,
+        END OF GY_ZSDSFIC020.
+
+TYPES : BEGIN OF GY_CUST_PHONE,
+          ADDRNUMBER TYPE ADR2-ADDRNUMBER,
+          TEL_NUMBER TYPE ADR2-TEL_NUMBER,
+        END OF GY_CUST_PHONE.
+
+TYPES : BEGIN OF GY_ONE_TIME_CUST,
+          VBELN      TYPE VBRP-VBELN,
+          ADRNR      TYPE VBPA-ADRNR,
+          TEL_NUMBER TYPE ADR2-TEL_NUMBER,
+          SMTP_ADDR  TYPE ADR6-SMTP_ADDR.
+TYPES END OF GY_ONE_TIME_CUST.
+
+TYPES : BEGIN OF GY_ONE_TIME_CUST_ID,
+          VBELN TYPE VBPA3-VBELN,
+          STCD3 TYPE VBPA3-STCD3.
+TYPES END OF GY_ONE_TIME_CUST_ID.
+TYPES: GTY_ONE_TIME_CUST_ID TYPE HASHED TABLE OF GY_ONE_TIME_CUST_ID WITH UNIQUE KEY VBELN.
+
+TYPES : BEGIN OF GY_T005U,
+          BLAND TYPE T005U-BLAND,
+          BEZEI TYPE T005U-BEZEI,
+        END OF GY_T005U.
+
+TYPES: GTY_DETAIL TYPE STANDARD TABLE OF GY_DETAIL WITH EMPTY KEY.
+TYPES: GTY_RESULT TYPE STANDARD TABLE OF GY_RESULT WITH EMPTY KEY.
+*-----------------------------------------------------------------------
+* D A T A
+*-----------------------------------------------------------------------
+DATA : GT_RESULT TYPE TABLE OF GY_RESULT WITH EMPTY KEY,
+       GS_RESULT TYPE GY_RESULT.
+
+DATA : GT_STATUS TYPE TABLE OF GY_STATUS,
+       GS_STATUS TYPE GY_STATUS.
+
+DATA : GT_BRANCH TYPE TABLE OF GY_BRANCH,
+       GS_BRANCH TYPE GY_BRANCH.
+
+DATA : GT_DIS_SUB TYPE TABLE OF GY_ZSDSFIT052,
+       GS_DIS_SUB TYPE GY_ZSDSFIT052.
+
+DATA : GT_ADRC      TYPE TABLE OF GY_ADRC,
+       GT_ADRC_CUST TYPE TABLE OF ADRC.
+
+DATA : GT_ETAX_CUST TYPE TABLE OF GY_ZSDSFIC001,
+       GS_ETAX_CUST TYPE GY_ZSDSFIC001.
+
+DATA : GT_KNBW TYPE TABLE OF GY_KNBW,
+       GS_KNBW TYPE GY_KNBW.
+
+DATA : GT_ZSDSFIC020 TYPE TABLE OF GY_ZSDSFIC020,
+       GS_ZSDSFIC020 TYPE GY_ZSDSFIC020.
+
+DATA : GT_ZSDSFIC017 TYPE TABLE OF GY_ZSDSFIC017,
+       GS_ZSDSFIC017 TYPE GY_ZSDSFIC017.
+
+DATA : GT_T005U TYPE TABLE OF GY_T005U,
+       GS_T005U TYPE GY_T005U.
+
+DATA : GT_CUST_PHONE TYPE TABLE OF GY_CUST_PHONE,
+       GS_CUST_PHONE TYPE GY_CUST_PHONE.
+
+DATA : GT_ONE_TIME_CUST TYPE TABLE OF GY_ONE_TIME_CUST,
+       GS_ONE_TIME_CUST TYPE GY_ONE_TIME_CUST.
+
+DATA : GT_ONE_TIME_CUST_ID TYPE GTY_ONE_TIME_CUST_ID,
+       GS_ONE_TIME_CUST_ID TYPE GY_ONE_TIME_CUST_ID.
+
+DATA : BDCDATA LIKE BDCDATA OCCURS 0 WITH HEADER LINE.
+
+DATA : MESSTAB   LIKE BDCMSGCOLL OCCURS 0 WITH HEADER LINE,
+       T_MESSTAB LIKE BDCMSGCOLL OCCURS 0 WITH HEADER LINE,
+       S_MESSTAB LIKE BDCMSGCOLL.
+
+DATA : DYNPFIELDS  LIKE DYNPREAD OCCURS 5 WITH HEADER LINE.
+
+DATA : GT_FCAT   TYPE SLIS_T_FIELDCAT_ALV,
+       GS_LAYOUT TYPE SLIS_LAYOUT_ALV,
+       GT_SORT   TYPE SLIS_T_SORTINFO_ALV,
+       GS_SORT   TYPE SLIS_SORTINFO_ALV.
+
+*-----------------------------------------------------------------------
+* C O N S T A N T S
+*-----------------------------------------------------------------------
+CONSTANTS: GC_I  TYPE C LENGTH 1 VALUE 'I',
+           GC_EQ TYPE C LENGTH 2 VALUE 'EQ',
+           GC_S  TYPE C LENGTH 1 VALUE 'S',
+           GC_E  TYPE C LENGTH 1 VALUE 'E',
+           GC_X  TYPE C LENGTH 1 VALUE 'X',
+           GC_A  TYPE C LENGTH 1 VALUE 'A',
+           GC_L  TYPE C LENGTH 1 VALUE 'L'.
+
+CONSTANTS: BEGIN OF GC_CON,
+             SUCCESS TYPE C LENGTH 4 VALUE '@08@',
+             WARNING TYPE C LENGTH 4 VALUE '@09@',
+             ERROR   TYPE C LENGTH 4 VALUE '@0A@',
+             POST    TYPE C LENGTH 4 VALUE 'POST',
+             GET     TYPE C LENGTH 3 VALUE 'GET',
+             DEV     TYPE C LENGTH 3 VALUE 'F36',
+             QAS     TYPE C LENGTH 3 VALUE 'F46',
+             PRD     TYPE C LENGTH 3 VALUE 'F56',
+             REPID   TYPE C LENGTH 12 VALUE 'RECEIPT_PATH',
+             PARAM   TYPE C LENGTH 14 VALUE 'GET_CONFIG_001',
+             0L      TYPE C LENGTH 2  VALUE '0L',
+             D       TYPE C LENGTH 1  VALUE 'D',
+             S       TYPE C LENGTH 1  VALUE 'S',
+             AG      TYPE C LENGTH 2  VALUE 'AG',
+             05100   TYPE C LENGTH 5  VALUE '05100',
+             ZZZZ    TYPE C LENGTH 4  VALUE 'ZZZZ',
+             H       TYPE C LENGTH 1  VALUE 'H',
+             FORMAT  TYPE C LENGTH 3 VALUE 'PDF',
+           END OF GC_CON.
+
+CONSTANTS: GC_FORM_NAME TYPE TNAPR-SFORM VALUE 'ZSDSFI003'.
+
+*-----------------------------------------------------------------------
+* R A N G E S
+*-----------------------------------------------------------------------
+*DATA:
+*-----------------------------------------------------------------------
+* M A C R O S
+*-----------------------------------------------------------------------
+*DEFINE.
+*END-OF-DEFINITION.
+
+*-----------------------------------------------------------------------
+* F I E L D – S Y M B O L S
+*-----------------------------------------------------------------------
+*FIELD-SYMBOLS:
+
+*-----------------------------------------------------------------------
+* F I E L D – G R O U P S
+*-----------------------------------------------------------------------
+*FIELD-GROUPS:

@@ -1,0 +1,8 @@
+@AbapCatalog.internal.setChange: 'FLDADD_NO_ASS_INFLUENCE'
+@AbapCatalog.sqlViewAppendName: 'ZZ1_B1EA8874298E'
+
+extend view A_SERVICECONTRACT with ZZ1_ES7YRGEX2ELPV27IXZPYHL7LAQ
+  
+{ 
+  _Extension.ZZ1_PARTNER_SEGMENT as ZZ1_PARTNER_SEGMENT
+}

@@ -1,0 +1,24 @@
+FUNCTION Z_SDSSD_UPDATE_ZSD_SHIP_DOC.
+*"----------------------------------------------------------------------
+*"*"Local Interface:
+*"  TABLES
+*"      PT_ZSDSSDT013 STRUCTURE  ZSDSSDT013
+*"----------------------------------------------------------------------
+  DATA LS_ZSD_SHIP_DOC TYPE ZSDSSDT013.
+
+  LOOP AT PT_ZSDSSDT013.
+    SELECT SINGLE *
+    INTO LS_ZSD_SHIP_DOC
+    FROM ZSDSSDT013
+    WHERE TKNUM EQ PT_ZSDSSDT013-TKNUM
+      AND VBELN EQ PT_ZSDSSDT013-VBELN
+      AND POSNR EQ PT_ZSDSSDT013-POSNR.
+
+    IF ( SY-SUBRC EQ 0 ).
+      MODIFY ZSDSSDT013 FROM LS_ZSD_SHIP_DOC.
+    ELSE.
+      INSERT ZSDSSDT013 FROM PT_ZSDSSDT013.
+    ENDIF.
+  ENDLOOP.
+
+ENDFUNCTION.

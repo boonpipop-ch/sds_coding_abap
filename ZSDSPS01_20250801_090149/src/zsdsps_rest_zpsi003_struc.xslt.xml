@@ -1,0 +1,12 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<abapGit version="v1.0.0" serializer="LCL_OBJECT_XSLT" serializer_version="v1.0.0">
+ <asx:abap xmlns:asx="http://www.sap.com/abapxml" version="1.0">
+  <asx:values>
+   <ATTRIBUTES>
+    <XSLTDESC>ZSDSPS_REST_ZPSI003_STRUC</XSLTDESC>
+    <LANGU>E</LANGU>
+    <DESCRIPT>Inbound WBS Close (WTEC)/Cancel in SAP from Salesforce</DESCRIPT>
+   </ATTRIBUTES>
+  </asx:values>
+ </asx:abap>
+</abapGit>

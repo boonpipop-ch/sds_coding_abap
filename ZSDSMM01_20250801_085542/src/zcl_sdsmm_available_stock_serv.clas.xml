@@ -1,0 +1,183 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<abapGit version="v1.0.0" serializer="LCL_OBJECT_CLAS" serializer_version="v1.0.0">
+ <asx:abap xmlns:asx="http://www.sap.com/abapxml" version="1.0">
+  <asx:values>
+   <VSEOCLASS>
+    <CLSNAME>ZCL_SDSMM_AVAILABLE_STOCK_SERV</CLSNAME>
+    <LANGU>E</LANGU>
+    <DESCRIPT>SDS: Available Stock Service Class</DESCRIPT>
+    <STATE>1</STATE>
+    <CLSCCINCL>X</CLSCCINCL>
+    <FIXPT>X</FIXPT>
+    <UNICODE>X</UNICODE>
+   </VSEOCLASS>
+   <TPOOL>
+    <item>
+     <ID>I</ID>
+     <KEY>T01</KEY>
+     <ENTRY>Data doesn&apos;t exist.</ENTRY>
+     <LENGTH>29</LENGTH>
+    </item>
+    <item>
+     <ID>I</ID>
+     <KEY>T02</KEY>
+     <ENTRY>Found data</ENTRY>
+     <LENGTH>20</LENGTH>
+    </item>
+    <item>
+     <ID>I</ID>
+     <KEY>T03</KEY>
+     <ENTRY>Records.</ENTRY>
+     <LENGTH>18</LENGTH>
+    </item>
+    <item>
+     <ID>I</ID>
+     <KEY>T04</KEY>
+     <ENTRY>Stock = 0 .</ENTRY>
+     <LENGTH>21</LENGTH>
+    </item>
+   </TPOOL>
+   <DESCRIPTIONS>
+    <SEOCOMPOTX>
+     <CMPNAME>AVAILABLE_STOCK_PROCESS</CMPNAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Available Stock Process</DESCRIPT>
+    </SEOCOMPOTX>
+    <SEOCOMPOTX>
+     <CMPNAME>ET_LGORT</CMPNAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Range Table for Data Element LGORT_D</DESCRIPT>
+    </SEOCOMPOTX>
+    <SEOCOMPOTX>
+     <CMPNAME>ET_WERKS</CMPNAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Plant</DESCRIPT>
+    </SEOCOMPOTX>
+    <SEOCOMPOTX>
+     <CMPNAME>GC_TRUE</CMPNAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>General Flag</DESCRIPT>
+    </SEOCOMPOTX>
+    <SEOCOMPOTX>
+     <CMPNAME>GET_CONSTANTS</CMPNAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Get Constants</DESCRIPT>
+    </SEOCOMPOTX>
+    <SEOCOMPOTX>
+     <CMPNAME>GET_MATERIAL_BY_PARTGROUP</CMPNAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Get Spare parts material by parts group</DESCRIPT>
+    </SEOCOMPOTX>
+    <SEOCOMPOTX>
+     <CMPNAME>GET_STOCK_DATA</CMPNAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Get Available stock</DESCRIPT>
+    </SEOCOMPOTX>
+   </DESCRIPTIONS>
+   <DESCRIPTIONS_SUB>
+    <SEOSUBCOTX>
+     <CMPNAME>AVAILABLE_STOCK_PROCESS</CMPNAME>
+     <SCONAME>ES_RESPONSE</SCONAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Response Interface by Group of Spare parts</DESCRIPT>
+    </SEOSUBCOTX>
+    <SEOSUBCOTX>
+     <CMPNAME>AVAILABLE_STOCK_PROCESS</CMPNAME>
+     <SCONAME>IF_MATNR</SCONAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Material Number</DESCRIPT>
+    </SEOSUBCOTX>
+    <SEOSUBCOTX>
+     <CMPNAME>GET_CONSTANTS</CMPNAME>
+     <SCONAME>ET_KAPPL</SCONAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Application in GENC</DESCRIPT>
+    </SEOSUBCOTX>
+    <SEOSUBCOTX>
+     <CMPNAME>GET_CONSTANTS</CMPNAME>
+     <SCONAME>ET_KSCHL</SCONAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Condition type in GENC</DESCRIPT>
+    </SEOSUBCOTX>
+    <SEOSUBCOTX>
+     <CMPNAME>GET_CONSTANTS</CMPNAME>
+     <SCONAME>ET_VKORG</SCONAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Sale Org in GENC</DESCRIPT>
+    </SEOSUBCOTX>
+    <SEOSUBCOTX>
+     <CMPNAME>GET_CONSTANTS</CMPNAME>
+     <SCONAME>ET_VTWEG</SCONAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Distribution Channel in GENC</DESCRIPT>
+    </SEOSUBCOTX>
+    <SEOSUBCOTX>
+     <CMPNAME>GET_CONSTANTS</CMPNAME>
+     <SCONAME>ET_WERKS</SCONAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Plant in GENC</DESCRIPT>
+    </SEOSUBCOTX>
+    <SEOSUBCOTX>
+     <CMPNAME>GET_MATERIAL_BY_PARTGROUP</CMPNAME>
+     <SCONAME>ET_PARTGRP_MATNR</SCONAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Range of Material in Part Group</DESCRIPT>
+    </SEOSUBCOTX>
+    <SEOSUBCOTX>
+     <CMPNAME>GET_MATERIAL_BY_PARTGROUP</CMPNAME>
+     <SCONAME>IF_MATNR</SCONAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Material Number</DESCRIPT>
+    </SEOSUBCOTX>
+    <SEOSUBCOTX>
+     <CMPNAME>GET_STOCK_DATA</CMPNAME>
+     <SCONAME>EF_MESSAGE</SCONAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Response Message</DESCRIPT>
+    </SEOSUBCOTX>
+    <SEOSUBCOTX>
+     <CMPNAME>GET_STOCK_DATA</CMPNAME>
+     <SCONAME>ET_RESULT</SCONAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Table type Interface by Group of Spare parts</DESCRIPT>
+    </SEOSUBCOTX>
+    <SEOSUBCOTX>
+     <CMPNAME>GET_STOCK_DATA</CMPNAME>
+     <SCONAME>IT_KAPPL</SCONAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Application in GENC</DESCRIPT>
+    </SEOSUBCOTX>
+    <SEOSUBCOTX>
+     <CMPNAME>GET_STOCK_DATA</CMPNAME>
+     <SCONAME>IT_KSCHL</SCONAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Condition type in GENC</DESCRIPT>
+    </SEOSUBCOTX>
+    <SEOSUBCOTX>
+     <CMPNAME>GET_STOCK_DATA</CMPNAME>
+     <SCONAME>IT_PARTGRP_MATNR</SCONAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Part group Material</DESCRIPT>
+    </SEOSUBCOTX>
+    <SEOSUBCOTX>
+     <CMPNAME>GET_STOCK_DATA</CMPNAME>
+     <SCONAME>IT_VKORG</SCONAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Sale Org in GENC</DESCRIPT>
+    </SEOSUBCOTX>
+    <SEOSUBCOTX>
+     <CMPNAME>GET_STOCK_DATA</CMPNAME>
+     <SCONAME>IT_VTWEG</SCONAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Distribution Channel in GENC</DESCRIPT>
+    </SEOSUBCOTX>
+    <SEOSUBCOTX>
+     <CMPNAME>GET_STOCK_DATA</CMPNAME>
+     <SCONAME>IT_WERKS</SCONAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Plant in GENC</DESCRIPT>
+    </SEOSUBCOTX>
+   </DESCRIPTIONS_SUB>
+  </asx:values>
+ </asx:abap>
+</abapGit>

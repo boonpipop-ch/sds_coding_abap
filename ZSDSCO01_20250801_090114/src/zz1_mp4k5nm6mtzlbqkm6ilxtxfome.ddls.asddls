@@ -1,0 +1,8 @@
+@AbapCatalog.internal.setChange: 'FLDADD_NO_ASS_INFLUENCE'
+@AbapCatalog.sqlViewAppendName: 'ZZ1_E894C1986C73'
+
+extend view C_FINPLANNINGUPLOADITEM with ZZ1_MP4K5NM6MTZLBQKM6ILXTXFOME
+  
+{ 
+  _Extension.ZZ1_ZZREFTN_MSE as ZZ1_ZZREFTN_MSE
+}

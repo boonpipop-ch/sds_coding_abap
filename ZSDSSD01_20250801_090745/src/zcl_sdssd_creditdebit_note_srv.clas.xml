@@ -1,0 +1,534 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<abapGit version="v1.0.0" serializer="LCL_OBJECT_CLAS" serializer_version="v1.0.0">
+ <asx:abap xmlns:asx="http://www.sap.com/abapxml" version="1.0">
+  <asx:values>
+   <VSEOCLASS>
+    <CLSNAME>ZCL_SDSSD_CREDITDEBIT_NOTE_SRV</CLSNAME>
+    <LANGU>E</LANGU>
+    <DESCRIPT>Credit Note Debit Note Creation</DESCRIPT>
+    <STATE>1</STATE>
+    <CLSCCINCL>X</CLSCCINCL>
+    <FIXPT>X</FIXPT>
+    <UNICODE>X</UNICODE>
+   </VSEOCLASS>
+   <TPOOL>
+    <item>
+     <ID>I</ID>
+     <KEY>E01</KEY>
+     <ENTRY>Please maintain constant values &amp; in Table ZSDSCAC001</ENTRY>
+     <LENGTH>106</LENGTH>
+    </item>
+    <item>
+     <ID>I</ID>
+     <KEY>E02</KEY>
+     <ENTRY>Missing K2 ID</ENTRY>
+     <LENGTH>23</LENGTH>
+    </item>
+    <item>
+     <ID>I</ID>
+     <KEY>E03</KEY>
+     <ENTRY>Duplicate K2 ID</ENTRY>
+     <LENGTH>25</LENGTH>
+    </item>
+    <item>
+     <ID>I</ID>
+     <KEY>E04</KEY>
+     <ENTRY>Missing Document date</ENTRY>
+     <LENGTH>42</LENGTH>
+    </item>
+    <item>
+     <ID>I</ID>
+     <KEY>E05</KEY>
+     <ENTRY>Sales Order No. must be empty for create mode</ENTRY>
+     <LENGTH>90</LENGTH>
+    </item>
+    <item>
+     <ID>I</ID>
+     <KEY>E06</KEY>
+     <ENTRY>Missing Sales Order Type</ENTRY>
+     <LENGTH>48</LENGTH>
+    </item>
+    <item>
+     <ID>I</ID>
+     <KEY>E07</KEY>
+     <ENTRY>Sales Order Type does not exist</ENTRY>
+     <LENGTH>62</LENGTH>
+    </item>
+    <item>
+     <ID>I</ID>
+     <KEY>E08</KEY>
+     <ENTRY>Missing Distribution Channel</ENTRY>
+     <LENGTH>56</LENGTH>
+    </item>
+    <item>
+     <ID>I</ID>
+     <KEY>E09</KEY>
+     <ENTRY>Distribution Channel  does not exist</ENTRY>
+     <LENGTH>72</LENGTH>
+    </item>
+    <item>
+     <ID>I</ID>
+     <KEY>E10</KEY>
+     <ENTRY>Missing Sales Office</ENTRY>
+     <LENGTH>40</LENGTH>
+    </item>
+    <item>
+     <ID>I</ID>
+     <KEY>E11</KEY>
+     <ENTRY>Sales Office does not exist</ENTRY>
+     <LENGTH>54</LENGTH>
+    </item>
+    <item>
+     <ID>I</ID>
+     <KEY>E12</KEY>
+     <ENTRY>Missing Sales Group</ENTRY>
+     <LENGTH>29</LENGTH>
+    </item>
+    <item>
+     <ID>I</ID>
+     <KEY>E13</KEY>
+     <ENTRY>Sales Group does not exist</ENTRY>
+     <LENGTH>52</LENGTH>
+    </item>
+    <item>
+     <ID>I</ID>
+     <KEY>E14</KEY>
+     <ENTRY>Missing Order Reason</ENTRY>
+     <LENGTH>40</LENGTH>
+    </item>
+    <item>
+     <ID>I</ID>
+     <KEY>E15</KEY>
+     <ENTRY>Order Reason does not exist</ENTRY>
+     <LENGTH>54</LENGTH>
+    </item>
+    <item>
+     <ID>I</ID>
+     <KEY>E16</KEY>
+     <ENTRY>Missing Customer Sold-to</ENTRY>
+     <LENGTH>48</LENGTH>
+    </item>
+    <item>
+     <ID>I</ID>
+     <KEY>E17</KEY>
+     <ENTRY>Missing Customer Ship-to</ENTRY>
+     <LENGTH>48</LENGTH>
+    </item>
+    <item>
+     <ID>I</ID>
+     <KEY>E18</KEY>
+     <ENTRY>Missing Customer Bill-to</ENTRY>
+     <LENGTH>48</LENGTH>
+    </item>
+    <item>
+     <ID>I</ID>
+     <KEY>E19</KEY>
+     <ENTRY>Missing Customer Payer</ENTRY>
+     <LENGTH>44</LENGTH>
+    </item>
+    <item>
+     <ID>I</ID>
+     <KEY>E20</KEY>
+     <ENTRY>Missing Customer Sales Employee</ENTRY>
+     <LENGTH>62</LENGTH>
+    </item>
+    <item>
+     <ID>I</ID>
+     <KEY>E21</KEY>
+     <ENTRY>Missing Item Number</ENTRY>
+     <LENGTH>29</LENGTH>
+    </item>
+    <item>
+     <ID>I</ID>
+     <KEY>E22</KEY>
+     <ENTRY>Item: Invalid Item Number</ENTRY>
+     <LENGTH>50</LENGTH>
+    </item>
+    <item>
+     <ID>I</ID>
+     <KEY>E23</KEY>
+     <ENTRY>Missing material number</ENTRY>
+     <LENGTH>46</LENGTH>
+    </item>
+    <item>
+     <ID>I</ID>
+     <KEY>E24</KEY>
+     <ENTRY>Material Number does not exist</ENTRY>
+     <LENGTH>60</LENGTH>
+    </item>
+    <item>
+     <ID>I</ID>
+     <KEY>E25</KEY>
+     <ENTRY>Missing quantity</ENTRY>
+     <LENGTH>26</LENGTH>
+    </item>
+    <item>
+     <ID>I</ID>
+     <KEY>E26</KEY>
+     <ENTRY>Missing sales unit</ENTRY>
+     <LENGTH>28</LENGTH>
+    </item>
+    <item>
+     <ID>I</ID>
+     <KEY>E27</KEY>
+     <ENTRY>Invalid unit:</ENTRY>
+     <LENGTH>23</LENGTH>
+    </item>
+    <item>
+     <ID>I</ID>
+     <KEY>E28</KEY>
+     <ENTRY>Missing Plant</ENTRY>
+     <LENGTH>23</LENGTH>
+    </item>
+    <item>
+     <ID>I</ID>
+     <KEY>E29</KEY>
+     <ENTRY>Plant does not exist</ENTRY>
+     <LENGTH>40</LENGTH>
+    </item>
+    <item>
+     <ID>I</ID>
+     <KEY>E30</KEY>
+     <ENTRY>Storage Location does not exist</ENTRY>
+     <LENGTH>62</LENGTH>
+    </item>
+    <item>
+     <ID>I</ID>
+     <KEY>E31</KEY>
+     <ENTRY>Missing Item Category</ENTRY>
+     <LENGTH>42</LENGTH>
+    </item>
+    <item>
+     <ID>I</ID>
+     <KEY>E32</KEY>
+     <ENTRY>Item Category does not exist</ENTRY>
+     <LENGTH>56</LENGTH>
+    </item>
+    <item>
+     <ID>I</ID>
+     <KEY>E33</KEY>
+     <ENTRY>LOB has not found</ENTRY>
+     <LENGTH>27</LENGTH>
+    </item>
+    <item>
+     <ID>I</ID>
+     <KEY>E34</KEY>
+     <ENTRY>Please input valid amount</ENTRY>
+     <LENGTH>50</LENGTH>
+    </item>
+    <item>
+     <ID>I</ID>
+     <KEY>E35</KEY>
+     <ENTRY>Wrong Date format. Please use format YYYYMMDD</ENTRY>
+     <LENGTH>90</LENGTH>
+    </item>
+    <item>
+     <ID>I</ID>
+     <KEY>T01</KEY>
+     <ENTRY>Sales organization</ENTRY>
+     <LENGTH>28</LENGTH>
+    </item>
+    <item>
+     <ID>I</ID>
+     <KEY>T02</KEY>
+     <ENTRY>Division</ENTRY>
+     <LENGTH>18</LENGTH>
+    </item>
+    <item>
+     <ID>I</ID>
+     <KEY>T03</KEY>
+     <ENTRY>CREDITMEMO</ENTRY>
+     <LENGTH>20</LENGTH>
+    </item>
+    <item>
+     <ID>I</ID>
+     <KEY>T04</KEY>
+     <ENTRY>DEBITMEMO</ENTRY>
+     <LENGTH>19</LENGTH>
+    </item>
+    <item>
+     <ID>I</ID>
+     <KEY>T05</KEY>
+     <ENTRY>RETURN</ENTRY>
+     <LENGTH>16</LENGTH>
+    </item>
+   </TPOOL>
+   <DESCRIPTIONS>
+    <SEOCOMPOTX>
+     <CMPNAME>APPEND_RESPONSE</CMPNAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Append response table</DESCRIPT>
+    </SEOCOMPOTX>
+    <SEOCOMPOTX>
+     <CMPNAME>APPEND_TEXT</CMPNAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Append text</DESCRIPT>
+    </SEOCOMPOTX>
+    <SEOCOMPOTX>
+     <CMPNAME>GC_CREATE</CMPNAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Single-Character Flag</DESCRIPT>
+    </SEOCOMPOTX>
+    <SEOCOMPOTX>
+     <CMPNAME>GC_ERROR</CMPNAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Single-Character Flag</DESCRIPT>
+    </SEOCOMPOTX>
+    <SEOCOMPOTX>
+     <CMPNAME>GC_SUCCESS</CMPNAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Single-Character Flag</DESCRIPT>
+    </SEOCOMPOTX>
+    <SEOCOMPOTX>
+     <CMPNAME>GC_UPDATE</CMPNAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Single-Character Flag</DESCRIPT>
+    </SEOCOMPOTX>
+    <SEOCOMPOTX>
+     <CMPNAME>GC_WARNING</CMPNAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Single-Character Flag</DESCRIPT>
+    </SEOCOMPOTX>
+    <SEOCOMPOTX>
+     <CMPNAME>GET_CONSTANTS</CMPNAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Get Constants</DESCRIPT>
+    </SEOCOMPOTX>
+    <SEOCOMPOTX>
+     <CMPNAME>GRT_COND_TYPE_DELETE</CMPNAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Table for KSCHL_RAN</DESCRIPT>
+    </SEOCOMPOTX>
+    <SEOCOMPOTX>
+     <CMPNAME>GRT_CREDITDEBIT_COND_TYPE</CMPNAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Table for KSCHL_RAN</DESCRIPT>
+    </SEOCOMPOTX>
+    <SEOCOMPOTX>
+     <CMPNAME>GRT_CREDITMEMO_DOCTYP</CMPNAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Ranges Table for Sales and Distribution Document Type</DESCRIPT>
+    </SEOCOMPOTX>
+    <SEOCOMPOTX>
+     <CMPNAME>GRT_DEBITMEMO_DOCTYP</CMPNAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Ranges Table for Sales and Distribution Document Type</DESCRIPT>
+    </SEOCOMPOTX>
+    <SEOCOMPOTX>
+     <CMPNAME>GRT_DIVISION</CMPNAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Table Type for Range of SPART data element</DESCRIPT>
+    </SEOCOMPOTX>
+    <SEOCOMPOTX>
+     <CMPNAME>GRT_RETURN_DOCTYP</CMPNAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Ranges Table for Sales and Distribution Document Type</DESCRIPT>
+    </SEOCOMPOTX>
+    <SEOCOMPOTX>
+     <CMPNAME>GRT_SALESORG</CMPNAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Table Type for Range of VKORG data element</DESCRIPT>
+    </SEOCOMPOTX>
+    <SEOCOMPOTX>
+     <CMPNAME>SALES_ORDER_CREATE</CMPNAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Sales order creation</DESCRIPT>
+    </SEOCOMPOTX>
+    <SEOCOMPOTX>
+     <CMPNAME>SALES_ORDER_PROCESS</CMPNAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Process sales order data</DESCRIPT>
+    </SEOCOMPOTX>
+    <SEOCOMPOTX>
+     <CMPNAME>VALIDATE_AMOUNT</CMPNAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Validate amount</DESCRIPT>
+    </SEOCOMPOTX>
+    <SEOCOMPOTX>
+     <CMPNAME>VALIDATE_DATE</CMPNAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Validate date</DESCRIPT>
+    </SEOCOMPOTX>
+    <SEOCOMPOTX>
+     <CMPNAME>VALIDATE_HEADER</CMPNAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Validate header data</DESCRIPT>
+    </SEOCOMPOTX>
+    <SEOCOMPOTX>
+     <CMPNAME>VALIDATE_INPUT</CMPNAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Validate input data</DESCRIPT>
+    </SEOCOMPOTX>
+    <SEOCOMPOTX>
+     <CMPNAME>VALIDATE_ITEM</CMPNAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Validate header data</DESCRIPT>
+    </SEOCOMPOTX>
+   </DESCRIPTIONS>
+   <DESCRIPTIONS_SUB>
+    <SEOSUBCOTX>
+     <CMPNAME>APPEND_RESPONSE</CMPNAME>
+     <SCONAME>CT_RESPONSE</SCONAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Table Type for Response Message Structure</DESCRIPT>
+    </SEOSUBCOTX>
+    <SEOSUBCOTX>
+     <CMPNAME>APPEND_RESPONSE</CMPNAME>
+     <SCONAME>IF_MESSAGE</SCONAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Response Message</DESCRIPT>
+    </SEOSUBCOTX>
+    <SEOSUBCOTX>
+     <CMPNAME>APPEND_RESPONSE</CMPNAME>
+     <SCONAME>IF_STATUS</SCONAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Single-Character Flag</DESCRIPT>
+    </SEOSUBCOTX>
+    <SEOSUBCOTX>
+     <CMPNAME>APPEND_TEXT</CMPNAME>
+     <SCONAME>LANGU</SCONAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Language Key</DESCRIPT>
+    </SEOSUBCOTX>
+    <SEOSUBCOTX>
+     <CMPNAME>APPEND_TEXT</CMPNAME>
+     <SCONAME>TEXT</SCONAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Table of Row Type BAPISDTEXT</DESCRIPT>
+    </SEOSUBCOTX>
+    <SEOSUBCOTX>
+     <CMPNAME>APPEND_TEXT</CMPNAME>
+     <SCONAME>TEXT_ID</SCONAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Text ID</DESCRIPT>
+    </SEOSUBCOTX>
+    <SEOSUBCOTX>
+     <CMPNAME>APPEND_TEXT</CMPNAME>
+     <SCONAME>TEXT_LINE</SCONAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Text Line</DESCRIPT>
+    </SEOSUBCOTX>
+    <SEOSUBCOTX>
+     <CMPNAME>GET_CONSTANTS</CMPNAME>
+     <SCONAME>CT_RESPONSE</SCONAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Table Type for Response Message Structure</DESCRIPT>
+    </SEOSUBCOTX>
+    <SEOSUBCOTX>
+     <CMPNAME>SALES_ORDER_CREATE</CMPNAME>
+     <SCONAME>CS_SALESORDER</SCONAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>JSON Structure Create Credit/Debit Note From K2 (Header)</DESCRIPT>
+    </SEOSUBCOTX>
+    <SEOSUBCOTX>
+     <CMPNAME>SALES_ORDER_CREATE</CMPNAME>
+     <SCONAME>CT_SALESORDERITEM</SCONAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Table Type : Create Credit/Debit Note From K2 (Item)</DESCRIPT>
+    </SEOSUBCOTX>
+    <SEOSUBCOTX>
+     <CMPNAME>SALES_ORDER_CREATE</CMPNAME>
+     <SCONAME>EF_RESPONSE</SCONAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>SDS: REST Response Message Structure</DESCRIPT>
+    </SEOSUBCOTX>
+    <SEOSUBCOTX>
+     <CMPNAME>SALES_ORDER_PROCESS</CMPNAME>
+     <SCONAME>CS_SALESORDER</SCONAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>JSON Structure Create Credit/Debit Note From K2 (Header)</DESCRIPT>
+    </SEOSUBCOTX>
+    <SEOSUBCOTX>
+     <CMPNAME>SALES_ORDER_PROCESS</CMPNAME>
+     <SCONAME>CT_SALESORDERITEM</SCONAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Table Type : Create Credit/Debit Note From K2 (Item)</DESCRIPT>
+    </SEOSUBCOTX>
+    <SEOSUBCOTX>
+     <CMPNAME>SALES_ORDER_PROCESS</CMPNAME>
+     <SCONAME>EF_RESPONSE</SCONAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>SDS: REST Response Message Structure</DESCRIPT>
+    </SEOSUBCOTX>
+    <SEOSUBCOTX>
+     <CMPNAME>VALIDATE_AMOUNT</CMPNAME>
+     <SCONAME>AMOUNT_IN</SCONAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Char 20</DESCRIPT>
+    </SEOSUBCOTX>
+    <SEOSUBCOTX>
+     <CMPNAME>VALIDATE_AMOUNT</CMPNAME>
+     <SCONAME>AMOUNT_OUT</SCONAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Char 20</DESCRIPT>
+    </SEOSUBCOTX>
+    <SEOSUBCOTX>
+     <CMPNAME>VALIDATE_AMOUNT</CMPNAME>
+     <SCONAME>CS_RESPONSE</SCONAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>SDS: REST Response Message Structure</DESCRIPT>
+    </SEOSUBCOTX>
+    <SEOSUBCOTX>
+     <CMPNAME>VALIDATE_DATE</CMPNAME>
+     <SCONAME>CS_RESPONSE</SCONAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>SDS: REST Response Message Structure</DESCRIPT>
+    </SEOSUBCOTX>
+    <SEOSUBCOTX>
+     <CMPNAME>VALIDATE_DATE</CMPNAME>
+     <SCONAME>DATE_IN</SCONAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Character Field with Length 10</DESCRIPT>
+    </SEOSUBCOTX>
+    <SEOSUBCOTX>
+     <CMPNAME>VALIDATE_DATE</CMPNAME>
+     <SCONAME>DATE_OUT</SCONAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Character Field with Length 10</DESCRIPT>
+    </SEOSUBCOTX>
+    <SEOSUBCOTX>
+     <CMPNAME>VALIDATE_HEADER</CMPNAME>
+     <SCONAME>CS_SALESORDER</SCONAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>JSON Structure Create Credit/Debit Note From K2 (Header)</DESCRIPT>
+    </SEOSUBCOTX>
+    <SEOSUBCOTX>
+     <CMPNAME>VALIDATE_HEADER</CMPNAME>
+     <SCONAME>CT_RESPONSE</SCONAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Table Type for Response Message Structure</DESCRIPT>
+    </SEOSUBCOTX>
+    <SEOSUBCOTX>
+     <CMPNAME>VALIDATE_HEADER</CMPNAME>
+     <SCONAME>EF_INVALID</SCONAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>General Flag</DESCRIPT>
+    </SEOSUBCOTX>
+    <SEOSUBCOTX>
+     <CMPNAME>VALIDATE_INPUT</CMPNAME>
+     <SCONAME>CS_SALESORDER</SCONAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>JSON Structure Create Credit/Debit Note From K2 (Header)</DESCRIPT>
+    </SEOSUBCOTX>
+    <SEOSUBCOTX>
+     <CMPNAME>VALIDATE_INPUT</CMPNAME>
+     <SCONAME>CT_SALESORDERITEM</SCONAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Table Type : Create Credit/Debit Note From K2 (Item)</DESCRIPT>
+    </SEOSUBCOTX>
+    <SEOSUBCOTX>
+     <CMPNAME>VALIDATE_ITEM</CMPNAME>
+     <SCONAME>CS_SALESORDER</SCONAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>JSON Structure Create Credit/Debit Note From K2 (Header)</DESCRIPT>
+    </SEOSUBCOTX>
+    <SEOSUBCOTX>
+     <CMPNAME>VALIDATE_ITEM</CMPNAME>
+     <SCONAME>CT_SALESORDERITEM</SCONAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Table Type : Create Credit/Debit Note From K2 (Item)</DESCRIPT>
+    </SEOSUBCOTX>
+   </DESCRIPTIONS_SUB>
+  </asx:values>
+ </asx:abap>
+</abapGit>

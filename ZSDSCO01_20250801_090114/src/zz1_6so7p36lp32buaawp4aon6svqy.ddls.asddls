@@ -1,0 +1,8 @@
+@AbapCatalog.internal.setChange: 'FLDADD_NO_ASS_INFLUENCE'
+@AbapCatalog.sqlViewAppendName: 'ZZ1_E67DA27FB47E'
+
+extend view C_MARKETSEGMENTPLANACTQ2501 with ZZ1_6SO7P36LP32BUAAWP4AON6SVQY
+  
+{ 
+  ZZ1_FISCYR_APM as ZZ1_FISCYR_APM
+}

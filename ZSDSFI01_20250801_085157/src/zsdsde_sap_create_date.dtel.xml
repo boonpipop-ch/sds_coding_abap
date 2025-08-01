@@ -1,0 +1,19 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<abapGit version="v1.0.0" serializer="LCL_OBJECT_DTEL" serializer_version="v1.0.0">
+ <asx:abap xmlns:asx="http://www.sap.com/abapxml" version="1.0">
+  <asx:values>
+   <DD04V>
+    <ROLLNAME>ZSDSDE_SAP_CREATE_DATE</ROLLNAME>
+    <DDLANGUAGE>E</DDLANGUAGE>
+    <DOMNAME>ZSDSDM_ISO_DAT_TIME</DOMNAME>
+    <HEADLEN>31</HEADLEN>
+    <SCRLEN3>31</SCRLEN3>
+    <DDTEXT>Day Month Year and Time of  Document Issue Date</DDTEXT>
+    <REPTEXT>วันเดือนปีและเวลาที่สร้างเอกสาร</REPTEXT>
+    <SCRTEXT_L>วันเดือนปีและเวลาที่สร้างเอกสาร</SCRTEXT_L>
+    <DTELMASTER>E</DTELMASTER>
+    <REFKIND>D</REFKIND>
+   </DD04V>
+  </asx:values>
+ </asx:abap>
+</abapGit>

@@ -1,0 +1,8 @@
+@AbapCatalog.internal.setChange: 'FLDADD_NO_ASS_INFLUENCE'
+@AbapCatalog.sqlViewAppendName: 'ZZ1_57EB5C4B0693'
+
+extend view C_GENERICPLANQ3001 with ZZ1_XZ3RR6KIEWOYQV46J23HIFATFQ
+  
+{ 
+  ZZ1_SDSDIST_APM as ZZ1_SDSDIST_APM
+}

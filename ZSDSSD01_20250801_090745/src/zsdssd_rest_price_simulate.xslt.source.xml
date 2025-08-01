@@ -1,0 +1,235 @@
+<?sap.transform simple?>
+<tt:transform xmlns:tt="http://www.sap.com/transformation-templates" xmlns:ddic="http://www.sap.com/abapxml/types/dictionary">
+
+  <tt:root name="DATA" type="ddic:ZSDSSDS007"/>
+  <tt:template>
+
+    <!-- Header-->
+    <object>
+      <tt:group>
+        <tt:cond frq="1">
+          <str name="SFQuotationNo">
+            <tt:value ref="DATA.NAME"/>
+            <tt:assign to-ref="DATA.UPDFLG.NAME" val="'X'"/>
+          </str>
+        </tt:cond>
+        <tt:cond frq="1">
+          <str name="InterfaceDate">
+            <tt:value ref="DATA.PRICE_DATE"/>
+            <tt:assign to-ref="DATA.UPDFLG.PRICE_DATE" val="'X'"/>
+          </str>
+        </tt:cond>
+        <tt:cond frq="1">
+          <str name="CreateDate">
+            <tt:value ref="DATA.DOC_DATE"/>
+            <tt:assign to-ref="DATA.UPDFLG.DOC_DATE" val="'X'"/>
+          </str>
+        </tt:cond>
+        <tt:cond frq="1">
+          <str name="DocumentType">
+            <tt:value ref="DATA.DOC_TYPE"/>
+            <tt:assign to-ref="DATA.UPDFLG.DOC_TYPE" val="'X'"/>
+          </str>
+        </tt:cond>
+        <tt:cond frq="1">
+          <str name="DistributionChannel">
+            <tt:value ref="DATA.DISTR_CHAN"/>
+            <tt:assign to-ref="DATA.UPDFLG.DISTR_CHAN" val="'X'"/>
+          </str>
+        </tt:cond>
+        <tt:cond frq="1">
+          <str name="SalesGroup">
+            <tt:value ref="DATA.SALES_GRP"/>
+            <tt:assign to-ref="DATA.UPDFLG.SALES_GRP" val="'X'"/>
+          </str>
+        </tt:cond>
+        <tt:cond frq="1">
+          <str name="BPSoldToNumber">
+            <tt:value ref="DATA.PARTN_NUMB"/>
+            <tt:assign to-ref="DATA.UPDFLG.PARTN_NUMB" val="'X'"/>
+          </str>
+        </tt:cond>
+        <tt:cond frq="?">
+          <str name="PaymentTerms">
+            <tt:value ref="DATA.PMNTTRMS"/>
+            <tt:assign to-ref="DATA.UPDFLG.PMNTTRMS" val="'X'"/>
+          </str>
+        </tt:cond>
+        <tt:cond frq="?">
+          <str name="ResponseStatus">
+            <tt:value ref="DATA.RESP_STATUS"/>
+          </str>
+        </tt:cond>
+        <tt:cond frq="?">
+          <str name="ResponseMessage">
+            <tt:value ref="DATA.RESP_MESSAGE"/>
+          </str>
+        </tt:cond>
+      </tt:group>
+      <!-- Quote Item -->
+      <array name="QuoteItem">
+        <tt:cond check="exist(DATA.QUOTE_ITEM)">
+          <tt:loop ref="DATA.QUOTE_ITEM">
+            <object>
+              <tt:group>
+                <tt:cond frq="1">
+                  <str name="SFItemNumber">
+                    <tt:value ref="$ref.ITM_NUMBER"/>
+                    <tt:assign to-ref="$ref.UPDFLG.ITM_NUMBER" val="'X'"/>
+                  </str>
+                </tt:cond>
+                <tt:cond frq="1">
+                  <str name="MaterialNumber">
+                    <tt:value ref="$ref.MATERIAL"/>
+                    <tt:assign to-ref="$ref.UPDFLG.MATERIAL" val="'X'"/>
+                  </str>
+                </tt:cond>
+                <tt:cond frq="?">
+                  <num name="Quantity">
+                    <tt:value ref="$ref.TARGET_QTY"/>
+                    <tt:assign to-ref="$ref.UPDFLG.TARGET_QTY" val="'X'"/>
+                  </num>
+                </tt:cond>
+                <tt:cond frq="?">
+                  <str name="SalesUnit">
+                    <tt:value ref="$ref.TARGET_QU"/>
+                    <tt:assign to-ref="$ref.UPDFLG.TARGET_QU" val="'X'"/>
+                  </str>
+                </tt:cond>
+                <tt:cond frq="?">
+                  <num name="NetDiscountAmount">
+                    <tt:value ref="$ref.CONDVALUE_NET"/>
+                    <tt:assign to-ref="$ref.UPDFLG.CONDVALUE_NET" val="'X'"/>
+                  </num>
+                </tt:cond>
+                <tt:cond frq="?">
+                  <num name="ItemDiscountPer">
+                    <tt:value ref="$ref.CONDVALUE_ZDI1"/>
+                    <tt:assign to-ref="$ref.UPDFLG.CONDVALUE_ZDI1" val="'X'"/>
+                  </num>
+                </tt:cond>
+                <tt:cond frq="?">
+                  <num name="ItemDiscountVal">
+                    <tt:value ref="$ref.CONDVALUE_ZDI2"/>
+                    <tt:assign to-ref="$ref.UPDFLG.CONDVALUE_ZDI2" val="'X'"/>
+                  </num>
+                </tt:cond>
+                <tt:cond frq="?">
+                  <num name="ItemDiscountLV1Per">
+                    <tt:value ref="$ref.CONDVALUE_ZD01"/>
+                    <tt:assign to-ref="$ref.UPDFLG.CONDVALUE_ZD01" val="'X'"/>
+                  </num>
+                </tt:cond>
+                <tt:cond frq="?">
+                  <num name="ItemDiscountLV1Val">
+                    <tt:value ref="$ref.CONDVALUE_ZD02"/>
+                    <tt:assign to-ref="$ref.UPDFLG.CONDVALUE_ZD02" val="'X'"/>
+                  </num>
+                </tt:cond>
+                <tt:cond frq="?">
+                  <num name="ItemDiscountLV2Per">
+                    <tt:value ref="$ref.CONDVALUE_ZD03"/>
+                    <tt:assign to-ref="$ref.UPDFLG.CONDVALUE_ZD03" val="'X'"/>
+                  </num>
+                </tt:cond>
+                <tt:cond frq="?">
+                  <num name="ItemDiscountLV2Val">
+                    <tt:value ref="$ref.CONDVALUE_ZD04"/>
+                    <tt:assign to-ref="$ref.UPDFLG.CONDVALUE_ZD04" val="'X'"/>
+                  </num>
+                </tt:cond>
+                <tt:cond frq="?">
+                  <num name="ItemDiscountLV3Per">
+                    <tt:value ref="$ref.CONDVALUE_ZD05"/>
+                    <tt:assign to-ref="$ref.UPDFLG.CONDVALUE_ZD05" val="'X'"/>
+                  </num>
+                </tt:cond>
+                <tt:cond frq="?">
+                  <num name="ItemDiscountLV3Val">
+                    <tt:value ref="$ref.CONDVALUE_ZD06"/>
+                    <tt:assign to-ref="$ref.UPDFLG.CONDVALUE_ZD06" val="'X'"/>
+                  </num>
+                </tt:cond>
+                <tt:cond frq="?">
+                  <num name="ItemDiscountLV4Per">
+                    <tt:value ref="$ref.CONDVALUE_ZD07"/>
+                    <tt:assign to-ref="$ref.UPDFLG.CONDVALUE_ZD07" val="'X'"/>
+                  </num>
+                </tt:cond>
+                <tt:cond frq="?">
+                  <num name="ItemDiscountLV4Val">
+                    <tt:value ref="$ref.CONDVALUE_ZD08"/>
+                    <tt:assign to-ref="$ref.UPDFLG.CONDVALUE_ZD08" val="'X'"/>
+                  </num>
+                </tt:cond>
+                <tt:cond frq="?">
+                  <num name="ItemDiscountLV5Per">
+                    <tt:value ref="$ref.CONDVALUE_ZD09"/>
+                    <tt:assign to-ref="$ref.UPDFLG.CONDVALUE_ZD09" val="'X'"/>
+                  </num>
+                </tt:cond>
+                <tt:cond frq="?">
+                  <num name="ItemDiscountLV5Val">
+                    <tt:value ref="$ref.CONDVALUE_ZD10"/>
+                    <tt:assign to-ref="$ref.UPDFLG.CONDVALUE_ZD10" val="'X'"/>
+                  </num>
+                </tt:cond>
+                <tt:cond frq="?">
+                  <num name="SVServicePrice">
+                    <tt:value ref="$ref.CONDVALUE_ZSR1"/>
+                    <tt:assign to-ref="$ref.UPDFLG.CONDVALUE_ZSR1" val="'X'"/>
+                  </num>
+                </tt:cond>
+                <tt:cond frq="?">
+                  <num name="SVItemDiscountPer">
+                    <tt:value ref="$ref.CONDVALUE_ZSI1"/>
+                    <tt:assign to-ref="$ref.UPDFLG.CONDVALUE_ZSI1" val="'X'"/>
+                  </num>
+                </tt:cond>
+                <tt:cond frq="?">
+                  <num name="SVItemDiscountVal">
+                    <tt:value ref="$ref.CONDVALUE_ZSI2"/>
+                    <tt:assign to-ref="$ref.UPDFLG.CONDVALUE_ZSI2" val="'X'"/>
+                  </num>
+                </tt:cond>
+                <tt:cond frq="?">
+                  <str name="Status">
+                    <tt:value ref="$ref.RESP_STATUS"/>
+                  </str>
+                </tt:cond>
+                <tt:cond frq="?">
+                  <str name="Message">
+                    <tt:value ref="$ref.RESP_MESSAGE"/>
+                  </str>
+                </tt:cond>
+              </tt:group>
+            </object>
+          </tt:loop>
+        </tt:cond>
+      </array>
+
+      <tt:cond check="exist(DATA.RESPONSE)">
+        <array name="Response">
+          <tt:loop ref="DATA.RESPONSE">
+            <!-- Response-->
+            <object>
+              <tt:group>
+                <tt:cond frq="?">
+                  <str name="Status">
+                    <tt:value ref="$ref.RESP_STATUS"/>
+                  </str>
+                </tt:cond>
+                <tt:cond frq="?">
+                  <str name="Message">
+                    <tt:value ref="$ref.RESP_MESSAGE"/>
+                  </str>
+                </tt:cond>
+              </tt:group>
+            </object>
+          </tt:loop>
+        </array>
+      </tt:cond>
+
+    </object>
+  </tt:template>
+</tt:transform>

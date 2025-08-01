@@ -1,0 +1,8 @@
+@AbapCatalog.internal.setChange: 'FLDADD_NO_ASS_INFLUENCE'
+@AbapCatalog.sqlViewAppendName: 'ZZ1_66A3663F54F4'
+
+extend view E_SERVICEDOCUMENT with ZZ1_IOU5XJL4JTY2X37EFC4NJIKSPY
+  
+{ 
+  Persistence.ZZ1_PARTNER_SEGMENT as ZZ1_PARTNER_SEGMENT
+}

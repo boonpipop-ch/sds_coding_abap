@@ -1,0 +1,8 @@
+@AbapCatalog.internal.setChange: 'FLDADD_NO_ASS_INFLUENCE'
+@AbapCatalog.sqlViewAppendName: 'ZZ1_D7A4D589DE53'
+
+extend view C_MARKETSEGMENTQ2501 with ZZ1_L3UQYIBZABT6DQQH45J65LA3VY
+  
+{ 
+  ZZ1_APPLTN as ZZ1_APPLTN
+}

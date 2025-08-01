@@ -1,0 +1,19 @@
+*&---------------------------------------------------------------------*
+*& Include          ZSDSSDR0550_SELECTION
+*&---------------------------------------------------------------------*
+*-----------------------------------------------------------------------
+* P A R A M E T E R S   &   S E L E C T - O P T I O N S
+*-----------------------------------------------------------------------
+SELECTION-SCREEN BEGIN OF BLOCK BLOCK2 WITH FRAME TITLE TEXT-002.
+  PARAMETERS : P_START TYPE ZSDSDE_DAY_FIRST DEFAULT SY-DATUM MODIF ID DAT,
+               P_END   TYPE ZSDSDE_DAY_LAST MODIF ID DAT.
+SELECTION-SCREEN END OF BLOCK BLOCK2.
+
+SELECTION-SCREEN BEGIN OF BLOCK BLOCK1 WITH FRAME TITLE TEXT-001.
+  SELECT-OPTIONS : S_MATNR  FOR ZSDSSDC030-MATNR.
+SELECTION-SCREEN END OF BLOCK BLOCK1.
+
+SELECTION-SCREEN BEGIN OF BLOCK BLOCK3 WITH FRAME TITLE TEXT-003.
+  PARAMETERS : R1 RADIOBUTTON GROUP LOG DEFAULT 'X' USER-COMMAND UCOMM,
+               R2 RADIOBUTTON GROUP LOG.
+SELECTION-SCREEN END OF BLOCK BLOCK3.

@@ -1,0 +1,501 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<abapGit version="v1.0.0" serializer="LCL_OBJECT_FUGR" serializer_version="v1.0.0">
+ <asx:abap xmlns:asx="http://www.sap.com/abapxml" version="1.0">
+  <asx:values>
+   <AREAT>Function Group : JV Approve</AREAT>
+   <INCLUDES>
+    <SOBJ_NAME>LZSDSFI23F01</SOBJ_NAME>
+    <SOBJ_NAME>LZSDSFI23TOP</SOBJ_NAME>
+    <SOBJ_NAME>SAPLZSDSFI23</SOBJ_NAME>
+   </INCLUDES>
+   <FUNCTIONS>
+    <item>
+     <FUNCNAME>Z_SDSFI_INTERFACE_00001030</FUNCNAME>
+     <SHORT_TEXT>Schnittstellenbeschreibung zum Event 00001030</SHORT_TEXT>
+     <IMPORT>
+      <RSIMP>
+       <PARAMETER>I_BKDF</PARAMETER>
+       <DBFIELD>BKDF</DBFIELD>
+      </RSIMP>
+      <RSIMP>
+       <PARAMETER>I_UF05A</PARAMETER>
+       <DBFIELD>UF05A</DBFIELD>
+      </RSIMP>
+      <RSIMP>
+       <PARAMETER>I_XVBUP</PARAMETER>
+       <DBFIELD>OFIWA-XVBUP</DBFIELD>
+       <DEFAULT>&apos;X&apos;</DEFAULT>
+       <OPTIONAL>X</OPTIONAL>
+      </RSIMP>
+     </IMPORT>
+     <TABLES>
+      <RSTBL>
+       <PARAMETER>T_AUSZ1</PARAMETER>
+       <DBSTRUCT>AUSZ1</DBSTRUCT>
+       <OPTIONAL>X</OPTIONAL>
+      </RSTBL>
+      <RSTBL>
+       <PARAMETER>T_AUSZ2</PARAMETER>
+       <DBSTRUCT>AUSZ2</DBSTRUCT>
+       <OPTIONAL>X</OPTIONAL>
+      </RSTBL>
+      <RSTBL>
+       <PARAMETER>T_AUSZ3</PARAMETER>
+       <DBSTRUCT>AUSZ_CLR</DBSTRUCT>
+       <OPTIONAL>X</OPTIONAL>
+      </RSTBL>
+      <RSTBL>
+       <PARAMETER>T_BKP1</PARAMETER>
+       <DBSTRUCT>BKP1</DBSTRUCT>
+      </RSTBL>
+      <RSTBL>
+       <PARAMETER>T_BKPF</PARAMETER>
+       <DBSTRUCT>BKPF</DBSTRUCT>
+      </RSTBL>
+      <RSTBL>
+       <PARAMETER>T_BSEC</PARAMETER>
+       <DBSTRUCT>BSEC</DBSTRUCT>
+      </RSTBL>
+      <RSTBL>
+       <PARAMETER>T_BSED</PARAMETER>
+       <DBSTRUCT>BSED</DBSTRUCT>
+      </RSTBL>
+      <RSTBL>
+       <PARAMETER>T_BSEG</PARAMETER>
+       <DBSTRUCT>BSEG</DBSTRUCT>
+      </RSTBL>
+      <RSTBL>
+       <PARAMETER>T_BSET</PARAMETER>
+       <DBSTRUCT>BSET</DBSTRUCT>
+      </RSTBL>
+      <RSTBL>
+       <PARAMETER>T_BSEU</PARAMETER>
+       <DBSTRUCT>BSEU</DBSTRUCT>
+      </RSTBL>
+     </TABLES>
+     <DOCUMENTATION>
+      <RSFDO>
+       <PARAMETER>I_BKDF</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>Dauerbuchungsdaten</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>I_UF05A</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>Hilfsfelder für temporäre Belege</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>I_XVBUP</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>Kennzeichen: Verbuchung in update task</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>T_AUSZ1</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>Auszugleichende Positionen</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>T_AUSZ2</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>Ausgleichsaktionen</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>T_AUSZ3</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>Ausgleichsaktionen</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>T_BKP1</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>Zusatzinformationen pro Belegkopf</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>T_BKPF</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>Belegköpfe</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>T_BSEC</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>CPD-Daten</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>T_BSED</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>Wechseldaten</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>T_BSEG</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>Belegzeilen</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>T_BSET</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>Steuerdaten</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>T_BSEU</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>Verbuchungsinformation pro Belegzeile</STEXT>
+      </RSFDO>
+     </DOCUMENTATION>
+    </item>
+    <item>
+     <FUNCNAME>Z_SDSFI_JV_PROCESS</FUNCNAME>
+     <SHORT_TEXT>Schnittstellenbeschreibung zum Event 00001011</SHORT_TEXT>
+     <TABLES>
+      <RSTBL>
+       <PARAMETER>T_BSEG</PARAMETER>
+       <DBSTRUCT>BSEG</DBSTRUCT>
+      </RSTBL>
+      <RSTBL>
+       <PARAMETER>T_BKPF</PARAMETER>
+       <DBSTRUCT>BKPF</DBSTRUCT>
+      </RSTBL>
+     </TABLES>
+     <DOCUMENTATION>
+      <RSFDO>
+       <PARAMETER>T_BSEG</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>Accounting Document Segment</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>T_BKPF</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>Accounting Document Header</STEXT>
+      </RSFDO>
+     </DOCUMENTATION>
+    </item>
+   </FUNCTIONS>
+   <LONGTEXTS_Z_SDSFI_INTERFACE_00001030>
+    <item>
+     <DOKIL>
+      <ID>FU</ID>
+      <OBJECT>Z_SDSFI_INTERFACE_00001030</OBJECT>
+      <LANGU>D</LANGU>
+      <TYP>T</TYP>
+      <VERSION>0006</VERSION>
+      <MASTERLANG>X</MASTERLANG>
+      <TXTLINES>00019</TXTLINES>
+      <DOKSTATE>A</DOKSTATE>
+     </DOKIL>
+     <HEAD>
+      <TDOBJECT>DOKU</TDOBJECT>
+      <TDNAME>Z_SDSFI_INTERFACE_00001030</TDNAME>
+      <TDID>FU</TDID>
+      <TDSPRAS>D</TDSPRAS>
+      <TDFORM>S_DOCU_SHOW</TDFORM>
+      <TDSTYLE>S_DOCUS1</TDSTYLE>
+      <TDVERSION>00006</TDVERSION>
+      <TDLINESIZE>072</TDLINESIZE>
+     </HEAD>
+     <LINES>
+      <TLINE>
+       <TDFORMAT>/:</TDFORMAT>
+       <TDLINE>DEFINE &amp;TEXT&amp;  = &apos;Beleg buchen, Verbuchung&apos;</TDLINE>
+      </TLINE>
+      <TLINE>
+       <TDFORMAT>/:</TDFORMAT>
+       <TDLINE>DEFINE &amp;EVENT&amp; = &apos;00001030&apos;</TDLINE>
+      </TLINE>
+      <TLINE>
+       <TDFORMAT>/:</TDFORMAT>
+       <TDLINE>DEFINE &amp;TYPE&amp;  = &apos;INTERFACE&apos;</TDLINE>
+      </TLINE>
+      <TLINE>
+       <TDFORMAT>/:</TDFORMAT>
+       <TDLINE>INCLUDE FI_OPEN_FI_DOCUMENTATION_1 OBJECT DOKU ID TX</TDLINE>
+      </TLINE>
+      <TLINE>
+       <TDFORMAT>U1</TDFORMAT>
+       <TDLINE>EVENT</TDLINE>
+      </TLINE>
+      <TLINE>
+       <TDFORMAT>AS</TDFORMAT>
+       <TDLINE>Der Zeitpunkt liegt hinter dem Aufruf des Verbuchers fürs FI</TDLINE>
+      </TLINE>
+      <TLINE>
+       <TDLINE>(POST_DOCUMENT) und auch nach dem Aufruf des Interface-Anteils.</TDLINE>
+      </TLINE>
+      <TLINE>
+       <TDFORMAT>U1</TDFORMAT>
+       <TDLINE>SCHNITTSTELLE</TDLINE>
+      </TLINE>
+      <TLINE>
+       <TDFORMAT>AS</TDFORMAT>
+       <TDLINE>An die Zusatzkomponente werden alle aktuellen und für die Verbuchung</TDLINE>
+      </TLINE>
+      <TLINE>
+       <TDLINE>relevanten Belegdaten sowie diverse Steuerparameter übergeben. Das</TDLINE>
+      </TLINE>
+      <TLINE>
+       <TDLINE>Kennzeichen I_XVBUP dient als reine Information, daß der SAP-Standard</TDLINE>
+      </TLINE>
+      <TLINE>
+       <TDLINE>asynchron verbucht.</TDLINE>
+      </TLINE>
+      <TLINE>
+       <TDFORMAT>HU</TDFORMAT>
+       <TDLINE>Damit darf in der Zusatzkomponente keine schreibende Datenbankaktion</TDLINE>
+      </TLINE>
+      <TLINE>
+       <TDLINE>ausgeführt werden !!</TDLINE>
+      </TLINE>
+      <TLINE>
+       <TDFORMAT>AS</TDFORMAT>
+       <TDLINE>Die Verbuchung (auch der Add-On-spezifischen Tabellen) wird durch den</TDLINE>
+      </TLINE>
+      <TLINE>
+       <TDLINE>COMMIT WORK des Standardablaufes ausgeführt. Falls Ihr</TDLINE>
+      </TLINE>
+      <TLINE>
+       <TDLINE>Funktionsbaustein nicht über RFC gerufen wird, veranlassen Sie stets</TDLINE>
+      </TLINE>
+      <TLINE>
+       <TDLINE>asynchrone Verbuchung mit dem Zusatz</TDLINE>
+      </TLINE>
+      <TLINE>
+       <TDFORMAT>PE</TDFORMAT>
+       <TDLINE>IN UPDATE TASK.</TDLINE>
+      </TLINE>
+     </LINES>
+    </item>
+    <item>
+     <DOKIL>
+      <ID>FU</ID>
+      <OBJECT>Z_SDSFI_INTERFACE_00001030</OBJECT>
+      <LANGU>E</LANGU>
+      <TYP>T</TYP>
+      <VERSION>0006</VERSION>
+      <TXTLINES>00019</TXTLINES>
+      <DOKSTATE>A</DOKSTATE>
+     </DOKIL>
+     <HEAD>
+      <TDOBJECT>DOKU</TDOBJECT>
+      <TDNAME>Z_SDSFI_INTERFACE_00001030</TDNAME>
+      <TDID>FU</TDID>
+      <TDSPRAS>E</TDSPRAS>
+      <TDFORM>S_DOCU_SHOW</TDFORM>
+      <TDSTYLE>S_DOCUS1</TDSTYLE>
+      <TDVERSION>00006</TDVERSION>
+      <TDLINESIZE>072</TDLINESIZE>
+     </HEAD>
+     <LINES>
+      <TLINE>
+       <TDFORMAT>/:</TDFORMAT>
+       <TDLINE>DEFINE &amp;TEXT&amp;  = &apos;Document posting, update posting&apos;</TDLINE>
+      </TLINE>
+      <TLINE>
+       <TDFORMAT>/:</TDFORMAT>
+       <TDLINE>DEFINE &amp;EVENT&amp; = &apos;00001030&apos;</TDLINE>
+      </TLINE>
+      <TLINE>
+       <TDFORMAT>/:</TDFORMAT>
+       <TDLINE>DEFINE &amp;TYPE&amp;  = &apos;INTERFACE&apos;</TDLINE>
+      </TLINE>
+      <TLINE>
+       <TDFORMAT>/:</TDFORMAT>
+       <TDLINE>INCLUDE FI_OPEN_FI_DOCUMENTATION_1 OBJECT DOKU ID TX LANGUAGE EN</TDLINE>
+      </TLINE>
+      <TLINE>
+       <TDFORMAT>U1</TDFORMAT>
+       <TDLINE>EVENT</TDLINE>
+      </TLINE>
+      <TLINE>
+       <TDFORMAT>AS</TDFORMAT>
+       <TDLINE>This Event is reached prior to the update posting module for FI</TDLINE>
+      </TLINE>
+      <TLINE>
+       <TDLINE>(POST_DOCUMENT) and also following callup of the interface part.</TDLINE>
+      </TLINE>
+      <TLINE>
+       <TDFORMAT>U1</TDFORMAT>
+       <TDLINE>INTERFACE</TDLINE>
+      </TLINE>
+      <TLINE>
+       <TDFORMAT>AS</TDFORMAT>
+       <TDLINE>All current data, all document data required for the update, and</TDLINE>
+      </TLINE>
+      <TLINE>
+       <TDLINE>various control parameters are transferred to the additional component.</TDLINE>
+      </TLINE>
+      <TLINE>
+       <TDLINE>The indicator I_XVBUP is used for information purposes only - that the</TDLINE>
+      </TLINE>
+      <TLINE>
+       <TDLINE>SAP standard system carries out an update posting asynchronously.</TDLINE>
+      </TLINE>
+      <TLINE>
+       <TDFORMAT>HU</TDFORMAT>
+       <TDLINE>It follows that no database activities involving the writing of data</TDLINE>
+      </TLINE>
+      <TLINE>
+       <TDLINE>may be carried out in the additional component.</TDLINE>
+      </TLINE>
+      <TLINE>
+       <TDFORMAT>AS</TDFORMAT>
+       <TDLINE>The update posting (including tables specific to Add-ons) are carried</TDLINE>
+      </TLINE>
+      <TLINE>
+       <TDLINE>out by the COMMIT WORK of the standard process. If your function module</TDLINE>
+      </TLINE>
+      <TLINE>
+       <TDLINE>is not accessed via RFC, you should always initiate asynchronous update</TDLINE>
+      </TLINE>
+      <TLINE>
+       <TDLINE>posting using the ABAP statement:</TDLINE>
+      </TLINE>
+      <TLINE>
+       <TDFORMAT>PE</TDFORMAT>
+       <TDLINE>IN UPDATE TASK.</TDLINE>
+      </TLINE>
+     </LINES>
+    </item>
+   </LONGTEXTS_Z_SDSFI_INTERFACE_00001030>
+   <LONGTEXTS_Z_SDSFI_JV_PROCESS>
+    <item>
+     <DOKIL>
+      <ID>FU</ID>
+      <OBJECT>Z_SDSFI_JV_PROCESS</OBJECT>
+      <LANGU>D</LANGU>
+      <TYP>T</TYP>
+      <VERSION>0005</VERSION>
+      <MASTERLANG>X</MASTERLANG>
+      <TXTLINES>00012</TXTLINES>
+      <DOKSTATE>A</DOKSTATE>
+     </DOKIL>
+     <HEAD>
+      <TDOBJECT>DOKU</TDOBJECT>
+      <TDNAME>Z_SDSFI_JV_PROCESS</TDNAME>
+      <TDID>FU</TDID>
+      <TDSPRAS>D</TDSPRAS>
+      <TDFORM>S_DOCU_SHOW</TDFORM>
+      <TDSTYLE>S_DOCUS1</TDSTYLE>
+      <TDVERSION>00005</TDVERSION>
+      <TDLINESIZE>072</TDLINESIZE>
+     </HEAD>
+     <LINES>
+      <TLINE>
+       <TDFORMAT>/:</TDFORMAT>
+       <TDLINE>DEFINE &amp;TEXT&amp;  = &apos;Beleg buchen, Belegzeile prüfen&apos;</TDLINE>
+      </TLINE>
+      <TLINE>
+       <TDFORMAT>/:</TDFORMAT>
+       <TDLINE>DEFINE &amp;EVENT&amp; = &apos;00001011&apos;</TDLINE>
+      </TLINE>
+      <TLINE>
+       <TDFORMAT>/:</TDFORMAT>
+       <TDLINE>DEFINE &amp;TYPE&amp;  = &apos;INTERFACE&apos;</TDLINE>
+      </TLINE>
+      <TLINE>
+       <TDFORMAT>/:</TDFORMAT>
+       <TDLINE>INCLUDE FI_OPEN_FI_DOCUMENTATION_1 OBJECT DOKU ID TX</TDLINE>
+      </TLINE>
+      <TLINE>
+       <TDFORMAT>U1</TDFORMAT>
+       <TDLINE>EVENT</TDLINE>
+      </TLINE>
+      <TLINE>
+       <TDFORMAT>AS</TDFORMAT>
+       <TDLINE>Der Zeitpunkt wird immer dann erreicht, wenn beim Buchen eines Beleges</TDLINE>
+      </TLINE>
+      <TLINE>
+       <TDLINE>eine Zeile die Prüfungen durchläuft. Der Event wird sowohl bei</TDLINE>
+      </TLINE>
+      <TLINE>
+       <TDLINE>Hinzufügen einer Position als auch beim Korrigieren durchlaufen.</TDLINE>
+      </TLINE>
+      <TLINE>
+       <TDFORMAT>AS</TDFORMAT>
+      </TLINE>
+      <TLINE>
+       <TDFORMAT>U1</TDFORMAT>
+       <TDLINE>SCHNITTSTELLE</TDLINE>
+      </TLINE>
+      <TLINE>
+       <TDFORMAT>AS</TDFORMAT>
+       <TDLINE>An die Zusatzkomponente werden die bisher vorliegenden Daten der</TDLINE>
+      </TLINE>
+      <TLINE>
+       <TDLINE>Belegzeile sowie des Belegkopfes übergeben ( zu diesem Zeitpunkt ist</TDLINE>
+      </TLINE>
+      <TLINE>
+       <TDLINE>noch keine Belegnummer vergeben).</TDLINE>
+      </TLINE>
+     </LINES>
+    </item>
+    <item>
+     <DOKIL>
+      <ID>FU</ID>
+      <OBJECT>Z_SDSFI_JV_PROCESS</OBJECT>
+      <LANGU>E</LANGU>
+      <TYP>T</TYP>
+      <VERSION>0005</VERSION>
+      <TXTLINES>00012</TXTLINES>
+      <DOKSTATE>A</DOKSTATE>
+     </DOKIL>
+     <HEAD>
+      <TDOBJECT>DOKU</TDOBJECT>
+      <TDNAME>Z_SDSFI_JV_PROCESS</TDNAME>
+      <TDID>FU</TDID>
+      <TDSPRAS>E</TDSPRAS>
+      <TDFORM>S_DOCU_SHOW</TDFORM>
+      <TDSTYLE>S_DOCUS1</TDSTYLE>
+      <TDVERSION>00005</TDVERSION>
+      <TDLINESIZE>072</TDLINESIZE>
+     </HEAD>
+     <LINES>
+      <TLINE>
+       <TDFORMAT>/:</TDFORMAT>
+       <TDLINE>DEFINE &amp;TEXT&amp;  = &apos;Document posting, line item check&apos;</TDLINE>
+      </TLINE>
+      <TLINE>
+       <TDFORMAT>/:</TDFORMAT>
+       <TDLINE>DEFINE &amp;EVENT&amp; = &apos;00001011&apos;</TDLINE>
+      </TLINE>
+      <TLINE>
+       <TDFORMAT>/:</TDFORMAT>
+       <TDLINE>DEFINE &amp;TYPE&amp;  = &apos;INTERFACE&apos;</TDLINE>
+      </TLINE>
+      <TLINE>
+       <TDFORMAT>/:</TDFORMAT>
+       <TDLINE>INCLUDE FI_OPEN_FI_DOCUMENTATION_1 OBJECT DOKU ID TX LANGUAGE EN</TDLINE>
+      </TLINE>
+      <TLINE>
+       <TDFORMAT>U1</TDFORMAT>
+       <TDLINE>EVENT</TDLINE>
+      </TLINE>
+      <TLINE>
+       <TDFORMAT>AS</TDFORMAT>
+       <TDLINE>This Event is reached whenever, when posting a document, a document</TDLINE>
+      </TLINE>
+      <TLINE>
+       <TDLINE>line item is subject to the checks. This Event is reached both when</TDLINE>
+      </TLINE>
+      <TLINE>
+       <TDLINE>adding and when correcting a line item.</TDLINE>
+      </TLINE>
+      <TLINE>
+       <TDFORMAT>AS</TDFORMAT>
+      </TLINE>
+      <TLINE>
+       <TDFORMAT>U1</TDFORMAT>
+       <TDLINE>INTERFACE</TDLINE>
+      </TLINE>
+      <TLINE>
+       <TDFORMAT>AS</TDFORMAT>
+       <TDLINE>The existing data belonging to the line item and to the document header</TDLINE>
+      </TLINE>
+      <TLINE>
+       <TDLINE>is transferred to the additional component (a document number has not</TDLINE>
+      </TLINE>
+      <TLINE>
+       <TDLINE>yet been assigned).</TDLINE>
+      </TLINE>
+     </LINES>
+    </item>
+   </LONGTEXTS_Z_SDSFI_JV_PROCESS>
+  </asx:values>
+ </asx:abap>
+</abapGit>

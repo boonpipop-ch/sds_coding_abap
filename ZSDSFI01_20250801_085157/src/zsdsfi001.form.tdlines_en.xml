@@ -1,0 +1,349 @@
+﻿<?xml version="1.0" encoding="utf-16"?>
+<abapGit version="v1.0.0">
+ <asx:abap xmlns:asx="http://www.sap.com/abapxml" version="1.0">
+  <asx:values>
+   <TDLINES>
+    <TLINE>
+     <TDFORMAT>/W</TDFORMAT>
+     <TDLINE>ADDR</TDLINE>
+    </TLINE>
+    <TLINE>
+     <TDFORMAT>L1</TDFORMAT>
+     <TDLINE>,,รหัสลูกค้า  ,,&amp;GV_KUNNR&amp;</TDLINE>
+    </TLINE>
+    <TLINE>
+     <TDFORMAT>L1</TDFORMAT>
+     <TDLINE>,,ชื่อลูกค้า  ,,&amp;GV_NAME&amp;</TDLINE>
+    </TLINE>
+    <TLINE>
+     <TDFORMAT>L1</TDFORMAT>
+     <TDLINE>,,,,&amp;GV_NAME_ENG&amp;</TDLINE>
+    </TLINE>
+    <TLINE>
+     <TDFORMAT>L1</TDFORMAT>
+     <TDLINE>,,ที่อยู่ลูกค้า  ,,&amp;GV_STRAS&amp; &amp;gv_str_suppl3&amp; &amp;gv_location&amp;</TDLINE>
+    </TLINE>
+    <TLINE>
+     <TDFORMAT>L1</TDFORMAT>
+     <TDLINE>,,,,&amp;GV_ORT02&amp;  &amp;GV_ORT01&amp;  &amp;GV_PSTLZ&amp;</TDLINE>
+    </TLINE>
+    <TLINE>
+     <TDFORMAT>L1</TDFORMAT>
+     <TDLINE>,,,,Tel. &amp;GV_TELF1&amp;</TDLINE>
+    </TLINE>
+    <TLINE>
+     <TDFORMAT>/W</TDFORMAT>
+     <TDLINE>ADD_COM</TDLINE>
+    </TLINE>
+    <TLINE>
+     <TDFORMAT>H1</TDFORMAT>
+     <TDLINE>บริษัท สยามไดกิ้นเซลส์ จำกัด</TDLINE>
+    </TLINE>
+    <TLINE>
+     <TDFORMAT>H1</TDFORMAT>
+     <TDLINE>22 ซอยอ่อนนุช 55/1 แขวงประเวศ เขตประเวศ กทม. 10250</TDLINE>
+    </TLINE>
+    <TLINE>
+     <TDFORMAT>H1</TDFORMAT>
+     <TDLINE>โทร. 0-2838-3200</TDLINE>
+    </TLINE>
+    <TLINE>
+     <TDFORMAT>H1</TDFORMAT>
+     <TDLINE>เลขที่ประจำตัวผู้เสียภาษี &amp;gv_stceg&amp;  ทะเบียนการค้าเลขที่ 09-41-05533</TDLINE>
+    </TLINE>
+    <TLINE>
+     <TDFORMAT>/W</TDFORMAT>
+     <TDLINE>APPENDIX</TDLINE>
+    </TLINE>
+    <TLINE>
+     <TDFORMAT>H1</TDFORMAT>
+     <TDLINE>Appendix 2</TDLINE>
+    </TLINE>
+    <TLINE>
+     <TDFORMAT>/W</TDFORMAT>
+     <TDLINE>AS_OF_D</TDLINE>
+    </TLINE>
+    <TLINE>
+     <TDFORMAT>L1</TDFORMAT>
+     <TDLINE>แสดงรายการสิ้นสุด ณ วันที่ &amp;GV_DATE_ASOF&amp;</TDLINE>
+    </TLINE>
+    <TLINE>
+     <TDFORMAT>/W</TDFORMAT>
+     <TDLINE>FOOTER</TDLINE>
+    </TLINE>
+    <TLINE>
+     <TDFORMAT>/E</TDFORMAT>
+     <TDLINE>TOT</TDLINE>
+    </TLINE>
+    <TLINE>
+     <TDFORMAT>L3</TDFORMAT>
+     <TDLINE>________________________________________________________________________</TDLINE>
+    </TLINE>
+    <TLINE>
+     <TDFORMAT>=</TDFORMAT>
+     <TDLINE>____________________________________________</TDLINE>
+    </TLINE>
+    <TLINE>
+     <TDFORMAT>L4</TDFORMAT>
+     <TDLINE>Balance as of ,,&amp;GV_ASOF&amp;,,&amp;GV_TOT_AMT&amp;</TDLINE>
+    </TLINE>
+    <TLINE>
+     <TDFORMAT>L4</TDFORMAT>
+     <TDLINE>________________________________________________________________________</TDLINE>
+    </TLINE>
+    <TLINE>
+     <TDFORMAT>=</TDFORMAT>
+     <TDLINE>____________________________________________</TDLINE>
+    </TLINE>
+    <TLINE>
+     <TDFORMAT>/(</TDFORMAT>
+    </TLINE>
+    <TLINE>
+     <TDFORMAT>R2</TDFORMAT>
+     <TDLINE>,,ยืนยันความถูกต้อง</TDLINE>
+    </TLINE>
+    <TLINE>
+     <TDFORMAT>R2</TDFORMAT>
+     <TDLINE>,,,,,,O  ถูกต้อง</TDLINE>
+    </TLINE>
+    <TLINE>
+     <TDFORMAT>R2</TDFORMAT>
+     <TDLINE>,,,,,,O  ไม่ถูกต้อง,,จำนวนเงินที่ถูกต้อง_____________________________</TDLINE>
+    </TLINE>
+    <TLINE>
+     <TDFORMAT>R2</TDFORMAT>
+     <TDLINE>,,ขอความกรุณาท่านได้โปรดยืนยันความถูกต้องโดยส่งรายงานแสดงบัญชีฉบับนี้</TDLINE>
+    </TLINE>
+    <TLINE>
+     <TDLINE>กลับมายัง บริษัท สยามไดกิ้นเซลส์ จำกัด ด้วยซองจดหมายที่แนบมาพร้อมกันนี้</TDLINE>
+    </TLINE>
+    <TLINE>
+     <TDLINE> หรือ Email: credit@daikin.co.th</TDLINE>
+    </TLINE>
+    <TLINE>
+     <TDFORMAT>R2</TDFORMAT>
+     <TDLINE>,,ทางบริษัทฯ  ขอขอบคุณท่านมา ณ โอกาสนี้ด้วย</TDLINE>
+    </TLINE>
+    <TLINE>
+     <TDFORMAT>R2</TDFORMAT>
+     <TDLINE>หมายเหตุ :  หากมีรายการใดที่ท่านได้ชำระเงินแล้วหลังจากวันที่ระบุในรายงาน</TDLINE>
+    </TLINE>
+    <TLINE>
+     <TDFORMAT>=</TDFORMAT>
+     <TDLINE>แสดงบัญชี ทางบริษัทฯ จะนำไปตัดหนี้คงค้างในรอบเดือนถัดไป</TDLINE>
+    </TLINE>
+    <TLINE>
+     <TDFORMAT>R2</TDFORMAT>
+    </TLINE>
+    <TLINE>
+     <TDFORMAT>R2</TDFORMAT>
+    </TLINE>
+    <TLINE>
+     <TDFORMAT>R3</TDFORMAT>
+     <TDLINE>,,_______________________________,,_______________________________</TDLINE>
+    </TLINE>
+    <TLINE>
+     <TDFORMAT>R3</TDFORMAT>
+    </TLINE>
+    <TLINE>
+     <TDFORMAT>R3</TDFORMAT>
+     <TDLINE>,,(______________________________),,(นางสาวนิธิฉัตร  นิธิรัตนทิพย์)</TDLINE>
+    </TLINE>
+    <TLINE>
+     <TDFORMAT>R3</TDFORMAT>
+     <TDLINE>,,ลงชื่อ/ประทับตราบริษัท,,ผู้จัดการแผนกสินเชื่อ</TDLINE>
+    </TLINE>
+    <TLINE>
+     <TDFORMAT>R3</TDFORMAT>
+    </TLINE>
+    <TLINE>
+     <TDFORMAT>R1</TDFORMAT>
+     <TDLINE>,,หมายเหตุ :,,หากมีรายการใดไม่ถูกต้องโปรดแจ้งบริษัทฯ ด่วน ถ้าไม่มีการทัก</TDLINE>
+    </TLINE>
+    <TLINE>
+     <TDFORMAT>=</TDFORMAT>
+    </TLINE>
+    <TLINE>
+     <TDFORMAT>=</TDFORMAT>
+     <TDLINE>ท้วงเป็นลายลักษณ์อักษรภายใน 15 วัน บริษัทจะถือว่ารายการแสดงบัญชีนี้ถูกต้อง</TDLINE>
+    </TLINE>
+    <TLINE>
+     <TDFORMAT>R1</TDFORMAT>
+     <TDLINE>,,,,หากมีข้อสงสัยเกี่ยวกับรายงานแสดงบัญชี และรายการใดมีการชำระเงินมาแล้ว</TDLINE>
+    </TLINE>
+    <TLINE>
+     <TDLINE>รบกวนลูกค้าแจ้ง จำนวนเงินที่โอน วันที่โอน และธนาคารที่โอน</TDLINE>
+    </TLINE>
+    <TLINE>
+     <TDFORMAT>R1</TDFORMAT>
+     <TDLINE>,,,,กรุณาติดต่อ คุณนิธิฉัตร หรือ คุณสุจิตรา โทร.0-2838-3200  ต่อ 3209</TDLINE>
+    </TLINE>
+    <TLINE>
+     <TDLINE>,3210 หรือ Email: credit@daikin.co.th</TDLINE>
+    </TLINE>
+    <TLINE>
+     <TDFORMAT>R1</TDFORMAT>
+     <TDLINE>,,,,กรณี เรื่องภาษี,รายการลดหนี้ กรุณาติดต่อ คุณวรัญก์ชนก ต่อ 3205</TDLINE>
+    </TLINE>
+    <TLINE>
+     <TDFORMAT>R1</TDFORMAT>
+     <TDLINE>,,,,กรณี เรื่องใบกำกับภาษี กรุณาติดต่อคุณฉัตธัญ ต่อ 1337</TDLINE>
+    </TLINE>
+    <TLINE>
+     <TDFORMAT>R1</TDFORMAT>
+     <TDLINE>,,,,รายการใดมีการชำระเงินมาแล้ว รบกวนลูกค้าแจ้ง จำนวนเงินที่โอน วันที่</TDLINE>
+    </TLINE>
+    <TLINE>
+     <TDLINE>โอน และธนาคารที่โอน</TDLINE>
+    </TLINE>
+    <TLINE>
+     <TDFORMAT>R1</TDFORMAT>
+     <TDLINE>,,,,และส่งเอกสารกลับมาที่ฝ่ายสินเชื่อ Fax.0-2721-6680</TDLINE>
+    </TLINE>
+    <TLINE>
+     <TDFORMAT>/W</TDFORMAT>
+     <TDLINE>F_NAME</TDLINE>
+    </TLINE>
+    <TLINE>
+     <TDFORMAT>H2</TDFORMAT>
+     <TDLINE>,,รายงานแสดงบัญชี</TDLINE>
+    </TLINE>
+    <TLINE>
+     <TDFORMAT>H2</TDFORMAT>
+     <TDLINE>,,Statement Of Account</TDLINE>
+    </TLINE>
+    <TLINE>
+     <TDFORMAT>/W</TDFORMAT>
+     <TDLINE>H_MAIN</TDLINE>
+    </TLINE>
+    <TLINE>
+     <TDFORMAT>/*</TDFORMAT>
+     <TDLINE>BOX XPOS &apos;0.3&apos; CM YPOS &apos;0.1&apos; CM WIDTH &apos;19&apos; CM HEIGHT &apos;1.2&apos; CM FRAME 10 TW</TDLINE>
+    </TLINE>
+    <TLINE>
+     <TDFORMAT>L6</TDFORMAT>
+     <TDLINE>________________________________________________________________________</TDLINE>
+    </TLINE>
+    <TLINE>
+     <TDFORMAT>=</TDFORMAT>
+     <TDLINE>____________________________________________</TDLINE>
+    </TLINE>
+    <TLINE>
+     <TDFORMAT>L6</TDFORMAT>
+     <TDLINE>,,เลขที่เอกสาร,,วันที่เอกสาร,,วันที่ครบ,,จำนวนเงิน,,Status ,,Cheque No.</TDLINE>
+    </TLINE>
+    <TLINE>
+     <TDFORMAT>=</TDFORMAT>
+     <TDLINE>,,Remark</TDLINE>
+    </TLINE>
+    <TLINE>
+     <TDFORMAT>L6</TDFORMAT>
+     <TDLINE>,,,,(Posting Date),,กำหนดชำระ,,,,</TDLINE>
+    </TLINE>
+    <TLINE>
+     <TDFORMAT>L6</TDFORMAT>
+     <TDLINE>________________________________________________________________________</TDLINE>
+    </TLINE>
+    <TLINE>
+     <TDFORMAT>=</TDFORMAT>
+     <TDLINE>____________________________________________</TDLINE>
+    </TLINE>
+    <TLINE>
+     <TDFORMAT>/W</TDFORMAT>
+     <TDLINE>H_SALE</TDLINE>
+    </TLINE>
+    <TLINE>
+     <TDFORMAT>/*</TDFORMAT>
+     <TDLINE>Saleperson  &amp;GV_SALE&amp;</TDLINE>
+    </TLINE>
+    <TLINE>
+     <TDFORMAT>/*</TDFORMAT>
+     <TDLINE>As of Period  &amp;GV_ASOF&amp;</TDLINE>
+    </TLINE>
+    <TLINE>
+     <TDFORMAT>/W</TDFORMAT>
+     <TDLINE>MAIN</TDLINE>
+    </TLINE>
+    <TLINE>
+     <TDFORMAT>/E</TDFORMAT>
+     <TDLINE>DETAIL</TDLINE>
+    </TLINE>
+    <TLINE>
+     <TDFORMAT>L5</TDFORMAT>
+     <TDLINE>,,&amp;GV_BELNR&amp;,,&amp;GV_BUDAT&amp;,,&amp;GV_DUEDATE&amp;,,&amp;GV_AMT&amp;&amp;GV_SIGN&amp;</TDLINE>
+    </TLINE>
+    <TLINE>
+     <TDFORMAT>=</TDFORMAT>
+     <TDLINE>,,&amp;GV_STUS_CQ&amp;,,&amp;GV_CQ_NO&amp;,,&amp;GV_REMARK(22)&amp;</TDLINE>
+    </TLINE>
+    <TLINE>
+     <TDFORMAT>/:</TDFORMAT>
+     <TDLINE>IF &amp;GV_REMARK+22(22)&amp; NE &apos; &apos;</TDLINE>
+    </TLINE>
+    <TLINE>
+     <TDFORMAT>L5</TDFORMAT>
+     <TDLINE>,,,,,,,,,,,,,,&amp;GV_REMARK+22(22)&amp;</TDLINE>
+    </TLINE>
+    <TLINE>
+     <TDFORMAT>/:</TDFORMAT>
+     <TDLINE>IF &amp;GV_REMARK+44(22)&amp; NE &apos; &apos;</TDLINE>
+    </TLINE>
+    <TLINE>
+     <TDFORMAT>L5</TDFORMAT>
+     <TDLINE>,,,,,,,,,,,,,,&amp;GV_REMARK+44(22)&amp;</TDLINE>
+    </TLINE>
+    <TLINE>
+     <TDFORMAT>/:</TDFORMAT>
+     <TDLINE>IF &amp;GV_REMARK+66(22)&amp; NE &apos; &apos;</TDLINE>
+    </TLINE>
+    <TLINE>
+     <TDFORMAT>L5</TDFORMAT>
+     <TDLINE>,,,,,,,,,,,,,,&amp;GV_REMARK+66(22)&amp;</TDLINE>
+    </TLINE>
+    <TLINE>
+     <TDFORMAT>/:</TDFORMAT>
+     <TDLINE>ENDIF</TDLINE>
+    </TLINE>
+    <TLINE>
+     <TDFORMAT>/:</TDFORMAT>
+     <TDLINE>ENDIF</TDLINE>
+    </TLINE>
+    <TLINE>
+     <TDFORMAT>/:</TDFORMAT>
+     <TDLINE>ENDIF</TDLINE>
+    </TLINE>
+    <TLINE>
+     <TDFORMAT>/W</TDFORMAT>
+     <TDLINE>PRINT_D</TDLINE>
+    </TLINE>
+    <TLINE>
+     <TDFORMAT>H1</TDFORMAT>
+    </TLINE>
+    <TLINE>
+     <TDFORMAT>H1</TDFORMAT>
+     <TDLINE>Page : &amp;PAGE&amp;/&amp;SAPSCRIPT-FORMPAGES(C4)&amp;</TDLINE>
+    </TLINE>
+    <TLINE>
+     <TDFORMAT>/W</TDFORMAT>
+     <TDLINE>SIGN</TDLINE>
+    </TLINE>
+    <TLINE>
+     <TDFORMAT>/E</TDFORMAT>
+     <TDLINE>SIGN</TDLINE>
+    </TLINE>
+    <TLINE>
+     <TDFORMAT>/:</TDFORMAT>
+     <TDLINE>BITMAP &apos;ZSD_RECEIPT_SIGNATURE&apos; OBJECT GRAPHICS ID BMAP TYPE BMON DPI 150</TDLINE>
+    </TLINE>
+    <TLINE>
+     <TDFORMAT>/W</TDFORMAT>
+     <TDLINE>TEXT1</TDLINE>
+    </TLINE>
+    <TLINE>
+     <TDFORMAT>H2</TDFORMAT>
+     <TDLINE>หนังสือยืนยันยอดฉบับนี้มิใช่จดหมายทวงหนี้</TDLINE>
+    </TLINE>
+   </TDLINES>
+  </asx:values>
+ </asx:abap>
+</abapGit>

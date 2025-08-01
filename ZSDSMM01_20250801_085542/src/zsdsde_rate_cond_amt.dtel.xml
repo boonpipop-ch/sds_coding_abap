@@ -1,0 +1,75 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<abapGit version="v1.0.0" serializer="LCL_OBJECT_DTEL" serializer_version="v1.0.0">
+ <asx:abap xmlns:asx="http://www.sap.com/abapxml" version="1.0">
+  <asx:values>
+   <DD04V>
+    <ROLLNAME>ZSDSDE_RATE_COND_AMT</ROLLNAME>
+    <DDLANGUAGE>E</DDLANGUAGE>
+    <DOMNAME>DEC_16_02_S</DOMNAME>
+    <LOGFLAG>X</LOGFLAG>
+    <HEADLEN>55</HEADLEN>
+    <SCRLEN1>10</SCRLEN1>
+    <SCRLEN2>20</SCRLEN2>
+    <SCRLEN3>40</SCRLEN3>
+    <DDTEXT>Rate (condition amount or percentage)</DDTEXT>
+    <REPTEXT>Rate (condition amount or percentage)</REPTEXT>
+    <SCRTEXT_S>RateCond.</SCRTEXT_S>
+    <SCRTEXT_M>Rate condi.amt/perc</SCRTEXT_M>
+    <SCRTEXT_L>Rate (condition amount or percentage)</SCRTEXT_L>
+    <APPLCLASS>VF</APPLCLASS>
+    <DTELMASTER>E</DTELMASTER>
+    <DEFFDNAME>COND_VALUE</DEFFDNAME>
+    <REFKIND>D</REFKIND>
+   </DD04V>
+   <I18N_LANGS>
+    <LANGU>2</LANGU>
+    <LANGU>7</LANGU>
+    <LANGU>D</LANGU>
+    <LANGU>J</LANGU>
+    <LANGU>쁩</LANGU>
+   </I18N_LANGS>
+   <DD04_TEXTS>
+    <item>
+     <DDLANGUAGE>2</DDLANGUAGE>
+     <DDTEXT>จำนวนเงินหรือเปอร์เซ็นต์ตามเงื่อนไข</DDTEXT>
+     <REPTEXT>จำนวนเงิน</REPTEXT>
+     <SCRTEXT_S>จำนวนเงิน</SCRTEXT_S>
+     <SCRTEXT_M>จำนวนเงิน</SCRTEXT_M>
+     <SCRTEXT_L>จำนวนเงิน</SCRTEXT_L>
+    </item>
+    <item>
+     <DDLANGUAGE>7</DDLANGUAGE>
+     <DDTEXT>Amaun Syarat atau Peratusan</DDTEXT>
+     <REPTEXT>Amaun</REPTEXT>
+     <SCRTEXT_S>Amaun</SCRTEXT_S>
+     <SCRTEXT_M>Amaun</SCRTEXT_M>
+     <SCRTEXT_L>Amaun</SCRTEXT_L>
+    </item>
+    <item>
+     <DDLANGUAGE>D</DDLANGUAGE>
+     <DDTEXT>Konditionsbetrag oder -prozentsatz</DDTEXT>
+     <REPTEXT>Betrag</REPTEXT>
+     <SCRTEXT_S>Betrag</SCRTEXT_S>
+     <SCRTEXT_M>Betrag</SCRTEXT_M>
+     <SCRTEXT_L>Betrag</SCRTEXT_L>
+    </item>
+    <item>
+     <DDLANGUAGE>J</DDLANGUAGE>
+     <DDTEXT>条件金額またはパーセント</DDTEXT>
+     <REPTEXT>条件レート</REPTEXT>
+     <SCRTEXT_S>条件レート</SCRTEXT_S>
+     <SCRTEXT_M>条件レート</SCRTEXT_M>
+     <SCRTEXT_L>条件レート</SCRTEXT_L>
+    </item>
+    <item>
+     <DDLANGUAGE>쁩</DDLANGUAGE>
+     <DDTEXT>Số lượng điều kiện hoặc phần trăm</DDTEXT>
+     <REPTEXT>Số tiền</REPTEXT>
+     <SCRTEXT_S>Số tiền</SCRTEXT_S>
+     <SCRTEXT_M>Số tiền</SCRTEXT_M>
+     <SCRTEXT_L>Số tiền</SCRTEXT_L>
+    </item>
+   </DD04_TEXTS>
+  </asx:values>
+ </asx:abap>
+</abapGit>

@@ -1,0 +1,82 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<abapGit version="v1.0.0" serializer="LCL_OBJECT_FUGR" serializer_version="v1.0.0">
+ <asx:abap xmlns:asx="http://www.sap.com/abapxml" version="1.0">
+  <asx:values>
+   <AREAT>budget report</AREAT>
+   <INCLUDES>
+    <SOBJ_NAME>LZSDSFI20TOP</SOBJ_NAME>
+    <SOBJ_NAME>SAPLZSDSFI20</SOBJ_NAME>
+   </INCLUDES>
+   <FUNCTIONS>
+    <item>
+     <FUNCNAME>Z_SDSFI_PROJECT_DETAIL</FUNCNAME>
+     <REMOTE_CALL>R</REMOTE_CALL>
+     <SHORT_TEXT>Project Detail</SHORT_TEXT>
+     <IMPORT>
+      <RSIMP>
+       <PARAMETER>IT_WBS</PARAMETER>
+       <OPTIONAL>X</OPTIONAL>
+       <TYP>ZSDSFIS184_TT</TYP>
+      </RSIMP>
+     </IMPORT>
+     <EXPORT>
+      <RSEXP>
+       <PARAMETER>ET_WBS_DETAIL</PARAMETER>
+       <TYP>ZSDSFIS186_TT</TYP>
+      </RSEXP>
+      <RSEXP>
+       <PARAMETER>ET_WBS_COST_DETAIL</PARAMETER>
+       <TYP>ZSDSFIS187_TT</TYP>
+      </RSEXP>
+     </EXPORT>
+     <DOCUMENTATION>
+      <RSFDO>
+       <PARAMETER>IT_WBS</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>Range WBS</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>ET_WBS_DETAIL</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>WBS Revenue</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>ET_WBS_COST_DETAIL</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>Detail Cost</STEXT>
+      </RSFDO>
+     </DOCUMENTATION>
+    </item>
+    <item>
+     <FUNCNAME>Z_SDSFI_PROJECT_INFO</FUNCNAME>
+     <SHORT_TEXT>Project Information</SHORT_TEXT>
+     <IMPORT>
+      <RSIMP>
+       <PARAMETER>IT_WBS</PARAMETER>
+       <OPTIONAL>X</OPTIONAL>
+       <TYP>ZSDSFIS184_TT</TYP>
+      </RSIMP>
+     </IMPORT>
+     <EXPORT>
+      <RSEXP>
+       <PARAMETER>ET_WBS_INFO</PARAMETER>
+       <TYP>ZSDSFIS185_TT</TYP>
+      </RSEXP>
+     </EXPORT>
+     <DOCUMENTATION>
+      <RSFDO>
+       <PARAMETER>IT_WBS</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>Range WBS</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>ET_WBS_INFO</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>WBS Information</STEXT>
+      </RSFDO>
+     </DOCUMENTATION>
+    </item>
+   </FUNCTIONS>
+  </asx:values>
+ </asx:abap>
+</abapGit>

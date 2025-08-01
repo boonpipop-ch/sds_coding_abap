@@ -1,0 +1,8 @@
+@AbapCatalog.internal.setChange: 'FLDADD_NO_ASS_INFLUENCE'
+@AbapCatalog.sqlViewAppendName: 'ZZ1_ADE71B151D34'
+
+extend view A_BUSINESSSOLUTIONQUOTATION with ZZ1_YUW76RLMQWP35JFBOGY7O5CA6E
+  
+{ 
+  _Extension.ZZ1_DELIVERY_ORD as ZZ1_DELIVERY_ORD
+}

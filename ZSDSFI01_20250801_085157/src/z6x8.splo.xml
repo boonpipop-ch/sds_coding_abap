@@ -1,0 +1,18 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<abapGit version="v1.0.0" serializer="LCL_OBJECT_SPLO" serializer_version="v1.0.0">
+ <asx:abap xmlns:asx="http://www.sap.com/abapxml" version="1.0">
+  <asx:values>
+   <TSPLT>
+    <SPRAS>E</SPRAS>
+    <PAPART>Z6X8</PAPART>
+    <TXT>Paper size for 50tavi</TXT>
+   </TSPLT>
+   <TSPLD>
+    <PAPART>Z6X8</PAPART>
+    <PFORMAT>Z6X8</PFORMAT>
+    <ORIENT>P</ORIENT>
+    <TYPE>S</TYPE>
+   </TSPLD>
+  </asx:values>
+ </asx:abap>
+</abapGit>

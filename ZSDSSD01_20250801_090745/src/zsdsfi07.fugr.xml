@@ -1,0 +1,154 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<abapGit version="v1.0.0" serializer="LCL_OBJECT_FUGR" serializer_version="v1.0.0">
+ <asx:abap xmlns:asx="http://www.sap.com/abapxml" version="1.0">
+  <asx:values>
+   <AREAT>Get Data CM</AREAT>
+   <INCLUDES>
+    <SOBJ_NAME>LZSDSFI07F01</SOBJ_NAME>
+    <SOBJ_NAME>LZSDSFI07TOP</SOBJ_NAME>
+    <SOBJ_NAME>SAPLZSDSFI07</SOBJ_NAME>
+   </INCLUDES>
+   <FUNCTIONS>
+    <item>
+     <FUNCNAME>Z_SDSSD_GET_BASE_UNIT</FUNCNAME>
+     <REMOTE_CALL>R</REMOTE_CALL>
+     <SHORT_TEXT>Get Base Unit</SHORT_TEXT>
+     <CHANGING>
+      <RSCHA>
+       <PARAMETER>CT_ITEM</PARAMETER>
+       <OPTIONAL>X</OPTIONAL>
+       <TYP>ZSDSSDS004_TT</TYP>
+      </RSCHA>
+     </CHANGING>
+     <DOCUMENTATION>
+      <RSFDO>
+       <PARAMETER>CT_ITEM</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>CM - Outbound Invoice Item</STEXT>
+      </RSFDO>
+     </DOCUMENTATION>
+    </item>
+    <item>
+     <FUNCNAME>Z_SDSSD_GET_CM</FUNCNAME>
+     <REMOTE_CALL>R</REMOTE_CALL>
+     <SHORT_TEXT>Get CM</SHORT_TEXT>
+     <IMPORT>
+      <RSIMP>
+       <PARAMETER>I_VBELN</PARAMETER>
+       <OPTIONAL>X</OPTIONAL>
+       <TYP>VBELN_VF</TYP>
+      </RSIMP>
+      <RSIMP>
+       <PARAMETER>I_TYPE</PARAMETER>
+       <OPTIONAL>X</OPTIONAL>
+       <TYP>VBTYPL</TYP>
+      </RSIMP>
+     </IMPORT>
+     <CHANGING>
+      <RSCHA>
+       <PARAMETER>CT_ITEM</PARAMETER>
+       <OPTIONAL>X</OPTIONAL>
+       <TYP>ZSDSSDS004_TT</TYP>
+      </RSCHA>
+      <RSCHA>
+       <PARAMETER>CT_RETURN</PARAMETER>
+       <OPTIONAL>X</OPTIONAL>
+       <TYP>BAPIRETTAB</TYP>
+      </RSCHA>
+      <RSCHA>
+       <PARAMETER>CT_ITEM_SERIAL_NO</PARAMETER>
+       <OPTIONAL>X</OPTIONAL>
+       <TYP>ZSDSSDS005_TT</TYP>
+      </RSCHA>
+     </CHANGING>
+     <EXPORT>
+      <RSEXP>
+       <PARAMETER>E_HEADER</PARAMETER>
+       <TYP>ZSDSSDS003</TYP>
+      </RSEXP>
+      <RSEXP>
+       <PARAMETER>E_ADDRESS</PARAMETER>
+       <TYP>ZSDSSDS120</TYP>
+      </RSEXP>
+     </EXPORT>
+     <DOCUMENTATION>
+      <RSFDO>
+       <PARAMETER>I_VBELN</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>Billing Document</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>I_TYPE</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>SD Document Category</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>E_HEADER</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>CM - Outbound Invoice Header</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>E_ADDRESS</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>S/O Address (Transaction)</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>CT_ITEM</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>CM - Outbound Invoice Item</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>CT_RETURN</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>Return Parameter</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>CT_ITEM_SERIAL_NO</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>CM - Outbound Invoice Serial No.</STEXT>
+      </RSFDO>
+     </DOCUMENTATION>
+    </item>
+    <item>
+     <FUNCNAME>Z_SDSSD_GET_CM_DOC</FUNCNAME>
+     <REMOTE_CALL>R</REMOTE_CALL>
+     <SHORT_TEXT>Get CM Document</SHORT_TEXT>
+     <IMPORT>
+      <RSIMP>
+       <PARAMETER>I_DOC</PARAMETER>
+       <OPTIONAL>X</OPTIONAL>
+       <TYP>VBELN</TYP>
+      </RSIMP>
+     </IMPORT>
+     <EXPORT>
+      <RSEXP>
+       <PARAMETER>E_DO</PARAMETER>
+       <TYP>VBELN_VL</TYP>
+      </RSEXP>
+      <RSEXP>
+       <PARAMETER>E_INV</PARAMETER>
+       <TYP>VBELN_VF</TYP>
+      </RSEXP>
+     </EXPORT>
+     <DOCUMENTATION>
+      <RSFDO>
+       <PARAMETER>I_DOC</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>Sales and Distribution Document Number</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>E_DO</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>Delivery</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>E_INV</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>Billing Document</STEXT>
+      </RSFDO>
+     </DOCUMENTATION>
+    </item>
+   </FUNCTIONS>
+  </asx:values>
+ </asx:abap>
+</abapGit>

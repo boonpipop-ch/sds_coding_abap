@@ -1,0 +1,105 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<abapGit version="v1.0.0" serializer="LCL_OBJECT_AQQU" serializer_version="v1.0.0">
+ <asx:abap xmlns:asx="http://www.sap.com/abapxml" version="1.0">
+  <asx:values>
+   <AQGQCAT>
+    <AQGQCAT>
+     <NUM>ZSDSCOUG001</NUM>
+     <QNUM>ZSDSCOSKFQ</QNUM>
+     <CLAS>ZSDSCOSKFINFO</CLAS>
+    </AQGQCAT>
+   </AQGQCAT>
+   <AQGTQ>
+    <AQGTQ>
+     <SPRSL>E</SPRSL>
+     <NUM>ZSDSCOUG001</NUM>
+     <QNUM>ZSDSCOSKFQ</QNUM>
+     <TINDX>00001</TINDX>
+     <HEAD>X</HEAD>
+     <MAXL>060</MAXL>
+     <TEXT>SDS Statistical Key Figure Report</TEXT>
+    </AQGTQ>
+    <AQGTQ>
+     <SPRSL>E</SPRSL>
+     <NUM>ZSDSCOUG001</NUM>
+     <QNUM>ZSDSCOSKFQ</QNUM>
+     <TINDX>00005</TINDX>
+     <MAXL>030</MAXL>
+     <TEXT>Company Code</TEXT>
+    </AQGTQ>
+    <AQGTQ>
+     <SPRSL>E</SPRSL>
+     <NUM>ZSDSCOUG001</NUM>
+     <QNUM>ZSDSCOSKFQ</QNUM>
+     <TINDX>00006</TINDX>
+     <MAXL>030</MAXL>
+     <TEXT>Statistical Key Figure</TEXT>
+    </AQGTQ>
+    <AQGTQ>
+     <SPRSL>E</SPRSL>
+     <NUM>ZSDSCOUG001</NUM>
+     <QNUM>ZSDSCOSKFQ</QNUM>
+     <TINDX>00007</TINDX>
+     <MAXL>030</MAXL>
+     <TEXT>Fiscal Year</TEXT>
+    </AQGTQ>
+    <AQGTQ>
+     <SPRSL>E</SPRSL>
+     <NUM>ZSDSCOUG001</NUM>
+     <QNUM>ZSDSCOSKFQ</QNUM>
+     <TINDX>00008</TINDX>
+     <MAXL>030</MAXL>
+     <TEXT>Fiscal Period</TEXT>
+    </AQGTQ>
+    <AQGTQ>
+     <SPRSL>E</SPRSL>
+     <NUM>ZSDSCOUG001</NUM>
+     <QNUM>ZSDSCOSKFQ</QNUM>
+     <TINDX>00009</TINDX>
+     <MAXL>030</MAXL>
+     <TEXT>Statistical Key Figure Item</TEXT>
+    </AQGTQ>
+    <AQGTQ>
+     <SPRSL>E</SPRSL>
+     <NUM>ZSDSCOUG001</NUM>
+     <QNUM>ZSDSCOSKFQ</QNUM>
+     <TINDX>00010</TINDX>
+     <MAXL>030</MAXL>
+     <TEXT>Plan Category</TEXT>
+    </AQGTQ>
+    <AQGTQ>
+     <SPRSL>E</SPRSL>
+     <NUM>ZSDSCOUG001</NUM>
+     <QNUM>ZSDSCOSKFQ</QNUM>
+     <TINDX>00011</TINDX>
+     <MAXL>030</MAXL>
+     <TEXT>Cost Center</TEXT>
+    </AQGTQ>
+    <AQGTQ>
+     <SPRSL>E</SPRSL>
+     <NUM>ZSDSCOUG001</NUM>
+     <QNUM>ZSDSCOSKFQ</QNUM>
+     <TINDX>00048</TINDX>
+     <MAXL>030</MAXL>
+     <TEXT>Record Type</TEXT>
+    </AQGTQ>
+    <AQGTQ>
+     <SPRSL>E</SPRSL>
+     <NUM>ZSDSCOUG001</NUM>
+     <QNUM>ZSDSCOSKFQ</QNUM>
+     <TINDX>00060</TINDX>
+     <MAXL>030</MAXL>
+     <TEXT>Fiscal Year + Fiscal Period</TEXT>
+    </AQGTQ>
+    <AQGTQ>
+     <SPRSL>E</SPRSL>
+     <NUM>ZSDSCOUG001</NUM>
+     <QNUM>ZSDSCOSKFQ</QNUM>
+     <TINDX>00097</TINDX>
+     <MAXL>030</MAXL>
+     <TEXT>Indicator: Is Special Period</TEXT>
+    </AQGTQ>
+   </AQGTQ>
+  </asx:values>
+ </asx:abap>
+</abapGit>

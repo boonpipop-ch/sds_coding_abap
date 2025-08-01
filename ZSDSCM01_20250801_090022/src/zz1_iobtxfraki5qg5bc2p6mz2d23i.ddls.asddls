@@ -1,0 +1,8 @@
+@AbapCatalog.internal.setChange: 'FLDADD_NO_ASS_INFLUENCE'
+@AbapCatalog.sqlViewAppendName: 'ZZ1_B468356EF3AE'
+
+extend view A_SERVICECONTRACT with ZZ1_IOBTXFRAKI5QG5BC2P6MZ2D23I
+  
+{ 
+  _Extension.ZZ1_BREAK_POSITION as ZZ1_BREAK_POSITION
+}

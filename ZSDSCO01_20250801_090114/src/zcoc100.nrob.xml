@@ -1,0 +1,21 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<abapGit version="v1.0.0" serializer="LCL_OBJECT_NROB" serializer_version="v1.0.0">
+ <asx:abap xmlns:asx="http://www.sap.com/abapxml" version="1.0">
+  <asx:values>
+   <ATTRIBUTES>
+    <OBJECT>ZCOC100</OBJECT>
+    <YEARIND>X</YEARIND>
+    <DOMLEN>NUMC10</DOMLEN>
+    <PERCENTAGE>90.0</PERCENTAGE>
+    <BUFFER>X</BUFFER>
+    <NOIVBUFFER>00000001</NOIVBUFFER>
+   </ATTRIBUTES>
+   <TEXT>
+    <LANGU>E</LANGU>
+    <OBJECT>ZCOC100</OBJECT>
+    <TXT>C100_Warranty_5411000010-Provision for Product Warrantie_Gen</TXT>
+    <TXTSHORT>SDS_C100</TXTSHORT>
+   </TEXT>
+  </asx:values>
+ </asx:abap>
+</abapGit>

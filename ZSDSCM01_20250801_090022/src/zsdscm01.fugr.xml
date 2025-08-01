@@ -1,0 +1,122 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<abapGit version="v1.0.0" serializer="LCL_OBJECT_FUGR" serializer_version="v1.0.0">
+ <asx:abap xmlns:asx="http://www.sap.com/abapxml" version="1.0">
+  <asx:values>
+   <AREAT>SDS: CM Event Functions</AREAT>
+   <INCLUDES>
+    <SOBJ_NAME>LZSDSCM01F01</SOBJ_NAME>
+    <SOBJ_NAME>LZSDSCM01TOP</SOBJ_NAME>
+    <SOBJ_NAME>SAPLZSDSCM01</SOBJ_NAME>
+   </INCLUDES>
+   <FUNCTIONS>
+    <item>
+     <FUNCNAME>Z_SDSCM_PROD_HIER_DETERMINE_EC</FUNCNAME>
+     <SHORT_TEXT>SDS: Product Hierarchy Determination</SHORT_TEXT>
+     <IMPORT>
+      <RSIMP>
+       <PARAMETER>IV_HEADER_GUID</PARAMETER>
+       <REFERENCE>X</REFERENCE>
+       <TYP>CRMT_OBJECT_GUID</TYP>
+      </RSIMP>
+      <RSIMP>
+       <PARAMETER>IV_OBJECT_GUID</PARAMETER>
+       <REFERENCE>X</REFERENCE>
+       <TYP>CRMT_OBJECT_GUID</TYP>
+      </RSIMP>
+      <RSIMP>
+       <PARAMETER>IV_OBJECT_NAME</PARAMETER>
+       <REFERENCE>X</REFERENCE>
+       <TYP>CRMT_OBJECT_NAME</TYP>
+      </RSIMP>
+      <RSIMP>
+       <PARAMETER>IV_STRVAL_NEW</PARAMETER>
+       <OPTIONAL>X</OPTIONAL>
+       <REFERENCE>X</REFERENCE>
+       <TYP>ANY</TYP>
+      </RSIMP>
+      <RSIMP>
+       <PARAMETER>IV_STRVAL_OLD</PARAMETER>
+       <OPTIONAL>X</OPTIONAL>
+       <REFERENCE>X</REFERENCE>
+       <TYP>ANY</TYP>
+      </RSIMP>
+      <RSIMP>
+       <PARAMETER>IV_EVENT</PARAMETER>
+       <OPTIONAL>X</OPTIONAL>
+       <REFERENCE>X</REFERENCE>
+       <TYP>CRMT_EVENT</TYP>
+      </RSIMP>
+      <RSIMP>
+       <PARAMETER>IV_ATTRIBUT</PARAMETER>
+       <OPTIONAL>X</OPTIONAL>
+       <REFERENCE>X</REFERENCE>
+       <TYP>CRMT_EVENT_ATTRIBUT</TYP>
+      </RSIMP>
+     </IMPORT>
+     <EXCEPTION>
+      <RSEXC>
+       <EXCEPTION>ABORT</EXCEPTION>
+      </RSEXC>
+     </EXCEPTION>
+     <DOCUMENTATION>
+      <RSFDO>
+       <PARAMETER>IV_HEADER_GUID</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>GUID of a CRM Order Object</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>IV_OBJECT_GUID</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>GUID of a CRM Order Object</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>IV_OBJECT_NAME</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>Business Transaction Subobject</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>IV_STRVAL_NEW</PARAMETER>
+       <KIND>P</KIND>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>IV_STRVAL_OLD</PARAMETER>
+       <KIND>P</KIND>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>IV_EVENT</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>Event in Program Flow</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>IV_ATTRIBUT</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>Attribute for Detailing Events</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>ABORT</PARAMETER>
+       <KIND>X</KIND>
+      </RSFDO>
+     </DOCUMENTATION>
+    </item>
+    <item>
+     <FUNCNAME>Z_SDSCM_UPDATE_WARRANTY_MST_EC</FUNCNAME>
+     <SHORT_TEXT>SDS: Product Hierarchy Determination</SHORT_TEXT>
+     <IMPORT>
+      <RSIMP>
+       <PARAMETER>IT_HEADER_GUID</PARAMETER>
+       <REFERENCE>X</REFERENCE>
+       <TYP>CRMT_OBJECT_GUID_TAB</TYP>
+      </RSIMP>
+     </IMPORT>
+     <DOCUMENTATION>
+      <RSFDO>
+       <PARAMETER>IT_HEADER_GUID</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>List of GUIDs</STEXT>
+      </RSFDO>
+     </DOCUMENTATION>
+    </item>
+   </FUNCTIONS>
+  </asx:values>
+ </asx:abap>
+</abapGit>

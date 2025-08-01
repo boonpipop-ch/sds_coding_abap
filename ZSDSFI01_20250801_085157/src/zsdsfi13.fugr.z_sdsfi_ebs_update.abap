@@ -1,0 +1,34 @@
+FUNCTION Z_SDSFI_EBS_UPDATE.
+*"----------------------------------------------------------------------
+*"*"Local Interface:
+*"  IMPORTING
+*"     REFERENCE(I_FEBEP) TYPE  FEBEP
+*"     REFERENCE(I_FEBKO) TYPE  FEBKO
+*"     REFERENCE(I_TESTRUN) TYPE  XFLAG
+*"  EXPORTING
+*"     REFERENCE(E_FEBEP) TYPE  FEBEP
+*"     REFERENCE(E_FEBKO) TYPE  FEBKO
+*"     REFERENCE(E_MSGTEXT) TYPE  FEBMKA-MESSG
+*"     REFERENCE(E_MSGTYP) TYPE  FEBMKA-MSTYP
+*"     REFERENCE(E_UPDATE) TYPE  FEBMKA-MSTYP
+*"  TABLES
+*"      T_FEBCL STRUCTURE  FEBCL
+*"      T_FEBRE STRUCTURE  FEBRE
+*"----------------------------------------------------------------------
+*...Update Bank Transaction to FEBEP-ZUONR
+  E_FEBEP   = I_FEBEP.
+  E_FEBKO   = I_FEBKO.
+  E_MSGTEXT = SPACE.
+  E_MSGTYP  = SPACE.
+  E_UPDATE  = SPACE.
+
+  IF E_FEBEP-ZUONR IS INITIAL.
+    E_UPDATE      = ABAP_TRUE.
+    E_FEBEP-ZUONR = I_FEBEP-VGEXT.
+    IF I_FEBEP-CHECT CA '0123456789'.
+      RETURN.
+    ENDIF.
+    E_FEBEP-ZUONR = |{ E_FEBEP-ZUONR }{ I_FEBEP-CHECT }|.
+  ENDIF.
+
+ENDFUNCTION.

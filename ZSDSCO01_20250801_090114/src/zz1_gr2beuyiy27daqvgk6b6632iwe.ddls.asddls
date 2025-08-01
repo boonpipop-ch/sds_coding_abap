@@ -1,0 +1,8 @@
+@AbapCatalog.internal.setChange: 'FLDADD_NO_ASS_INFLUENCE'
+@AbapCatalog.sqlViewAppendName: 'ZZ1_652B18445F45'
+
+extend view C_PROFITABILITY_Q0002 with ZZ1_GR2BEUYIY27DAQVGK6B6632IWE
+  
+{ 
+  ZZ1_SERVTYPE_MSE as ZZ1_SERVTYPE_MSE
+}

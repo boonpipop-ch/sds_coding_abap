@@ -1,0 +1,18 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<abapGit version="v1.0.0" serializer="LCL_OBJECT_SXCI" serializer_version="v1.0.0">
+ <asx:abap xmlns:asx="http://www.sap.com/abapxml" version="1.0">
+  <asx:values>
+   <SXCI>
+    <IMPLEMENTATION_DATA>
+     <IMP_NAME>ZSDS_PROCESS_PO</IMP_NAME>
+     <TEXT>BADI : ME_PROCESS_PO_CUST</TEXT>
+     <IMP_CLASS>ZCL_IM_SDS_PROCESS_PO</IMP_CLASS>
+     <EXIT_NAME>ME_PROCESS_PO_CUST</EXIT_NAME>
+     <INTER_NAME>IF_EX_ME_PROCESS_PO_CUST</INTER_NAME>
+     <ACTIVE>X</ACTIVE>
+     <LAYER>2</LAYER>
+    </IMPLEMENTATION_DATA>
+   </SXCI>
+  </asx:values>
+ </asx:abap>
+</abapGit>

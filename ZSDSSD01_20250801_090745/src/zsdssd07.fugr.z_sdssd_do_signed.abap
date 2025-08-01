@@ -1,0 +1,23 @@
+FUNCTION Z_SDSSD_DO_SIGNED.
+*"----------------------------------------------------------------------
+*"*"Local Interface:
+*"  CHANGING
+*"     VALUE(ET_DATA) TYPE  ZSDSSDT024_TT OPTIONAL
+*"----------------------------------------------------------------------
+
+  DATA: LT_DATA TYPE STANDARD TABLE OF ZSDSSDT024.
+
+  CHECK ET_DATA[] IS NOT INITIAL.
+  LOOP AT ET_DATA INTO DATA(LS_DATA).
+    APPEND INITIAL LINE TO LT_DATA ASSIGNING FIELD-SYMBOL(<LFS_DATA>).
+    MOVE-CORRESPONDING LS_DATA TO <LFS_DATA>.
+    <LFS_DATA>-MANDT = SY-MANDT.
+  ENDLOOP.
+
+  MODIFY ZSDSSDT024 FROM TABLE LT_DATA .
+  CALL FUNCTION 'BAPI_TRANSACTION_COMMIT'
+   EXPORTING
+     WAIT          =  ABAP_TRUE
+            .
+
+ENDFUNCTION.

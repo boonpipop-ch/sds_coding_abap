@@ -1,0 +1,8 @@
+@AbapCatalog.internal.setChange: 'FLDADD_NO_ASS_INFLUENCE'
+@AbapCatalog.sqlViewAppendName: 'ZZ1_79DDB63FB8B1'
+
+extend view C_EXPIRINGSRVCCONTRITMDETAILS with ZZ1_Z5LUHSHBHNZSBEZFLGFMLKTG2I
+  
+{ 
+  _ServiceDocumentExt.ZZ1_INV_REMARK as ZZ1_INV_REMARK
+}

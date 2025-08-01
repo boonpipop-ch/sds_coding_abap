@@ -1,0 +1,1457 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<abapGit version="v1.0.0" serializer="LCL_OBJECT_FUGR" serializer_version="v1.0.0">
+ <asx:abap xmlns:asx="http://www.sap.com/abapxml" version="1.0">
+  <asx:values>
+   <AREAT>FI Posting Interface</AREAT>
+   <INCLUDES>
+    <SOBJ_NAME>LZSDSFI08F00</SOBJ_NAME>
+    <SOBJ_NAME>LZSDSFI08F01</SOBJ_NAME>
+    <SOBJ_NAME>LZSDSFI08TOP</SOBJ_NAME>
+    <SOBJ_NAME>SAPLZSDSFI08</SOBJ_NAME>
+   </INCLUDES>
+   <FUNCTIONS>
+    <item>
+     <FUNCNAME>Z_SDSFI_POSTING_INTERFACE_DOC</FUNCNAME>
+     <GLOBAL_FLAG>X</GLOBAL_FLAG>
+     <SHORT_TEXT>Post document using the internal posting interface</SHORT_TEXT>
+     <IMPORT>
+      <RSIMP>
+       <PARAMETER>I_TCODE</PARAMETER>
+       <DBFIELD>SY-TCODE</DBFIELD>
+      </RSIMP>
+      <RSIMP>
+       <PARAMETER>I_SGFUNCT</PARAMETER>
+       <DBFIELD>RFIPI-SGFUNCT</DBFIELD>
+       <DEFAULT>SPACE</DEFAULT>
+       <OPTIONAL>X</OPTIONAL>
+      </RSIMP>
+      <RSIMP>
+       <PARAMETER>I_NO_AUTH</PARAMETER>
+       <DEFAULT>SPACE</DEFAULT>
+       <OPTIONAL>X</OPTIONAL>
+      </RSIMP>
+      <RSIMP>
+       <PARAMETER>I_XSIMU</PARAMETER>
+       <OPTIONAL>X</OPTIONAL>
+       <REFERENCE>X</REFERENCE>
+       <TYP>CHAR1</TYP>
+      </RSIMP>
+     </IMPORT>
+     <EXPORT>
+      <RSEXP>
+       <PARAMETER>E_MSGID</PARAMETER>
+       <TYP>SY-MSGID</TYP>
+      </RSEXP>
+      <RSEXP>
+       <PARAMETER>E_MSGNO</PARAMETER>
+       <TYP>SY-MSGNO</TYP>
+      </RSEXP>
+      <RSEXP>
+       <PARAMETER>E_MSGTY</PARAMETER>
+       <TYP>SY-MSGTY</TYP>
+      </RSEXP>
+      <RSEXP>
+       <PARAMETER>E_MSGV1</PARAMETER>
+       <TYP>SY-MSGV1</TYP>
+      </RSEXP>
+      <RSEXP>
+       <PARAMETER>E_MSGV2</PARAMETER>
+       <TYP>SY-MSGV2</TYP>
+      </RSEXP>
+      <RSEXP>
+       <PARAMETER>E_MSGV3</PARAMETER>
+       <TYP>SY-MSGV3</TYP>
+      </RSEXP>
+      <RSEXP>
+       <PARAMETER>E_MSGV4</PARAMETER>
+       <TYP>SY-MSGV4</TYP>
+      </RSEXP>
+      <RSEXP>
+       <PARAMETER>E_SUBRC</PARAMETER>
+       <TYP>SY-SUBRC</TYP>
+      </RSEXP>
+     </EXPORT>
+     <TABLES>
+      <RSTBL>
+       <PARAMETER>T_BLNTAB</PARAMETER>
+       <DBSTRUCT>BLNTAB</DBSTRUCT>
+      </RSTBL>
+      <RSTBL>
+       <PARAMETER>T_FTPOST</PARAMETER>
+       <DBSTRUCT>FTPOST</DBSTRUCT>
+      </RSTBL>
+      <RSTBL>
+       <PARAMETER>T_FTTAX</PARAMETER>
+       <DBSTRUCT>FTTAX</DBSTRUCT>
+      </RSTBL>
+     </TABLES>
+     <EXCEPTION>
+      <RSEXC>
+       <EXCEPTION>ACCOUNT_MISSING</EXCEPTION>
+      </RSEXC>
+      <RSEXC>
+       <EXCEPTION>COMPANY_CODE_MISSING</EXCEPTION>
+      </RSEXC>
+      <RSEXC>
+       <EXCEPTION>POSTING_KEY_INVALID</EXCEPTION>
+      </RSEXC>
+      <RSEXC>
+       <EXCEPTION>POSTING_KEY_MISSING</EXCEPTION>
+      </RSEXC>
+      <RSEXC>
+       <EXCEPTION>RECORD_TYPE_INVALID</EXCEPTION>
+      </RSEXC>
+      <RSEXC>
+       <EXCEPTION>TRANSACTION_CODE_INVALID</EXCEPTION>
+      </RSEXC>
+      <RSEXC>
+       <EXCEPTION>AMOUNT_FORMAT_ERROR</EXCEPTION>
+      </RSEXC>
+      <RSEXC>
+       <EXCEPTION>TOO_MANY_LINE_ITEMS</EXCEPTION>
+      </RSEXC>
+      <RSEXC>
+       <EXCEPTION>COMPANY_CODE_INVALID</EXCEPTION>
+      </RSEXC>
+      <RSEXC>
+       <EXCEPTION>SCREEN_NOT_FOUND</EXCEPTION>
+      </RSEXC>
+      <RSEXC>
+       <EXCEPTION>NO_AUTHORIZATION</EXCEPTION>
+      </RSEXC>
+     </EXCEPTION>
+     <DOCUMENTATION>
+      <RSFDO>
+       <PARAMETER>I_TCODE</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>Transaction code</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>I_SGFUNCT</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>Different FUNCT function</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>I_NO_AUTH</PARAMETER>
+       <KIND>P</KIND>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>I_XSIMU</PARAMETER>
+       <KIND>P</KIND>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>E_MSGID</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>Message ID (only for Call Trans. ..Using)</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>E_MSGNO</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>Message number (only for Call Trans. ..Using)</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>E_MSGTY</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>Message category (only for Call Trans. ..Using)</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>E_MSGV1</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>Message variable 1 (only for Call Trans. ..Using)</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>E_MSGV2</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>Message variable 2 (only for Call Trans. ..Using)</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>E_MSGV3</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>Message variable 3 (only for Call Trans. ..Using)</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>E_MSGV4</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>Message variable 4 (only for Call Trans. ..Using)</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>E_SUBRC</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>Return code (only for Call Trans. ..Using)</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>T_BLNTAB</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>Table of the document numbers (only for Call Trans...)</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>T_FTPOST</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>Document header and item data</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>T_FTTAX</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>Taxes</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>ACCOUNT_MISSING</PARAMETER>
+       <KIND>X</KIND>
+       <STEXT>Account number for footer not transferred</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>COMPANY_CODE_MISSING</PARAMETER>
+       <KIND>X</KIND>
+       <STEXT>Company code for footer not transferred</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>POSTING_KEY_INVALID</PARAMETER>
+       <KIND>X</KIND>
+       <STEXT>Posting key not defined in TBSL</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>POSTING_KEY_MISSING</PARAMETER>
+       <KIND>X</KIND>
+       <STEXT>Posting key for footer not transferred</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>RECORD_TYPE_INVALID</PARAMETER>
+       <KIND>X</KIND>
+       <STEXT>Impermissible record type (FTPOST-STYPE) transferred</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>TRANSACTION_CODE_INVALID</PARAMETER>
+       <KIND>X</KIND>
+       <STEXT>Transferred transaction code not supported</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>AMOUNT_FORMAT_ERROR</PARAMETER>
+       <KIND>X</KIND>
+       <STEXT>Formatting error with the specified amount</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>TOO_MANY_LINE_ITEMS</PARAMETER>
+       <KIND>X</KIND>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>COMPANY_CODE_INVALID</PARAMETER>
+       <KIND>X</KIND>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>SCREEN_NOT_FOUND</PARAMETER>
+       <KIND>X</KIND>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>NO_AUTHORIZATION</PARAMETER>
+       <KIND>X</KIND>
+       <STEXT>Authorization missing</STEXT>
+      </RSFDO>
+     </DOCUMENTATION>
+    </item>
+    <item>
+     <FUNCNAME>Z_SDSFI_POSTING_INTERFACE_END</FUNCNAME>
+     <GLOBAL_FLAG>X</GLOBAL_FLAG>
+     <SHORT_TEXT>End process information for internal accounting interface</SHORT_TEXT>
+     <IMPORT>
+      <RSIMP>
+       <PARAMETER>I_BDCIMMED</PARAMETER>
+       <DBFIELD>RFIPI-BDCIMMED</DBFIELD>
+       <DEFAULT>SPACE</DEFAULT>
+       <OPTIONAL>X</OPTIONAL>
+      </RSIMP>
+      <RSIMP>
+       <PARAMETER>I_BDCSTRTDT</PARAMETER>
+       <DBFIELD>TBTCJOB-SDLSTRTDT</DBFIELD>
+       <DEFAULT>NO_DATE</DEFAULT>
+       <OPTIONAL>X</OPTIONAL>
+      </RSIMP>
+      <RSIMP>
+       <PARAMETER>I_BDCSTRTTM</PARAMETER>
+       <DBFIELD>TBTCJOB-SDLSTRTTM</DBFIELD>
+       <DEFAULT>NO_TIME</DEFAULT>
+       <OPTIONAL>X</OPTIONAL>
+      </RSIMP>
+     </IMPORT>
+     <EXCEPTION>
+      <RSEXC>
+       <EXCEPTION>SESSION_NOT_PROCESSABLE</EXCEPTION>
+      </RSEXC>
+     </EXCEPTION>
+     <DOCUMENTATION>
+      <RSFDO>
+       <PARAMETER>I_BDCIMMED</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>only BDC: process session immediately</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>I_BDCSTRTDT</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>only BDC: process session on this date</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>I_BDCSTRTTM</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>only BDC: process session at this time</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>SESSION_NOT_PROCESSABLE</PARAMETER>
+       <KIND>X</KIND>
+       <STEXT>Error when attempting to process session automatically</STEXT>
+      </RSFDO>
+     </DOCUMENTATION>
+    </item>
+    <item>
+     <FUNCNAME>Z_SDSFI_POSTING_INTERFACE_ST</FUNCNAME>
+     <GLOBAL_FLAG>X</GLOBAL_FLAG>
+     <SHORT_TEXT>Initial information for internal accounting interface</SHORT_TEXT>
+     <IMPORT>
+      <RSIMP>
+       <PARAMETER>I_CLIENT</PARAMETER>
+       <DBFIELD>SY-MANDT</DBFIELD>
+       <DEFAULT>SY-MANDT</DEFAULT>
+       <OPTIONAL>X</OPTIONAL>
+      </RSIMP>
+      <RSIMP>
+       <PARAMETER>I_FUNCTION</PARAMETER>
+       <DBFIELD>RFIPI-FUNCT</DBFIELD>
+      </RSIMP>
+      <RSIMP>
+       <PARAMETER>I_GROUP</PARAMETER>
+       <DBFIELD>APQI-GROUPID</DBFIELD>
+       <DEFAULT>SPACE</DEFAULT>
+       <OPTIONAL>X</OPTIONAL>
+      </RSIMP>
+      <RSIMP>
+       <PARAMETER>I_HOLDDATE</PARAMETER>
+       <DBFIELD>APQI-STARTDATE</DBFIELD>
+       <DEFAULT>SPACE</DEFAULT>
+       <OPTIONAL>X</OPTIONAL>
+      </RSIMP>
+      <RSIMP>
+       <PARAMETER>I_KEEP</PARAMETER>
+       <DBFIELD>APQI-QERASE</DBFIELD>
+       <DEFAULT>SPACE</DEFAULT>
+       <OPTIONAL>X</OPTIONAL>
+      </RSIMP>
+      <RSIMP>
+       <PARAMETER>I_MODE</PARAMETER>
+       <DBFIELD>RFPDO-ALLGAZMD</DBFIELD>
+       <DEFAULT>&apos;N&apos;</DEFAULT>
+       <OPTIONAL>X</OPTIONAL>
+      </RSIMP>
+      <RSIMP>
+       <PARAMETER>I_UPDATE</PARAMETER>
+       <DBFIELD>RFPDO-ALLGVBMD</DBFIELD>
+       <DEFAULT>&apos;S&apos;</DEFAULT>
+       <OPTIONAL>X</OPTIONAL>
+      </RSIMP>
+      <RSIMP>
+       <PARAMETER>I_USER</PARAMETER>
+       <DBFIELD>APQI-USERID</DBFIELD>
+       <DEFAULT>SPACE</DEFAULT>
+       <OPTIONAL>X</OPTIONAL>
+      </RSIMP>
+      <RSIMP>
+       <PARAMETER>I_XBDCC</PARAMETER>
+       <DBFIELD>RFIPI-XBDCC</DBFIELD>
+       <DEFAULT>SPACE</DEFAULT>
+       <OPTIONAL>X</OPTIONAL>
+      </RSIMP>
+      <RSIMP>
+       <PARAMETER>I_BDC_APP_AREA</PARAMETER>
+       <DEFAULT>SPACE</DEFAULT>
+       <OPTIONAL>X</OPTIONAL>
+       <TYP>BDC_APP_AREA</TYP>
+      </RSIMP>
+     </IMPORT>
+     <EXCEPTION>
+      <RSEXC>
+       <EXCEPTION>CLIENT_INCORRECT</EXCEPTION>
+      </RSEXC>
+      <RSEXC>
+       <EXCEPTION>FUNCTION_INVALID</EXCEPTION>
+      </RSEXC>
+      <RSEXC>
+       <EXCEPTION>GROUP_NAME_MISSING</EXCEPTION>
+      </RSEXC>
+      <RSEXC>
+       <EXCEPTION>MODE_INVALID</EXCEPTION>
+      </RSEXC>
+      <RSEXC>
+       <EXCEPTION>UPDATE_INVALID</EXCEPTION>
+      </RSEXC>
+      <RSEXC>
+       <EXCEPTION>USER_INVALID</EXCEPTION>
+      </RSEXC>
+     </EXCEPTION>
+     <DOCUMENTATION>
+      <RSFDO>
+       <PARAMETER>I_CLIENT</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>Client</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>I_FUNCTION</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>Function: BDC, Call Trans. Using, internal interface</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>I_GROUP</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>only BDC: batch input session name</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>I_HOLDDATE</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>only BDC: locking the session until the specified date</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>I_KEEP</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>only BDC: indicator to hold processed sessions</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>I_MODE</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>Processing mode (for Call Transaction Using)</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>I_UPDATE</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>Update mode (synchronous / asynchronous) (Call Trans.)</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>I_USER</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>Batch input user for authorization</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>I_XBDCC</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>X-batch input if error in call transaction</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>I_BDC_APP_AREA</PARAMETER>
+       <KIND>P</KIND>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>CLIENT_INCORRECT</PARAMETER>
+       <KIND>X</KIND>
+       <STEXT>Transferred client differs from the system client</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>FUNCTION_INVALID</PARAMETER>
+       <KIND>X</KIND>
+       <STEXT>Transferred function is not supported</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>GROUP_NAME_MISSING</PARAMETER>
+       <KIND>X</KIND>
+       <STEXT>Session name is missing (for batch input)</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>MODE_INVALID</PARAMETER>
+       <KIND>X</KIND>
+       <STEXT>Display mode not supported (for Call Trans.)</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>UPDATE_INVALID</PARAMETER>
+       <KIND>X</KIND>
+       <STEXT>Update mode not supported (for Call Tr)</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>USER_INVALID</PARAMETER>
+       <KIND>X</KIND>
+      </RSFDO>
+     </DOCUMENTATION>
+    </item>
+    <item>
+     <FUNCNAME>Z_SDSFI_POSTING_INTF_CLR_PART</FUNCNAME>
+     <GLOBAL_FLAG>X</GLOBAL_FLAG>
+     <SHORT_TEXT>Post with clearing (FB05) using posting interface - partial support</SHORT_TEXT>
+     <IMPORT>
+      <RSIMP>
+       <PARAMETER>I_AUGLV</PARAMETER>
+       <DBFIELD>T041A-AUGLV</DBFIELD>
+      </RSIMP>
+      <RSIMP>
+       <PARAMETER>I_TCODE</PARAMETER>
+       <DBFIELD>SY-TCODE</DBFIELD>
+      </RSIMP>
+      <RSIMP>
+       <PARAMETER>I_SGFUNCT</PARAMETER>
+       <DBFIELD>RFIPI-SGFUNCT</DBFIELD>
+       <DEFAULT>SPACE</DEFAULT>
+       <OPTIONAL>X</OPTIONAL>
+      </RSIMP>
+      <RSIMP>
+       <PARAMETER>I_NO_AUTH</PARAMETER>
+       <DEFAULT>SPACE</DEFAULT>
+       <OPTIONAL>X</OPTIONAL>
+      </RSIMP>
+      <RSIMP>
+       <PARAMETER>I_XSIMU</PARAMETER>
+       <DEFAULT>SPACE</DEFAULT>
+       <OPTIONAL>X</OPTIONAL>
+       <REFERENCE>X</REFERENCE>
+       <TYP>CHAR1</TYP>
+      </RSIMP>
+      <RSIMP>
+       <PARAMETER>I_ACCEPT</PARAMETER>
+       <DEFAULT>SPACE</DEFAULT>
+       <OPTIONAL>X</OPTIONAL>
+       <REFERENCE>X</REFERENCE>
+       <TYP>CHAR1</TYP>
+      </RSIMP>
+     </IMPORT>
+     <EXPORT>
+      <RSEXP>
+       <PARAMETER>E_MSGID</PARAMETER>
+       <TYP>SY-MSGID</TYP>
+      </RSEXP>
+      <RSEXP>
+       <PARAMETER>E_MSGNO</PARAMETER>
+       <TYP>SY-MSGNO</TYP>
+      </RSEXP>
+      <RSEXP>
+       <PARAMETER>E_MSGTY</PARAMETER>
+       <TYP>SY-MSGTY</TYP>
+      </RSEXP>
+      <RSEXP>
+       <PARAMETER>E_MSGV1</PARAMETER>
+       <TYP>SY-MSGV1</TYP>
+      </RSEXP>
+      <RSEXP>
+       <PARAMETER>E_MSGV2</PARAMETER>
+       <TYP>SY-MSGV2</TYP>
+      </RSEXP>
+      <RSEXP>
+       <PARAMETER>E_MSGV3</PARAMETER>
+       <TYP>SY-MSGV3</TYP>
+      </RSEXP>
+      <RSEXP>
+       <PARAMETER>E_MSGV4</PARAMETER>
+       <TYP>SY-MSGV4</TYP>
+      </RSEXP>
+      <RSEXP>
+       <PARAMETER>E_SUBRC</PARAMETER>
+       <TYP>SY-SUBRC</TYP>
+      </RSEXP>
+     </EXPORT>
+     <TABLES>
+      <RSTBL>
+       <PARAMETER>T_BLNTAB</PARAMETER>
+       <DBSTRUCT>BLNTAB</DBSTRUCT>
+      </RSTBL>
+      <RSTBL>
+       <PARAMETER>T_FTCLEAR</PARAMETER>
+       <DBSTRUCT>FTCLEAR</DBSTRUCT>
+      </RSTBL>
+      <RSTBL>
+       <PARAMETER>T_FTPOST</PARAMETER>
+       <DBSTRUCT>FTPOST</DBSTRUCT>
+      </RSTBL>
+      <RSTBL>
+       <PARAMETER>T_FTTAX</PARAMETER>
+       <DBSTRUCT>FTTAX</DBSTRUCT>
+      </RSTBL>
+      <RSTBL>
+       <PARAMETER>T_PARTIAL</PARAMETER>
+       <DBSTRUCT>ZSDSFIS093</DBSTRUCT>
+      </RSTBL>
+     </TABLES>
+     <EXCEPTION>
+      <RSEXC>
+       <EXCEPTION>CLEARING_PROCEDURE_INVALID</EXCEPTION>
+      </RSEXC>
+      <RSEXC>
+       <EXCEPTION>CLEARING_PROCEDURE_MISSING</EXCEPTION>
+      </RSEXC>
+      <RSEXC>
+       <EXCEPTION>TABLE_T041A_EMPTY</EXCEPTION>
+      </RSEXC>
+      <RSEXC>
+       <EXCEPTION>TRANSACTION_CODE_INVALID</EXCEPTION>
+      </RSEXC>
+      <RSEXC>
+       <EXCEPTION>AMOUNT_FORMAT_ERROR</EXCEPTION>
+      </RSEXC>
+      <RSEXC>
+       <EXCEPTION>TOO_MANY_LINE_ITEMS</EXCEPTION>
+      </RSEXC>
+      <RSEXC>
+       <EXCEPTION>COMPANY_CODE_INVALID</EXCEPTION>
+      </RSEXC>
+      <RSEXC>
+       <EXCEPTION>SCREEN_NOT_FOUND</EXCEPTION>
+      </RSEXC>
+      <RSEXC>
+       <EXCEPTION>NO_AUTHORIZATION</EXCEPTION>
+      </RSEXC>
+     </EXCEPTION>
+     <DOCUMENTATION>
+      <RSFDO>
+       <PARAMETER>I_AUGLV</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>Clearing Transaction</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>I_TCODE</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>ABAP System Field: Current Transaction Code</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>I_SGFUNCT</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>FI Posting Interface Alternative Function</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>I_NO_AUTH</PARAMETER>
+       <KIND>P</KIND>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>I_XSIMU</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>Single-Character Flag</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>I_ACCEPT</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>Accept button on witholding tax</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>E_MSGID</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>ABAP System Field: Message ID</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>E_MSGNO</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>ABAP System Field: Message Number</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>E_MSGTY</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>ABAP System Field: Message Type</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>E_MSGV1</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>ABAP System Field: Message Variable</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>E_MSGV2</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>ABAP System Field: Message Variable</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>E_MSGV3</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>ABAP System Field: Message Variable</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>E_MSGV4</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>ABAP System Field: Message Variable</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>E_SUBRC</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>ABAP System Field: Return Code of ABAP Statements</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>T_BLNTAB</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>Document Number Table for Financial Accounting</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>T_FTCLEAR</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>Clearing Data for Internal Posting Interface</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>T_FTPOST</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>Document Header and Items for Internal Posting Interface</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>T_FTTAX</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>Taxes for Internal Posting Interface</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>T_PARTIAL</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>Structure for FIARE05 Partial Clearing</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>CLEARING_PROCEDURE_INVALID</PARAMETER>
+       <KIND>X</KIND>
+       <STEXT>Transferred clearing procedure is invalid</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>CLEARING_PROCEDURE_MISSING</PARAMETER>
+       <KIND>X</KIND>
+       <STEXT>Clearing procedure not transferred</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>TABLE_T041A_EMPTY</PARAMETER>
+       <KIND>X</KIND>
+       <STEXT>Table of the clearing procedures (T041A) is empty</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>TRANSACTION_CODE_INVALID</PARAMETER>
+       <KIND>X</KIND>
+       <STEXT>Transferred transaction code not supported</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>AMOUNT_FORMAT_ERROR</PARAMETER>
+       <KIND>X</KIND>
+       <STEXT>Formatting error with the specified amount</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>TOO_MANY_LINE_ITEMS</PARAMETER>
+       <KIND>X</KIND>
+       <STEXT>Beleg beinhaltet zu viele Positionen</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>COMPANY_CODE_INVALID</PARAMETER>
+       <KIND>X</KIND>
+       <STEXT>ungültiger Buchungskreis</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>SCREEN_NOT_FOUND</PARAMETER>
+       <KIND>X</KIND>
+       <STEXT>Folgedynpro nicht gefunden</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>NO_AUTHORIZATION</PARAMETER>
+       <KIND>X</KIND>
+       <STEXT>Authorization missing</STEXT>
+      </RSFDO>
+     </DOCUMENTATION>
+    </item>
+   </FUNCTIONS>
+   <LONGTEXTS_Z_SDSFI_POSTING_INTERFACE_DOC>
+    <item>
+     <DOKIL>
+      <ID>FU</ID>
+      <OBJECT>Z_SDSFI_POSTING_INTERFACE_DOC</OBJECT>
+      <LANGU>D</LANGU>
+      <TYP>T</TYP>
+      <VERSION>0004</VERSION>
+      <MASTERLANG>X</MASTERLANG>
+      <TXTLINES>00090</TXTLINES>
+      <DOKSTATE>A</DOKSTATE>
+     </DOKIL>
+     <HEAD>
+      <TDOBJECT>DOKU</TDOBJECT>
+      <TDNAME>Z_SDSFI_POSTING_INTERFACE_DOC</TDNAME>
+      <TDID>FU</TDID>
+      <TDSPRAS>D</TDSPRAS>
+      <TDFORM>S_DOCU_SHOW</TDFORM>
+      <TDSTYLE>S_DOCUS1</TDSTYLE>
+      <TDVERSION>00004</TDVERSION>
+      <TDLINESIZE>072</TDLINESIZE>
+     </HEAD>
+     <LINES>
+      <TLINE>
+       <TDFORMAT>*</TDFORMAT>
+       <TDLINE>English version follows!</TDLINE>
+      </TLINE>
+      <TLINE>
+       <TDFORMAT>*</TDFORMAT>
+       <TDLINE>Der Funktionsbaustein &apos;POSTING_INTERFACE_DOCUMENT&apos; erstellt eine</TDLINE>
+      </TLINE>
+      <TLINE>
+       <TDLINE>Batch-Input-Transaktion (bzw. macht Call Transaction ... Using ...) für</TDLINE>
+      </TLINE>
+      <TLINE>
+       <TDLINE>einen mit FB01 oder FBB1 zu buchenden Beleg.</TDLINE>
+      </TLINE>
+      <TLINE>
+       <TDFORMAT>*</TDFORMAT>
+       <TDLINE>In der Tabelle T_FTPOST sind alle Belegkopf- und Belegpositionsdaten,</TDLINE>
+      </TLINE>
+      <TLINE>
+       <TDLINE>die für diesen Beleg gebraucht werden, zu übergeben.</TDLINE>
+      </TLINE>
+      <TLINE>
+       <TDFORMAT>*</TDFORMAT>
+       <TDLINE>Folgende Regeln sind dabei zu beachten:</TDLINE>
+      </TLINE>
+      <TLINE>
+       <TDFORMAT>B1</TDFORMAT>
+       <TDLINE>Die Daten werden durch Satztyp (Kopf/Position) und Zähler</TDLINE>
+      </TLINE>
+      <TLINE>
+       <TDLINE>gekennzeichnet.</TDLINE>
+      </TLINE>
+      <TLINE>
+       <TDFORMAT>B1</TDFORMAT>
+       <TDLINE>Es können maximal 950 Buchungszeilen übergeben werden</TDLINE>
+      </TLINE>
+      <TLINE>
+       <TDFORMAT>B1</TDFORMAT>
+       <TDLINE>Die Daten werden mit Feldname und Feldwert übergeben.</TDLINE>
+      </TLINE>
+      <TLINE>
+       <TDFORMAT>B1</TDFORMAT>
+       <TDLINE>Die Daten müssen in folgender Reihenfolge übergeben werden:</TDLINE>
+      </TLINE>
+      <TLINE>
+       <TDFORMAT>B2</TDFORMAT>
+       <TDLINE>Belegkopfdaten  ( K 1)</TDLINE>
+      </TLINE>
+      <TLINE>
+       <TDFORMAT>B2</TDFORMAT>
+       <TDLINE>Belegposition 1 ( P 1)</TDLINE>
+      </TLINE>
+      <TLINE>
+       <TDFORMAT>B2</TDFORMAT>
+       <TDLINE>Belegposition 2 ( P 2)  etc.</TDLINE>
+      </TLINE>
+      <TLINE>
+       <TDFORMAT>B1</TDFORMAT>
+       <TDLINE>Als Feldnamen werden in der Regel die Namen erwartet, die auch auf dem</TDLINE>
+      </TLINE>
+      <TLINE>
+       <TDLINE>zu füllenden Bild verwendet werden (z.B. &apos;BKPF-WAERS&apos;, &apos;BSEG-WRBTR&apos;..).</TDLINE>
+      </TLINE>
+      <TLINE>
+       <TDFORMAT>B1</TDFORMAT>
+       <TDLINE>Die Fußzeile-Daten können in folgenden Feldern übergeben werden:</TDLINE>
+      </TLINE>
+      <TLINE>
+       <TDFORMAT>B2</TDFORMAT>
+       <TDLINE>Buchungsschlüsssel: RF05A-NEWBS oder BSEG-BSCHL</TDLINE>
+      </TLINE>
+      <TLINE>
+       <TDFORMAT>B2</TDFORMAT>
+       <TDLINE>Kontonummer:        RF05A-NEWKO oder BSEG-KONTO</TDLINE>
+      </TLINE>
+      <TLINE>
+       <TDFORMAT>/</TDFORMAT>
+       <TDLINE>                    oder BSEG-KUNNR (für Debitorenkonten)</TDLINE>
+      </TLINE>
+      <TLINE>
+       <TDFORMAT>/</TDFORMAT>
+       <TDLINE>                    oder BSEG-LIFNR (für Kreditorenkonten)</TDLINE>
+      </TLINE>
+      <TLINE>
+       <TDFORMAT>/</TDFORMAT>
+       <TDLINE>                    oder BSEG-HKONT (für Sachkonten)</TDLINE>
+      </TLINE>
+      <TLINE>
+       <TDFORMAT>B2</TDFORMAT>
+       <TDLINE>Sonderhauptbuchkennzeichen: RF05A-NEWUM oder BSEG-UMSKZ</TDLINE>
+      </TLINE>
+      <TLINE>
+       <TDFORMAT>B2</TDFORMAT>
+       <TDLINE>Buchungskreis (bei buchungskreisübergreifender Buchung):</TDLINE>
+      </TLINE>
+      <TLINE>
+       <TDFORMAT>/</TDFORMAT>
+       <TDLINE>                    RF05A-NEWBK oder BSEG-BUKRS.</TDLINE>
+      </TLINE>
+      <TLINE>
+       <TDFORMAT>B2</TDFORMAT>
+       <TDLINE>Um die Daten den richtigen Bildern zuordnen zu können, werden die</TDLINE>
+      </TLINE>
+      <TLINE>
+       <TDLINE>Feldnamen durch den Funktionsbaustein analysiert. Feldnamen für</TDLINE>
+      </TLINE>
+      <TLINE>
+       <TDLINE>CpD-Daten bzw. Daten für einen abweichenden Regulierer müssen z.B. mit</TDLINE>
+      </TLINE>
+      <TLINE>
+       <TDLINE>&apos;BSEC-&apos; anfangen (siehe Bild SAPLFCPD 0100).</TDLINE>
+      </TLINE>
+      <TLINE>
+       <TDFORMAT>AS</TDFORMAT>
+       <TDLINE>Verarbeitung mit &apos;Call Transaction ... Using &apos;</TDLINE>
+      </TLINE>
+      <TLINE>
+       <TDFORMAT>*</TDFORMAT>
+       <TDLINE>Erfolgt die Verarbeitung mit &apos;Call Transaction .. Using&apos; so kann der</TDLINE>
+      </TLINE>
+      <TLINE>
+       <TDLINE>Aufrufer am Exportparameter &apos;SUBRC&apos; erkennen, ob die Verarbeitung</TDLINE>
+      </TLINE>
+      <TLINE>
+       <TDLINE>erfolgreich war.</TDLINE>
+      </TLINE>
+      <TLINE>
+       <TDFORMAT>*</TDFORMAT>
+       <TDLINE>Ein SUBRC = 0 bedeutet, daß der Beleg gebucht wurde. In der Tabelle</TDLINE>
+      </TLINE>
+      <TLINE>
+       <TDLINE>T_BLNTAB kann die Belegnummer entgegengenommen werden. Bei</TDLINE>
+      </TLINE>
+      <TLINE>
+       <TDLINE>buchungskreisübergreifenden Belegen stehen hier mehrere Belegnummern.</TDLINE>
+      </TLINE>
+      <TLINE>
+       <TDFORMAT>*</TDFORMAT>
+       <TDLINE>Ein SUBRC &lt;&gt; 0 bedeutet, daß der Beleg nicht gebucht werden konnte. Die</TDLINE>
+      </TLINE>
+      <TLINE>
+       <TDLINE>Information über den aufgetretenen Fehler wird in den Message-Feldern</TDLINE>
+      </TLINE>
+      <TLINE>
+       <TDLINE>MSGID, MSGNO, etc, zurückgeliefert.</TDLINE>
+      </TLINE>
+      <TLINE>
+       <TDFORMAT>AS</TDFORMAT>
+       <TDLINE>Unterstützung der Transaktion &apos;FBB1&apos;</TDLINE>
+      </TLINE>
+      <TLINE>
+       <TDFORMAT>*</TDFORMAT>
+       <TDLINE>Soll die Transaktion FBB1 (Fremdwährungsbewertung buchen) aufgerufen</TDLINE>
+      </TLINE>
+      <TLINE>
+       <TDLINE>werden, so muß der Aufrufer folgendes beachten:</TDLINE>
+      </TLINE>
+      <TLINE>
+       <TDFORMAT>B1</TDFORMAT>
+       <TDLINE>Im Feld BKPF-WAERS ist der Fremdwährungsschlüssel zu übergeben.</TDLINE>
+      </TLINE>
+      <TLINE>
+       <TDFORMAT>B1</TDFORMAT>
+       <TDLINE>Je Belegposition ist bei dieser Transaktion der Hauswährungsbetrag im</TDLINE>
+      </TLINE>
+      <TLINE>
+       <TDLINE>Feld BSEG-WRBTR zu übergeben.</TDLINE>
+      </TLINE>
+      <TLINE>
+       <TDFORMAT>LZ</TDFORMAT>
+      </TLINE>
+      <TLINE>
+       <TDFORMAT>AS</TDFORMAT>
+       <TDLINE>English version:</TDLINE>
+      </TLINE>
+      <TLINE>
+       <TDFORMAT>AS</TDFORMAT>
+       <TDLINE>The function module &apos;POSTING_INTERFACE_DOCUMENT&apos; creates a batch input</TDLINE>
+      </TLINE>
+      <TLINE>
+       <TDLINE>transaction ( or Call Transaction ... Using ...) for a document to be</TDLINE>
+      </TLINE>
+      <TLINE>
+       <TDLINE>posted with FB01 or FBB1.</TDLINE>
+      </TLINE>
+      <TLINE>
+       <TDFORMAT>*</TDFORMAT>
+       <TDLINE>You should transfer all document header and document item data which is</TDLINE>
+      </TLINE>
+      <TLINE>
+       <TDLINE>needed for this document to table T_FTPOST.</TDLINE>
+      </TLINE>
+      <TLINE>
+       <TDFORMAT>*</TDFORMAT>
+       <TDLINE>Note the following rules:</TDLINE>
+      </TLINE>
+      <TLINE>
+       <TDFORMAT>B1</TDFORMAT>
+       <TDLINE>The data is marked with a record type (header, code = K; item, code =</TDLINE>
+      </TLINE>
+      <TLINE>
+       <TDLINE>P) and counter.</TDLINE>
+      </TLINE>
+      <TLINE>
+       <TDFORMAT>B1</TDFORMAT>
+       <TDLINE>The data is transferred with the field name and field value.</TDLINE>
+      </TLINE>
+      <TLINE>
+       <TDFORMAT>B1</TDFORMAT>
+       <TDLINE>The data must be transferred in the following sequence:</TDLINE>
+      </TLINE>
+      <TLINE>
+       <TDFORMAT>B2</TDFORMAT>
+       <TDLINE>Document header data ( K 1)</TDLINE>
+      </TLINE>
+      <TLINE>
+       <TDFORMAT>B2</TDFORMAT>
+       <TDLINE>Document item 1 ( P 1)</TDLINE>
+      </TLINE>
+      <TLINE>
+       <TDFORMAT>B2</TDFORMAT>
+       <TDLINE>Document item 2 ( P 2)  etc.</TDLINE>
+      </TLINE>
+      <TLINE>
+       <TDFORMAT>B1</TDFORMAT>
+       <TDLINE>The field names are the same as those used on the entry screen (e.g.</TDLINE>
+      </TLINE>
+      <TLINE>
+       <TDLINE>&apos;BKPF-WAERS&apos;, &apos;BSEG-WRBTR&apos;, &apos;COBL-GSBER&apos;...).</TDLINE>
+      </TLINE>
+      <TLINE>
+       <TDFORMAT>B1</TDFORMAT>
+       <TDLINE>The footer data can be transferred using the following fields:</TDLINE>
+      </TLINE>
+      <TLINE>
+       <TDFORMAT>B2</TDFORMAT>
+       <TDLINE>Posting key:        RF05A-NEWBS or BSEG-BSCHL</TDLINE>
+      </TLINE>
+      <TLINE>
+       <TDFORMAT>B2</TDFORMAT>
+       <TDLINE>Account number:     RF05A-NEWKO or BSEG-KONTO</TDLINE>
+      </TLINE>
+      <TLINE>
+       <TDFORMAT>/</TDFORMAT>
+       <TDLINE>                    or BSEG-KUNNR (for customer accounts)</TDLINE>
+      </TLINE>
+      <TLINE>
+       <TDFORMAT>/</TDFORMAT>
+       <TDLINE>                    or BSEG-LIFNR (for vendor accounts)</TDLINE>
+      </TLINE>
+      <TLINE>
+       <TDFORMAT>/</TDFORMAT>
+       <TDLINE>                    or BSEG-HKONT (for G/L accounts)</TDLINE>
+      </TLINE>
+      <TLINE>
+       <TDFORMAT>B2</TDFORMAT>
+       <TDLINE>Special G/L indicator: RF05A-NEWUM or BSEG-UMSKZ</TDLINE>
+      </TLINE>
+      <TLINE>
+       <TDFORMAT>B2</TDFORMAT>
+       <TDLINE>Company code (for intercompany posting):</TDLINE>
+      </TLINE>
+      <TLINE>
+       <TDFORMAT>/</TDFORMAT>
+       <TDLINE>                    RF05A-NEWBK or BSEG-BUKRS.</TDLINE>
+      </TLINE>
+      <TLINE>
+       <TDFORMAT>B2</TDFORMAT>
+       <TDLINE>The field names are analyzed by the function module so that the data can</TDLINE>
+      </TLINE>
+      <TLINE>
+       <TDLINE>assigned to the right screens. Field names for one-time data or data</TDLINE>
+      </TLINE>
+      <TLINE>
+       <TDLINE>for an alternative payer must start with &apos;BSEC-&apos;, for example (see</TDLINE>
+      </TLINE>
+      <TLINE>
+       <TDLINE>screen SAPLFCPD 0100).</TDLINE>
+      </TLINE>
+      <TLINE>
+       <TDFORMAT>AS</TDFORMAT>
+       <TDLINE>Processing with &apos;Call Transaction ... Using &apos;</TDLINE>
+      </TLINE>
+      <TLINE>
+       <TDFORMAT>*</TDFORMAT>
+       <TDLINE>If processing takes place with &apos;Call Transaction .. Using&apos;, the</TDLINE>
+      </TLINE>
+      <TLINE>
+       <TDLINE>initiator can see whether processing was successful by looking at the</TDLINE>
+      </TLINE>
+      <TLINE>
+       <TDLINE>export parameter&apos;SUBRC&apos;.</TDLINE>
+      </TLINE>
+      <TLINE>
+       <TDFORMAT>*</TDFORMAT>
+       <TDLINE>SUBRC = 0 means that the document was posted. The document number is</TDLINE>
+      </TLINE>
+      <TLINE>
+       <TDLINE>stored in table T_BLNTAB. For intercompany documents, several document</TDLINE>
+      </TLINE>
+      <TLINE>
+       <TDLINE>numbers are stored here.</TDLINE>
+      </TLINE>
+      <TLINE>
+       <TDFORMAT>*</TDFORMAT>
+       <TDLINE>SUBRC &lt;&gt; 0 means that the document could not be posted. Information</TDLINE>
+      </TLINE>
+      <TLINE>
+       <TDLINE>concerning the error which has arisen is returned via the message</TDLINE>
+      </TLINE>
+      <TLINE>
+       <TDLINE>fields MSGID, MSGNO, etc.</TDLINE>
+      </TLINE>
+      <TLINE>
+       <TDFORMAT>AS</TDFORMAT>
+       <TDLINE>Support of transaction &apos;FBB1&apos;</TDLINE>
+      </TLINE>
+      <TLINE>
+       <TDFORMAT>*</TDFORMAT>
+       <TDLINE>If you want to call up transaction FBB1, you should note the following:</TDLINE>
+      </TLINE>
+      <TLINE>
+       <TDFORMAT>B1</TDFORMAT>
+       <TDLINE>Enter the foreign currency key in field BKPF-WAERS.</TDLINE>
+      </TLINE>
+      <TLINE>
+       <TDFORMAT>B1</TDFORMAT>
+       <TDLINE>In this transaction you should enter the local currency amount in field</TDLINE>
+      </TLINE>
+      <TLINE>
+       <TDLINE>BSEG-WRBTR for each document item.</TDLINE>
+      </TLINE>
+     </LINES>
+    </item>
+    <item>
+     <DOKIL>
+      <ID>FU</ID>
+      <OBJECT>Z_SDSFI_POSTING_INTERFACE_DOC</OBJECT>
+      <LANGU>E</LANGU>
+      <TYP>T</TYP>
+      <VERSION>0004</VERSION>
+      <TXTLINES>00044</TXTLINES>
+      <DOKSTATE>A</DOKSTATE>
+     </DOKIL>
+     <HEAD>
+      <TDOBJECT>DOKU</TDOBJECT>
+      <TDNAME>Z_SDSFI_POSTING_INTERFACE_DOC</TDNAME>
+      <TDID>FU</TDID>
+      <TDSPRAS>E</TDSPRAS>
+      <TDFORM>S_DOCU_SHOW</TDFORM>
+      <TDSTYLE>S_DOCUS1</TDSTYLE>
+      <TDVERSION>00004</TDVERSION>
+      <TDLINESIZE>072</TDLINESIZE>
+     </HEAD>
+     <LINES>
+      <TLINE>
+       <TDFORMAT>AS</TDFORMAT>
+       <TDLINE>Function module &apos;POSTING_INTERFACE_DOCUMENT&apos; creates a batch input</TDLINE>
+      </TLINE>
+      <TLINE>
+       <TDLINE>transaction ( or Call Transaction ... Using ...) for a document to be</TDLINE>
+      </TLINE>
+      <TLINE>
+       <TDLINE>posted with FB01 or FBB1.</TDLINE>
+      </TLINE>
+      <TLINE>
+       <TDFORMAT>*</TDFORMAT>
+       <TDLINE>You should transfer all document header and document item data which is</TDLINE>
+      </TLINE>
+      <TLINE>
+       <TDLINE>needed for this document to table T_FTPOST.</TDLINE>
+      </TLINE>
+      <TLINE>
+       <TDFORMAT>*</TDFORMAT>
+       <TDLINE>Note the following rules:</TDLINE>
+      </TLINE>
+      <TLINE>
+       <TDFORMAT>B1</TDFORMAT>
+       <TDLINE>The data is marked with a record type (header, code = K; item, code =</TDLINE>
+      </TLINE>
+      <TLINE>
+       <TDLINE>P) and counter.</TDLINE>
+      </TLINE>
+      <TLINE>
+       <TDFORMAT>B1</TDFORMAT>
+       <TDLINE>Up to 950 line items can be transferred.</TDLINE>
+      </TLINE>
+      <TLINE>
+       <TDFORMAT>B1</TDFORMAT>
+       <TDLINE>The data is transferred with the field name and field value.</TDLINE>
+      </TLINE>
+      <TLINE>
+       <TDFORMAT>B1</TDFORMAT>
+       <TDLINE>The data must be transferred in the following sequence:</TDLINE>
+      </TLINE>
+      <TLINE>
+       <TDFORMAT>B2</TDFORMAT>
+       <TDLINE>Document header data ( K 1)</TDLINE>
+      </TLINE>
+      <TLINE>
+       <TDFORMAT>B2</TDFORMAT>
+       <TDLINE>Document item 1 ( P 1)</TDLINE>
+      </TLINE>
+      <TLINE>
+       <TDFORMAT>B2</TDFORMAT>
+       <TDLINE>Document item 2 ( P 2)  etc.</TDLINE>
+      </TLINE>
+      <TLINE>
+       <TDFORMAT>B1</TDFORMAT>
+       <TDLINE>The field names are the same as those used on the entry screen (e.g.</TDLINE>
+      </TLINE>
+      <TLINE>
+       <TDLINE>&apos;BKPF-WAERS&apos;, &apos;BSEG-WRBTR&apos;, &apos;COBL-GSBER&apos;...).</TDLINE>
+      </TLINE>
+      <TLINE>
+       <TDFORMAT>B1</TDFORMAT>
+       <TDLINE>The footer data can be transferred using the following fields:</TDLINE>
+      </TLINE>
+      <TLINE>
+       <TDFORMAT>B2</TDFORMAT>
+       <TDLINE>Posting key:        RF05A-NEWBS or BSEG-BSCHL</TDLINE>
+      </TLINE>
+      <TLINE>
+       <TDFORMAT>B2</TDFORMAT>
+       <TDLINE>Account number:     RF05A-NEWKO or BSEG-KONTO</TDLINE>
+      </TLINE>
+      <TLINE>
+       <TDFORMAT>/</TDFORMAT>
+       <TDLINE>                    or BSEG-KUNNR (for customer accounts)</TDLINE>
+      </TLINE>
+      <TLINE>
+       <TDFORMAT>/</TDFORMAT>
+       <TDLINE>                    or BSEG-LIFNR (for vendor accounts)</TDLINE>
+      </TLINE>
+      <TLINE>
+       <TDFORMAT>/</TDFORMAT>
+       <TDLINE>                    or BSEG-HKONT (for G/L accounts)</TDLINE>
+      </TLINE>
+      <TLINE>
+       <TDFORMAT>B2</TDFORMAT>
+       <TDLINE>Special G/L indicator: RF05A-NEWUM or BSEG-UMSKZ</TDLINE>
+      </TLINE>
+      <TLINE>
+       <TDFORMAT>B2</TDFORMAT>
+       <TDLINE>Company code (for intercompany posting):</TDLINE>
+      </TLINE>
+      <TLINE>
+       <TDFORMAT>/</TDFORMAT>
+       <TDLINE>                    RF05A-NEWBK or BSEG-BUKRS.</TDLINE>
+      </TLINE>
+      <TLINE>
+       <TDFORMAT>B2</TDFORMAT>
+       <TDLINE>The field names are analyzed by the function module so that the data</TDLINE>
+      </TLINE>
+      <TLINE>
+       <TDLINE>can be assigned to the right screens. Field names for one-time data or</TDLINE>
+      </TLINE>
+      <TLINE>
+       <TDLINE>data for an alternative payer must start with &apos;BSEC-&apos;, for example (see</TDLINE>
+      </TLINE>
+      <TLINE>
+       <TDLINE>screen SAPLFCPD 0100).</TDLINE>
+      </TLINE>
+      <TLINE>
+       <TDFORMAT>AS</TDFORMAT>
+       <TDLINE>Processing with &apos;Call Transaction ... Using &apos;</TDLINE>
+      </TLINE>
+      <TLINE>
+       <TDFORMAT>*</TDFORMAT>
+       <TDLINE>If processing takes place with &apos;Call Transaction .. Using&apos;, the</TDLINE>
+      </TLINE>
+      <TLINE>
+       <TDLINE>initiator can see whether processing was successful by looking at the</TDLINE>
+      </TLINE>
+      <TLINE>
+       <TDLINE>export parameter&apos;SUBRC&apos;.</TDLINE>
+      </TLINE>
+      <TLINE>
+       <TDFORMAT>*</TDFORMAT>
+       <TDLINE>SUBRC = 0 means that the document was posted. The document number is</TDLINE>
+      </TLINE>
+      <TLINE>
+       <TDLINE>stored in table T_BLNTAB. For intercompany documents, several document</TDLINE>
+      </TLINE>
+      <TLINE>
+       <TDLINE>numbers are stored here.</TDLINE>
+      </TLINE>
+      <TLINE>
+       <TDFORMAT>*</TDFORMAT>
+       <TDLINE>SUBRC &lt;&gt; 0 means that the document could not be posted. Information</TDLINE>
+      </TLINE>
+      <TLINE>
+       <TDLINE>concerning the error which has arisen is returned via the message</TDLINE>
+      </TLINE>
+      <TLINE>
+       <TDLINE>fields MSGID, MSGNO, etc.</TDLINE>
+      </TLINE>
+      <TLINE>
+       <TDFORMAT>AS</TDFORMAT>
+       <TDLINE>Support of transaction &apos;FBB1&apos;</TDLINE>
+      </TLINE>
+      <TLINE>
+       <TDFORMAT>*</TDFORMAT>
+       <TDLINE>If you want to access transaction FBB1, you should note the following:</TDLINE>
+      </TLINE>
+      <TLINE>
+       <TDFORMAT>B1</TDFORMAT>
+       <TDLINE>Enter the foreign currency key in field BKPF-WAERS.</TDLINE>
+      </TLINE>
+      <TLINE>
+       <TDFORMAT>B1</TDFORMAT>
+       <TDLINE>In this transaction you should enter the local currency amount in field</TDLINE>
+      </TLINE>
+      <TLINE>
+       <TDLINE>BSEG-WRBTR for each document item.</TDLINE>
+      </TLINE>
+     </LINES>
+    </item>
+   </LONGTEXTS_Z_SDSFI_POSTING_INTERFACE_DOC>
+   <LONGTEXTS_Z_SDSFI_POSTING_INTERFACE_ST>
+    <item>
+     <DOKIL>
+      <ID>FU</ID>
+      <OBJECT>Z_SDSFI_POSTING_INTERFACE_ST</OBJECT>
+      <LANGU>D</LANGU>
+      <TYP>T</TYP>
+      <VERSION>0001</VERSION>
+      <MASTERLANG>X</MASTERLANG>
+      <TXTLINES>00024</TXTLINES>
+      <DOKSTATE>A</DOKSTATE>
+     </DOKIL>
+     <HEAD>
+      <TDOBJECT>DOKU</TDOBJECT>
+      <TDNAME>Z_SDSFI_POSTING_INTERFACE_ST</TDNAME>
+      <TDID>FU</TDID>
+      <TDSPRAS>D</TDSPRAS>
+      <TDFORM>S_DOCU_SHOW</TDFORM>
+      <TDSTYLE>S_DOCUS1</TDSTYLE>
+      <TDVERSION>00001</TDVERSION>
+      <TDLINESIZE>072</TDLINESIZE>
+     </HEAD>
+     <LINES>
+      <TLINE>
+       <TDFORMAT>*</TDFORMAT>
+       <TDLINE>English version follows!</TDLINE>
+      </TLINE>
+      <TLINE>
+       <TDFORMAT>/</TDFORMAT>
+       <TDLINE>Der Funktionsbaustein &apos;POSTING_INTERFACE_START&apos; bereitet die</TDLINE>
+      </TLINE>
+      <TLINE>
+       <TDLINE>Verarbeitung von mehreren mit den Transaktionen FB01 oder FB05 zu</TDLINE>
+      </TLINE>
+      <TLINE>
+       <TDLINE>buchenden Belegen vor.</TDLINE>
+      </TLINE>
+      <TLINE>
+       <TDFORMAT>*</TDFORMAT>
+       <TDLINE>Wird die Funktion &apos;B&apos; (Batch-Input-Verarbeitung) gewünscht, so öffnet</TDLINE>
+      </TLINE>
+      <TLINE>
+       <TDLINE>dieser Funktionsbaustein die Batch-Input-Mappe und übergibt die dazu</TDLINE>
+      </TLINE>
+      <TLINE>
+       <TDLINE>notwendigen Parameter.</TDLINE>
+      </TLINE>
+      <TLINE>
+       <TDFORMAT>*</TDFORMAT>
+       <TDLINE>Wird die Funktion &apos;C&apos; (Verarbeitung mit Call Transaction .. Using ..)</TDLINE>
+      </TLINE>
+      <TLINE>
+       <TDLINE>gewünscht, so nimmt dieser Funktionsbaustein die notwendigen Parmeter</TDLINE>
+      </TLINE>
+      <TLINE>
+       <TDLINE>für Anzeigemodus und Updatemodus vom Aufrufer entgegen.</TDLINE>
+      </TLINE>
+      <TLINE>
+       <TDFORMAT>*</TDFORMAT>
+       <TDLINE>Die Funktion &apos;I&apos; ( Interaktive Buchungsschnittstelle) ist zur Zeit noch</TDLINE>
+      </TLINE>
+      <TLINE>
+       <TDLINE>nicht unterstützt.</TDLINE>
+      </TLINE>
+      <TLINE>
+       <TDFORMAT>LZ</TDFORMAT>
+      </TLINE>
+      <TLINE>
+       <TDFORMAT>/</TDFORMAT>
+       <TDLINE>English version:</TDLINE>
+      </TLINE>
+      <TLINE>
+       <TDFORMAT>AS</TDFORMAT>
+       <TDLINE>The function module &apos;POSTING_INTERFACE_START&apos; carries out preparations</TDLINE>
+      </TLINE>
+      <TLINE>
+       <TDLINE>for the processing of several documents which are to be posted with</TDLINE>
+      </TLINE>
+      <TLINE>
+       <TDLINE>transactions FB01 or FB05.</TDLINE>
+      </TLINE>
+      <TLINE>
+       <TDFORMAT>AS</TDFORMAT>
+       <TDLINE>If function &apos;B&apos; (batch input processing) is required, this function</TDLINE>
+      </TLINE>
+      <TLINE>
+       <TDLINE>module opens the batch input session and transfers the necessary</TDLINE>
+      </TLINE>
+      <TLINE>
+       <TDLINE>parameters.</TDLINE>
+      </TLINE>
+      <TLINE>
+       <TDFORMAT>AS</TDFORMAT>
+       <TDLINE>If function&apos;C&apos; (processing with Call Transaction .. Using..) is</TDLINE>
+      </TLINE>
+      <TLINE>
+       <TDLINE>required, this function module receives the necessary parameters for</TDLINE>
+      </TLINE>
+      <TLINE>
+       <TDLINE>the display and update modes from the call program.</TDLINE>
+      </TLINE>
+      <TLINE>
+       <TDFORMAT>AS</TDFORMAT>
+       <TDLINE>Function &apos;I&apos; (interactive posting interface) is not currently</TDLINE>
+      </TLINE>
+      <TLINE>
+       <TDLINE>supported.</TDLINE>
+      </TLINE>
+     </LINES>
+    </item>
+    <item>
+     <DOKIL>
+      <ID>FU</ID>
+      <OBJECT>Z_SDSFI_POSTING_INTERFACE_ST</OBJECT>
+      <LANGU>E</LANGU>
+      <TYP>T</TYP>
+      <VERSION>0001</VERSION>
+      <TXTLINES>00012</TXTLINES>
+      <DOKSTATE>A</DOKSTATE>
+     </DOKIL>
+     <HEAD>
+      <TDOBJECT>DOKU</TDOBJECT>
+      <TDNAME>Z_SDSFI_POSTING_INTERFACE_ST</TDNAME>
+      <TDID>FU</TDID>
+      <TDSPRAS>E</TDSPRAS>
+      <TDFORM>S_DOCU_SHOW</TDFORM>
+      <TDSTYLE>S_DOCUS1</TDSTYLE>
+      <TDVERSION>00001</TDVERSION>
+      <TDLINESIZE>072</TDLINESIZE>
+     </HEAD>
+     <LINES>
+      <TLINE>
+       <TDFORMAT>LZ</TDFORMAT>
+      </TLINE>
+      <TLINE>
+       <TDFORMAT>/</TDFORMAT>
+       <TDLINE>English version:</TDLINE>
+      </TLINE>
+      <TLINE>
+       <TDFORMAT>AS</TDFORMAT>
+       <TDLINE>The function module &apos;POSTING_INTERFACE_START&apos; carries out preparations</TDLINE>
+      </TLINE>
+      <TLINE>
+       <TDLINE>for the processing of several documents which are to be posted with</TDLINE>
+      </TLINE>
+      <TLINE>
+       <TDLINE>transactions FB01 or FB05.</TDLINE>
+      </TLINE>
+      <TLINE>
+       <TDFORMAT>AS</TDFORMAT>
+       <TDLINE>If function &apos;B&apos; (batch input processing) is required, this function</TDLINE>
+      </TLINE>
+      <TLINE>
+       <TDLINE>module opens the batch input session and transfers the necessary</TDLINE>
+      </TLINE>
+      <TLINE>
+       <TDLINE>parameters.</TDLINE>
+      </TLINE>
+      <TLINE>
+       <TDFORMAT>AS</TDFORMAT>
+       <TDLINE>If function&apos;C&apos; (processing with Call Transaction .. Using..) is</TDLINE>
+      </TLINE>
+      <TLINE>
+       <TDLINE>required, this function module receives the necessary parameters for</TDLINE>
+      </TLINE>
+      <TLINE>
+       <TDLINE>the display and update modes from the call program.</TDLINE>
+      </TLINE>
+      <TLINE>
+       <TDFORMAT>AS</TDFORMAT>
+       <TDLINE>Function &apos;I&apos; (interactive posting interface) is not currently</TDLINE>
+      </TLINE>
+      <TLINE>
+       <TDLINE>supported.</TDLINE>
+      </TLINE>
+     </LINES>
+    </item>
+   </LONGTEXTS_Z_SDSFI_POSTING_INTERFACE_ST>
+  </asx:values>
+ </asx:abap>
+</abapGit>

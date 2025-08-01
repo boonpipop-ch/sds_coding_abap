@@ -1,0 +1,88 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<abapGit version="v1.0.0" serializer="LCL_OBJECT_CLAS" serializer_version="v1.0.0">
+ <asx:abap xmlns:asx="http://www.sap.com/abapxml" version="1.0">
+  <asx:values>
+   <VSEOCLASS>
+    <CLSNAME>ZCL_SDSCM_ENH_GI_SVO_CONF</CLSNAME>
+    <LANGU>E</LANGU>
+    <DESCRIPT>SDS: Enhancement on GI from SVO Confirmation</DESCRIPT>
+    <STATE>1</STATE>
+    <CLSCCINCL>X</CLSCCINCL>
+    <FIXPT>X</FIXPT>
+    <UNICODE>X</UNICODE>
+   </VSEOCLASS>
+   <DESCRIPTIONS>
+    <SEOCOMPOTX>
+     <CMPNAME>GET_CONSTANTS</CMPNAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Get GENC constants</DESCRIPT>
+    </SEOCOMPOTX>
+    <SEOCOMPOTX>
+     <CMPNAME>IS_SDS</CMPNAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Check SDS Related?</DESCRIPT>
+    </SEOCOMPOTX>
+    <SEOCOMPOTX>
+     <CMPNAME>UPDATE_GOODSMVT_HEAD</CMPNAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>SDS: Update Goods Movement Header data</DESCRIPT>
+    </SEOCOMPOTX>
+    <SEOCOMPOTX>
+     <CMPNAME>UPDATE_GOODSMVT_ITEM</CMPNAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>SDS: Update Goods Movement Item data</DESCRIPT>
+    </SEOCOMPOTX>
+   </DESCRIPTIONS>
+   <DESCRIPTIONS_SUB>
+    <SEOSUBCOTX>
+     <CMPNAME>IS_SDS</CMPNAME>
+     <SCONAME>IF_WERKS</SCONAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Plant</DESCRIPT>
+    </SEOSUBCOTX>
+    <SEOSUBCOTX>
+     <CMPNAME>IS_SDS</CMPNAME>
+     <SCONAME>RF_RESULT</SCONAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Truth Value: True/False</DESCRIPT>
+    </SEOSUBCOTX>
+    <SEOSUBCOTX>
+     <CMPNAME>UPDATE_GOODSMVT_HEAD</CMPNAME>
+     <SCONAME>CS_GM_HEAD</SCONAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>BAPI Communication Structure: Material Document Header Data</DESCRIPT>
+    </SEOSUBCOTX>
+    <SEOSUBCOTX>
+     <CMPNAME>UPDATE_GOODSMVT_HEAD</CMPNAME>
+     <SCONAME>IF_HEADER_GUID</SCONAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>GUID of a CRM Order Object</DESCRIPT>
+    </SEOSUBCOTX>
+    <SEOSUBCOTX>
+     <CMPNAME>UPDATE_GOODSMVT_HEAD</CMPNAME>
+     <SCONAME>IF_WERKS</SCONAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Plant</DESCRIPT>
+    </SEOSUBCOTX>
+    <SEOSUBCOTX>
+     <CMPNAME>UPDATE_GOODSMVT_ITEM</CMPNAME>
+     <SCONAME>CS_GOODSMVT_ITEM</SCONAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>BAPI Communication Structure: Create Material Document Item</DESCRIPT>
+    </SEOSUBCOTX>
+    <SEOSUBCOTX>
+     <CMPNAME>UPDATE_GOODSMVT_ITEM</CMPNAME>
+     <SCONAME>IF_BUKRS</SCONAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Company Code</DESCRIPT>
+    </SEOSUBCOTX>
+    <SEOSUBCOTX>
+     <CMPNAME>UPDATE_GOODSMVT_ITEM</CMPNAME>
+     <SCONAME>IS_MATERIAL_GM</SCONAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Structure for Material Confirmation from CRM</DESCRIPT>
+    </SEOSUBCOTX>
+   </DESCRIPTIONS_SUB>
+  </asx:values>
+ </asx:abap>
+</abapGit>

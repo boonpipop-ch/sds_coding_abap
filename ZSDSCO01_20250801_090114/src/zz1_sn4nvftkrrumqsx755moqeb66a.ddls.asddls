@@ -1,0 +1,8 @@
+@AbapCatalog.internal.setChange: 'FLDADD_NO_ASS_INFLUENCE'
+@AbapCatalog.sqlViewAppendName: 'ZZ1_13A0AE9985D4'
+
+extend view C_GLLINEITEMSQ0001 with ZZ1_SN4NVFTKRRUMQSX755MOQEB66A
+  
+{ 
+  ZZ1_ZZINNI_MSE as ZZ1_ZZINNI_MSE
+}

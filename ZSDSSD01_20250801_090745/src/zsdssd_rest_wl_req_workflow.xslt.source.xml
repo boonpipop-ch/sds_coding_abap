@@ -1,0 +1,90 @@
+<?sap.transform simple?>
+<tt:transform xmlns:tt="http://www.sap.com/transformation-templates" xmlns:ddic="http://www.sap.com/abapxml/types/dictionary">
+
+  <tt:root name="DATA" type="ddic:ZSDSCMS017"/>
+  <tt:variable name="MARKED" val="1"/>
+
+  <tt:template>
+
+    <object>
+
+      <tt:group>
+        <tt:cond frq="?">
+          <!-- ? = Optional, 1 = Required-->
+          <str name="EmployeeCode">
+            <tt:value ref="DATA.EMPLOYEECODE"/>
+          </str>
+        </tt:cond>
+
+        <tt:cond frq="?">
+          <str name="WarrantyLetterID">
+            <tt:value ref="DATA.WARRANTYLETTERID"/>
+          </str>
+        </tt:cond>
+
+        <tt:cond frq="?">
+          <str name="ProjectWBS">
+            <tt:value ref="DATA.PROJECTWBS"/>
+          </str>
+        </tt:cond>
+
+        <tt:cond frq="?">
+          <str name="ProjectName">
+            <tt:value ref="DATA.PROJECTNAME"/>
+          </str>
+        </tt:cond>
+
+        <tt:cond frq="?">
+          <str name="WarrantyStart">
+            <tt:value ref="DATA.WARRANTYSTART"/>
+          </str>
+        </tt:cond>
+
+        <tt:cond frq="?">
+          <str name="CompressorWarrantyYear">
+            <tt:value ref="DATA.COMPRESSORWARRANTYYEAR"/>
+          </str>
+        </tt:cond>
+
+        <tt:cond frq="?">
+          <str name="OtherWarrantyYear">
+            <tt:value ref="DATA.OTHERWARRANTYYEAR"/>
+          </str>
+        </tt:cond>
+
+        <tt:cond frq="?">
+          <str name="CustomerCode">
+            <tt:value ref="DATA.CUSTOMERCODE"/>
+          </str>
+        </tt:cond>
+
+        <tt:cond frq="?">
+          <str name="CustomerName">
+            <tt:value ref="DATA.CUSTOMERNAME"/>
+          </str>
+        </tt:cond>
+
+        <tt:cond frq="?">
+          <str name="InvoiceNo">
+            <tt:value ref="DATA.INVOICENO"/>
+          </str>
+        </tt:cond>
+
+        <tt:cond frq="?">
+          <str name="MessageType">
+            <tt:value ref="DATA.MESSAGETYPE"/>
+          </str>
+        </tt:cond>
+
+        <tt:cond frq="?">
+          <str name="MessageText">
+            <tt:value ref="DATA.MESSAGETEXT"/>
+          </str>
+        </tt:cond>
+      </tt:group>
+
+    </object>
+
+  </tt:template>
+
+</tt:transform>

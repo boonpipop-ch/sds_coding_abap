@@ -1,0 +1,442 @@
+*-----------------------------------------------------------------------
+*  Program ID         : ZSDSFIR0480_TOP
+*  Creation Date      : 26.09.2024
+*  Author             : Lakkhana U.(Eviden)
+*  Add-on ID          : N/A
+*  Description        : This is include program for Global data
+*                       and selection screen
+*  Purpose            : Include program for global data type and data object
+*  Copied from        : N/A
+*  Restriction        : N/A
+*-----------------------------------------------------------------------
+*  CHANGE HISTORY
+*-----------------------------------------------------------------------
+*  Date        Task #      Programmer  Description
+*-----------------------------------------------------------------------
+*  DD.MM.YYYY  TR no.      ABAP Name   Detail
+*-----------------------------------------------------------------------
+
+*----------------------------------------------------------------------*
+* TABLES
+*----------------------------------------------------------------------*
+TABLES:
+  PRPS.
+
+*----------------------------------------------------------------------*
+* TYPES
+*----------------------------------------------------------------------*
+
+TYPES: TS_DATA       TYPE ZSDSFIS139,
+       TT_DATA       TYPE STANDARD TABLE OF TS_DATA,
+       TT_LOGS       TYPE STANDARD TABLE OF ZSDSFIT048,
+       TT_DOC_FLOW   TYPE STANDARD TABLE OF CRMT_DOC_FLOW_WRK,
+       TT_ZSDSFIT048 TYPE STANDARD TABLE OF ZSDSFIT048,
+       TT_OUTPUT     TYPE STANDARD TABLE OF ZSDSFIS139. " WITH EMPTY KEY.
+
+TYPES: BEGIN OF TS_DATA_H,
+         SVO_ID      TYPE ZSDSFIS139-SVO_ID,
+         SERV_CON_ID TYPE ZSDSFIS139-SERV_CON_ID,
+         RUNNO       TYPE ZSDSFIS139-RUNNO,
+         BELNR       TYPE BKPF-BELNR,
+       END OF TS_DATA_H,
+       TT_DATA_H TYPE STANDARD TABLE OF TS_DATA_H.
+
+TYPES: BEGIN OF TS_SERV_H,
+         OBJTYPE_H        TYPE CRMS4D_SERV_H-OBJTYPE_H,
+         OBJECT_ID        TYPE CRMS4D_SERV_H-OBJECT_ID,
+         HEADER_GUID      TYPE CRMS4D_SERV_H-HEADER_GUID,
+         STAT_LIFECYCLE   TYPE CRMS4D_SERV_H-STAT_LIFECYCLE,
+         STAT_CANCELLED   TYPE CRMS4D_SERV_H-STAT_CANCELLED,
+         SRV_CUST_BEG     TYPE CRMS4D_SERV_H-SRV_CUST_BEG,
+         SRV_CUST_END     TYPE CRMS4D_SERV_H-SRV_CUST_END,
+         CONTSTART        TYPE CRMS4D_SERV_H-CONTSTART,
+         CONTEND          TYPE CRMS4D_SERV_H-CONTEND,
+         SOLD_TO_PARTY    TYPE CRMS4D_SERV_H-SOLD_TO_PARTY,
+         NET_VALUE_H      TYPE CRMS4D_SERV_H-NET_VALUE_H,
+         CURRENCY         TYPE CRMS4D_SERV_H-CURRENCY,
+         STAT_FOR_BILLING TYPE CRMS4D_SERV_H-STAT_FOR_BILLING,
+       END OF TS_SERV_H,
+       TT_SERV_H TYPE STANDARD TABLE OF TS_SERV_H.
+
+TYPES: BEGIN OF TS_SERV_I,
+         OBJTYPE_H       TYPE CRMS4D_SERV_I-OBJTYPE_H,
+         OBJECT_ID       TYPE CRMS4D_SERV_I-OBJECT_ID,
+         NUMBER_INT      TYPE CRMS4D_SERV_I-NUMBER_INT,
+         SALES_ORG_SD    TYPE CRMS4D_SERV_I-SALES_ORG_SD,
+         SALES_OFFICE_SD TYPE CRMS4D_SERV_I-SALES_OFFICE_SD,
+         SALES_GROUP_SD  TYPE CRMS4D_SERV_I-SALES_GROUP_SD,
+         DIS_CHANNEL     TYPE CRMS4D_SERV_I-DIS_CHANNEL,
+         PRODUCT_ID      TYPE CRMS4D_SERV_I-PRODUCT_ID,
+         NET_VALUE_I     TYPE CRMS4D_SERV_I-NET_VALUE_I,
+         CURRENCY        TYPE CRMS4D_SERV_I-CURRENCY,
+         AC_OBJECT_TYPE  TYPE CRMS4D_SERV_I-AC_OBJECT_TYPE,
+         AC_ASSIGNMENT   TYPE CRMS4D_SERV_I-AC_ASSIGNMENT,
+         STAT_LIFECYCLE  TYPE CRMS4D_SERV_I-STAT_LIFECYCLE,
+         ITEM_GUID       TYPE CRMS4D_SERV_I-ITEM_GUID,
+         HEADER_GUID     TYPE CRMS4D_SERV_I-HEADER_GUID,
+       END OF TS_SERV_I,
+       TT_SERV_I TYPE STANDARD TABLE OF TS_SERV_I.
+
+TYPES: BEGIN OF TS_BILLING,
+         VBELN      TYPE VBRK-VBELN,
+         POSNR      TYPE VBRP-POSNR,
+         BUPLA      TYPE VBRK-BUPLA,
+         KOSTL      TYPE VBRP-KOSTL,
+         PRCTR      TYPE VBRP-PRCTR,
+         VKORG      TYPE VBRK-VKORG,
+         VTWEG      TYPE VBRK-VTWEG,
+         AUFNR      TYPE VBRP-AUFNR,
+         PS_PSP_PNR TYPE VBAP-PS_PSP_PNR,
+         WAERK      TYPE VBRK-WAERK,
+         MATNR      TYPE VBRP-MATNR,
+         NETWR      TYPE VBRP-NETWR,
+       END OF TS_BILLING,
+       TT_BILLING TYPE STANDARD TABLE OF TS_BILLING.
+
+TYPES: BEGIN OF TS_AUFK,
+         AUFNR TYPE AUFK-AUFNR,
+         PRCTR TYPE AUFK-PRCTR,
+       END OF TS_AUFK,
+       TT_AUFK TYPE STANDARD TABLE OF TS_AUFK.
+
+TYPES: BEGIN OF TS_MESSG,
+         MSGTY TYPE  SY-MSGTY,
+         MSGID TYPE  SY-MSGID,
+         MSGNO TYPE  SY-MSGNO,
+         MSGTX TYPE  ZSDSDE_MSGTX,
+       END OF TS_MESSG.
+*      TT_MESSG TYPE STANDARD TABLE OF TS_MESSG.
+
+TYPES: BEGIN OF TS_FIDOC,
+         BUKRS TYPE  BKPF-BUKRS,
+         BELNR TYPE  BKPF-BELNR,
+         GJAHR TYPE  BKPF-GJAHR,
+       END OF TS_FIDOC.
+
+TYPES: BEGIN OF TS_MATERIAL,
+         MATNR TYPE MVKE-MATNR,
+         VKORG TYPE MVKE-VKORG,
+         VTWEG TYPE MVKE-VTWEG,
+         KTGRM TYPE MVKE-KTGRM,
+         VTEXT TYPE TVKMT-VTEXT,
+       END OF TS_MATERIAL,
+       TT_MATERIAL TYPE STANDARD TABLE OF TS_MATERIAL.
+
+TYPES:
+  BEGIN OF TS_WBS,
+    POSID TYPE PRPS-POSID,
+  END OF TS_WBS,
+  TT_WBS TYPE STANDARD TABLE OF TS_WBS,
+  BEGIN OF TS_PRPS,
+    PSPNR TYPE PRPS-PSPNR,
+    POSID TYPE PRPS-POSID,
+    OBJNR TYPE PRPS-OBJNR,
+    PRCTR TYPE PRPS-PRCTR,  "++CH02
+  END OF TS_PRPS,
+  TT_PRPS      TYPE SORTED TABLE OF TS_PRPS WITH NON-UNIQUE KEY PSPNR,
+  TT_RANGE_WBS TYPE RANGE OF PRPS-POSID.
+
+TYPES:
+  BEGIN OF TS_ACDOCA,
+    RLDNR    TYPE ACDOCA-RLDNR,
+    RBUKRS   TYPE ACDOCA-RBUKRS,
+    GJAHR    TYPE ACDOCA-GJAHR,
+    BELNR    TYPE ACDOCA-BELNR,
+    DOCLN    TYPE ACDOCA-DOCLN,
+    BUDAT    TYPE ACDOCA-BUDAT,
+    HSL      TYPE ACDOCA-HSL,
+    RHCUR    TYPE ACDOCA-RHCUR,
+    RACCT    TYPE ACDOCA-RACCT,
+    AWTYP    TYPE ACDOCA-AWTYP,
+    AWREF    TYPE ACDOCA-AWREF,
+    AWITEM   TYPE ACDOCA-AWITEM,
+    PS_POSID TYPE ACDOCA-PS_POSID,
+    MATNR    TYPE ACDOCA-MATNR,
+    AUFNR    TYPE ACDOCA-AUFNR,
+    VBELV    TYPE VBFA-VBELV, "Sales Order
+    POSNV    TYPE VBFA-POSNV, "Sales Order item
+    VBELN    TYPE VBFA-VBELN, "Billing document
+    POSNN    TYPE VBFA-POSNN, "Billing item
+  END OF TS_ACDOCA,
+  TT_ACDOCA TYPE STANDARD TABLE OF TS_ACDOCA,
+
+  BEGIN OF TS_REVENUE,
+    POSID    TYPE ACDOCA-PS_POSID,
+    MATNR    TYPE ACDOCA-MATNR,
+    VBELN_VL TYPE VBFA-VBELV, "DO
+    VBELN_VF TYPE VBFA-VBELN, "Billing document
+    POSNR_VF TYPE VBFA-POSNN, "Billing Item
+    AMOUNT   TYPE ZSDSFIS139-NETWR,
+    RHCUR    TYPE ACDOCA-RHCUR,
+  END OF TS_REVENUE,
+  TT_REVENUE TYPE STANDARD TABLE OF TS_REVENUE.
+
+TYPES:
+  BEGIN OF TS_BKPF,
+    BUKRS TYPE BKPF-BUKRS,
+    BELNR TYPE BKPF-BELNR,
+    GJAHR TYPE BKPF-GJAHR,
+    BUDAT TYPE BKPF-BUDAT,
+  END OF TS_BKPF,
+  TT_BKPF TYPE STANDARD TABLE OF TS_BKPF.
+
+*----------------------------------------------------------------------*
+* CONSTANTS
+*----------------------------------------------------------------------*
+CONSTANTS:
+  BEGIN OF GC_MODE,
+    TEST_RUN TYPE CHAR1    VALUE 'X',
+    PROD_RUN TYPE CHAR1    VALUE '',
+  END OF GC_MODE,
+
+  BEGIN OF GC_STATUS,
+    SUCCESS TYPE ICON_D VALUE '@08@',
+    WARNING TYPE ICON_D VALUE '@09@',
+    ERROR   TYPE ICON_D VALUE '@0A@',
+  END OF GC_STATUS,
+
+  BEGIN OF GC_MSGTY,
+    ERR TYPE BAPI_MTYPE VALUE 'E',
+    SUC TYPE BAPI_MTYPE VALUE 'S',
+    WAR TYPE BAPI_MTYPE VALUE 'W',
+  END OF GC_MSGTY,
+
+  BEGIN OF GC_AC_OBJECT_TYPE,
+    ORDER TYPE CRMS4D_SERV_H-AC_OBJECT_TYPE VALUE '01',
+    WBS   TYPE CRMS4D_SERV_H-AC_OBJECT_TYPE VALUE '03',
+  END OF GC_AC_OBJECT_TYPE ,
+
+  BEGIN OF GC_GENC_PARAM ##NEEDED,
+    GL_ACC TYPE ZSDSDE_PARAM_NAME VALUE 'GL_ACCOUNT',
+  END OF GC_GENC_PARAM,
+
+  BEGIN OF GC_FUNC,
+    SEL_A    TYPE SY-UCOMM VALUE 'SEL_ALL',
+    SEL_N    TYPE SY-UCOMM VALUE 'SEL_NONE',
+    DOWNLOAD TYPE SY-UCOMM VALUE 'DOWNLOAD',
+    POST     TYPE UI_FUNC  VALUE 'POST',
+  END OF GC_FUNC,
+
+  BEGIN OF GC_KTGRM,
+    MA  TYPE KTGRM VALUE '04',
+    EXT TYPE KTGRM VALUE '05',
+    SLA TYPE KTGRM VALUE '07',
+  END OF GC_KTGRM,
+
+  BEGIN OF GC_RARTYP,
+    MA  TYPE ZSDSDE_RARTYP VALUE 'MA',
+    EXT TYPE ZSDSDE_RARTYP VALUE 'EXT',
+    SLA TYPE ZSDSDE_RARTYP VALUE 'SLA',
+    MA_CT TYPE ZSDSDE_RARTYP VALUE 'MA_CT',  "++CH02
+  END OF GC_RARTYP,
+
+  BEGIN OF GC_PROCESS_TYPE,
+    ZRO1 TYPE CRMS4D_SERV_H-PROCESS_TYPE VALUE 'ZRO1', "Service MA
+    ZRP1 TYPE CRMS4D_SERV_H-PROCESS_TYPE VALUE 'ZRP1', "ServiceProj MA
+  END OF GC_PROCESS_TYPE,
+
+  BEGIN OF GC_CON,
+    TCODE              TYPE SY-TCODE  VALUE 'ZSDSFI040',
+    OBJTYPE_SVORDER    TYPE CRMT_SUBOBJECT_CATEGORY_DB VALUE 'BUS2000116',
+    OBJTYPE_SVCONTRACT TYPE CRMT_SUBOBJECT_CATEGORY_DB VALUE 'BUS2000112',
+    OBJTYPE_BILLING    TYPE CRMT_SUBOBJECT_CATEGORY_DB VALUE 'VBRK',
+    OBJTYPE_ORDER      TYPE CRMT_SUBOBJECT_CATEGORY_DB VALUE 'BUS2075',
+    STAT_FOR_BILLING_A TYPE CRMS4_STAT_FOR_BILLING_HEADER VALUE 'A',
+*    STATUS_COMPLETE    TYPE CRMS4_STAT_LIFECYCLE VALUE 'C', "Completed
+*    STATUS_OPEN        TYPE CRMS4_STAT_LIFECYCLE VALUE 'A', "Open
+    ADDITIONAL_FILED   TYPE C LENGTH 10 VALUE 'ZSDSFIS007',
+    FIRST_ITEM_NO      TYPE CRMS4_NUMBER_INT VALUE '000001',
+    BUKRS              TYPE BUKRS         VALUE '1000',
+    BUS_AREA           TYPE GSBER         VALUE '0001',
+    BUPLA              TYPE BUPLA         VALUE '0000',
+    SEQNO              TYPE ZSDSDE_FI_SEQ VALUE '001',
+    CURR_TYPE          TYPE CURTP         VALUE '00',
+    40                 TYPE C LENGTH 2    VALUE '40' ##WARN_OK,
+    50                 TYPE C LENGTH 2    VALUE '50' ##WARN_OK,
+    RLDNR              TYPE ACDOCA-RLDNR  VALUE '0L',
+    AWTYP              TYPE ACDOCA-AWTYP  VALUE 'VBRK',
+    VBTYP_V            TYPE VBFA-VBTYP_V  VALUE 'J', "DO
+    VBTYP_N            TYPE VBFA-VBTYP_N  VALUE 'M', "Invoice
+    TRUE               TYPE CHAR1         VALUE 'X',
+    STAT_DEL           TYPE CRM_JEST-STAT VALUE 'E0005',
+    MIN_TIME           TYPE SY-TIMLO      VALUE '070000',
+    MAX_TIME           TYPE SY-TIMLO      VALUE '065959',
+    AWTYP_VBRK         TYPE ACDOCA-AWTYP  VALUE 'VBRK',  "++CH02
+  END OF GC_CON.
+*----------------------------------------------------------------------*
+* INTERNAL TABLES
+*----------------------------------------------------------------------*
+DATA:
+  GT_DATA   TYPE  TT_DATA                            ##NEEDED,
+  GT_DATA_H TYPE  TT_DATA_H                          ##NEEDED,
+  GT_HEADER TYPE  TT_DATA_H                          ##NEEDED,
+  GT_LOGS   TYPE  TT_LOGS                            ##NEEDED,
+  GT_BKPF   TYPE  TT_BKPF                            ##NEEDED,
+  GT_WBS    TYPE STANDARD TABLE OF TS_WBS            ##NEEDED,
+  GT_OUTPUT TYPE  TT_OUTPUT                          ##NEEDED.
+
+*----------------------------------------------------------------------*
+* WORK AREAS
+*----------------------------------------------------------------------*
+DATA: GS_ZSDSFIS139 TYPE ZSDSFIS139.
+
+*----------------------------------------------------------------------*
+* DATA DECLARATION
+*----------------------------------------------------------------------*
+##NEEDED
+DATA: GS_DOCUMENTHEADER    TYPE BAPIACHE09,
+      GS_CUSTOMERCPD       TYPE BAPIACPA09,
+      GT_ACCOUNTGL         TYPE TABLE OF BAPIACGL09,
+      GT_ACCOUNTRECEIVABLE TYPE TABLE OF BAPIACAR09,
+      GS_ACCOUNTRECEIVABLE TYPE BAPIACAR09,
+      GT_ACCOUNTPAYABLE    TYPE TABLE OF BAPIACAP09,
+      GS_ACCOUNTPAYABLE    TYPE BAPIACAP09,
+      GT_ACCOUNTTAX        TYPE TABLE OF BAPIACTX09,
+      GS_ACCOUNTTAX        TYPE BAPIACTX09,
+      GT_CURRENCYAMOUNT    TYPE TABLE OF BAPIACCR09,
+      GS_CURRENCYAMOUNT    TYPE BAPIACCR09,
+      GT_CRITERIA          TYPE TABLE OF BAPIACKEC9,
+      GT_EXTENSION1        TYPE TABLE OF BAPIACEXTC,
+      GT_EXTENSION2        TYPE TABLE OF BAPIPAREX,
+      GS_EXTENSION2        TYPE BAPIPAREX,
+      GT_RETURN            TYPE TABLE OF BAPIRET2,
+      GT_ACCOUNTWT         TYPE TABLE OF BAPIACWT09,
+      GF_ITEMNO_ACC        TYPE POSNR_ACC,
+      GF_DOC_EXCH          TYPE KURSF.
+
+*----------------------------------------------------------------------*
+* RANGE
+*----------------------------------------------------------------------*
+DATA: GRT_MATNR      TYPE RANGE OF MATNR ##NEEDED,
+      GRT_VTWEG      TYPE RANGE OF VTWEG ##NEEDED,
+      GRT_VBELN      TYPE RANGE OF VBELN ##NEEDED,
+      GRT_WBS_EXT    TYPE TT_RANGE_WBS   ##NEEDED,
+      GRT_ITEM_GUID  TYPE RANGE OF CRMT_OBJECT_GUID   ##NEEDED,
+      GRT_STATUS_POST TYPE RANGE OF CRMS4_STAT_LIFECYCLE ##NEEDED,
+      GRT_STATUS_OTH  TYPE RANGE OF CRMS4_STAT_LIFECYCLE ##NEEDED,
+      GRT_STATUS_MACT TYPE RANGE OF CRMS4_STAT_LIFECYCLE ##NEEDED,"++CH02
+      GRT_CONTEND    TYPE RANGE OF CRMS4D_SERV_H-CONTEND ##NEEDED."++CH02
+*----------------------------------------------------------------------*
+* FIELD-SYMBOLS
+*----------------------------------------------------------------------*
+
+*----------------------------------------------------------------------*
+* GENC VARIABLES
+*----------------------------------------------------------------------*
+DATA:
+  GF_DOC_TYPE          TYPE BKPF-BLART                             ##NEEDED,
+  GF_ERROR             TYPE C                                      ##NEEDED,
+  GF_GL_ACC_DR         TYPE BAPIACGL09-GL_ACCOUNT                  ##NEEDED,
+  GF_GL_ACC_CR         TYPE BAPIACGL09-GL_ACCOUNT                  ##NEEDED,
+  GF_GL_ACC_DR_EXT     TYPE BAPIACGL09-GL_ACCOUNT                  ##NEEDED,
+  GF_GL_ACC_CR_EXT     TYPE BAPIACGL09-GL_ACCOUNT                  ##NEEDED,
+  GF_GL_ACC_DR_SLA     TYPE BAPIACGL09-GL_ACCOUNT                  ##NEEDED,
+  GF_GL_ACC_CR_SLA     TYPE BAPIACGL09-GL_ACCOUNT                  ##NEEDED,
+  GF_SYSTEM_STATUS     TYPE JEST-STAT                              ##NEEDED,
+  GF_MAX_RECORDS       TYPE BSEG-BUZEI                             ##NEEDED,
+  GF_STATUS_COMPLETE   TYPE CRMS4_STAT_LIFECYCLE                   ##NEEDED,
+  GF_MONAT             TYPE BKPF-MONAT                             ##NEEDED,
+  GF_GJAHR             TYPE BKPF-GJAHR                             ##NEEDED,
+  GF_BUDAT             TYPE SY-DATUM                               ##NEEDED,
+  GF_BLDAT             TYPE SY-DATUM                               ##NEEDED,
+  GF_DATE_BEG          TYPE SY-DATUM                               ##NEEDED,
+  GF_DATE_END          TYPE SY-DATUM                               ##NEEDED,
+  GF_COMPDT_BEG        TYPE DATS                                   ##NEEDED,
+  GF_COMPDT_END        TYPE DATS                                   ##NEEDED,
+  GF_TSTAMP_BEG        TYPE TZNTSTMPSL                             ##NEEDED,
+  GF_TSTAMP_END        TYPE TZNTSTMPSL                             ##NEEDED,
+  GF_LAST_DAY_OF_MONTH TYPE SY-DATUM                               ##NEEDED,
+  GF_FISCYEARPER       TYPE ACDOCA-FISCYEARPER                     ##NEEDED.
+*----------------------------------------------------------------------*
+* ALV VARIABLES
+*----------------------------------------------------------------------*
+CONSTANTS:
+  GC_STRUCTURE     TYPE  TABNAME  VALUE 'ZSDSFIS139'.
+
+CONSTANTS:
+  GC_HEADER_HEIGHT_1 TYPE  I                VALUE 10,
+  GC_ALV_HEIGHT_1    TYPE  I                VALUE 90.
+*----------------------------------------------------------------------*
+* MACROS
+*----------------------------------------------------------------------*
+DEFINE MC_SHOW_PROGRESS.
+  IF sy-batch IS INITIAL.
+*   Show progress online
+    CALL FUNCTION 'SAPGUI_PROGRESS_INDICATOR'
+      EXPORTING
+        percentage = &1 ##NUMBER_OK
+        text       = &2.
+  ELSE.
+*   Show message step in background
+    MESSAGE i000(38) WITH &2 space space space.
+  ENDIF.
+END-OF-DEFINITION.
+
+*----------------------------------------------------------------------*
+* SELECTION-SCREEN
+*----------------------------------------------------------------------*
+* Text-s01: Selection
+SELECTION-SCREEN BEGIN OF BLOCK B1 WITH FRAME TITLE TEXT-S01.
+
+  PARAMETERS:
+    P_VKORG TYPE VBRK-VKORG OBLIGATORY DEFAULT '1000'.
+
+  SELECTION-SCREEN BEGIN OF LINE.
+    PARAMETERS:  RB_SOMA RADIOBUTTON GROUP G1 DEFAULT 'X' USER-COMMAND SEL ##SEL_WRONG.
+    SELECTION-SCREEN COMMENT 5(24) TEXT-001.
+    SELECT-OPTIONS:
+      S_SVO_ID   FOR GS_ZSDSFIS139-SVO_ID  ##SEL_WRONG.
+  SELECTION-SCREEN END OF LINE.
+
+  SELECTION-SCREEN BEGIN OF LINE.
+    PARAMETERS:  RB_WBS RADIOBUTTON GROUP G1  ##SEL_WRONG.
+    SELECTION-SCREEN COMMENT 5(24) TEXT-002.
+    SELECT-OPTIONS:
+     S_WBS   FOR PRPS-POSID ##SEL_WRONG.  "Ext.Warranty (WBS)
+  SELECTION-SCREEN END OF LINE.
+
+  SELECTION-SCREEN BEGIN OF LINE.
+    PARAMETERS:  RB_SOSLA RADIOBUTTON GROUP G1  ##SEL_WRONG.
+    SELECTION-SCREEN COMMENT 5(24) TEXT-003.
+    SELECT-OPTIONS:
+      S_SO_SLA   FOR GS_ZSDSFIS139-SERV_CON_ID  ##SEL_WRONG.
+  SELECTION-SCREEN END OF LINE.
+
+*-BOI ++CH02 Lakkhana(23.07.2025)
+  SELECTION-SCREEN BEGIN OF LINE.
+    PARAMETERS: RB_MACON RADIOBUTTON GROUP G1  ##SEL_WRONG.
+    SELECTION-SCREEN COMMENT 5(24) TEXT-006.
+    SELECT-OPTIONS:
+      S_SVC_ID  FOR GS_ZSDSFIS139-SERV_CON_ID  ##SEL_WRONG.
+  SELECTION-SCREEN END OF LINE.
+*-EOI ++CH02 Lakkhana(23.07.2025)
+
+  SELECT-OPTIONS:
+    S_YRPER    FOR GS_ZSDSFIS139-FISCYEARPER MODIF ID REP,
+    S_KUNNR    FOR GS_ZSDSFIS139-KUNNR NO-DISPLAY,
+    S_COMPDT   FOR SY-DATUM NO-EXTENSION MODIF ID SV,
+    S_CONEND   FOR SY-DATUM MODIF ID SC.  "++CH02
+  PARAMETERS:
+    P_BUDT_D   TYPE SY-DATUM OBLIGATORY MODIF ID SVD.
+SELECTION-SCREEN END OF BLOCK B1.
+
+* Text-s03: Processing Options
+SELECTION-SCREEN BEGIN OF BLOCK B3 WITH FRAME TITLE TEXT-S03.
+  PARAMETERS:
+    RB_POST TYPE CHAR1 RADIOBUTTON GROUP G2 DEFAULT 'X'
+                                            USER-COMMAND DMY,
+    RB_REPT TYPE CHAR1 RADIOBUTTON GROUP G2.
+SELECTION-SCREEN END OF BLOCK B3.
+
+* Text-s02: Posting Information
+SELECTION-SCREEN BEGIN OF BLOCK B2 WITH FRAME TITLE TEXT-S02.
+  PARAMETERS:
+    P_BUKRS  TYPE BKPF-BUKRS OBLIGATORY MODIF ID FI,
+    P_BLART  TYPE BKPF-BLART OBLIGATORY MODIF ID FI,
+    P_BLDAT  TYPE BKPF-BLDAT OBLIGATORY MODIF ID SO,
+    P_BUDAT  TYPE BKPF-BUDAT OBLIGATORY MODIF ID SO,
+    P_BLDT_W TYPE BKPF-BLDAT OBLIGATORY MODIF ID WBS,
+    P_BUDT_W TYPE BKPF-BUDAT OBLIGATORY MODIF ID WBS,
+    P_BUPLA  TYPE VBRK-BUPLA            MODIF ID FI,
+    P_SGTXT  TYPE BSEG-SGTXT NO-DISPLAY MODIF ID FI.
+SELECTION-SCREEN END OF BLOCK B2.

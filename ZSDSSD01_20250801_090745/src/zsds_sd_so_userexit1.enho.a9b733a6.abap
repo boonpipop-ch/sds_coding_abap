@@ -1,0 +1,12 @@
+"Name: \PR:SAPMV45A\FO:USEREXIT_CHECK_VBAP\SE:END\EI
+ENHANCEMENT 0 ZSDS_SD_SO_USEREXIT1.
+* SDS User Exit Implementation
+  ZCL_SDSSD_SALESORDER_ENH=>USEREXIT_CHECK_VBAP(
+        EXPORTING IS_XVBAK = VBAK
+                  IS_XVBAP = XVBAP
+                  IS_YVBAP = YVBAP
+        CHANGING  CS_VBAP = VBAP
+                  CS_OVBAP = *VBAP
+                  CT_XVBAP = XVBAP[]
+                  CT_YVBAP = YVBAP[] ).
+ENDENHANCEMENT.

@@ -1,0 +1,172 @@
+<?sap.transform simple?>
+<tt:transform xmlns:tt="http://www.sap.com/transformation-templates" xmlns:ddic="http://www.sap.com/abapxml/types/dictionary">
+
+  <tt:root name="DATA" type="ddic:ZSDSCMS010"/>
+  <tt:template>
+
+    <!-- Header Data-->
+    <object>
+      <tt:group>
+
+        <tt:cond frq="?">
+          <str name="SAPConfNo">
+            <tt:value ref="DATA.SVC_NO"/>
+          </str>
+        </tt:cond>
+        <tt:cond frq="1">
+          <str name="SFConfNo">
+            <tt:value ref="DATA.SF_CONFIRM_NO"/>
+          </str>
+        </tt:cond>
+        <tt:cond frq="1">
+          <str name="OrderType">
+            <tt:value ref="DATA.PROCESS_TYPE"/>
+          </str>
+        </tt:cond>
+        <tt:cond frq="?">
+          <str name="SoldTo">
+            <tt:value ref="DATA.SOLD_TO"/>
+          </str>
+        </tt:cond>
+        <tt:cond frq="?">
+          <str name="Status">
+            <tt:value ref="DATA.STATUS"/>
+          </str>
+        </tt:cond>
+        <tt:cond frq="?">
+          <str name="Plant">
+            <tt:value ref="DATA.PLANT"/>
+          </str>
+        </tt:cond>
+        <tt:cond frq="?">
+          <str name="Sloc">
+            <tt:value ref="DATA.LGORT"/>
+          </str>
+        </tt:cond>
+        <tt:cond frq="?">
+          <str name="EmployeeCode">
+            <tt:value ref="DATA.EMP_RESP"/>
+          </str>
+        </tt:cond>
+        <tt:cond frq="?">
+          <str name="BreakReason">
+            <tt:value ref="DATA.BREAK_REASON"/>
+          </str>
+        </tt:cond>
+        <tt:cond frq="?">
+          <str name="BreakPosition">
+            <tt:value ref="DATA.BREAK_POSITION"/>
+          </str>
+        </tt:cond>
+        <tt:cond frq="?">
+          <str name="ResultProgress">
+            <tt:value ref="DATA.RESULT_PROGRESS"/>
+          </str>
+        </tt:cond>
+        <tt:cond frq="?">
+          <str name="ErrorCode">
+            <tt:value ref="DATA.ERROR_CODE"/>
+          </str>
+        </tt:cond>
+        <tt:cond frq="?">
+          <str name="MainCause">
+            <tt:value ref="DATA.MAIN_CAUSE"/>
+          </str>
+        </tt:cond>
+        <tt:cond frq="?">
+          <str name="ResponseStatus">
+            <tt:value ref="DATA.RESP_STATUS"/>
+          </str>
+        </tt:cond>
+        <tt:cond frq="?">
+          <str name="ResponseMessage">
+            <tt:value ref="DATA.RESP_MESSAGE"/>
+          </str>
+        </tt:cond>
+
+      </tt:group>
+
+      <array name="ServiceConfItem">
+        <tt:cond check="exist(DATA.ITEM)">
+          <tt:loop name="item" ref="DATA.ITEM">
+            <!-- Item Data -->
+            <object>
+              <tt:group>
+                <tt:cond frq="1">
+                  <str name="ConfItem">
+                    <tt:value ref="$item.NUMBER_INT"/>
+                  </str>
+                </tt:cond>
+                <tt:cond frq="?">
+                  <str name="Product">
+                    <tt:value ref="$item.PRODUCT_ID"/>
+                  </str>
+                </tt:cond>
+                <tt:cond frq="1">
+                  <num name="Quantity">
+                    <tt:value ref="$item.QUANTITY"/>
+                  </num>
+                </tt:cond>
+                <tt:cond frq="1">
+                  <str name="RefSVONo">
+                    <tt:value ref="$item.REF_SRVORD"/>
+                  </str>
+                </tt:cond>
+                <tt:cond frq="1">
+                  <str name="RefSVOItem">
+                    <tt:value ref="$item.REF_SRVORD_ITEM"/>
+                  </str>
+                </tt:cond>
+                <tt:cond frq="?">
+                  <str name="StartDate">
+                    <tt:value ref="$item.START_DATE"/>
+                  </str>
+                </tt:cond>
+                <tt:cond frq="?">
+                  <str name="EndDate">
+                    <tt:value ref="$item.END_DATE"/>
+                  </str>
+                </tt:cond>
+                <tt:cond frq="?">
+                  <str name="WBS">
+                    <tt:value ref="$item.AC_ASSIGNMENT"/>
+                  </str>
+                </tt:cond>
+                <tt:cond frq="?">
+                  <str name="Status">
+                    <tt:value ref="$item.STATUS"/>
+                  </str>
+                </tt:cond>
+
+              </tt:group>
+
+            </object>
+          </tt:loop>
+        </tt:cond>
+      </array>
+
+      <tt:cond check="not-initial(DATA.RESPONSE)">
+        <array name="Response">
+          <tt:loop ref="DATA.RESPONSE">
+            <!-- Response-->
+            <object>
+              <tt:group>
+                <tt:cond frq="?">
+                  <str name="Status">
+                    <tt:value ref="$ref.RESP_STATUS"/>
+                  </str>
+                </tt:cond>
+                <tt:cond frq="?">
+                  <str name="Message">
+                    <tt:value ref="$ref.RESP_MESSAGE"/>
+                  </str>
+                </tt:cond>
+              </tt:group>
+            </object>
+          </tt:loop>
+        </array>
+      </tt:cond>
+
+    </object>
+  </tt:template>
+</tt:transform>

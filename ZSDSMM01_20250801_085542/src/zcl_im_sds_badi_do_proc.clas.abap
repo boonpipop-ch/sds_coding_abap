@@ -1,0 +1,46 @@
+class ZCL_IM_SDS_BADI_DO_PROC definition
+  public
+  final
+  create public .
+
+public section.
+
+  interfaces IF_EX_DELIVERY_PUBLISH .
+protected section.
+private section.
+ENDCLASS.
+
+
+
+CLASS ZCL_IM_SDS_BADI_DO_PROC IMPLEMENTATION.
+
+
+  METHOD IF_EX_DELIVERY_PUBLISH~PUBLISH_AFTER_SAVE.
+
+    CONSTANTS: LC_TCODE TYPE SY-TCODE VALUE 'VL01*'.
+    DATA : LV_CHECK_SDS LIKE ABAP_TRUE.
+    LV_CHECK_SDS = LCL_DATA=>CHECK_SDS( SY-MANDT ).
+    IF LV_CHECK_SDS EQ ABAP_TRUE.
+      IF SY-TCODE CP LC_TCODE.
+        FIELD-SYMBOLS: <L_LIKP>   TYPE SHP_LIKP_T.
+        ASSIGN ('(SAPMV50A)XLIKP[]') TO <L_LIKP>.
+        IF <L_LIKP> IS NOT ASSIGNED.
+          RETURN.
+        ELSE.
+          READ TABLE <L_LIKP> INTO DATA(LS_LIKP) INDEX 1.
+          IF SY-SUBRC <> 0.
+            RETURN.
+          ENDIF.
+          IF LS_LIKP-VBELN IS NOT INITIAL.
+            SUBMIT ZSDSSDR0390 WITH P_VBELN = LS_LIKP-VBELN AND RETURN.
+          ENDIF.
+        ENDIF.
+      ENDIF.
+    ENDIF.
+
+  ENDMETHOD.
+
+
+  method IF_EX_DELIVERY_PUBLISH~PUBLISH_BEFORE_COMMIT.
+  endmethod.
+ENDCLASS.

@@ -1,0 +1,296 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<abapGit version="v1.0.0" serializer="LCL_OBJECT_MSAG" serializer_version="v1.0.0">
+ <asx:abap xmlns:asx="http://www.sap.com/abapxml" version="1.0">
+  <asx:values>
+   <T100A>
+    <ARBGB>ZSDSCM01</ARBGB>
+    <MASTERLANG>E</MASTERLANG>
+    <STEXT>SDS Message Class for Customer Management</STEXT>
+   </T100A>
+   <T100>
+    <T100>
+     <SPRSL>E</SPRSL>
+     <ARBGB>ZSDSCM01</ARBGB>
+     <MSGNR>000</MSGNR>
+     <TEXT>&amp; &amp; &amp; &amp;</TEXT>
+    </T100>
+    <T100>
+     <SPRSL>E</SPRSL>
+     <ARBGB>ZSDSCM01</ARBGB>
+     <MSGNR>001</MSGNR>
+     <TEXT>Invalid Service Order value &amp;1.</TEXT>
+    </T100>
+    <T100>
+     <SPRSL>E</SPRSL>
+     <ARBGB>ZSDSCM01</ARBGB>
+     <MSGNR>002</MSGNR>
+     <TEXT>Invalid Order Type value &amp;1.</TEXT>
+    </T100>
+    <T100>
+     <SPRSL>E</SPRSL>
+     <ARBGB>ZSDSCM01</ARBGB>
+     <MSGNR>003</MSGNR>
+     <TEXT>Invalid Format &amp;1 value &amp;2</TEXT>
+    </T100>
+    <T100>
+     <SPRSL>E</SPRSL>
+     <ARBGB>ZSDSCM01</ARBGB>
+     <MSGNR>004</MSGNR>
+     <TEXT>Service contract &amp;1 has been created.</TEXT>
+    </T100>
+    <T100>
+     <SPRSL>E</SPRSL>
+     <ARBGB>ZSDSCM01</ARBGB>
+     <MSGNR>005</MSGNR>
+     <TEXT>Service contract &amp;1 has been changed.</TEXT>
+    </T100>
+    <T100>
+     <SPRSL>E</SPRSL>
+     <ARBGB>ZSDSCM01</ARBGB>
+     <MSGNR>006</MSGNR>
+     <TEXT>Error during processing GUID &amp;1.</TEXT>
+    </T100>
+    <T100>
+     <SPRSL>E</SPRSL>
+     <ARBGB>ZSDSCM01</ARBGB>
+     <MSGNR>007</MSGNR>
+     <TEXT>GUID &amp;1 is currently locked by user &amp;2. Please try again later.</TEXT>
+    </T100>
+    <T100>
+     <SPRSL>E</SPRSL>
+     <ARBGB>ZSDSCM01</ARBGB>
+     <MSGNR>008</MSGNR>
+     <TEXT>Service Contract &amp;1 does not exist.</TEXT>
+    </T100>
+    <T100>
+     <SPRSL>E</SPRSL>
+     <ARBGB>ZSDSCM01</ARBGB>
+     <MSGNR>009</MSGNR>
+     <TEXT>SFContractNo &amp;1 mismathes with service contract &amp;2.</TEXT>
+    </T100>
+    <T100>
+     <SPRSL>E</SPRSL>
+     <ARBGB>ZSDSCM01</ARBGB>
+     <MSGNR>010</MSGNR>
+     <TEXT>SAPContractNo must be blank in create mode.</TEXT>
+    </T100>
+    <T100>
+     <SPRSL>E</SPRSL>
+     <ARBGB>ZSDSCM01</ARBGB>
+     <MSGNR>011</MSGNR>
+     <TEXT>SAPContractNo is required in change/delete mode.</TEXT>
+    </T100>
+    <T100>
+     <SPRSL>E</SPRSL>
+     <ARBGB>ZSDSCM01</ARBGB>
+     <MSGNR>012</MSGNR>
+     <TEXT>Partner &amp;1 &amp;2 is not valid.</TEXT>
+    </T100>
+    <T100>
+     <SPRSL>E</SPRSL>
+     <ARBGB>ZSDSCM01</ARBGB>
+     <MSGNR>013</MSGNR>
+     <TEXT>ItemNo &amp;1 already exists.</TEXT>
+    </T100>
+    <T100>
+     <SPRSL>E</SPRSL>
+     <ARBGB>ZSDSCM01</ARBGB>
+     <MSGNR>014</MSGNR>
+     <TEXT>ItemNo &amp;1 does not exist.</TEXT>
+    </T100>
+    <T100>
+     <SPRSL>E</SPRSL>
+     <ARBGB>ZSDSCM01</ARBGB>
+     <MSGNR>015</MSGNR>
+     <TEXT>SFContractNo &amp;1 is already created with Service contract &amp;2.</TEXT>
+    </T100>
+    <T100>
+     <SPRSL>E</SPRSL>
+     <ARBGB>ZSDSCM01</ARBGB>
+     <MSGNR>016</MSGNR>
+     <TEXT>ContractType &amp;1 mismathes with service contract &amp;2.</TEXT>
+    </T100>
+    <T100>
+     <SPRSL>E</SPRSL>
+     <ARBGB>ZSDSCM01</ARBGB>
+     <MSGNR>017</MSGNR>
+     <TEXT>Cannot change Item Category in service item &amp;2 to &amp;1.</TEXT>
+    </T100>
+    <T100>
+     <SPRSL>E</SPRSL>
+     <ARBGB>ZSDSCM01</ARBGB>
+     <MSGNR>018</MSGNR>
+     <TEXT>ConditionType is required for item &amp;1.</TEXT>
+    </T100>
+    <T100>
+     <SPRSL>E</SPRSL>
+     <ARBGB>ZSDSCM01</ARBGB>
+     <MSGNR>019</MSGNR>
+     <TEXT>Cannot determin Billing plan type for item number &amp;1.</TEXT>
+    </T100>
+    <T100>
+     <SPRSL>E</SPRSL>
+     <ARBGB>ZSDSCM01</ARBGB>
+     <MSGNR>020</MSGNR>
+     <TEXT>Invalid Mode value &amp;1.</TEXT>
+    </T100>
+    <T100>
+     <SPRSL>E</SPRSL>
+     <ARBGB>ZSDSCM01</ARBGB>
+     <MSGNR>021</MSGNR>
+     <TEXT>Invalid Service Contract &amp;1.</TEXT>
+    </T100>
+    <T100>
+     <SPRSL>E</SPRSL>
+     <ARBGB>ZSDSCM01</ARBGB>
+     <MSGNR>022</MSGNR>
+     <TEXT>Invalid Field &amp;1 value &amp;2.</TEXT>
+    </T100>
+    <T100>
+     <SPRSL>E</SPRSL>
+     <ARBGB>ZSDSCM01</ARBGB>
+     <MSGNR>023</MSGNR>
+     <TEXT>Service contract &amp;1 has been marked as deleted.</TEXT>
+    </T100>
+    <T100>
+     <SPRSL>E</SPRSL>
+     <ARBGB>ZSDSCM01</ARBGB>
+     <MSGNR>024</MSGNR>
+     <TEXT>Service confirmation &amp;1 has been created.</TEXT>
+    </T100>
+    <T100>
+     <SPRSL>E</SPRSL>
+     <ARBGB>ZSDSCM01</ARBGB>
+     <MSGNR>025</MSGNR>
+     <TEXT>SF Confirmation no &amp;1 was already created as Service confirmation &amp;2.</TEXT>
+    </T100>
+    <T100>
+     <SPRSL>E</SPRSL>
+     <ARBGB>ZSDSCM01</ARBGB>
+     <MSGNR>026</MSGNR>
+     <TEXT>More than 1 service order found in confirmation.</TEXT>
+    </T100>
+    <T100>
+     <SPRSL>E</SPRSL>
+     <ARBGB>ZSDSCM01</ARBGB>
+     <MSGNR>027</MSGNR>
+     <TEXT>Service Order &amp;1 is not in released status.</TEXT>
+    </T100>
+    <T100>
+     <SPRSL>E</SPRSL>
+     <ARBGB>ZSDSCM01</ARBGB>
+     <MSGNR>028</MSGNR>
+     <TEXT>ItemNo &amp;1 cannot copy to service confirmation type &amp;2.</TEXT>
+    </T100>
+    <T100>
+     <SPRSL>E</SPRSL>
+     <ARBGB>ZSDSCM01</ARBGB>
+     <MSGNR>029</MSGNR>
+     <TEXT>Requested end date must be later than requested start date</TEXT>
+    </T100>
+    <T100>
+     <SPRSL>E</SPRSL>
+     <ARBGB>ZSDSCM01</ARBGB>
+     <MSGNR>030</MSGNR>
+     <TEXT>Service Order &amp;1 cannot copy to confirmation type &amp;2.</TEXT>
+    </T100>
+    <T100>
+     <SPRSL>E</SPRSL>
+     <ARBGB>ZSDSCM01</ARBGB>
+     <MSGNR>031</MSGNR>
+     <TEXT>Product &amp;1 is not matched with product in service order item.</TEXT>
+    </T100>
+    <T100>
+     <SPRSL>E</SPRSL>
+     <ARBGB>ZSDSCM01</ARBGB>
+     <MSGNR>032</MSGNR>
+     <TEXT>WBS &amp;1 is not matched with WBS in service order item.</TEXT>
+    </T100>
+    <T100>
+     <SPRSL>E</SPRSL>
+     <ARBGB>ZSDSCM01</ARBGB>
+     <MSGNR>033</MSGNR>
+     <TEXT>Error during maintaining data into table ZSDSCMT003.</TEXT>
+    </T100>
+    <T100>
+     <SPRSL>E</SPRSL>
+     <ARBGB>ZSDSCM01</ARBGB>
+     <MSGNR>034</MSGNR>
+     <TEXT>Test run successfully.</TEXT>
+    </T100>
+    <T100>
+     <SPRSL>E</SPRSL>
+     <ARBGB>ZSDSCM01</ARBGB>
+     <MSGNR>035</MSGNR>
+     <TEXT>Warranty master data updated successfully.</TEXT>
+    </T100>
+    <T100>
+     <SPRSL>E</SPRSL>
+     <ARBGB>ZSDSCM01</ARBGB>
+     <MSGNR>036</MSGNR>
+     <TEXT>Existing Warranty data &amp;1(&amp;2) newer than updating data &amp;3(&amp;4).</TEXT>
+    </T100>
+    <T100>
+     <SPRSL>E</SPRSL>
+     <ARBGB>ZSDSCM01</ARBGB>
+     <MSGNR>037</MSGNR>
+     <TEXT>Existing Warranty data &amp;1(&amp;2) is not from SVO &amp;3.</TEXT>
+    </T100>
+    <T100>
+     <SPRSL>E</SPRSL>
+     <ARBGB>ZSDSCM01</ARBGB>
+     <MSGNR>038</MSGNR>
+     <TEXT>No data changed.</TEXT>
+    </T100>
+    <T100>
+     <SPRSL>E</SPRSL>
+     <ARBGB>ZSDSCM01</ARBGB>
+     <MSGNR>039</MSGNR>
+     <TEXT>SFWorkOrderNo &amp;1 is already created with Service Order &amp;2.</TEXT>
+    </T100>
+    <T100>
+     <SPRSL>E</SPRSL>
+     <ARBGB>ZSDSCM01</ARBGB>
+     <MSGNR>040</MSGNR>
+     <TEXT>Error Not found Item &amp;1 with Service Order &amp;2.</TEXT>
+    </T100>
+    <T100>
+     <SPRSL>E</SPRSL>
+     <ARBGB>ZSDSCM01</ARBGB>
+     <MSGNR>041</MSGNR>
+     <TEXT>Error Invalid Order Type &amp;1 with Service Order &amp;2.</TEXT>
+    </T100>
+    <T100>
+     <SPRSL>E</SPRSL>
+     <ARBGB>ZSDSCM01</ARBGB>
+     <MSGNR>042</MSGNR>
+     <TEXT>Product is required for item &amp;1.</TEXT>
+    </T100>
+    <T100>
+     <SPRSL>E</SPRSL>
+     <ARBGB>ZSDSCM01</ARBGB>
+     <MSGNR>043</MSGNR>
+     <TEXT>No pricing procedure could be determined for distribution channel &amp;1.</TEXT>
+    </T100>
+    <T100>
+     <SPRSL>E</SPRSL>
+     <ARBGB>ZSDSCM01</ARBGB>
+     <MSGNR>044</MSGNR>
+     <TEXT>No item category could be determined.</TEXT>
+    </T100>
+    <T100>
+     <SPRSL>E</SPRSL>
+     <ARBGB>ZSDSCM01</ARBGB>
+     <MSGNR>045</MSGNR>
+     <TEXT>Cannot lock order &amp;1 for processing.</TEXT>
+    </T100>
+    <T100>
+     <SPRSL>E</SPRSL>
+     <ARBGB>ZSDSCM01</ARBGB>
+     <MSGNR>046</MSGNR>
+     <TEXT>No data found</TEXT>
+    </T100>
+   </T100>
+  </asx:values>
+ </asx:abap>
+</abapGit>

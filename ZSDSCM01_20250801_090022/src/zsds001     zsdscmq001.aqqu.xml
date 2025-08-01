@@ -1,0 +1,345 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<abapGit version="v1.0.0" serializer="LCL_OBJECT_AQQU" serializer_version="v1.0.0">
+ <asx:abap xmlns:asx="http://www.sap.com/abapxml" version="1.0">
+  <asx:values>
+   <AQGQCAT>
+    <AQGQCAT>
+     <NUM>ZSDS001</NUM>
+     <QNUM>ZSDSCMQ001</QNUM>
+     <CLAS>ZSDSCMIS001</CLAS>
+    </AQGQCAT>
+   </AQGQCAT>
+   <AQGTQ>
+    <AQGTQ>
+     <SPRSL>E</SPRSL>
+     <NUM>ZSDS001</NUM>
+     <QNUM>ZSDSCMQ001</QNUM>
+     <TINDX>00001</TINDX>
+     <HEAD>X</HEAD>
+     <MAXL>060</MAXL>
+     <TEXT>Query equipment table ZSDSCMT003</TEXT>
+    </AQGTQ>
+    <AQGTQ>
+     <SPRSL>E</SPRSL>
+     <NUM>ZSDS001</NUM>
+     <QNUM>ZSDSCMQ001</QNUM>
+     <TINDX>00003</TINDX>
+     <MAXL>030</MAXL>
+     <TEXT>Equipment Number</TEXT>
+    </AQGTQ>
+    <AQGTQ>
+     <SPRSL>E</SPRSL>
+     <NUM>ZSDS001</NUM>
+     <QNUM>ZSDSCMQ001</QNUM>
+     <TINDX>00004</TINDX>
+     <MAXL>030</MAXL>
+     <TEXT>Text:Equipment Number</TEXT>
+    </AQGTQ>
+    <AQGTQ>
+     <SPRSL>E</SPRSL>
+     <NUM>ZSDS001</NUM>
+     <QNUM>ZSDSCMQ001</QNUM>
+     <TINDX>00005</TINDX>
+     <MAXL>030</MAXL>
+     <TEXT>Material Number</TEXT>
+    </AQGTQ>
+    <AQGTQ>
+     <SPRSL>E</SPRSL>
+     <NUM>ZSDS001</NUM>
+     <QNUM>ZSDSCMQ001</QNUM>
+     <TINDX>00006</TINDX>
+     <MAXL>030</MAXL>
+     <TEXT>Text:Material Number</TEXT>
+    </AQGTQ>
+    <AQGTQ>
+     <SPRSL>E</SPRSL>
+     <NUM>ZSDS001</NUM>
+     <QNUM>ZSDSCMQ001</QNUM>
+     <TINDX>00007</TINDX>
+     <MAXL>030</MAXL>
+     <TEXT>Serial Number</TEXT>
+    </AQGTQ>
+    <AQGTQ>
+     <SPRSL>E</SPRSL>
+     <NUM>ZSDS001</NUM>
+     <QNUM>ZSDSCMQ001</QNUM>
+     <TINDX>00008</TINDX>
+     <MAXL>030</MAXL>
+     <TEXT>material + serial</TEXT>
+    </AQGTQ>
+    <AQGTQ>
+     <SPRSL>E</SPRSL>
+     <NUM>ZSDS001</NUM>
+     <QNUM>ZSDSCMQ001</QNUM>
+     <TINDX>00011</TINDX>
+     <MAXL>030</MAXL>
+     <TEXT>Sales Office</TEXT>
+    </AQGTQ>
+    <AQGTQ>
+     <SPRSL>E</SPRSL>
+     <NUM>ZSDS001</NUM>
+     <QNUM>ZSDSCMQ001</QNUM>
+     <TINDX>00012</TINDX>
+     <MAXL>030</MAXL>
+     <TEXT>Sales Group</TEXT>
+    </AQGTQ>
+    <AQGTQ>
+     <SPRSL>E</SPRSL>
+     <NUM>ZSDS001</NUM>
+     <QNUM>ZSDSCMQ001</QNUM>
+     <TINDX>00013</TINDX>
+     <MAXL>030</MAXL>
+     <TEXT>Warranty Package ID</TEXT>
+    </AQGTQ>
+    <AQGTQ>
+     <SPRSL>E</SPRSL>
+     <NUM>ZSDS001</NUM>
+     <QNUM>ZSDSCMQ001</QNUM>
+     <TINDX>00014</TINDX>
+     <MAXL>030</MAXL>
+     <TEXT>Warranty Letter Need</TEXT>
+    </AQGTQ>
+    <AQGTQ>
+     <SPRSL>E</SPRSL>
+     <NUM>ZSDS001</NUM>
+     <QNUM>ZSDSCMQ001</QNUM>
+     <TINDX>00015</TINDX>
+     <MAXL>030</MAXL>
+     <TEXT>Warranty Letter ID</TEXT>
+    </AQGTQ>
+    <AQGTQ>
+     <SPRSL>E</SPRSL>
+     <NUM>ZSDS001</NUM>
+     <QNUM>ZSDSCMQ001</QNUM>
+     <TINDX>00016</TINDX>
+     <MAXL>030</MAXL>
+     <TEXT>Delivery</TEXT>
+    </AQGTQ>
+    <AQGTQ>
+     <SPRSL>E</SPRSL>
+     <NUM>ZSDS001</NUM>
+     <QNUM>ZSDSCMQ001</QNUM>
+     <TINDX>00017</TINDX>
+     <MAXL>030</MAXL>
+     <TEXT>Billing Date</TEXT>
+    </AQGTQ>
+    <AQGTQ>
+     <SPRSL>E</SPRSL>
+     <NUM>ZSDS001</NUM>
+     <QNUM>ZSDSCMQ001</QNUM>
+     <TINDX>00018</TINDX>
+     <MAXL>030</MAXL>
+     <TEXT>Actual Goods Movement Date</TEXT>
+    </AQGTQ>
+    <AQGTQ>
+     <SPRSL>E</SPRSL>
+     <NUM>ZSDS001</NUM>
+     <QNUM>ZSDSCMQ001</QNUM>
+     <TINDX>00019</TINDX>
+     <MAXL>030</MAXL>
+     <TEXT>Sales Document</TEXT>
+    </AQGTQ>
+    <AQGTQ>
+     <SPRSL>E</SPRSL>
+     <NUM>ZSDS001</NUM>
+     <QNUM>ZSDSCMQ001</QNUM>
+     <TINDX>00020</TINDX>
+     <MAXL>030</MAXL>
+     <TEXT>Customer Number</TEXT>
+    </AQGTQ>
+    <AQGTQ>
+     <SPRSL>E</SPRSL>
+     <NUM>ZSDS001</NUM>
+     <QNUM>ZSDSCMQ001</QNUM>
+     <TINDX>00021</TINDX>
+     <MAXL>030</MAXL>
+     <TEXT>Installation Date</TEXT>
+    </AQGTQ>
+    <AQGTQ>
+     <SPRSL>E</SPRSL>
+     <NUM>ZSDS001</NUM>
+     <QNUM>ZSDSCMQ001</QNUM>
+     <TINDX>00022</TINDX>
+     <MAXL>030</MAXL>
+     <TEXT>Commissioning Date</TEXT>
+    </AQGTQ>
+    <AQGTQ>
+     <SPRSL>E</SPRSL>
+     <NUM>ZSDS001</NUM>
+     <QNUM>ZSDSCMQ001</QNUM>
+     <TINDX>00023</TINDX>
+     <MAXL>030</MAXL>
+     <TEXT>Service Order Installation</TEXT>
+    </AQGTQ>
+    <AQGTQ>
+     <SPRSL>E</SPRSL>
+     <NUM>ZSDS001</NUM>
+     <QNUM>ZSDSCMQ001</QNUM>
+     <TINDX>00024</TINDX>
+     <MAXL>030</MAXL>
+     <TEXT>Service Order Commissioning</TEXT>
+    </AQGTQ>
+    <AQGTQ>
+     <SPRSL>E</SPRSL>
+     <NUM>ZSDS001</NUM>
+     <QNUM>ZSDSCMQ001</QNUM>
+     <TINDX>00025</TINDX>
+     <MAXL>030</MAXL>
+     <TEXT>GI STD Warranty Start Date</TEXT>
+    </AQGTQ>
+    <AQGTQ>
+     <SPRSL>E</SPRSL>
+     <NUM>ZSDS001</NUM>
+     <QNUM>ZSDSCMQ001</QNUM>
+     <TINDX>00026</TINDX>
+     <MAXL>030</MAXL>
+     <TEXT>GI STD Warranty End Date</TEXT>
+    </AQGTQ>
+    <AQGTQ>
+     <SPRSL>E</SPRSL>
+     <NUM>ZSDS001</NUM>
+     <QNUM>ZSDSCMQ001</QNUM>
+     <TINDX>00027</TINDX>
+     <MAXL>030</MAXL>
+     <TEXT>STD Warranty Start</TEXT>
+    </AQGTQ>
+    <AQGTQ>
+     <SPRSL>E</SPRSL>
+     <NUM>ZSDS001</NUM>
+     <QNUM>ZSDSCMQ001</QNUM>
+     <TINDX>00028</TINDX>
+     <MAXL>030</MAXL>
+     <TEXT>STD Warranty End</TEXT>
+    </AQGTQ>
+    <AQGTQ>
+     <SPRSL>E</SPRSL>
+     <NUM>ZSDS001</NUM>
+     <QNUM>ZSDSCMQ001</QNUM>
+     <TINDX>00029</TINDX>
+     <MAXL>030</MAXL>
+     <TEXT>Customer Registered Start</TEXT>
+    </AQGTQ>
+    <AQGTQ>
+     <SPRSL>E</SPRSL>
+     <NUM>ZSDS001</NUM>
+     <QNUM>ZSDSCMQ001</QNUM>
+     <TINDX>00030</TINDX>
+     <MAXL>030</MAXL>
+     <TEXT>CusRegistered End</TEXT>
+    </AQGTQ>
+    <AQGTQ>
+     <SPRSL>E</SPRSL>
+     <NUM>ZSDS001</NUM>
+     <QNUM>ZSDSCMQ001</QNUM>
+     <TINDX>00031</TINDX>
+     <MAXL>030</MAXL>
+     <TEXT>EXT Warranty Start</TEXT>
+    </AQGTQ>
+    <AQGTQ>
+     <SPRSL>E</SPRSL>
+     <NUM>ZSDS001</NUM>
+     <QNUM>ZSDSCMQ001</QNUM>
+     <TINDX>00032</TINDX>
+     <MAXL>030</MAXL>
+     <TEXT>EXT Warranty End</TEXT>
+    </AQGTQ>
+    <AQGTQ>
+     <SPRSL>E</SPRSL>
+     <NUM>ZSDS001</NUM>
+     <QNUM>ZSDSCMQ001</QNUM>
+     <TINDX>00033</TINDX>
+     <MAXL>030</MAXL>
+     <TEXT>FG Material WBS</TEXT>
+    </AQGTQ>
+    <AQGTQ>
+     <SPRSL>E</SPRSL>
+     <NUM>ZSDS001</NUM>
+     <QNUM>ZSDSCMQ001</QNUM>
+     <TINDX>00034</TINDX>
+     <MAXL>030</MAXL>
+     <TEXT>STD Warranty WBS</TEXT>
+    </AQGTQ>
+    <AQGTQ>
+     <SPRSL>E</SPRSL>
+     <NUM>ZSDS001</NUM>
+     <QNUM>ZSDSCMQ001</QNUM>
+     <TINDX>00035</TINDX>
+     <MAXL>030</MAXL>
+     <TEXT>EXT Warranty WBS</TEXT>
+    </AQGTQ>
+    <AQGTQ>
+     <SPRSL>E</SPRSL>
+     <NUM>ZSDS001</NUM>
+     <QNUM>ZSDSCMQ001</QNUM>
+     <TINDX>00036</TINDX>
+     <MAXL>030</MAXL>
+     <TEXT>Data from Migration Flag</TEXT>
+    </AQGTQ>
+    <AQGTQ>
+     <SPRSL>E</SPRSL>
+     <NUM>ZSDS001</NUM>
+     <QNUM>ZSDSCMQ001</QNUM>
+     <TINDX>00037</TINDX>
+     <MAXL>030</MAXL>
+     <TEXT>Update Indicator</TEXT>
+    </AQGTQ>
+    <AQGTQ>
+     <SPRSL>E</SPRSL>
+     <NUM>ZSDS001</NUM>
+     <QNUM>ZSDSCMQ001</QNUM>
+     <TINDX>00038</TINDX>
+     <MAXL>030</MAXL>
+     <TEXT>Name of Person Responsible for</TEXT>
+    </AQGTQ>
+    <AQGTQ>
+     <SPRSL>E</SPRSL>
+     <NUM>ZSDS001</NUM>
+     <QNUM>ZSDSCMQ001</QNUM>
+     <TINDX>00039</TINDX>
+     <MAXL>030</MAXL>
+     <TEXT>Record Created On</TEXT>
+    </AQGTQ>
+    <AQGTQ>
+     <SPRSL>E</SPRSL>
+     <NUM>ZSDS001</NUM>
+     <QNUM>ZSDSCMQ001</QNUM>
+     <TINDX>00040</TINDX>
+     <MAXL>030</MAXL>
+     <TEXT>Entry time</TEXT>
+    </AQGTQ>
+    <AQGTQ>
+     <SPRSL>E</SPRSL>
+     <NUM>ZSDS001</NUM>
+     <QNUM>ZSDSCMQ001</QNUM>
+     <TINDX>00041</TINDX>
+     <MAXL>030</MAXL>
+     <TEXT>Name of Person Who Changed Obj</TEXT>
+    </AQGTQ>
+    <AQGTQ>
+     <SPRSL>E</SPRSL>
+     <NUM>ZSDS001</NUM>
+     <QNUM>ZSDSCMQ001</QNUM>
+     <TINDX>00042</TINDX>
+     <MAXL>030</MAXL>
+     <TEXT>Last Changed On</TEXT>
+    </AQGTQ>
+    <AQGTQ>
+     <SPRSL>E</SPRSL>
+     <NUM>ZSDS001</NUM>
+     <QNUM>ZSDSCMQ001</QNUM>
+     <TINDX>00043</TINDX>
+     <MAXL>030</MAXL>
+     <TEXT>Time last change was made</TEXT>
+    </AQGTQ>
+    <AQGTQ>
+     <SPRSL>E</SPRSL>
+     <NUM>ZSDS001</NUM>
+     <QNUM>ZSDSCMQ001</QNUM>
+     <TINDX>00060</TINDX>
+     <MAXL>030</MAXL>
+     <TEXT>Text:Sales Office</TEXT>
+    </AQGTQ>
+   </AQGTQ>
+  </asx:values>
+ </asx:abap>
+</abapGit>

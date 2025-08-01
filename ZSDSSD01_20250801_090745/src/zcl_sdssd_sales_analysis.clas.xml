@@ -1,0 +1,236 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<abapGit version="v1.0.0" serializer="LCL_OBJECT_CLAS" serializer_version="v1.0.0">
+ <asx:abap xmlns:asx="http://www.sap.com/abapxml" version="1.0">
+  <asx:values>
+   <VSEOCLASS>
+    <CLSNAME>ZCL_SDSSD_SALES_ANALYSIS</CLSNAME>
+    <LANGU>E</LANGU>
+    <DESCRIPT>SDS: Sales Analysis Class</DESCRIPT>
+    <STATE>1</STATE>
+    <CLSCCINCL>X</CLSCCINCL>
+    <FIXPT>X</FIXPT>
+    <UNICODE>X</UNICODE>
+   </VSEOCLASS>
+   <TPOOL>
+    <item>
+     <ID>I</ID>
+     <KEY>001</KEY>
+     <ENTRY>1st half</ENTRY>
+     <LENGTH>18</LENGTH>
+    </item>
+    <item>
+     <ID>I</ID>
+     <KEY>002</KEY>
+     <ENTRY>2nd half</ENTRY>
+     <LENGTH>18</LENGTH>
+    </item>
+    <item>
+     <ID>I</ID>
+     <KEY>003</KEY>
+     <ENTRY>Quarter 1</ENTRY>
+     <LENGTH>19</LENGTH>
+    </item>
+    <item>
+     <ID>I</ID>
+     <KEY>004</KEY>
+     <ENTRY>Quarter 2</ENTRY>
+     <LENGTH>19</LENGTH>
+    </item>
+    <item>
+     <ID>I</ID>
+     <KEY>005</KEY>
+     <ENTRY>Quarter 3</ENTRY>
+     <LENGTH>19</LENGTH>
+    </item>
+    <item>
+     <ID>I</ID>
+     <KEY>006</KEY>
+     <ENTRY>Quarter 4</ENTRY>
+     <LENGTH>19</LENGTH>
+    </item>
+    <item>
+     <ID>I</ID>
+     <KEY>008</KEY>
+     <ENTRY>Complete</ENTRY>
+     <LENGTH>18</LENGTH>
+    </item>
+   </TPOOL>
+   <DESCRIPTIONS>
+    <SEOCOMPOTX>
+     <CMPNAME>GET_ADV_RECEIVE</CMPNAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Get Advance Receive</DESCRIPT>
+    </SEOCOMPOTX>
+    <SEOCOMPOTX>
+     <CMPNAME>GET_APPL_TEXT</CMPNAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Get Application Text</DESCRIPT>
+    </SEOCOMPOTX>
+    <SEOCOMPOTX>
+     <CMPNAME>GET_BILL_TYPE_TEXT</CMPNAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Get Bill Type Text</DESCRIPT>
+    </SEOCOMPOTX>
+    <SEOCOMPOTX>
+     <CMPNAME>GET_CASH_DISCOUNT</CMPNAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Get Cash Discount %</DESCRIPT>
+    </SEOCOMPOTX>
+    <SEOCOMPOTX>
+     <CMPNAME>GET_CUSTOMER</CMPNAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Get Customer</DESCRIPT>
+    </SEOCOMPOTX>
+    <SEOCOMPOTX>
+     <CMPNAME>GET_CUST_CRDT_GRP</CMPNAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Get Customer Credit Group</DESCRIPT>
+    </SEOCOMPOTX>
+    <SEOCOMPOTX>
+     <CMPNAME>GET_CUST_GROUP_1_TEXT</CMPNAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Get Customer Group 1 Text</DESCRIPT>
+    </SEOCOMPOTX>
+    <SEOCOMPOTX>
+     <CMPNAME>GET_CUST_GROUP_2_TEXT</CMPNAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Get Customer Group 2 Text</DESCRIPT>
+    </SEOCOMPOTX>
+    <SEOCOMPOTX>
+     <CMPNAME>GET_DATA</CMPNAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Get data</DESCRIPT>
+    </SEOCOMPOTX>
+    <SEOCOMPOTX>
+     <CMPNAME>GET_DATE_IN_FISCAL_YEAR</CMPNAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Get Date in fiscal year</DESCRIPT>
+    </SEOCOMPOTX>
+    <SEOCOMPOTX>
+     <CMPNAME>GET_DIST_CHANNEL_TEXT</CMPNAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Get Distribution Channel Text</DESCRIPT>
+    </SEOCOMPOTX>
+    <SEOCOMPOTX>
+     <CMPNAME>GET_DIVISION_TEXT</CMPNAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Get Division Text</DESCRIPT>
+    </SEOCOMPOTX>
+    <SEOCOMPOTX>
+     <CMPNAME>GET_DOCU_FLOW_FOR_BILL</CMPNAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Get Document Flow for Billing</DESCRIPT>
+    </SEOCOMPOTX>
+    <SEOCOMPOTX>
+     <CMPNAME>GET_FI_DOC</CMPNAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Get FI Document for Billing</DESCRIPT>
+    </SEOCOMPOTX>
+    <SEOCOMPOTX>
+     <CMPNAME>GET_GENC</CMPNAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Get GENC Setting</DESCRIPT>
+    </SEOCOMPOTX>
+    <SEOCOMPOTX>
+     <CMPNAME>GET_HEAD_DISCOUNT</CMPNAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Get Head Discount %</DESCRIPT>
+    </SEOCOMPOTX>
+    <SEOCOMPOTX>
+     <CMPNAME>GET_INVOICE</CMPNAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Get Invoice</DESCRIPT>
+    </SEOCOMPOTX>
+    <SEOCOMPOTX>
+     <CMPNAME>GET_LOAD_POINT_TEXT</CMPNAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Get Loading Point Text</DESCRIPT>
+    </SEOCOMPOTX>
+    <SEOCOMPOTX>
+     <CMPNAME>GET_MD_MATERIAL</CMPNAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Get Material Master Data</DESCRIPT>
+    </SEOCOMPOTX>
+    <SEOCOMPOTX>
+     <CMPNAME>GET_ORD_REASON_TEXT</CMPNAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Get Order Reason Text</DESCRIPT>
+    </SEOCOMPOTX>
+    <SEOCOMPOTX>
+     <CMPNAME>GET_PAYMT_TERM_TEXT</CMPNAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Get Payment Term Text</DESCRIPT>
+    </SEOCOMPOTX>
+    <SEOCOMPOTX>
+     <CMPNAME>GET_PERSON_NAME</CMPNAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Get Personel Name</DESCRIPT>
+    </SEOCOMPOTX>
+    <SEOCOMPOTX>
+     <CMPNAME>GET_PLANT_NAME</CMPNAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Get Plant Name</DESCRIPT>
+    </SEOCOMPOTX>
+    <SEOCOMPOTX>
+     <CMPNAME>GET_PROJECT</CMPNAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Get Project for WBS</DESCRIPT>
+    </SEOCOMPOTX>
+    <SEOCOMPOTX>
+     <CMPNAME>GET_SALE_GROUP_TEXT</CMPNAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Get Sale Group Text</DESCRIPT>
+    </SEOCOMPOTX>
+    <SEOCOMPOTX>
+     <CMPNAME>GET_SALE_OFFICE_TEXT</CMPNAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Get Sale Office Text</DESCRIPT>
+    </SEOCOMPOTX>
+    <SEOCOMPOTX>
+     <CMPNAME>GET_SALE_ORG_TEXT</CMPNAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Get Sales Organization</DESCRIPT>
+    </SEOCOMPOTX>
+    <SEOCOMPOTX>
+     <CMPNAME>GET_SERVICE</CMPNAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Get Service</DESCRIPT>
+    </SEOCOMPOTX>
+    <SEOCOMPOTX>
+     <CMPNAME>GET_STORAGE_LOCATION_TEXT</CMPNAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Get Storage Location Text</DESCRIPT>
+    </SEOCOMPOTX>
+    <SEOCOMPOTX>
+     <CMPNAME>GET_TEXT</CMPNAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Get text</DESCRIPT>
+    </SEOCOMPOTX>
+    <SEOCOMPOTX>
+     <CMPNAME>GET_UNIT_COST</CMPNAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Get Cost/Unit</DESCRIPT>
+    </SEOCOMPOTX>
+    <SEOCOMPOTX>
+     <CMPNAME>GET_UNIT_PRICE</CMPNAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Get Price/Unit</DESCRIPT>
+    </SEOCOMPOTX>
+   </DESCRIPTIONS>
+   <DESCRIPTIONS_SUB>
+    <SEOSUBCOTX>
+     <CMPNAME>GET_TEXT</CMPNAME>
+     <SCONAME>IF_ID</SCONAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Text ID</DESCRIPT>
+    </SEOSUBCOTX>
+    <SEOSUBCOTX>
+     <CMPNAME>GET_TEXT</CMPNAME>
+     <SCONAME>IF_OBJECT</SCONAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Texts: application object</DESCRIPT>
+    </SEOSUBCOTX>
+   </DESCRIPTIONS_SUB>
+  </asx:values>
+ </asx:abap>
+</abapGit>

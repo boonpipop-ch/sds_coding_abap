@@ -1,0 +1,343 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<abapGit version="v1.0.0" serializer="LCL_OBJECT_FUGR" serializer_version="v1.0.0">
+ <asx:abap xmlns:asx="http://www.sap.com/abapxml" version="1.0">
+  <asx:values>
+   <AREAT>CO Interface</AREAT>
+   <INCLUDES>
+    <SOBJ_NAME>LZSDSCO01F01</SOBJ_NAME>
+    <SOBJ_NAME>LZSDSCO01TOP</SOBJ_NAME>
+    <SOBJ_NAME>SAPLZSDSCO01</SOBJ_NAME>
+   </INCLUDES>
+   <FUNCTIONS>
+    <item>
+     <FUNCNAME>Z_SDSCO_BUDGET_CREATION</FUNCNAME>
+     <REMOTE_CALL>R</REMOTE_CALL>
+     <SHORT_TEXT>IO Master, Planning and Budgeting Creation</SHORT_TEXT>
+     <IMPORT>
+      <RSIMP>
+       <PARAMETER>IS_ORDERMASTER</PARAMETER>
+       <OPTIONAL>X</OPTIONAL>
+       <TYP>ZSDSCOS006</TYP>
+      </RSIMP>
+      <RSIMP>
+       <PARAMETER>IM_AUFNR</PARAMETER>
+       <OPTIONAL>X</OPTIONAL>
+       <TYP>AUFK-AUFNR</TYP>
+      </RSIMP>
+     </IMPORT>
+     <EXPORT>
+      <RSEXP>
+       <PARAMETER>EX_AUFNR</PARAMETER>
+       <TYP>AUFNR</TYP>
+      </RSEXP>
+     </EXPORT>
+     <TABLES>
+      <RSTBL>
+       <PARAMETER>ET_PLANNING</PARAMETER>
+       <OPTIONAL>X</OPTIONAL>
+       <TYP>ZSDSCOS004_TT</TYP>
+      </RSTBL>
+      <RSTBL>
+       <PARAMETER>ET_RETURN</PARAMETER>
+       <OPTIONAL>X</OPTIONAL>
+       <TYP>BAPIRET2_T</TYP>
+      </RSTBL>
+     </TABLES>
+     <DOCUMENTATION>
+      <RSFDO>
+       <PARAMETER>IS_ORDERMASTER</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>IO Master Header</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>IM_AUFNR</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>Order Number</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>EX_AUFNR</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>Order Number</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>ET_PLANNING</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>Detailed Planning by G/L</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>ET_RETURN</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>Return table</STEXT>
+      </RSFDO>
+     </DOCUMENTATION>
+    </item>
+    <item>
+     <FUNCNAME>Z_SDSCO_CCA_REMAIN_BG_SRV</FUNCNAME>
+     <REMOTE_CALL>R</REMOTE_CALL>
+     <SHORT_TEXT>Cost Center Remaining Budget</SHORT_TEXT>
+     <IMPORT>
+      <RSIMP>
+       <PARAMETER>IM_K2_RESP_CCA</PARAMETER>
+       <OPTIONAL>X</OPTIONAL>
+       <TYP>ZSDSDE_K2CCA</TYP>
+      </RSIMP>
+      <RSIMP>
+       <PARAMETER>IM_K2_BG_YEAR</PARAMETER>
+       <OPTIONAL>X</OPTIONAL>
+       <TYP>ZSDSDE_K2YEAR</TYP>
+      </RSIMP>
+      <RSIMP>
+       <PARAMETER>IM_K2_PERIOD_FR</PARAMETER>
+       <OPTIONAL>X</OPTIONAL>
+       <TYP>ZSDSDE_K2PERF</TYP>
+      </RSIMP>
+      <RSIMP>
+       <PARAMETER>IM_K2_PERIOD_TO</PARAMETER>
+       <OPTIONAL>X</OPTIONAL>
+       <TYP>ZSDSDE_K2PERT</TYP>
+      </RSIMP>
+      <RSIMP>
+       <PARAMETER>IM_K2_GL</PARAMETER>
+       <OPTIONAL>X</OPTIONAL>
+       <TYP>ZSDSDE_K2GL</TYP>
+      </RSIMP>
+     </IMPORT>
+     <EXPORT>
+      <RSEXP>
+       <PARAMETER>ES_PARAM</PARAMETER>
+       <TYP>ZSDSCOS001</TYP>
+      </RSEXP>
+     </EXPORT>
+     <TABLES>
+      <RSTBL>
+       <PARAMETER>ET_DATA</PARAMETER>
+       <OPTIONAL>X</OPTIONAL>
+       <TYP>ZSDSCOS001_TT</TYP>
+      </RSTBL>
+      <RSTBL>
+       <PARAMETER>ET_RETURN</PARAMETER>
+       <OPTIONAL>X</OPTIONAL>
+       <TYP>ZSDSCOS002_TT</TYP>
+      </RSTBL>
+     </TABLES>
+     <DOCUMENTATION>
+      <RSFDO>
+       <PARAMETER>IM_K2_RESP_CCA</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>Cost Center Available Budget</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>IM_K2_BG_YEAR</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>K2 Budget Year</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>IM_K2_PERIOD_FR</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>K2 Period From</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>IM_K2_PERIOD_TO</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>K2 Period To</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>IM_K2_GL</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>K2 GL Account</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>ES_PARAM</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>Cost Center Available Budget</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>ET_DATA</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>Cost Center Remaining Budget Output</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>ET_RETURN</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>Return</STEXT>
+      </RSFDO>
+     </DOCUMENTATION>
+    </item>
+    <item>
+     <FUNCNAME>Z_SDSCO_IO_AVAIL_SRV</FUNCNAME>
+     <REMOTE_CALL>R</REMOTE_CALL>
+     <SHORT_TEXT>Internal Order Remaining Budget</SHORT_TEXT>
+     <IMPORT>
+      <RSIMP>
+       <PARAMETER>IM_K2_MEMO</PARAMETER>
+       <OPTIONAL>X</OPTIONAL>
+       <TYP>ZSDSDE_K2MEMO</TYP>
+      </RSIMP>
+      <RSIMP>
+       <PARAMETER>IM_K2_BG_YEAR</PARAMETER>
+       <OPTIONAL>X</OPTIONAL>
+       <TYP>ZSDSDE_K2YEAR</TYP>
+      </RSIMP>
+      <RSIMP>
+       <PARAMETER>IM_K2_PERIOD_FR</PARAMETER>
+       <OPTIONAL>X</OPTIONAL>
+       <TYP>ZSDSDE_K2PERF</TYP>
+      </RSIMP>
+      <RSIMP>
+       <PARAMETER>IM_K2_PERIOD_TO</PARAMETER>
+       <OPTIONAL>X</OPTIONAL>
+       <TYP>ZSDSDE_K2PERT</TYP>
+      </RSIMP>
+     </IMPORT>
+     <EXPORT>
+      <RSEXP>
+       <PARAMETER>ES_PARAM</PARAMETER>
+       <TYP>ZSDSCOS001</TYP>
+      </RSEXP>
+     </EXPORT>
+     <TABLES>
+      <RSTBL>
+       <PARAMETER>ET_ACTUAL</PARAMETER>
+       <OPTIONAL>X</OPTIONAL>
+       <TYP>ZSDSCOS003_TT</TYP>
+      </RSTBL>
+      <RSTBL>
+       <PARAMETER>ET_COMMIT</PARAMETER>
+       <OPTIONAL>X</OPTIONAL>
+       <TYP>ZSDSCOS003_TT</TYP>
+      </RSTBL>
+      <RSTBL>
+       <PARAMETER>ET_ASSIGNED</PARAMETER>
+       <OPTIONAL>X</OPTIONAL>
+       <TYP>ZSDSCOS003_TT</TYP>
+      </RSTBL>
+      <RSTBL>
+       <PARAMETER>ET_PLAN</PARAMETER>
+       <OPTIONAL>X</OPTIONAL>
+       <TYP>ZSDSCOS003_TT</TYP>
+      </RSTBL>
+      <RSTBL>
+       <PARAMETER>ET_AVAILABLE</PARAMETER>
+       <OPTIONAL>X</OPTIONAL>
+       <TYP>ZSDSCOS003_TT</TYP>
+      </RSTBL>
+      <RSTBL>
+       <PARAMETER>ET_RETURN</PARAMETER>
+       <OPTIONAL>X</OPTIONAL>
+       <TYP>ZSDSCOS002_TT</TYP>
+      </RSTBL>
+     </TABLES>
+     <DOCUMENTATION>
+      <RSFDO>
+       <PARAMETER>IM_K2_MEMO</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>K2 E-Memo No.</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>IM_K2_BG_YEAR</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>K2 Budget Year</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>IM_K2_PERIOD_FR</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>K2 Period From</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>IM_K2_PERIOD_TO</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>K2 Period To</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>ES_PARAM</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>Cost Center Available Budget</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>ET_ACTUAL</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>Cost Totals by Account</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>ET_COMMIT</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>Cost Totals by Account</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>ET_ASSIGNED</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>Cost Totals by Account</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>ET_PLAN</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>Cost Totals by Account</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>ET_AVAILABLE</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>Cost Totals by Account</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>ET_RETURN</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>Return</STEXT>
+      </RSFDO>
+     </DOCUMENTATION>
+    </item>
+    <item>
+     <FUNCNAME>Z_SDSCO_IO_CREATION</FUNCNAME>
+     <REMOTE_CALL>R</REMOTE_CALL>
+     <SHORT_TEXT>IO Master, Planning and Budgeting Creation</SHORT_TEXT>
+     <IMPORT>
+      <RSIMP>
+       <PARAMETER>IS_ORDERMASTER</PARAMETER>
+       <OPTIONAL>X</OPTIONAL>
+       <TYP>ZSDSCOS006</TYP>
+      </RSIMP>
+     </IMPORT>
+     <EXPORT>
+      <RSEXP>
+       <PARAMETER>EX_AUFNR</PARAMETER>
+       <TYP>AUFNR</TYP>
+      </RSEXP>
+     </EXPORT>
+     <TABLES>
+      <RSTBL>
+       <PARAMETER>ET_PLANNING</PARAMETER>
+       <OPTIONAL>X</OPTIONAL>
+       <TYP>ZSDSCOS004_TT</TYP>
+      </RSTBL>
+      <RSTBL>
+       <PARAMETER>ET_RETURN</PARAMETER>
+       <OPTIONAL>X</OPTIONAL>
+       <TYP>BAPIRET2_T</TYP>
+      </RSTBL>
+     </TABLES>
+     <DOCUMENTATION>
+      <RSFDO>
+       <PARAMETER>IS_ORDERMASTER</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>IO Master Header</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>EX_AUFNR</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>Order Number</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>ET_PLANNING</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>Detailed Planning by G/L</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>ET_RETURN</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>Return table</STEXT>
+      </RSFDO>
+     </DOCUMENTATION>
+    </item>
+   </FUNCTIONS>
+  </asx:values>
+ </asx:abap>
+</abapGit>

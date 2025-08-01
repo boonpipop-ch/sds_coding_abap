@@ -1,0 +1,134 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<abapGit version="v1.0.0" serializer="LCL_OBJECT_FUGR" serializer_version="v1.0.0">
+ <asx:abap xmlns:asx="http://www.sap.com/abapxml" version="1.0">
+  <asx:values>
+   <AREAT>SDS: Fix Performace Issue Inforec Read</AREAT>
+   <INCLUDES>
+    <SOBJ_NAME>LZSDSCM02TOP</SOBJ_NAME>
+    <SOBJ_NAME>SAPLZSDSCM02</SOBJ_NAME>
+   </INCLUDES>
+   <FUNCTIONS>
+    <item>
+     <FUNCNAME>Z_SDSCM_CRMS4_INFORECORD_READ</FUNCNAME>
+     <SHORT_TEXT>Read Price from Inforecord - Non Stock</SHORT_TEXT>
+     <IMPORT>
+      <RSIMP>
+       <PARAMETER>IV_MATNR</PARAMETER>
+       <REFERENCE>X</REFERENCE>
+       <TYP>MATNR</TYP>
+      </RSIMP>
+      <RSIMP>
+       <PARAMETER>IV_PLANT</PARAMETER>
+       <REFERENCE>X</REFERENCE>
+       <TYP>EWERK</TYP>
+      </RSIMP>
+      <RSIMP>
+       <PARAMETER>IV_PURGRP</PARAMETER>
+       <OPTIONAL>X</OPTIONAL>
+       <REFERENCE>X</REFERENCE>
+       <TYP>BKGRP</TYP>
+      </RSIMP>
+      <RSIMP>
+       <PARAMETER>IV_PURORG</PARAMETER>
+       <OPTIONAL>X</OPTIONAL>
+       <REFERENCE>X</REFERENCE>
+       <TYP>EKORG</TYP>
+      </RSIMP>
+      <RSIMP>
+       <PARAMETER>IV_VALID_FROM</PARAMETER>
+       <REFERENCE>X</REFERENCE>
+       <TYP>DATUM</TYP>
+      </RSIMP>
+      <RSIMP>
+       <PARAMETER>IV_VALID_TO</PARAMETER>
+       <REFERENCE>X</REFERENCE>
+       <TYP>DATUM</TYP>
+      </RSIMP>
+      <RSIMP>
+       <PARAMETER>IV_SERVICE_PERFORMER</PARAMETER>
+       <OPTIONAL>X</OPTIONAL>
+       <REFERENCE>X</REFERENCE>
+       <TYP>BU_PARTNER</TYP>
+      </RSIMP>
+     </IMPORT>
+     <EXPORT>
+      <RSEXP>
+       <PARAMETER>E_NETPR</PARAMETER>
+       <TYP>BAPICUREXT</TYP>
+      </RSEXP>
+      <RSEXP>
+       <PARAMETER>E_WAERS</PARAMETER>
+       <TYP>WAERS</TYP>
+      </RSEXP>
+      <RSEXP>
+       <PARAMETER>E_EPEIN</PARAMETER>
+       <TYP>PEINH</TYP>
+      </RSEXP>
+     </EXPORT>
+     <EXCEPTION>
+      <RSEXC>
+       <EXCEPTION>NO_INFOREC_FOUND</EXCEPTION>
+      </RSEXC>
+     </EXCEPTION>
+     <DOCUMENTATION>
+      <RSFDO>
+       <PARAMETER>IV_MATNR</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>Material Number</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>IV_PLANT</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>Plant</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>IV_PURGRP</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>Purchasing Group</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>IV_PURORG</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>Purchasing Organization</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>IV_VALID_FROM</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>Valid From</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>IV_VALID_TO</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>Valid To</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>IV_SERVICE_PERFORMER</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>Business Partner Number</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>E_NETPR</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>Net Price in Purchasing Document (in Document Currency)</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>E_WAERS</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>Currency Key</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>E_EPEIN</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>Price unit</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>NO_INFOREC_FOUND</PARAMETER>
+       <KIND>X</KIND>
+       <STEXT>No Inforecord found</STEXT>
+      </RSFDO>
+     </DOCUMENTATION>
+    </item>
+   </FUNCTIONS>
+  </asx:values>
+ </asx:abap>
+</abapGit>

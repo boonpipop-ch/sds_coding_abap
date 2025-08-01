@@ -1,0 +1,134 @@
+<?sap.transform simple?>
+<tt:transform xmlns:tt="http://www.sap.com/transformation-templates" xmlns:ddic="http://www.sap.com/abapxml/types/dictionary">
+
+  <tt:root name="DATA" type="ddic:ZSDSMMS024"/>
+  <tt:variable name="MARKED" val="1"/>
+  <tt:template>
+
+    <!-- Reservation Header -->
+    <object>
+      <tt:group>
+        <tt:cond frq="1">
+          <!-- ? = Optional, 1 = Required-->
+          <str name="SalesforceNo">
+            <tt:value ref="DATA.SALESFORCE_NO"/>
+          </str>
+        </tt:cond>
+        <tt:cond frq="1">
+          <str name="Plant">
+            <tt:value ref="DATA.PLANT"/>
+          </str>
+        </tt:cond>
+        <tt:cond frq="1">
+          <str name="MovementType">
+            <tt:value ref="DATA.MOVEMENT_TYPE"/>
+          </str>
+        </tt:cond>
+        <tt:cond frq="1">
+          <str name="ReceivingSloc">
+            <tt:value ref="DATA.RECEIVING_SLOC"/>
+          </str>
+        </tt:cond>
+        <tt:cond frq="?">
+          <str name="ResponseReservationNo">
+            <tt:value ref="DATA.RESPONSE_RESERVATION_NO"/>
+          </str>
+        </tt:cond>
+        <tt:cond frq="?">
+          <str name="ResponseStatus">
+            <tt:value ref="DATA.RESP_STATUS"/>
+          </str>
+        </tt:cond>
+        <tt:cond frq="?">
+          <str name="ResponseMessage">
+            <tt:value ref="DATA.RESP_MESSAGE"/>
+          </str>
+        </tt:cond>
+      </tt:group>
+
+      <array name="ReservationItem">
+        <tt:cond check="exist(DATA.RESERV_ITEM)">
+          <tt:loop ref="DATA.RESERV_ITEM">
+            <!--             Reservation Item -->
+            <object>
+              <tt:group>
+                <tt:cond frq="1">
+                  <str name="SalesforceItemNo">
+                    <tt:value ref="$ref.SALESFORCE_ITEM_NO"/>
+                  </str>
+                </tt:cond>
+                <tt:cond frq="?">
+                  <str name="ReservationNo">
+                    <tt:value ref="$ref.RESERVATION_NO"/>
+                  </str>
+                </tt:cond>
+                <tt:cond frq="?">
+                  <str name="ReservationItemNo">
+                    <tt:value ref="$ref.RESERVATION_ITEM"/>
+                  </str>
+                </tt:cond>
+                <tt:cond frq="?">
+                  <str name="MaterialCode">
+                    <tt:value ref="$ref.MATERIAL_CODE"/>
+                  </str>
+                </tt:cond>
+                <tt:cond frq="?">
+                  <str name="MaterialDescription">
+                    <tt:value ref="$ref.MATERIAL_DESCRIPTION"/>
+                  </str>
+                </tt:cond>
+                <tt:cond frq="?">
+                  <num name="Quantity">
+                    <tt:value ref="$ref.QUANTITY"/>
+                  </num>
+                </tt:cond>
+                <tt:cond frq="?">
+                  <str name="Unit">
+                    <tt:value ref="$ref.UNIT"/>
+                  </str>
+                </tt:cond>
+                <tt:cond frq="?">
+                  <str name="IssueSloc">
+                    <tt:value ref="$ref.ISSUE_SLOC"/>
+                  </str>
+                </tt:cond>
+                <tt:cond frq="?">
+                  <str name="Completed">
+                    <tt:value ref="$ref.COMPLETED"/>
+                  </str>
+                </tt:cond>
+                <tt:cond frq="?">
+                  <str name="Deleted">
+                    <tt:value ref="$ref.DELETED"/>
+                  </str>
+                </tt:cond>
+              </tt:group>
+            </object>
+          </tt:loop>
+        </tt:cond>
+      </array>
+      <tt:cond check="exist(DATA.RESPONSE)">
+        <array name="Response">
+          <tt:loop ref="DATA.RESPONSE">
+            <!-- Response-->
+            <object>
+              <tt:group>
+                <tt:cond frq="?">
+                  <str name="Status">
+                    <tt:value ref="$ref.RESP_STATUS"/>
+                  </str>
+                </tt:cond>
+                <tt:cond frq="?">
+                  <str name="Message">
+                    <tt:value ref="$ref.RESP_MESSAGE"/>
+                  </str>
+                </tt:cond>
+              </tt:group>
+            </object>
+          </tt:loop>
+        </array>
+      </tt:cond>
+
+    </object>
+  </tt:template>
+</tt:transform>

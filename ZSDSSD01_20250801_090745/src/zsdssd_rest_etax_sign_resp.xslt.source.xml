@@ -1,0 +1,92 @@
+<?sap.transform simple?>
+<tt:transform xmlns:tt="http://www.sap.com/transformation-templates" xmlns:ddic="http://www.sap.com/abapxml/types/dictionary">
+
+  <tt:root name="DATA" type="ddic:ZSDSSDS095"/>
+  <tt:template>
+    <object>
+      <tt:group>
+        <tt:cond frq="*">
+          <null/>
+        </tt:cond>
+        <tt:cond frq="?">
+          <str name="transCode">
+            <tt:value ref="DATA.TRANS_CODE"/>
+          </str>
+        </tt:cond>
+        <tt:cond frq="?">
+          <str name="document">
+            <tt:value ref="DATA.DOCUMENT"/>
+          </str>
+        </tt:cond>
+        <tt:cond frq="?">
+          <str name="documentXml">
+            <tt:value ref="DATA.DOCUMENT_XML"/>
+          </str>
+        </tt:cond>
+        <tt:cond frq="?">
+          <str name="document_tempURL">
+            <tt:value ref="DATA.DOCUMENT_TEMPURL"/>
+          </str>
+        </tt:cond>
+        <tt:cond frq="1">
+          <str name="responseCode">
+            <tt:value ref="DATA.RESPONSE_CODE"/>
+          </str>
+        </tt:cond>
+        <tt:cond frq="1">
+          <str name="responseMsg">
+            <tt:value ref="DATA.RESPONSE_MSG"/>
+          </str>
+        </tt:cond>
+        <tt:cond frq="?">
+          <array name="errorValidateMsg">
+            <tt:cond check="exist(DATA.ERROR_VALIDATE_MSG)">
+              <tt:loop ref="DATA.ERROR_VALIDATE_MSG">
+                <!-- Error Message -->
+                <object>
+                  <tt:group>
+                    <tt:cond frq="?">
+                      <num name="invoiceHdrId">
+                        <tt:skip/>
+                      </num>
+                    </tt:cond>
+                    <tt:cond frq="?">
+                      <num name="logEventId">
+                        <tt:skip/>
+                      </num>
+                    </tt:cond>
+                    <tt:cond frq="?">
+                      <str name="header">
+                        <tt:value ref="$ref.HEADER"/>
+                      </str>
+                    </tt:cond>
+                    <tt:cond frq="?">
+                      <str name="message">
+                        <tt:value ref="$ref.MESSAGE"/>
+                      </str>
+                    </tt:cond>
+                    <tt:cond frq="?">
+                      <num name="createdBy">
+                        <tt:skip/>
+                      </num>
+                    </tt:cond>
+                    <tt:cond frq="?">
+                      <str name="createdDate">
+                        <tt:value ref="$ref.CREATED_DATE"/>
+                      </str>
+                    </tt:cond>
+
+                  </tt:group>
+                </object>
+              </tt:loop>
+            </tt:cond>
+
+          </array>
+        </tt:cond>
+
+      </tt:group>
+    </object>
+
+  </tt:template>
+
+</tt:transform>

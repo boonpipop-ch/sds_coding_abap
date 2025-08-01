@@ -1,0 +1,75 @@
+FUNCTION Z_SDSFI_SFTP.
+*"----------------------------------------------------------------------
+*"*"Local Interface:
+*"  IMPORTING
+*"     REFERENCE(IM_SOURCE_FULLPATH)
+*"  EXPORTING
+*"     REFERENCE(EX_FTP_FULLPATH) TYPE  STRING
+*"     REFERENCE(EX_ARC_FULLPATH) TYPE  STRING
+*"     REFERENCE(EX_WA_MSG) TYPE  ZSDSFIS034
+*"----------------------------------------------------------------------
+
+  DATA: LV_PARAMETERS   TYPE SXPGCOLIST-PARAMETERS VALUE '$1 $2',
+        LV_FTP_DIR      TYPE STRING,
+        LV_FTP_FULLPATH TYPE STRING,
+        LV_STATUS       TYPE EXTCMDEXEX-STATUS,
+        LV_EXITCODE     TYPE EXTCMDEXEX-EXITCODE,
+        LV_RET_MESSAGE  TYPE CHAR100,
+        LV_RET_TYPE     TYPE CHAR1,
+        LV_FILENAME     TYPE STRING.
+
+  DATA: LT_EXEC_PROTOCOL  TYPE TABLE OF BTCXPM.
+
+  DATA: LWA_EXEC_PROTOCAL LIKE LINE OF LT_EXEC_PROTOCOL,
+        LWA_FILE_PATH     TYPE ZSDSFIS028.
+
+  DATA: LWA_MSG           TYPE ZSDSFIS034.
+
+  CALL FUNCTION 'Z_SDSFI_GET_FILE_PATH'
+    IMPORTING
+      EX_WA_FILE_PATH = LWA_FILE_PATH.
+
+* <PARAM>
+*  CASE sy-sysid.
+*    WHEN 'HM3'.
+*      lv_parameters   = '$1 $2 zhmcsys 10.10.200.110'.
+*      lv_ftp_dir      = '/EZTAX/DEV/HMC/IN/'.
+*    WHEN 'HMQ'.
+*      lv_parameters   = '$1 $2 uhmcsys 10.10.200.110'.
+*      lv_ftp_dir      = '/EZTAX/UAT/HMC/IN/'.
+*    WHEN OTHERS.
+**      lv_parameters   = '$1 $2 zhmcsys 10.10.200.110'.
+**      lv_ftp_dir      = '/EZTAX/PRD/HMC/IN/'.
+*      lv_parameters   = '$1 $2 ziamsys 13.229.22.86'.
+*      lv_ftp_dir      = '/IAM/ETAX/OUT/'.
+*  ENDCASE.
+
+  CONCATENATE LV_PARAMETERS LWA_FILE_PATH-FTP_USER LWA_FILE_PATH-FTP_HOST
+  INTO LV_PARAMETERS SEPARATED BY SPACE.
+  LV_FTP_DIR      = LWA_FILE_PATH-FTP_DIR_IN.
+
+  PERFORM GET_FILENAME_FROM_FULLPATH USING IM_SOURCE_FULLPATH
+                                  CHANGING LV_FILENAME.
+
+  CONCATENATE LV_FTP_DIR LV_FILENAME
+         INTO LV_FTP_FULLPATH SEPARATED BY '/'.
+  REPLACE '//' IN LV_FTP_FULLPATH WITH '/'.
+
+  REPLACE '$1' IN LV_PARAMETERS   WITH IM_SOURCE_FULLPATH.
+  REPLACE '$2' IN LV_PARAMETERS   WITH LV_FTP_DIR.
+
+  PERFORM SXPG_COMMAND_EXECUTE
+          TABLES LT_EXEC_PROTOCOL
+           USING 'ZSFTP'
+                 LV_PARAMETERS
+                 'sFTP'
+        CHANGING LV_STATUS
+                 LV_EXITCODE
+                 LV_RET_MESSAGE
+                 LV_RET_TYPE.
+
+  LWA_MSG-MSGTY   = LV_RET_TYPE.
+  LWA_MSG-MESSAGE = LV_RET_MESSAGE.
+  EX_FTP_FULLPATH = LV_FTP_FULLPATH.
+  EX_WA_MSG       = LWA_MSG.
+ENDFUNCTION.

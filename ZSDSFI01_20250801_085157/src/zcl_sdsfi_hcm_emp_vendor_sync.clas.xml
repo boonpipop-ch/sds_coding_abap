@@ -1,0 +1,125 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<abapGit version="v1.0.0" serializer="LCL_OBJECT_CLAS" serializer_version="v1.0.0">
+ <asx:abap xmlns:asx="http://www.sap.com/abapxml" version="1.0">
+  <asx:values>
+   <VSEOCLASS>
+    <CLSNAME>ZCL_SDSFI_HCM_EMP_VENDOR_SYNC</CLSNAME>
+    <LANGU>E</LANGU>
+    <STATE>1</STATE>
+    <CLSCCINCL>X</CLSCCINCL>
+    <FIXPT>X</FIXPT>
+    <UNICODE>X</UNICODE>
+   </VSEOCLASS>
+   <DESCRIPTIONS>
+    <SEOCOMPOTX>
+     <CMPNAME>GC_ADDR_EN</CMPNAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Address Record Type</DESCRIPT>
+    </SEOCOMPOTX>
+    <SEOCOMPOTX>
+     <CMPNAME>GC_ADDR_TH</CMPNAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Address Record Type</DESCRIPT>
+    </SEOCOMPOTX>
+    <SEOCOMPOTX>
+     <CMPNAME>GC_BANK_ID</CMPNAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Bank Details ID</DESCRIPT>
+    </SEOCOMPOTX>
+    <SEOCOMPOTX>
+     <CMPNAME>GC_TAXTTYPE</CMPNAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Tax Number Category</DESCRIPT>
+    </SEOCOMPOTX>
+    <SEOCOMPOTX>
+     <CMPNAME>GC_TRUE</CMPNAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Single-Character Flag</DESCRIPT>
+    </SEOCOMPOTX>
+    <SEOCOMPOTX>
+     <CMPNAME>GET_GENC</CMPNAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Get GenC Setting</DESCRIPT>
+    </SEOCOMPOTX>
+    <SEOCOMPOTX>
+     <CMPNAME>GF_DEFT_BCODE</CMPNAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Branch Code</DESCRIPT>
+    </SEOCOMPOTX>
+    <SEOCOMPOTX>
+     <CMPNAME>GF_DEFT_BDESC</CMPNAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Branch Code Description</DESCRIPT>
+    </SEOCOMPOTX>
+    <SEOCOMPOTX>
+     <CMPNAME>GF_DEFT_BU_GROUP</CMPNAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Business Partner Grouping</DESCRIPT>
+    </SEOCOMPOTX>
+    <SEOCOMPOTX>
+     <CMPNAME>GF_READ</CMPNAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>General Flag</DESCRIPT>
+    </SEOCOMPOTX>
+    <SEOCOMPOTX>
+     <CMPNAME>GT_BUKRS</CMPNAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>General Flag</DESCRIPT>
+    </SEOCOMPOTX>
+    <SEOCOMPOTX>
+     <CMPNAME>IS_SDS</CMPNAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>SDS:Check if Company code Activated</DESCRIPT>
+    </SEOCOMPOTX>
+    <SEOCOMPOTX>
+     <CMPNAME>MAINTAIN_VENDOR_BRANCH</CMPNAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Maintain Vendor Branch</DESCRIPT>
+    </SEOCOMPOTX>
+    <SEOCOMPOTX>
+     <CMPNAME>MAP_ADDR_HR_TO_FI</CMPNAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Map HR Address to FI Address</DESCRIPT>
+    </SEOCOMPOTX>
+   </DESCRIPTIONS>
+   <DESCRIPTIONS_SUB>
+    <SEOSUBCOTX>
+     <CMPNAME>ASSIGN_BAPI_TAX</CMPNAME>
+     <SCONAME>CS_BAPI_TAX</SCONAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Ext. Interface: Tax Numbers</DESCRIPT>
+    </SEOSUBCOTX>
+    <SEOSUBCOTX>
+     <CMPNAME>IS_SDS</CMPNAME>
+     <SCONAME>IF_BUKRS</SCONAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Company Code</DESCRIPT>
+    </SEOSUBCOTX>
+    <SEOSUBCOTX>
+     <CMPNAME>IS_SDS</CMPNAME>
+     <SCONAME>RF_RESULT</SCONAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>New Input Values</DESCRIPT>
+    </SEOSUBCOTX>
+    <SEOSUBCOTX>
+     <CMPNAME>MAINTAIN_VENDOR_BRANCH</CMPNAME>
+     <SCONAME>IF_PARTNER</SCONAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Business Partner Number</DESCRIPT>
+    </SEOSUBCOTX>
+    <SEOSUBCOTX>
+     <CMPNAME>MAP_ADDR_HR_TO_FI</CMPNAME>
+     <SCONAME>CS_POSTAL</SCONAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>External Interface: Data for Postal Address</DESCRIPT>
+    </SEOSUBCOTX>
+    <SEOSUBCOTX>
+     <CMPNAME>MAP_ADDR_HR_TO_FI</CMPNAME>
+     <SCONAME>IS_HOME_ADDRESS</SCONAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>HR Master Record: Infotype 0006 (Addresses)</DESCRIPT>
+    </SEOSUBCOTX>
+   </DESCRIPTIONS_SUB>
+  </asx:values>
+ </asx:abap>
+</abapGit>

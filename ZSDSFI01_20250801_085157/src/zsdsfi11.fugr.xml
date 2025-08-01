@@ -1,0 +1,60 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<abapGit version="v1.0.0" serializer="LCL_OBJECT_FUGR" serializer_version="v1.0.0">
+ <asx:abap xmlns:asx="http://www.sap.com/abapxml" version="1.0">
+  <asx:values>
+   <AREAT>Get Period</AREAT>
+   <INCLUDES>
+    <SOBJ_NAME>LZSDSFI11TOP</SOBJ_NAME>
+    <SOBJ_NAME>SAPLZSDSFI11</SOBJ_NAME>
+   </INCLUDES>
+   <FUNCTIONS>
+    <item>
+     <FUNCNAME>Z_SDSFI_GET_PERIOD_FISCAL_YEAR</FUNCNAME>
+     <SHORT_TEXT>For get period , fiscal year</SHORT_TEXT>
+     <IMPORT>
+      <RSIMP>
+       <PARAMETER>I_BUKRS</PARAMETER>
+       <TYP>BUKRS</TYP>
+      </RSIMP>
+      <RSIMP>
+       <PARAMETER>I_DATUM</PARAMETER>
+       <TYP>DATUM</TYP>
+      </RSIMP>
+     </IMPORT>
+     <EXPORT>
+      <RSEXP>
+       <PARAMETER>E_PERIOD</PARAMETER>
+       <TYP>POPER</TYP>
+      </RSEXP>
+      <RSEXP>
+       <PARAMETER>E_GJAHR</PARAMETER>
+       <TYP>GJAHR</TYP>
+      </RSEXP>
+     </EXPORT>
+     <DOCUMENTATION>
+      <RSFDO>
+       <PARAMETER>I_BUKRS</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>Company Code</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>I_DATUM</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>Date</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>E_PERIOD</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>Posting Period</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>E_GJAHR</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>Fiscal Year</STEXT>
+      </RSFDO>
+     </DOCUMENTATION>
+    </item>
+   </FUNCTIONS>
+  </asx:values>
+ </asx:abap>
+</abapGit>

@@ -1,0 +1,8 @@
+@AbapCatalog.internal.setChange: 'FLDADD_NO_ASS_INFLUENCE'
+@AbapCatalog.sqlViewAppendName: 'ZZ1_6BF5E0FBD07D'
+
+extend view A_BUSINESSSOLUTIONQUOTATION with ZZ1_SGG3DHLDITHS5Q3EWM4TKVUSAI
+  
+{ 
+  _Extension.ZZ1_RESULT_PROGRESS as ZZ1_RESULT_PROGRESS
+}

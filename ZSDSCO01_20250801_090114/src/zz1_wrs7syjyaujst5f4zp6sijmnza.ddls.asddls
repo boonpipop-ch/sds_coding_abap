@@ -1,0 +1,8 @@
+@AbapCatalog.internal.setChange: 'FLDADD_NO_ASS_INFLUENCE'
+@AbapCatalog.sqlViewAppendName: 'ZZ1_83698015F3F8'
+
+extend view C_PROFITANDLOSSQ2901 with ZZ1_WRS7SYJYAUJST5F4ZP6SIJMNZA
+  
+{ 
+  ZZ1_ZZPMT_MSE as ZZ1_ZZPMT_MSE
+}

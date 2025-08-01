@@ -1,0 +1,8 @@
+@AbapCatalog.internal.setChange: 'FLDADD_NO_ASS_INFLUENCE'
+@AbapCatalog.sqlViewAppendName: 'ZZ1_22384CD2B7B8'
+
+extend view I_MARGANLYSPRODANDSRVCCUBE with ZZ1_W4CTM7XQA6EV56HVI67RYY4CLE
+  
+{ 
+  _Extension.ZZ1_ZZREFTN_MSE as ZZ1_ZZREFTN_MSE
+}

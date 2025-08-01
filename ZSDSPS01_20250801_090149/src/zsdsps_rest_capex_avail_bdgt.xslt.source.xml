@@ -1,0 +1,67 @@
+<?sap.transform simple?>
+<tt:transform xmlns:tt="http://www.sap.com/transformation-templates" xmlns:ddic="http://www.sap.com/abapxml/types/dictionary">
+
+  <tt:root name="DATA" type="ddic:ZSDSPSS004"/>
+  <tt:template>
+    <!-- Structure-->
+    <object>
+      <tt:group>
+        <tt:cond frq="?"> <!-- ? = Optional, 1 = Required-->
+          <str name="FiscalYear">
+            <tt:value ref="DATA.FISCALYEAR"/>
+          </str>
+        </tt:cond>
+        <tt:cond frq="?"> <!-- ? = Optional, 1 = Required-->
+          <str name="WBS">
+            <tt:value ref="DATA.WBS"/>
+          </str>
+        </tt:cond>
+        <tt:cond frq="?"> <!-- ? = Optional, 1 = Required-->
+          <str name="eMemo">
+            <tt:value ref="DATA.EMEMO"/>
+          </str>
+        </tt:cond>
+        <tt:cond frq="?"> <!-- ? = Optional, 1 = Required-->
+          <str name="ResponseStatus">
+            <tt:value ref="DATA.RESPONSESTATUS"/>
+          </str>
+        </tt:cond>
+        <tt:cond frq="?"> <!-- ? = Optional, 1 = Required-->
+          <str name="ResponseMessage">
+            <tt:value ref="DATA.RESPONSEMESSAGE"/>
+          </str>
+        </tt:cond>
+        <tt:cond frq="?"> <!-- ? = Optional, 1 = Required-->
+          <num name="Budget">
+            <tt:value ref="DATA.BUDGET"/>
+          </num>
+        </tt:cond>
+        <tt:cond frq="?"> <!-- ? = Optional, 1 = Required-->
+          <num name="BudgetDistributed">
+            <tt:value ref="DATA.BUDGETDISTRIBUTED"/>
+          </num>
+        </tt:cond>
+        <tt:cond frq="?"> <!-- ? = Optional, 1 = Required-->
+          <num name="RemainBudget">
+            <tt:value ref="DATA.REMAINBUDGET"/>
+          </num>
+        </tt:cond>
+        <tt:cond frq="?"> <!-- ? = Optional, 1 = Required-->
+          <num name="Actual">
+            <tt:value ref="DATA.ACTUAL"/>
+          </num>
+        </tt:cond>
+        <tt:cond frq="?"> <!-- ? = Optional, 1 = Required-->
+          <num name="Commitment">
+            <tt:value ref="DATA.COMMITMENT"/>
+          </num>
+        </tt:cond>
+        <tt:cond frq="?"> <!-- ? = Optional, 1 = Required-->
+          <num name="Available">
+            <tt:value ref="DATA.AVAILABLE"/>
+          </num>
+        </tt:cond>
+      </tt:group>
+    </object>
+  </tt:template>
+</tt:transform>

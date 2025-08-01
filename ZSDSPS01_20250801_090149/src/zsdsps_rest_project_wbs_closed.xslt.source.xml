@@ -1,0 +1,44 @@
+<?sap.transform simple?>
+<tt:transform xmlns:tt="http://www.sap.com/transformation-templates" xmlns:ddic="http://www.sap.com/abapxml/types/dictionary">
+
+  <tt:root name="DATA" type="ddic:ZSDSPSS011"/>
+  <tt:template>
+    <object>
+      <array name="ClosureInfo">
+        <tt:cond check="exist(DATA.OBJECT)">
+          <tt:loop ref="DATA.OBJECT">
+            <object>
+              <tt:group>
+                <tt:cond frq="1">
+                  <str name="ProjectDefinition">
+                    <tt:value ref="$ref.PSPID"/>
+                  </str>
+                </tt:cond>
+                <tt:cond frq="?">
+                  <str name="WBS">
+                    <tt:value ref="$ref.POSID"/>
+                  </str>
+                </tt:cond>
+                <tt:cond frq="?">
+                  <str name="StatusFlag">
+                    <tt:value ref="$ref.CLSD_FLAG"/>
+                  </str>
+                </tt:cond>
+                <tt:cond frq="?">
+                  <str name="ResponseStatus">
+                    <tt:value ref="$ref.RESP_STATUS"/>
+                  </str>
+                </tt:cond>
+                <tt:cond frq="?">
+                  <str name="ResponseMessage">
+                    <tt:value ref="$ref.RESP_MESSAGE"/>
+                  </str>
+                </tt:cond>
+              </tt:group>
+            </object>
+          </tt:loop>
+        </tt:cond>
+      </array>
+    </object>
+  </tt:template>
+</tt:transform>

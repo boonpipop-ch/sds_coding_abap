@@ -1,0 +1,209 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<abapGit version="v1.0.0" serializer="LCL_OBJECT_CLAS" serializer_version="v1.0.0">
+ <asx:abap xmlns:asx="http://www.sap.com/abapxml" version="1.0">
+  <asx:values>
+   <VSEOCLASS>
+    <CLSNAME>ZCL_SDSPS_PROJ_WBS_STATUS_INTF</CLSNAME>
+    <LANGU>E</LANGU>
+    <DESCRIPT>SDS: Project/WBS System Status Interface</DESCRIPT>
+    <STATE>1</STATE>
+    <CLSCCINCL>X</CLSCCINCL>
+    <FIXPT>X</FIXPT>
+    <UNICODE>X</UNICODE>
+   </VSEOCLASS>
+   <DESCRIPTIONS>
+    <SEOCOMPOTX>
+     <CMPNAME>FILL_PROJECT</CMPNAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Prepare list of project definition</DESCRIPT>
+    </SEOCOMPOTX>
+    <SEOCOMPOTX>
+     <CMPNAME>FILL_WBS</CMPNAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Prepare list of WBS</DESCRIPT>
+    </SEOCOMPOTX>
+    <SEOCOMPOTX>
+     <CMPNAME>GC_JOBNAME_PREFIX</CMPNAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Background Job Name Prefix</DESCRIPT>
+    </SEOCOMPOTX>
+    <SEOCOMPOTX>
+     <CMPNAME>GC_OPTION_EQ</CMPNAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Type of OPTION component in row type of a Ranges type</DESCRIPT>
+    </SEOCOMPOTX>
+    <SEOCOMPOTX>
+     <CMPNAME>GC_REPID</CMPNAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>ABAP Program Name</DESCRIPT>
+    </SEOCOMPOTX>
+    <SEOCOMPOTX>
+     <CMPNAME>GC_SIGN_I</CMPNAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Type of SIGN component in row type of a Ranges type</DESCRIPT>
+    </SEOCOMPOTX>
+    <SEOCOMPOTX>
+     <CMPNAME>GET_CONSTANTS</CMPNAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Get GENC constants</DESCRIPT>
+    </SEOCOMPOTX>
+    <SEOCOMPOTX>
+     <CMPNAME>GRT_OBTYP_PROJ</CMPNAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Range table for object type Project</DESCRIPT>
+    </SEOCOMPOTX>
+    <SEOCOMPOTX>
+     <CMPNAME>GRT_OBTYP_WBS</CMPNAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Range table for object type WBS</DESCRIPT>
+    </SEOCOMPOTX>
+    <SEOCOMPOTX>
+     <CMPNAME>GRT_PROJ_DEF</CMPNAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Range Table Type For PSPID</DESCRIPT>
+    </SEOCOMPOTX>
+    <SEOCOMPOTX>
+     <CMPNAME>GRT_SYSTEM_STATUS</CMPNAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Range table for Status Text</DESCRIPT>
+    </SEOCOMPOTX>
+    <SEOCOMPOTX>
+     <CMPNAME>GRT_WBS_LEVEL</CMPNAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Range table for WBS Level</DESCRIPT>
+    </SEOCOMPOTX>
+    <SEOCOMPOTX>
+     <CMPNAME>PROCESS_DATA</CMPNAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Process Interface Project/WBS System Status to Salesforce</DESCRIPT>
+    </SEOCOMPOTX>
+    <SEOCOMPOTX>
+     <CMPNAME>PROCESS_STATUS_CLOSED</CMPNAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Processing for system status closed (CLSD)</DESCRIPT>
+    </SEOCOMPOTX>
+    <SEOCOMPOTX>
+     <CMPNAME>SUBMIT_INTERFACE_JOB_CLOSURE</CMPNAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Submit Outbound Interface Job for Project/WBS Closure</DESCRIPT>
+    </SEOCOMPOTX>
+    <SEOCOMPOTX>
+     <CMPNAME>TS_OBJECT_TYPE_RANGE</CMPNAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Range structure for object type</DESCRIPT>
+    </SEOCOMPOTX>
+    <SEOCOMPOTX>
+     <CMPNAME>TS_STATUS_CLSD_RANGE</CMPNAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Range structure for system status in scope</DESCRIPT>
+    </SEOCOMPOTX>
+    <SEOCOMPOTX>
+     <CMPNAME>TS_WBS_LEVEL_RANGE</CMPNAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Range structure for WBS Level</DESCRIPT>
+    </SEOCOMPOTX>
+    <SEOCOMPOTX>
+     <CMPNAME>TT_OBJECT_TYPE_RANGE</CMPNAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Range table for object type</DESCRIPT>
+    </SEOCOMPOTX>
+    <SEOCOMPOTX>
+     <CMPNAME>TT_STATUS_CLSD_RANGE</CMPNAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Range table for system status in scope</DESCRIPT>
+    </SEOCOMPOTX>
+    <SEOCOMPOTX>
+     <CMPNAME>TT_WBS_LEVEL_RANGE</CMPNAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Range table for WBS Level</DESCRIPT>
+    </SEOCOMPOTX>
+   </DESCRIPTIONS>
+   <DESCRIPTIONS_SUB>
+    <SEOSUBCOTX>
+     <CMPNAME>FILL_PROJECT</CMPNAME>
+     <SCONAME>CT_PROJECT</SCONAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Range Table Type For PSPID</DESCRIPT>
+    </SEOSUBCOTX>
+    <SEOSUBCOTX>
+     <CMPNAME>FILL_PROJECT</CMPNAME>
+     <SCONAME>IT_OBJECT</SCONAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Table Type Object List of Project/WBS</DESCRIPT>
+    </SEOSUBCOTX>
+    <SEOSUBCOTX>
+     <CMPNAME>FILL_WBS</CMPNAME>
+     <SCONAME>CT_WBS</SCONAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Ranges table for PRPS-POSID (WBS element)</DESCRIPT>
+    </SEOSUBCOTX>
+    <SEOSUBCOTX>
+     <CMPNAME>FILL_WBS</CMPNAME>
+     <SCONAME>IT_OBJECT</SCONAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Table Type Object List of Project/WBS</DESCRIPT>
+    </SEOSUBCOTX>
+    <SEOSUBCOTX>
+     <CMPNAME>PROCESS_DATA</CMPNAME>
+     <SCONAME>IF_SYSTEM_STATUS</SCONAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>System Status Text</DESCRIPT>
+    </SEOSUBCOTX>
+    <SEOSUBCOTX>
+     <CMPNAME>PROCESS_DATA</CMPNAME>
+     <SCONAME>IF_TEST</SCONAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Test Run Flag</DESCRIPT>
+    </SEOSUBCOTX>
+    <SEOSUBCOTX>
+     <CMPNAME>PROCESS_DATA</CMPNAME>
+     <SCONAME>IT_OBJECT</SCONAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Table Type Object List of Project/WBS</DESCRIPT>
+    </SEOSUBCOTX>
+    <SEOSUBCOTX>
+     <CMPNAME>PROCESS_STATUS_CLOSED</CMPNAME>
+     <SCONAME>IF_SYSTEM_STATUS</SCONAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>System Status</DESCRIPT>
+    </SEOSUBCOTX>
+    <SEOSUBCOTX>
+     <CMPNAME>PROCESS_STATUS_CLOSED</CMPNAME>
+     <SCONAME>IF_TEST</SCONAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Test Run Flag</DESCRIPT>
+    </SEOSUBCOTX>
+    <SEOSUBCOTX>
+     <CMPNAME>PROCESS_STATUS_CLOSED</CMPNAME>
+     <SCONAME>IT_OBJECT</SCONAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Table Type Object List of Project/WBS</DESCRIPT>
+    </SEOSUBCOTX>
+    <SEOSUBCOTX>
+     <CMPNAME>SUBMIT_INTERFACE_JOB_CLOSURE</CMPNAME>
+     <SCONAME>IF_SYSTEM_STATUS</SCONAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>System Status</DESCRIPT>
+    </SEOSUBCOTX>
+    <SEOSUBCOTX>
+     <CMPNAME>SUBMIT_INTERFACE_JOB_CLOSURE</CMPNAME>
+     <SCONAME>IF_TEST</SCONAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>General Flag</DESCRIPT>
+    </SEOSUBCOTX>
+    <SEOSUBCOTX>
+     <CMPNAME>SUBMIT_INTERFACE_JOB_CLOSURE</CMPNAME>
+     <SCONAME>IT_PROJECT</SCONAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Range Table Type For PSPID</DESCRIPT>
+    </SEOSUBCOTX>
+    <SEOSUBCOTX>
+     <CMPNAME>SUBMIT_INTERFACE_JOB_CLOSURE</CMPNAME>
+     <SCONAME>IT_WBS</SCONAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Selection Options for POSID (WBS Element)</DESCRIPT>
+    </SEOSUBCOTX>
+   </DESCRIPTIONS_SUB>
+  </asx:values>
+ </asx:abap>
+</abapGit>

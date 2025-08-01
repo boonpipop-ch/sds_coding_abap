@@ -1,0 +1,10 @@
+*&---------------------------------------------------------------------*
+*& Include          ZSDSFII0050_SELECTION
+*&---------------------------------------------------------------------*
+*-----------------------------------------------------------------------
+* P A R A M E T E R S   &   S E L E C T - O P T I O N S
+*-----------------------------------------------------------------------
+
+*  SELECTION-SCREEN BEGIN OF BLOCK BLOCK1 WITH FRAME TITLE TEXT-001.
+*    PARAMETERS TEST TYPE C MODIF ID TET.
+*  SELECTION-SCREEN END OF BLOCK BLOCK1.

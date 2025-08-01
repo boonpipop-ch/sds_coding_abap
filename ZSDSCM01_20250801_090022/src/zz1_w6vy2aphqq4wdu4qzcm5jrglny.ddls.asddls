@@ -1,0 +1,8 @@
+@AbapCatalog.internal.setChange: 'FLDADD_NO_ASS_INFLUENCE'
+@AbapCatalog.sqlViewAppendName: 'ZZ1_5A0E95FF2F1D'
+
+extend view A_BUSINESSSOLUTIONQUOTATION with ZZ1_W6VY2APHQQ4WDU4QZCM5JRGLNY
+  
+{ 
+  _Extension.ZZ1_BILL_METHOD as ZZ1_BILL_METHOD
+}

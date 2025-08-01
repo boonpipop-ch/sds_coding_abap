@@ -1,0 +1,8 @@
+@AbapCatalog.internal.setChange: 'FLDADD_NO_ASS_INFLUENCE'
+@AbapCatalog.sqlViewAppendName: 'ZZ1_7B50E92AC9AF'
+
+extend view C_EXPIRINGSRVCCONTRITMDETAILS with ZZ1_JBGLU3DDR323GSDEVIQ4NLY3EI
+  
+{ 
+  _ServiceDocumentExt.ZZ1_MAIN_CAUSE as ZZ1_MAIN_CAUSE
+}

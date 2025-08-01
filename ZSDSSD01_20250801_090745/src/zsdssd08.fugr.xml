@@ -1,0 +1,83 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<abapGit version="v1.0.0" serializer="LCL_OBJECT_FUGR" serializer_version="v1.0.0">
+ <asx:abap xmlns:asx="http://www.sap.com/abapxml" version="1.0">
+  <asx:values>
+   <AREAT>Call Print Output</AREAT>
+   <INCLUDES>
+    <SOBJ_NAME>LZSDSSD08TOP</SOBJ_NAME>
+    <SOBJ_NAME>SAPLZSDSSD08</SOBJ_NAME>
+   </INCLUDES>
+   <FUNCTIONS>
+    <item>
+     <FUNCNAME>Z_SDSSD_CALL_PRINT_OUTPUT</FUNCNAME>
+     <UPDATE_TASK>1</UPDATE_TASK>
+     <SHORT_TEXT>Call Print Output</SHORT_TEXT>
+     <IMPORT>
+      <RSIMP>
+       <PARAMETER>I_OUTPUT</PARAMETER>
+       <OPTIONAL>X</OPTIONAL>
+       <TYP>NA_KSCHL</TYP>
+      </RSIMP>
+      <RSIMP>
+       <PARAMETER>I_FORM</PARAMETER>
+       <OPTIONAL>X</OPTIONAL>
+       <TYP>NA_FNAME</TYP>
+      </RSIMP>
+      <RSIMP>
+       <PARAMETER>I_DOC</PARAMETER>
+       <OPTIONAL>X</OPTIONAL>
+       <TYP>CHAR10</TYP>
+      </RSIMP>
+      <RSIMP>
+       <PARAMETER>I_CUS_CODE</PARAMETER>
+       <OPTIONAL>X</OPTIONAL>
+       <TYP>KUNWE</TYP>
+      </RSIMP>
+      <RSIMP>
+       <PARAMETER>I_ADDRESS</PARAMETER>
+       <OPTIONAL>X</OPTIONAL>
+       <TYP>ADRNR</TYP>
+      </RSIMP>
+      <RSIMP>
+       <PARAMETER>I_MHA</PARAMETER>
+       <OPTIONAL>X</OPTIONAL>
+       <TYP>CHAR3</TYP>
+      </RSIMP>
+     </IMPORT>
+     <DOCUMENTATION>
+      <RSFDO>
+       <PARAMETER>I_OUTPUT</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>Output Type</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>I_FORM</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>PDF/Smart Form: Form Name</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>I_DOC</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>Character Field with Length 10</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>I_CUS_CODE</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>Ship-to Party</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>I_ADDRESS</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>Address</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>I_MHA</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>3-Byte field</STEXT>
+      </RSFDO>
+     </DOCUMENTATION>
+    </item>
+   </FUNCTIONS>
+  </asx:values>
+ </asx:abap>
+</abapGit>
